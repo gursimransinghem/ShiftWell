@@ -1,19 +1,27 @@
-const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
+/**
+ * Expo Router theme colors.
+ *
+ * Maps NightShift's dark-mode-first palette into the shape that
+ * Themed.tsx and Expo Router expect. The "light" variant uses the same
+ * dark palette because NightShift is designed to always feel dark.
+ */
+import { BACKGROUND, TEXT, ACCENT } from '../src/theme/colors';
+
+const tintColorDark = ACCENT.primary;
 
 export default {
   light: {
-    text: '#000',
-    background: '#fff',
-    tint: tintColorLight,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorLight,
+    text: TEXT.primary,
+    background: BACKGROUND.primary,
+    tint: tintColorDark,
+    tabIconDefault: TEXT.tertiary,
+    tabIconSelected: tintColorDark,
   },
   dark: {
-    text: '#fff',
-    background: '#000',
+    text: TEXT.primary,
+    background: BACKGROUND.primary,
     tint: tintColorDark,
-    tabIconDefault: '#ccc',
+    tabIconDefault: TEXT.tertiary,
     tabIconSelected: tintColorDark,
   },
 };
