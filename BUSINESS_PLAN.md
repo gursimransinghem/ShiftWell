@@ -1,4 +1,4 @@
-# NightShift — Business Plan
+# ShiftWell — Business Plan
 
 > **Version:** 1.0 | **Date:** March 2026
 > **Founder:** ED Physician (Emergency Department) — solo technical founder
@@ -28,7 +28,7 @@
 
 **Problem:** 700 million people globally work shifts. 32% of US healthcare workers report short sleep. No existing app combines calendar import, science-backed schedule generation, personal calendar awareness, meal timing, nap placement, and one-click calendar export.
 
-**Solution:** NightShift imports your work schedule (iCal/Google/QGenda), reads your personal calendar, and generates a complete circadian optimization plan — sleep windows, strategic naps, caffeine cutoffs, meal timing, light protocols — all exportable back to your calendar with one tap.
+**Solution:** ShiftWell imports your work schedule (iCal/Google/QGenda), reads your personal calendar, and generates a complete circadian optimization plan — sleep windows, strategic naps, caffeine cutoffs, meal timing, light protocols — all exportable back to your calendar with one tap.
 
 **Competitive Advantage:**
 - Built by a physician who lives the problem daily

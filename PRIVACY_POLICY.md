@@ -1,19 +1,19 @@
-# NightShift Privacy Policy
+# ShiftWell Privacy Policy
 
 **Effective Date:** March 1, 2026
 **Last Updated:** March 14, 2026
 
 ## Introduction
 
-NightShift ("the App") is a sleep optimization app designed for shift workers. It is developed and maintained by **[Company Name] LLC** ("we," "us," or "our").
+ShiftWell ("the App") is a sleep optimization app designed for shift workers. It is developed and maintained by **[Company Name] LLC** ("we," "us," or "our").
 
-We built NightShift with privacy as a core principle. Your data stays on your device. We do not collect, transmit, or store any of your information on external servers. This privacy policy explains what data the App uses, how it is handled, and what rights you have.
+We built ShiftWell with privacy as a core principle. Your data stays on your device. We do not collect, transmit, or store any of your information on external servers. This privacy policy explains what data the App uses, how it is handled, and what rights you have.
 
 ---
 
-## What Data Does NightShift Use?
+## What Data Does ShiftWell Use?
 
-NightShift stores the following information **locally on your device only**:
+ShiftWell stores the following information **locally on your device only**:
 
 - **Shift schedule** — Your work shift dates and times, including schedules imported from .ics calendar files
 - **Chronotype quiz answers** — Your responses to the in-app chronotype assessment
@@ -38,7 +38,7 @@ This data is stored using on-device storage (AsyncStorage) and **never leaves yo
 
 ## Calendar File Import and Export
 
-NightShift allows you to:
+ShiftWell allows you to:
 
 - **Import** .ics calendar files from your device to load your shift schedule
 - **Export** .ics calendar files containing your optimized sleep schedule
@@ -51,7 +51,7 @@ These operations happen entirely on your device using standard iOS file-handling
 
 All data is stored locally on your device using standard on-device storage. Your data is protected by your device's built-in security features, including device passcode, Face ID, or Touch ID.
 
-Because no data is transmitted from your device, there is no risk of server-side data breaches involving your NightShift data.
+Because no data is transmitted from your device, there is no risk of server-side data breaches involving your ShiftWell data.
 
 ---
 
@@ -79,7 +79,7 @@ Any future changes that affect how your data is handled will be reflected in an 
 
 ## Children's Privacy (COPPA)
 
-NightShift is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. Because the App does not collect any data from any user, there is no mechanism through which children's data could be gathered.
+ShiftWell is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13. Because the App does not collect any data from any user, there is no mechanism through which children's data could be gathered.
 
 If you believe a child under 13 is using the App in a way that concerns you, please contact us at the email below.
 
@@ -89,7 +89,7 @@ If you believe a child under 13 is using the App in a way that concerns you, ple
 
 If you are located in the European Economic Area (EEA), you have rights under the General Data Protection Regulation (GDPR), including the right to access, correct, delete, and port your personal data.
 
-Because NightShift stores all data locally on your device and we have no access to it:
+Because ShiftWell stores all data locally on your device and we have no access to it:
 
 - **Access and portability:** Your data is already entirely in your possession on your device. You can export your sleep schedule as an .ics file at any time.
 - **Deletion:** You can delete all App data through Settings > Clear All Data, or by uninstalling the App.
@@ -103,7 +103,7 @@ No data is transferred outside your device, so there are no cross-border data tr
 
 If you are a California resident, the California Consumer Privacy Act (CCPA) provides you with specific rights regarding your personal information.
 
-- **Right to know:** NightShift does not collect, sell, or share your personal information with third parties.
+- **Right to know:** ShiftWell does not collect, sell, or share your personal information with third parties.
 - **Right to delete:** You can delete all App data at any time through Settings > Clear All Data.
 - **Right to opt out of sale:** We do not sell your personal information. There is nothing to opt out of.
 - **Non-discrimination:** We will not discriminate against you for exercising any of your CCPA rights.
@@ -112,13 +112,13 @@ If you are a California resident, the California Consumer Privacy Act (CCPA) pro
 
 ## Not a Medical Device
 
-NightShift is a general wellness app. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease or medical condition. The sleep recommendations provided by the App are for informational purposes only and should not replace professional medical advice.
+ShiftWell is a general wellness app. It is not a medical device and is not intended to diagnose, treat, cure, or prevent any disease or medical condition. The sleep recommendations provided by the App are for informational purposes only and should not replace professional medical advice.
 
 ---
 
 ## Third-Party Links and Services
 
-NightShift does not contain links to third-party websites or services. If this changes in a future update, this policy will be updated accordingly.
+ShiftWell does not contain links to third-party websites or services. If this changes in a future update, this policy will be updated accordingly.
 
 ---
 
@@ -139,4 +139,4 @@ Email: **[contact@example.com]**
 
 ---
 
-*This privacy policy is written in plain language to help you understand exactly how NightShift handles your data. The short version: your data stays on your device, and we never see it.*
+*This privacy policy is written in plain language to help you understand exactly how ShiftWell handles your data. The short version: your data stays on your device, and we never see it.*

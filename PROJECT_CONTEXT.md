@@ -1,4 +1,4 @@
-# NightShift — Project Context & Baseline
+# ShiftWell — Project Context & Baseline
 
 > **Created:** 2026-03-14
 > **Founder:** ED Physician (Emergency Department) — first-time app builder
@@ -8,7 +8,7 @@
 
 ## How This Project Started
 
-This project originated from a brainstorming session exploring physician side-project ideas that leverage the rare combination of clinical expertise and tech interest. After generating and scoring 8 initial ideas across dimensions like feasibility, moat, revenue potential, and regulatory risk (documented in `PHYSICIAN_SIDE_PROJECT_IDEAS.md`), the founder proposed a 9th idea that immediately scored highest: **a sleep optimization app for shift workers**.
+This project originated from a brainstorming session exploring physician side-project ideas that leverage the rare combination of clinical expertise and tech interest. After generating and scoring 8 initial ideas across dimensions like feasibility, moat, revenue potential, and regulatory risk (documented in `PHYSICIAN_SIDE_PROJECT_IDEAS.md`), the founder proposed a 9th idea that immediately scored highest: **a sleep optimization app for shift workers** (now called ShiftWell).
 
 The insight was simple: as an ED physician who rotates through day shifts, night shifts, and everything in between, the founder lives the problem every week. No existing app solves it well.
 
@@ -28,7 +28,7 @@ Despite this, shift workers are left with:
 
 ---
 
-## The Solution: NightShift
+## The Solution: ShiftWell
 
 An AI-powered circadian rhythm optimization app that:
 
@@ -61,7 +61,7 @@ Total addressable market: essentially anyone who doesn't work 9-5.
 | **Arcashift** | Yes (buggy) | Partial | Yes | No | No | Free/Premium |
 | **SleepSync** (Monash) | No | No | Yes | No | No | Not launched |
 | **Sleep Aid** | Yes | No | Basic | No | No | Free |
-| **NightShift** | Auto iCal/Google | Yes (dynamic) | Yes + naps | Yes (meals) | Yes (one-click) | TBD |
+| **ShiftWell** | Auto iCal/Google | Yes (dynamic) | Yes + naps | Yes (meals) | Yes (one-click) | TBD |
 
 **Key gap:** No competitor combines calendar import + science-backed schedule generation + personal calendar awareness + one-click export + meal timing + nap placement. Timeshifter is Harvard-backed and award-winning but has no calendar integration at all.
 

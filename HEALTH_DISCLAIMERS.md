@@ -24,7 +24,7 @@ Last updated: 2026-03-14
 
 ## 3. App Store Description Disclaimer
 
-> **Disclaimer:** ShiftWell is a general wellness app designed to help shift workers optimize their sleep schedules. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Recommendations are based on published circadian rhythm research and are for informational purposes only. NightShift does not diagnose or treat Shift Work Sleep Disorder or any other medical condition. Always consult your healthcare provider before making changes to your sleep routine, and never drive or operate machinery if you feel drowsy.
+> **Disclaimer:** ShiftWell is a general wellness app designed to help shift workers optimize their sleep schedules. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Recommendations are based on published circadian rhythm research and are for informational purposes only. ShiftWell does not diagnose or treat Shift Work Sleep Disorder or any other medical condition. Always consult your healthcare provider before making changes to your sleep routine, and never drive or operate machinery if you feel drowsy.
 
 ---
 
@@ -36,11 +36,11 @@ ShiftWell is a general wellness application intended to help shift workers manag
 
 ### 4.2 Not Medical Advice
 
-The sleep schedule recommendations, light exposure guidance, and other information provided by NightShift are for **general informational and wellness purposes only**. Nothing in this app constitutes medical advice, professional diagnosis, or a professional treatment recommendation. The content is informed by published scientific research — including the Two-Process Model of sleep regulation (Borbely, 1982), shift work circadian adaptation protocols (Eastman & Burgess, 2009), and shift work epidemiology (Drake et al., 2013) — but the app's recommendations have not been independently validated in clinical trials.
+The sleep schedule recommendations, light exposure guidance, and other information provided by ShiftWell are for **general informational and wellness purposes only**. Nothing in this app constitutes medical advice, professional diagnosis, or a professional treatment recommendation. The content is informed by published scientific research — including the Two-Process Model of sleep regulation (Borbely, 1982), shift work circadian adaptation protocols (Eastman & Burgess, 2009), and shift work epidemiology (Drake et al., 2013) — but the app's recommendations have not been independently validated in clinical trials.
 
 ### 4.3 Not a Substitute for Professional Care
 
-ShiftWell is **not a substitute** for the advice, diagnosis, or treatment provided by a licensed physician, sleep specialist, or other qualified healthcare professional. Users should not disregard professional medical advice, delay seeking medical care, or discontinue any prescribed treatment based on information provided by NightShift.
+ShiftWell is **not a substitute** for the advice, diagnosis, or treatment provided by a licensed physician, sleep specialist, or other qualified healthcare professional. Users should not disregard professional medical advice, delay seeking medical care, or discontinue any prescribed treatment based on information provided by ShiftWell.
 
 ### 4.4 No Diagnosis or Treatment of Shift Work Sleep Disorder
 
@@ -72,7 +72,7 @@ To the maximum extent permitted by applicable law, ShiftWell, its developers, af
 
 ## 5. Terms of Service Summary
 
-The following outlines the key clauses for the NightShift Terms of Service:
+The following outlines the key clauses for the ShiftWell Terms of Service:
 
 ### 5.1 App Provided "As Is"
 
@@ -84,7 +84,7 @@ Sleep schedule recommendations are generated algorithmically based on published 
 
 ### 5.3 User Responsibility
 
-You are solely responsible for decisions you make based on the app's recommendations. You agree to use NightShift at your own risk and to consult a healthcare professional for any medical concerns.
+You are solely responsible for decisions you make based on the app's recommendations. You agree to use ShiftWell at your own risk and to consult a healthcare professional for any medical concerns.
 
 ### 5.4 User Data Ownership and Privacy
 

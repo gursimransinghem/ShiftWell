@@ -1,4 +1,4 @@
-# NightShift App — Implementation Plan
+# ShiftWell App — Implementation Plan
 
 > **Scope:** This document covers the technical "how and when" — stack, structure, build order, phases, and features.
 > **For project background** (problem, market, competitive landscape, decisions, science): see [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md)
