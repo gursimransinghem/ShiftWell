@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   Pressable,
   StyleSheet,
   Text,
@@ -48,6 +49,26 @@ export default function Button({
   const sizeConfig = SIZE_CONFIG[size];
   const isDisabled = disabled || loading;
 
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    if (isDisabled) return;
+    Animated.timing(scaleAnim, {
+      toValue: 0.97,
+      duration: 80,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    if (isDisabled) return;
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 120,
+      useNativeDriver: true,
+    }).start();
+  };
+
   const containerStyle: ViewStyle[] = [
     styles.base,
     {
@@ -90,27 +111,28 @@ export default function Button({
   const indicatorColor = variant === 'primary' ? '#FFFFFF' : COLORS.primary;
 
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={isDisabled}
-      style={({ pressed }) => [
-        ...containerStyle,
-        pressed && !isDisabled && styles.pressed,
-      ]}
-      accessibilityRole="button"
-      accessibilityState={{ disabled: isDisabled }}
-    >
-      {loading ? (
-        <ActivityIndicator color={indicatorColor} size="small" />
-      ) : (
-        <>
-          {icon && <>{icon}</>}
-          <Text style={[...textStyle, icon ? styles.iconSpacing : undefined]}>
-            {title}
-          </Text>
-        </>
-      )}
-    </Pressable>
+    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+      <Pressable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={isDisabled}
+        style={containerStyle}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: isDisabled }}
+      >
+        {loading ? (
+          <ActivityIndicator color={indicatorColor} size="small" />
+        ) : (
+          <>
+            {icon && <>{icon}</>}
+            <Text style={[...textStyle, icon ? styles.iconSpacing : undefined]}>
+              {title}
+            </Text>
+          </>
+        )}
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -137,9 +159,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.disabledBg,
     borderColor: COLORS.disabledBg,
     opacity: 0.6,
-  },
-  pressed: {
-    opacity: 0.7,
   },
   text: {
     fontWeight: '600',
