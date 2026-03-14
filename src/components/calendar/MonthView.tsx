@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useMemo, useEffect, useRef, useCallback } from 'react';
+import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import {
   format,
   startOfMonth,
@@ -66,6 +66,100 @@ function getDotsForDay(
   return dots.slice(0, 3); // max 3 dots per cell
 }
 
+// ---------------------------------------------------------------------------
+// Animated day cell — handles scale pop on selection
+// ---------------------------------------------------------------------------
+
+function DayCell({
+  day,
+  month,
+  selectedDate,
+  shifts,
+  planBlocks,
+  onDayPress,
+}: {
+  day: Date;
+  month: Date;
+  selectedDate: Date | null;
+  shifts: ShiftEvent[];
+  planBlocks: PlanBlock[];
+  onDayPress: (date: Date) => void;
+}) {
+  const inMonth = isSameMonth(day, month);
+  const today = isToday(day);
+  const selected = selectedDate ? isSameDay(day, selectedDate) : false;
+  const dots = getDotsForDay(day, shifts, planBlocks);
+
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (selected) {
+      scaleAnim.setValue(1);
+      Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 1.05,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [selected, scaleAnim]);
+
+  const handlePress = useCallback(() => {
+    onDayPress(day);
+  }, [day, onDayPress]);
+
+  return (
+    <Pressable
+      onPress={handlePress}
+      style={[
+        styles.dayCell,
+        selected && styles.dayCellSelected,
+      ]}
+      accessibilityRole="button"
+      accessibilityLabel={format(day, 'EEEE, MMMM d')}
+    >
+      <Animated.View
+        style={[
+          styles.dayNumberContainer,
+          today && styles.todayCircle,
+          { transform: [{ scale: scaleAnim }] },
+        ]}
+      >
+        <Text
+          style={[
+            styles.dayNumber,
+            !inMonth && styles.dayNumberDimmed,
+            today && styles.dayNumberToday,
+            selected && styles.dayNumberSelected,
+          ]}
+        >
+          {format(day, 'd')}
+        </Text>
+      </Animated.View>
+
+      {/* Event dots */}
+      <View style={styles.dotsRow}>
+        {dots.map((dot) => (
+          <View
+            key={dot.key}
+            style={[styles.dot, { backgroundColor: dot.color }]}
+          />
+        ))}
+      </View>
+    </Pressable>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
 export default function MonthView({
   month,
   shifts,
@@ -89,6 +183,22 @@ export default function MonthView({
     }
     return result;
   }, [calendarDays]);
+
+  // Month transition fade
+  const gridOpacity = useRef(new Animated.Value(1)).current;
+  const prevMonthRef = useRef(month.getTime());
+
+  useEffect(() => {
+    if (prevMonthRef.current !== month.getTime()) {
+      prevMonthRef.current = month.getTime();
+      gridOpacity.setValue(0);
+      Animated.timing(gridOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [month, gridOpacity]);
 
   const handlePrev = () => onMonthChange?.(subMonths(month, 1));
   const handleNext = () => onMonthChange?.(addMonths(month, 1));
@@ -129,53 +239,24 @@ export default function MonthView({
         ))}
       </View>
 
-      {/* Calendar grid */}
-      {weeks.map((week, weekIdx) => (
-        <View key={weekIdx} style={styles.weekRow}>
-          {week.map((day) => {
-            const inMonth = isSameMonth(day, month);
-            const today = isToday(day);
-            const selected = selectedDate ? isSameDay(day, selectedDate) : false;
-            const dots = getDotsForDay(day, shifts, planBlocks);
-
-            return (
-              <Pressable
+      {/* Calendar grid — animated on month change */}
+      <Animated.View style={{ opacity: gridOpacity }}>
+        {weeks.map((week, weekIdx) => (
+          <View key={weekIdx} style={styles.weekRow}>
+            {week.map((day) => (
+              <DayCell
                 key={day.toISOString()}
-                onPress={() => onDayPress(day)}
-                style={[
-                  styles.dayCell,
-                  selected && styles.dayCellSelected,
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel={format(day, 'EEEE, MMMM d')}
-              >
-                <View style={[styles.dayNumberContainer, today && styles.todayCircle]}>
-                  <Text
-                    style={[
-                      styles.dayNumber,
-                      !inMonth && styles.dayNumberDimmed,
-                      today && styles.dayNumberToday,
-                      selected && styles.dayNumberSelected,
-                    ]}
-                  >
-                    {format(day, 'd')}
-                  </Text>
-                </View>
-
-                {/* Event dots */}
-                <View style={styles.dotsRow}>
-                  {dots.map((dot) => (
-                    <View
-                      key={dot.key}
-                      style={[styles.dot, { backgroundColor: dot.color }]}
-                    />
-                  ))}
-                </View>
-              </Pressable>
-            );
-          })}
-        </View>
-      ))}
+                day={day}
+                month={month}
+                selectedDate={selectedDate}
+                shifts={shifts}
+                planBlocks={planBlocks}
+                onDayPress={onDayPress}
+              />
+            ))}
+          </View>
+        ))}
+      </Animated.View>
     </View>
   );
 }
