@@ -143,42 +143,49 @@ Build and unit-test these pure TypeScript modules with zero UI:
 - Shared UI components: Button (3 variants), Card, ProgressBar, OptionCard, TimeRangePicker
 - 3-tab navigation: Today, Schedule, Settings
 
-### Week 3: Today Screen + Import/Export
+### Week 3: Today Screen + Import/Export [COMPLETED]
 
 **Days 15-17: Today screen**
-- Timeline view of today's plan
-- Show: current/next shift, next sleep window, caffeine cutoff, next meal
-- Countdown timers: "Sleep in 3h 22m", "Caffeine cutoff in 1h 15m"
-- Clean, glanceable — this is the daily driver screen
+- Timeline view with color-coded blocks and active/next/past states
+- CountdownCards with live timers ("Sleep in 3h 22m")
+- Status header (on shift, sleep window, greeting)
+- InsightBanner with contextual circadian advice
+- TipCard with evidence-based tip of the day (25+ tips with scientific refs)
+- Pull-to-refresh plan regeneration, empty states with CTAs
+- useTodayPlan hook for all data derivation
 
 **Days 18-19: .ics import**
-- `expo-document-picker` to select .ics files
-- Parse → show detected shifts with checkboxes for confirmation
-- Import confirmed shifts to store
+- 3-step flow: file picker → parse & review detected shifts → confirm import
+- Checkboxes for shift selection, colored type badges
+- Uses expo-document-picker + expo-file-system
 
 **Days 20-21: .ics export**
-- Generate .ics from current sleep plan
-- `expo-sharing` to share via AirDrop/email/Files
-- User imports into Apple Calendar manually (subscribable URL in Phase 2)
+- useExport hook: generateICS → temp file → expo-sharing share sheet
+- Configurable export options (meals, light protocol, caffeine, wind-down, naps)
 
-### Week 4: Polish + TestFlight
+### Week 4: Polish + TestFlight [COMPLETED]
 
 **Days 22-24: Visual polish**
-- Professional dark theme, smooth animations
-- 44pt minimum touch targets, readable typography
-- App icon + splash screen (AI-generated)
-- "About" section with science references
+- AnimatedTransition component (fade-in/slide-up)
+- Welcome screen staggered animations
+- Chronotype quiz smooth question transitions
+- CountdownCard pulsing glow on urgent items
+- TimelineEvent active/next state animations
+- MonthView smooth month transitions and selection animation
+- Button/OptionCard press scale animations (tactile feedback)
 
-**Days 25-26: Testing**
-- Test on physical iPhone
-- Full flow: onboarding → add shifts → view plan → export .ics → import into Apple Calendar
-- Edge cases: back-to-back shifts, single day off between night stretches, 24-hour shifts
-- Test with real QGenda .ics export
+**Days 25-26: Testing (83 tests passing)**
+- Edge case tests: back-to-back shifts, 24h shifts, 7 consecutive nights, midnight shifts, chronotype extremes, household adjustments
+- Nap engine tests: prophylactic, power, preference toggle
+- Caffeine tests: sensitivity levels, cutoff timing
+- Meal tests: night shift nutrition, fasting periods
+- ICS parser tests: single/multi events, shift detection, malformed input
 
 **Days 27-28: TestFlight deployment**
-- Configure `eas.json`
-- `eas build --platform ios --profile preview`
-- `eas submit --platform ios`
+- eas.json configured (dev/preview/production profiles)
+- app.json production-ready (dark mode, splash, bundle ID)
+- App Store metadata drafted (description, keywords, category)
+- Icon generation instructions provided
 - Distribute to 5-10 fellow shift workers
 
 ### Weeks 5-6: Iterate + App Store

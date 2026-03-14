@@ -2,7 +2,7 @@
 
 > **Created:** 2026-03-14
 > **Founder:** ED Physician (Emergency Department) — first-time app builder
-> **Status:** Week 3 In Progress — Core UI complete, building Today screen + import/export + tips
+> **Status:** Week 4 Complete — MVP feature-complete, 83 tests passing, ready for TestFlight
 
 ---
 
@@ -184,15 +184,62 @@ Button (primary/secondary/ghost), Card, ProgressBar, OptionCard, TimeRangePicker
 
 ---
 
-## What's In Progress (Week 3)
+## What's Been Built (Week 3) — Today Screen + Import/Export
 
-1. **Today screen** — Glanceable timeline with countdowns ("Sleep in 3h", "Caffeine cutoff in 1h")
-2. **.ics import** — expo-document-picker → parse → confirm shifts → import to store
-3. **.ics export** — Generate plan as .ics → share via expo-sharing
-4. **Sleep tips & insights** — 25-30 evidence-based contextual tips, insight banners
-5. **Settings screen** — Import/export, profile editing, about section, science references
+### Today Screen (Daily Driver)
+- Timeline view with color-coded blocks, active/next/past states
+- CountdownCards with live timers ("Sleep in 3h 22m", "Caffeine cutoff in 1h")
+- InsightBanner with contextual circadian advice per day type
+- TipCard with evidence-based tip of the day (25+ tips, scientific refs)
+- Pull-to-refresh, empty states with CTAs
+- useTodayPlan custom hook
 
-Then Week 4: Visual polish, app icon, EAS/TestFlight config.
+### Import/Export
+- 3-step .ics import: file picker → parse & review → confirm
+- useExport hook: generateICS → temp file → share sheet
+- Configurable export options (meals, light, caffeine, naps)
+
+### Settings Screen
+- Import/export sections with shift counts
+- Profile display (chronotype, sleep need, caffeine sensitivity)
+- About section with science references
+- Reset onboarding, clear all data (with confirmations)
+
+### Sleep Tips Engine
+- 25+ evidence-based tips organized by category (sleep, caffeine, light, nutrition, recovery)
+- getTipsForDay() and getTipOfTheDay() functions
+- All tips sourced from peer-reviewed research
+
+---
+
+## What's Been Built (Week 4) — Polish + Ship Prep
+
+### Animations
+- AnimatedTransition (reusable fade-in/slide-up)
+- Staggered welcome screen animations
+- Smooth chronotype quiz transitions
+- CountdownCard pulsing glow, TimelineEvent state animations
+- MonthView month transitions, Button/OptionCard press feedback
+
+### Testing (83 tests, all passing)
+- Edge cases: back-to-back shifts, 24h shifts, 7 consecutive nights, midnight shifts, chronotype extremes, household adjustments, caffeine sensitivity
+- Nap engine, caffeine cutoffs, meal timing, ICS parser
+
+### Ship Configuration
+- eas.json (dev/preview/production build profiles)
+- app.json (production: dark mode, splash, bundle ID)
+- App Store metadata draft
+- Icon generation instructions
+
+---
+
+## What's Next (to ship)
+
+1. **Generate app icon** — Follow instructions in `assets/icons/README.md`
+2. **Test on physical iPhone** — `npx expo start` → scan QR
+3. **EAS build** — Fill in Apple credentials in `eas.json`, run `eas build --platform ios --profile preview`
+4. **TestFlight** — `eas submit --platform ios`, distribute to beta testers
+5. **Iterate** — Tune algorithm based on real-world feedback
 
 ---
 

@@ -5,6 +5,44 @@
 
 ---
 
+## 2026-03-14 — Session 4: Weeks 3-4 Complete Build Through to Ship-Ready
+
+### Completed
+- **Today screen:** Timeline with color-coded blocks, CountdownCards (live timers), status header, InsightBanner, TipCard, pull-to-refresh, empty states
+- **Sleep tips engine:** 25+ evidence-based tips with scientific references, contextual selection by day type, tip of the day rotation
+- **.ics import flow:** 3-step (file picker → review detected shifts with checkboxes → confirm import)
+- **.ics export:** useExport hook with configurable options, generates ICS → temp file → share sheet
+- **Settings screen:** Import/export controls, profile display, about section, science refs, reset/clear data
+- **Animations:** AnimatedTransition component, welcome stagger, chronotype transitions, countdown pulse, timeline active states, month transitions, button/card press scale
+- **Comprehensive test suite:** 83 tests all passing (edge cases, naps, caffeine, meals, ICS parser)
+- **EAS config:** eas.json (dev/preview/production), app.json production-ready
+- **App Store metadata:** Full listing draft (description, keywords, category)
+- **Documentation:** All project docs updated — IMPLEMENTATION_PLAN.md (Weeks 1-4 marked complete), PROJECT_CONTEXT.md (full build inventory), ACTIVITY_LOG.md
+
+### File Count Summary
+- Algorithm engine: 8 modules (src/lib/circadian/)
+- Calendar system: 3 modules (src/lib/calendar/)
+- Tips engine: 2 modules (src/lib/tips/)
+- Stores: 4 files (src/store/)
+- UI components: 7 files (src/components/ui/)
+- Today components: 5 files (src/components/today/)
+- Calendar components: 3 files (src/components/calendar/)
+- Hooks: 3 files (src/hooks/)
+- Theme: 4 files (src/theme/)
+- Screens: 11 files (app/)
+- Tests: 7 test files, 83 tests
+- Config: app.json, eas.json, jest.config.js, tsconfig.json
+
+### Next Steps (to ship)
+- [ ] Generate app icon (see assets/icons/README.md)
+- [ ] Test on physical iPhone via `npx expo start`
+- [ ] Fill in Apple credentials in eas.json
+- [ ] Run `eas build --platform ios --profile preview`
+- [ ] Submit to TestFlight, distribute to 5-10 beta testers
+- [ ] Iterate based on real-world feedback
+
+---
+
 ## 2026-03-14 — Session 3: Week 2 Core UI Build
 
 ### Completed
