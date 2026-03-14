@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/src/components/ui/Button';
 import ProgressBar from '@/src/components/ui/ProgressBar';
+import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 
 const VALUE_POINTS = [
@@ -22,30 +23,40 @@ export default function WelcomeScreen() {
           <ProgressBar currentStep={1} totalSteps={4} />
         </View>
 
-        <View style={styles.hero}>
-          <Text style={styles.appName}>NightShift</Text>
-          <Text style={styles.tagline}>
-            Science-backed sleep optimization for shift workers
-          </Text>
-        </View>
+        <AnimatedTransition delay={0} duration={300}>
+          <View style={styles.hero}>
+            <Text style={styles.appName}>NightShift</Text>
+            <Text style={styles.tagline}>
+              Science-backed sleep optimization for shift workers
+            </Text>
+          </View>
+        </AnimatedTransition>
 
         <View style={styles.valuePoints}>
-          {VALUE_POINTS.map((point) => (
-            <View key={point.text} style={styles.valueRow}>
-              <Text style={styles.valueIcon}>{point.icon}</Text>
-              <Text style={styles.valueText}>{point.text}</Text>
-            </View>
+          {VALUE_POINTS.map((point, index) => (
+            <AnimatedTransition
+              key={point.text}
+              delay={index * 150}
+              duration={250}
+            >
+              <View style={styles.valueRow}>
+                <Text style={styles.valueIcon}>{point.icon}</Text>
+                <Text style={styles.valueText}>{point.text}</Text>
+              </View>
+            </AnimatedTransition>
           ))}
         </View>
 
-        <View style={styles.footer}>
-          <Button
-            title="Get Started"
-            onPress={() => router.push('/(onboarding)/chronotype')}
-            size="lg"
-            fullWidth
-          />
-        </View>
+        <AnimatedTransition delay={450} duration={250}>
+          <View style={styles.footer}>
+            <Button
+              title="Get Started"
+              onPress={() => router.push('/(onboarding)/chronotype')}
+              size="lg"
+              fullWidth
+            />
+          </View>
+        </AnimatedTransition>
       </ScrollView>
     </SafeAreaView>
   );
