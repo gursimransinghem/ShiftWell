@@ -2,7 +2,7 @@
 
 > **Created:** 2026-03-14
 > **Founder:** ED Physician (Emergency Department) — first-time app builder
-> **Status:** Week 4 Complete — MVP feature-complete, 83 tests passing, ready for TestFlight
+> **Status:** Week 4 Complete + Business Plan — MVP feature-complete, 83 tests passing, business plan drafted, ready for TestFlight
 
 ---
 
@@ -233,13 +233,33 @@ Button (primary/secondary/ghost), Card, ProgressBar, OptionCard, TimeRangePicker
 
 ---
 
+## Business Planning
+
+A comprehensive business plan has been created: **[BUSINESS_PLAN.md](./BUSINESS_PLAN.md)**
+
+Covers: LLC formation, App Store submission, monetization (Free → $4.99/mo Freemium → B2B), go-to-market strategy, financial projections, legal/compliance, IP, marketing timeline, risk assessment, and key milestones.
+
+**Key strategic decisions:**
+- Launch free to build trust and reviews, introduce premium at Month 3
+- Lead with physician credibility in all marketing
+- Target healthcare shift workers first, expand to all shift workers
+- $0/mo operating costs in v1 (all on-device, no backend)
+- Break-even at just 7 premium subscribers
+
+---
+
 ## What's Next (to ship)
 
-1. **Generate app icon** — Follow instructions in `assets/icons/README.md`
-2. **Test on physical iPhone** — `npx expo start` → scan QR
-3. **EAS build** — Fill in Apple credentials in `eas.json`, run `eas build --platform ios --profile preview`
-4. **TestFlight** — `eas submit --platform ios`, distribute to beta testers
-5. **Iterate** — Tune algorithm based on real-world feedback
+1. **Form LLC** — File in home state (~$100-200, 30 min)
+2. **Get EIN** — irs.gov (free, 10 min)
+3. **Enroll in Apple Developer Program** — $99/yr
+4. **Generate app icon** — Follow instructions in `assets/icons/README.md`
+5. **Test on physical iPhone** — `npx expo start` → scan QR
+6. **Recruit beta testers** — 10-20 colleagues, 2+ weeks on TestFlight
+7. **EAS build** — `eas build --platform ios --profile preview`
+8. **TestFlight** — `eas submit --platform ios`, distribute to testers
+9. **Submit to App Store** — After beta validation (see BUSINESS_PLAN.md Section 4)
+10. **Iterate** — Tune algorithm based on real-world feedback
 
 ---
 

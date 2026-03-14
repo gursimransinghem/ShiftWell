@@ -5,6 +5,27 @@
 
 **Goal:** Working MVP on TestFlight in ~4-6 weeks, App Store submission shortly after.
 
+> **Business plan:** See [BUSINESS_PLAN.md](./BUSINESS_PLAN.md) for LLC setup, monetization, marketing, legal, and financial planning.
+
+---
+
+## Phase 0 — Business Setup (Pre-Launch)
+
+| Step | Action | Status |
+|------|--------|--------|
+| 1 | Form single-member LLC | ⬜ |
+| 2 | Get EIN from IRS | ⬜ |
+| 3 | Open business bank account | ⬜ |
+| 4 | Register domain | ⬜ |
+| 5 | Enroll in Apple Developer Program ($99/yr) | ⬜ |
+| 6 | Create privacy policy page | ⬜ |
+| 7 | Generate app icon | ⬜ |
+| 8 | Test on physical iPhone | ⬜ |
+| 9 | Beta test with 10-20 shift workers (2 weeks) | ⬜ |
+| 10 | Submit to App Store | ⬜ |
+
+See [BUSINESS_PLAN.md](./BUSINESS_PLAN.md) for detailed instructions on each step.
+
 ---
 
 ## Tech Stack
