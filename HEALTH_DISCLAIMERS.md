@@ -1,4 +1,4 @@
-# NightShift App — Health & Medical Disclaimers
+# ShiftWell App — Health & Medical Disclaimers
 
 Last updated: 2026-03-14
 
@@ -6,17 +6,17 @@ Last updated: 2026-03-14
 
 ## 1. In-App Disclaimer (Onboarding)
 
-> **NightShift is not a medical device and does not provide medical advice.** Sleep schedule recommendations are for informational purposes only and are not a substitute for professional medical guidance. Always consult a qualified healthcare provider before making changes to your sleep habits, especially if you have a diagnosed sleep disorder or other medical condition.
+> **ShiftWell is not a medical device and does not provide medical advice.** Sleep schedule recommendations are for informational purposes only and are not a substitute for professional medical guidance. Always consult a qualified healthcare provider before making changes to your sleep habits, especially if you have a diagnosed sleep disorder or other medical condition.
 
 ---
 
 ## 2. In-App Disclaimer (Settings Screen)
 
-> **About NightShift**
+> **About ShiftWell**
 >
-> NightShift provides sleep schedule recommendations based on published circadian rhythm research, including the Two-Process Model of sleep regulation (Borbely, 1982), phase-shifting protocols for shift workers (Eastman & Burgess, 2009), and epidemiological data on shift work sleep patterns (Drake et al., 2013).
+> ShiftWell provides sleep schedule recommendations based on published circadian rhythm research, including the Two-Process Model of sleep regulation (Borbely, 1982), phase-shifting protocols for shift workers (Eastman & Burgess, 2009), and epidemiological data on shift work sleep patterns (Drake et al., 2013).
 >
-> NightShift is **not a medical device** and is **not intended to diagnose, treat, cure, or prevent** any disease or medical condition, including Shift Work Sleep Disorder (SWSD). The recommendations provided are for general wellness and informational purposes only.
+> ShiftWell is **not a medical device** and is **not intended to diagnose, treat, cure, or prevent** any disease or medical condition, including Shift Work Sleep Disorder (SWSD). The recommendations provided are for general wellness and informational purposes only.
 >
 > If you experience persistent sleep difficulties, excessive daytime sleepiness, or any health concerns, please consult a qualified healthcare provider. Do not disregard professional medical advice or delay seeking it because of information provided by this app.
 
@@ -24,7 +24,7 @@ Last updated: 2026-03-14
 
 ## 3. App Store Description Disclaimer
 
-> **Disclaimer:** NightShift is a general wellness app designed to help shift workers optimize their sleep schedules. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Recommendations are based on published circadian rhythm research and are for informational purposes only. NightShift does not diagnose or treat Shift Work Sleep Disorder or any other medical condition. Always consult your healthcare provider before making changes to your sleep routine, and never drive or operate machinery if you feel drowsy.
+> **Disclaimer:** ShiftWell is a general wellness app designed to help shift workers optimize their sleep schedules. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Recommendations are based on published circadian rhythm research and are for informational purposes only. NightShift does not diagnose or treat Shift Work Sleep Disorder or any other medical condition. Always consult your healthcare provider before making changes to your sleep routine, and never drive or operate machinery if you feel drowsy.
 
 ---
 
@@ -32,7 +32,7 @@ Last updated: 2026-03-14
 
 ### 4.1 General Wellness Product
 
-NightShift is a general wellness application intended to help shift workers manage their sleep schedules. It qualifies under the U.S. Food and Drug Administration's General Wellness Policy as a low-risk general wellness product. NightShift is **not a medical device** as defined under Section 201(h) of the Federal Food, Drug, and Cosmetic Act. It has not been evaluated, cleared, or approved by the FDA or any other regulatory body.
+ShiftWell is a general wellness application intended to help shift workers manage their sleep schedules. It qualifies under the U.S. Food and Drug Administration's General Wellness Policy as a low-risk general wellness product. ShiftWell is **not a medical device** as defined under Section 201(h) of the Federal Food, Drug, and Cosmetic Act. It has not been evaluated, cleared, or approved by the FDA or any other regulatory body.
 
 ### 4.2 Not Medical Advice
 

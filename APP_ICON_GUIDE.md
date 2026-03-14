@@ -1,6 +1,6 @@
-# NightShift App Icon Guide
+# ShiftWell App Icon Guide
 
-> Comprehensive guide to designing, generating, and configuring the NightShift app icon.
+> Comprehensive guide to designing, generating, and configuring the ShiftWell app icon.
 
 ---
 
@@ -47,7 +47,7 @@ Save to `assets/images/android-icon-foreground.png` and `assets/images/android-i
 
 ### Color Palette
 
-Use the NightShift app theme colors:
+Use the ShiftWell app theme colors:
 
 | Color | Hex | Use |
 |-------|-----|-----|
