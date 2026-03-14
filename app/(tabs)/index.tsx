@@ -13,9 +13,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
-import { TimelineEvent, CountdownCard } from '@/src/components/today';
+import { TimelineEvent, CountdownCard, TipCard, InsightBanner } from '@/src/components/today';
 import Card from '@/src/components/ui/Card';
 import Button from '@/src/components/ui/Button';
+import { useUserStore } from '@/src/store/user-store';
+import { getTipOfTheDay } from '@/src/lib/tips/sleep-tips';
 import {
   COLORS,
   BLOCK_COLORS,
@@ -58,8 +60,17 @@ export default function TodayScreen() {
     isEmpty,
   } = useTodayPlan();
 
+  const plan = usePlanStore((s) => s.plan);
+  const profile = useUserStore((s) => s.profile);
+
   const hasShifts = shifts.length > 0;
   const now = new Date();
+
+  // Get today's day type and tip
+  const todayDayType = plan?.classifiedDays?.find(
+    (d) => d.date.toDateString() === now.toDateString()
+  )?.dayType ?? 'off';
+  const tipOfTheDay = getTipOfTheDay(todayDayType, profile);
 
   // Pull-to-refresh
   const onRefresh = useCallback(() => {
@@ -146,9 +157,33 @@ export default function TodayScreen() {
                 targetTime={c.targetTime}
                 color={c.color}
                 emoji={c.emoji}
+                isUrgent={i === 0}
               />
             ))}
           </ScrollView>
+        </View>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Insight banner                                                      */}
+      {/* ------------------------------------------------------------------ */}
+      {plan && hasShifts && (
+        <View style={styles.section}>
+          <InsightBanner
+            dayType={todayDayType}
+            stats={plan.stats}
+            profile={profile}
+          />
+        </View>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Tip of the day                                                      */}
+      {/* ------------------------------------------------------------------ */}
+      {tipOfTheDay && hasShifts && (
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>TIP OF THE DAY</Text>
+          <TipCard tip={tipOfTheDay} />
         </View>
       )}
 
