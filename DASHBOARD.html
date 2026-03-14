@@ -3,29 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShiftWell — Project Dashboard</title>
+<title>ShiftWell Project Dashboard</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg: #0A0E1A;
-    --card: #1A1F35;
-    --card-hover: #222842;
-    --primary: #6C63FF;
-    --primary-dim: rgba(108,99,255,0.15);
-    --success: #4CAF50;
-    --pending: #FF6B6B;
-    --warning: #FFD93D;
-    --text: #EAEAEA;
-    --text-dim: #8E92A4;
-    --border: #2A2F45;
-    --radius: 12px;
-  }
-
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+    background: #0A0E1A;
+    color: #EAEAEA;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     min-height: 100vh;
   }
@@ -40,20 +25,54 @@
     font-size: 2.4rem;
     font-weight: 700;
     letter-spacing: -0.5px;
+    color: #EAEAEA;
   }
-  .header h1 span { color: var(--primary); }
-  .header p { color: var(--text-dim); margin-top: 6px; font-size: 1.05rem; }
+  .header h1 .brand { color: #6C63FF; }
+  .header .subtitle {
+    color: #8E92A4;
+    margin-top: 6px;
+    font-size: 1.05rem;
+  }
+  .status-badge {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    background: rgba(255,217,61,0.15);
+    color: #FFD93D;
+  }
 
   /* --- Layout --- */
   .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
-  .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 20px; }
+  .section-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8E92A4;
+    margin-bottom: 14px;
+    margin-top: 28px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .grid-6 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
   .full { margin-bottom: 20px; }
 
   @media (max-width: 900px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
     .grid-6 { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 500px) {
@@ -63,16 +82,15 @@
 
   /* --- Cards --- */
   .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    background: #1A1F35;
+    border: 1px solid #2A2F45;
+    border-radius: 12px;
     padding: 24px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    background: var(--card-hover);
   }
   .card h2 {
     font-size: 1.15rem;
@@ -80,8 +98,25 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: #EAEAEA;
   }
   .card h2 .icon { font-size: 1.3rem; }
+
+  /* --- Metric Cards --- */
+  .metric-card {
+    text-align: center;
+    padding: 20px 12px;
+  }
+  .metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6C63FF;
+  }
+  .metric-label {
+    font-size: 0.82rem;
+    color: #8E92A4;
+    margin-top: 4px;
+  }
 
   /* --- Badges / Tags --- */
   .badge {
@@ -92,16 +127,16 @@
     font-weight: 600;
     letter-spacing: 0.3px;
   }
-  .badge-primary { background: var(--primary-dim); color: var(--primary); }
-  .badge-success { background: rgba(76,175,80,0.15); color: var(--success); }
-  .badge-warning { background: rgba(255,217,61,0.15); color: var(--warning); }
-  .badge-pending { background: rgba(255,107,107,0.15); color: var(--pending); }
+  .badge-primary { background: rgba(108,99,255,0.15); color: #6C63FF; }
+  .badge-success { background: rgba(76,175,80,0.15); color: #4CAF50; }
+  .badge-warning { background: rgba(255,217,61,0.15); color: #FFD93D; }
+  .badge-pending { background: rgba(255,107,107,0.15); color: #FF6B6B; }
 
   .tag {
     display: inline-block;
     padding: 4px 10px;
-    background: var(--primary-dim);
-    color: var(--primary);
+    background: rgba(108,99,255,0.15);
+    color: #6C63FF;
     border-radius: 6px;
     font-size: 0.78rem;
     margin: 3px 2px;
@@ -110,8 +145,9 @@
 
   /* --- Overview Card --- */
   .overview-status { margin-top: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .overview-meta { margin-top: 14px; color: var(--text-dim); font-size: 0.9rem; }
-  .overview-meta strong { color: var(--text); }
+  .overview-meta { margin-top: 14px; color: #8E92A4; font-size: 0.9rem; }
+  .overview-meta strong { color: #EAEAEA; }
+  .overview-meta p { margin-bottom: 4px; }
   .tech-stack { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 4px; }
 
   /* --- Progress Bars --- */
@@ -122,8 +158,9 @@
     justify-content: space-between;
     font-size: 0.88rem;
     margin-bottom: 6px;
+    color: #EAEAEA;
   }
-  .progress-label span:last-child { color: var(--text-dim); }
+  .progress-label .detail { color: #8E92A4; }
   .progress-track {
     height: 10px;
     background: rgba(255,255,255,0.06);
@@ -136,26 +173,8 @@
     width: 0;
     transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .progress-fill.green { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
-  .progress-fill.purple { background: linear-gradient(90deg, #6C63FF, #8B83FF); }
-  .progress-fill.red { background: linear-gradient(90deg, #FF6B6B, #FF8A8A); }
-  .progress-fill.yellow { background: linear-gradient(90deg, #FFD93D, #FFE57F); }
-
-  /* --- Metric Cards --- */
-  .metric-card {
-    text-align: center;
-    padding: 20px 12px;
-  }
-  .metric-card .metric-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
-  }
-  .metric-card .metric-label {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    margin-top: 4px;
-  }
+  .pf-green { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
+  .pf-red { background: linear-gradient(90deg, #FF6B6B, #FF8A8A); }
 
   /* --- Checklist --- */
   .checklist-item {
@@ -163,72 +182,42 @@
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #2A2F45;
     cursor: pointer;
+    -webkit-user-select: none;
     user-select: none;
   }
   .checklist-item:last-child { border-bottom: none; }
   .checklist-item:hover { opacity: 0.85; }
   .check-box {
-    width: 22px; height: 22px;
-    border: 2px solid var(--border);
+    width: 22px;
+    height: 22px;
+    border: 2px solid #2A2F45;
     border-radius: 6px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s ease, border-color 0.2s ease;
     font-size: 13px;
     color: transparent;
+    line-height: 1;
   }
   .checklist-item.checked .check-box {
-    background: var(--success);
-    border-color: var(--success);
+    background: #4CAF50;
+    border-color: #4CAF50;
     color: #fff;
   }
   .checklist-item.checked .check-label {
     text-decoration: line-through;
-    color: var(--text-dim);
+    color: #8E92A4;
   }
-  .check-label { font-size: 0.92rem; }
+  .check-label { font-size: 0.92rem; color: #EAEAEA; }
   .checklist-progress {
     font-size: 0.82rem;
-    color: var(--text-dim);
+    color: #8E92A4;
     margin-top: 12px;
     text-align: right;
-  }
-
-  /* --- File Inventory --- */
-  .file-section { border-bottom: 1px solid var(--border); }
-  .file-section:last-child { border-bottom: none; }
-  .file-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    cursor: pointer;
-    user-select: none;
-    font-weight: 600;
-    font-size: 0.92rem;
-  }
-  .file-section-header:hover { color: var(--primary); }
-  .file-section-header .arrow {
-    transition: transform 0.25s;
-    font-size: 0.7rem;
-    color: var(--text-dim);
-  }
-  .file-section.open .arrow { transform: rotate(90deg); }
-  .file-list {
-    display: none;
-    padding: 0 0 12px 16px;
-  }
-  .file-section.open .file-list { display: block; }
-  .file-list li {
-    list-style: none;
-    font-size: 0.84rem;
-    color: var(--text-dim);
-    padding: 3px 0;
-    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   /* --- Timeline --- */
@@ -240,7 +229,7 @@
     top: 8px;
     bottom: 8px;
     width: 2px;
-    background: var(--border);
+    background: #2A2F45;
   }
   .tl-item {
     position: relative;
@@ -254,12 +243,51 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--primary);
-    border: 3px solid var(--bg);
+    border: 3px solid #0A0E1A;
+    background: #4CAF50;
   }
-  .tl-item.done .tl-dot { background: var(--success); }
-  .tl-title { font-weight: 600; font-size: 0.92rem; }
-  .tl-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 2px; }
+  .tl-title { font-weight: 600; font-size: 0.92rem; color: #EAEAEA; }
+  .tl-date { font-size: 0.78rem; color: #6C63FF; margin-bottom: 2px; }
+  .tl-desc { font-size: 0.82rem; color: #8E92A4; margin-top: 2px; }
+
+  /* --- File Inventory --- */
+  .file-section { border-bottom: 1px solid #2A2F45; }
+  .file-section:last-child { border-bottom: none; }
+  .file-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #EAEAEA;
+  }
+  .file-section-header:hover { color: #6C63FF; }
+  .file-section-header .count {
+    color: #8E92A4;
+    font-weight: 400;
+  }
+  .file-section-header .arrow {
+    transition: transform 0.25s ease;
+    font-size: 0.7rem;
+    color: #8E92A4;
+  }
+  .file-section.open .arrow { transform: rotate(90deg); }
+  .file-list {
+    display: none;
+    padding: 0 0 12px 16px;
+    list-style: none;
+  }
+  .file-section.open .file-list { display: block; }
+  .file-list li {
+    font-size: 0.84rem;
+    color: #8E92A4;
+    padding: 3px 0;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+  }
 
   /* --- Fade-in animation --- */
   .fade-in {
@@ -271,39 +299,49 @@
     opacity: 1;
     transform: translateY(0);
   }
-
-  /* --- Section title --- */
-  .section-title {
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--text-dim);
-    margin-bottom: 14px;
-    margin-top: 28px;
-  }
 </style>
 </head>
 <body>
 
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <h1><span>ShiftWell</span> Project Dashboard</h1>
-  <p>Circadian rhythm optimization for shift workers</p>
+  <h1><span class="brand">ShiftWell</span> Project Dashboard</h1>
+  <p class="subtitle">Circadian rhythm optimization for shift workers</p>
+  <div class="status-badge">MVP Complete &mdash; Pre-Launch</div>
 </div>
 
 <div class="container">
 
-  <!-- Key Metrics -->
+  <!-- ===== KEY METRICS ===== -->
   <div class="section-title fade-in">Key Metrics</div>
   <div class="grid-6 fade-in">
-    <div class="card metric-card"><div class="metric-value">83</div><div class="metric-label">Tests Passing</div></div>
-    <div class="card metric-card"><div class="metric-value">25+</div><div class="metric-label">Components</div></div>
-    <div class="card metric-card"><div class="metric-value">8</div><div class="metric-label">Algorithm Modules</div></div>
-    <div class="card metric-card"><div class="metric-value">11</div><div class="metric-label">Screens</div></div>
-    <div class="card metric-card"><div class="metric-value">12</div><div class="metric-label">Docs</div></div>
-    <div class="card metric-card"><div class="metric-value">6</div><div class="metric-label">Sessions</div></div>
+    <div class="card metric-card">
+      <div class="metric-value">83</div>
+      <div class="metric-label">Tests Passing</div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-value">25+</div>
+      <div class="metric-label">Components</div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-value">8</div>
+      <div class="metric-label">Algorithm Modules</div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-value">11</div>
+      <div class="metric-label">Screens</div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-value">12</div>
+      <div class="metric-label">Docs</div>
+    </div>
+    <div class="card metric-card">
+      <div class="metric-value">6</div>
+      <div class="metric-label">Sessions</div>
+    </div>
   </div>
 
-  <!-- Overview + Progress -->
+  <!-- ===== OVERVIEW + PROGRESS ===== -->
   <div class="grid-2 fade-in">
     <!-- Project Overview -->
     <div class="card">
@@ -329,33 +367,33 @@
     <div class="card">
       <h2><span class="icon">&#9881;</span> Progress Tracker</h2>
       <div class="progress-item">
-        <div class="progress-label"><span>Algorithm Engine</span><span>100% &middot; 8 modules</span></div>
-        <div class="progress-track"><div class="progress-fill green" data-width="100"></div></div>
+        <div class="progress-label"><span>Algorithm Engine</span><span class="detail">100% &middot; 8 modules</span></div>
+        <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>UI Components</span><span>100% &middot; 25+ built</span></div>
-        <div class="progress-track"><div class="progress-fill green" data-width="100"></div></div>
+        <div class="progress-label"><span>UI Components</span><span class="detail">100% &middot; 25+ built</span></div>
+        <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Tests</span><span>100% &middot; 83 passing</span></div>
-        <div class="progress-track"><div class="progress-fill green" data-width="100"></div></div>
+        <div class="progress-label"><span>Tests</span><span class="detail">100% &middot; 83 passing</span></div>
+        <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>App Store Prep</span><span>100% &middot; all docs ready</span></div>
-        <div class="progress-track"><div class="progress-fill green" data-width="100"></div></div>
+        <div class="progress-label"><span>App Store Prep</span><span class="detail">100% &middot; all docs ready</span></div>
+        <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Business Setup</span><span>0% &middot; founder action items</span></div>
-        <div class="progress-track"><div class="progress-fill red" data-width="0"></div></div>
+        <div class="progress-label"><span>Business Setup</span><span class="detail">0% &middot; founder action items</span></div>
+        <div class="progress-track"><div class="progress-fill pf-red" data-width="0"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Beta Testing</span><span>0% &middot; not started</span></div>
-        <div class="progress-track"><div class="progress-fill red" data-width="0"></div></div>
+        <div class="progress-label"><span>Beta Testing</span><span class="detail">0% &middot; not started</span></div>
+        <div class="progress-track"><div class="progress-fill pf-red" data-width="0"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Checklist + Timeline -->
+  <!-- ===== CHECKLIST + TIMELINE ===== -->
   <div class="grid-2 fade-in">
     <!-- Launch Checklist -->
     <div class="card">
@@ -364,45 +402,51 @@
       <div class="checklist-progress" id="checklist-progress"></div>
     </div>
 
-    <!-- Timeline -->
+    <!-- Development Timeline -->
     <div class="card">
-      <h2><span class="icon">&#8982;</span> Development Timeline</h2>
+      <h2><span class="icon">&#128197;</span> Development Timeline</h2>
       <div class="timeline">
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 1 &mdash; Foundation</div>
+          <div class="tl-date">Session 1</div>
+          <div class="tl-title">Foundation</div>
           <div class="tl-desc">Project scaffolding, circadian algorithm core, shift classification engine</div>
         </div>
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 2 &mdash; Algorithm Suite</div>
+          <div class="tl-date">Session 2</div>
+          <div class="tl-title">Algorithm Suite</div>
           <div class="tl-desc">Sleep windows, nap engine, caffeine timing, meal scheduler, light protocols</div>
         </div>
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 3 &mdash; Calendar + Tips</div>
+          <div class="tl-date">Session 3</div>
+          <div class="tl-title">Calendar + Tips</div>
           <div class="tl-desc">ICS import/export, shift auto-detection, evidence-based tips library</div>
         </div>
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 4 &mdash; UI Build</div>
+          <div class="tl-date">Session 4</div>
+          <div class="tl-title">UI Build</div>
           <div class="tl-desc">25+ components, 11 screens, dark-mode-first design system</div>
         </div>
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 5 &mdash; Testing</div>
+          <div class="tl-date">Session 5</div>
+          <div class="tl-title">Testing</div>
           <div class="tl-desc">83 tests across 7 test files, full algorithm coverage</div>
         </div>
-        <div class="tl-item done">
+        <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Session 6 &mdash; Launch Prep</div>
+          <div class="tl-date">Session 6</div>
+          <div class="tl-title">Launch Prep</div>
           <div class="tl-desc">Business plan, privacy policy, disclaimers, App Store listing, deployment guide</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- File Inventory -->
+  <!-- ===== FILE INVENTORY ===== -->
   <div class="section-title fade-in">File Inventory</div>
   <div class="full fade-in">
     <div class="card" id="file-inventory"></div>
@@ -412,7 +456,9 @@
 
 <script>
 (function() {
-  // --- Checklist ---
+  'use strict';
+
+  // ===== CHECKLIST =====
   var checklistItems = [
     'Form LLC',
     'Get EIN',
@@ -426,95 +472,210 @@
     'App Store approval'
   ];
 
-  var STORAGE_KEY = 'nightshift_checklist';
+  var STORAGE_KEY = 'shiftwell_checklist';
 
   function loadChecklist() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { return {}; }
+    try {
+      var data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : {};
+    } catch (e) {
+      return {};
+    }
   }
+
   function saveChecklist(state) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      // localStorage unavailable, silently fail
+    }
   }
 
   function renderChecklist() {
     var container = document.getElementById('checklist');
+    if (!container) return;
     var state = loadChecklist();
-    container.innerHTML = '';
+    var html = '';
     var done = 0;
-    checklistItems.forEach(function(label, i) {
+    for (var i = 0; i < checklistItems.length; i++) {
       var checked = !!state[i];
       if (checked) done++;
-      var div = document.createElement('div');
-      div.className = 'checklist-item' + (checked ? ' checked' : '');
-      div.innerHTML = '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div><span class="check-label">' + label + '</span>';
-      div.addEventListener('click', function() {
-        state[i] = !state[i];
-        saveChecklist(state);
-        renderChecklist();
-      });
-      container.appendChild(div);
-    });
-    document.getElementById('checklist-progress').textContent = done + ' of ' + checklistItems.length + ' complete';
+      html += '<div class="checklist-item' + (checked ? ' checked' : '') + '" data-index="' + i + '">';
+      html += '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div>';
+      html += '<span class="check-label">' + checklistItems[i] + '</span>';
+      html += '</div>';
+    }
+    container.innerHTML = html;
+
+    var progressEl = document.getElementById('checklist-progress');
+    if (progressEl) {
+      progressEl.textContent = done + ' of ' + checklistItems.length + ' complete';
+    }
+
+    // Attach click handlers via event delegation
+    container.onclick = function(e) {
+      var item = e.target;
+      while (item && !item.getAttribute('data-index') && item !== container) {
+        item = item.parentElement;
+      }
+      if (!item || item === container) return;
+      var idx = parseInt(item.getAttribute('data-index'), 10);
+      var currentState = loadChecklist();
+      currentState[idx] = !currentState[idx];
+      saveChecklist(currentState);
+      renderChecklist();
+    };
   }
+
   renderChecklist();
 
-  // --- File Inventory ---
+  // ===== FILE INVENTORY =====
   var fileData = [
-    { title: 'Algorithm  (src/lib/circadian/)', count: 8, files: ['types.ts','classify-shifts.ts','sleep-windows.ts','nap-engine.ts','caffeine.ts','meals.ts','light-protocol.ts','index.ts'] },
-    { title: 'Calendar  (src/lib/calendar/)', count: 3, files: ['ics-parser.ts','ics-generator.ts','shift-detector.ts'] },
-    { title: 'Tips  (src/lib/tips/)', count: 1, files: ['tips library module'] },
-    { title: 'Stores  (src/store/)', count: 4, files: ['schedule-store.ts','settings-store.ts','recommendations-store.ts','onboarding-store.ts'] },
-    { title: 'Components &mdash; UI  (src/components/ui/)', count: 7, files: ['Button.tsx','Card.tsx','Header.tsx','ProgressBar.tsx','Badge.tsx','TabBar.tsx','TimelineItem.tsx'] },
-    { title: 'Components &mdash; Today  (src/components/today/)', count: 5, files: ['SleepCard.tsx','CaffeineCard.tsx','MealCard.tsx','LightCard.tsx','NapCard.tsx'] },
-    { title: 'Components &mdash; Calendar  (src/components/calendar/)', count: 3, files: ['CalendarView.tsx','ShiftCard.tsx','ImportModal.tsx'] },
-    { title: 'Screens  (app/)', count: 11, files: ['_layout.tsx','index.tsx','today.tsx','calendar.tsx','settings.tsx','onboarding/step1.tsx','onboarding/step2.tsx','onboarding/step3.tsx','onboarding/step4.tsx','onboarding/review.tsx','tips.tsx'] },
-    { title: 'Tests', count: 7, files: ['classify-shifts.test.ts','sleep-windows.test.ts','nap-engine.test.ts','caffeine.test.ts','meals.test.ts','light-protocol.test.ts','integration.test.ts'] },
-    { title: 'Documentation', count: 11, files: ['BUSINESS_PLAN.md','PRIVACY_POLICY.md','HEALTH_DISCLAIMERS.md','APP_ICON_GUIDE.md','APP_STORE_LISTING.md','DEPLOYMENT_GUIDE.md','FOUNDER_ACTION_GUIDE.md','VISUAL_ROADMAP.md','PROJECT_CONTEXT.md','IMPLEMENTATION_PLAN.md','ACTIVITY_LOG.md'] }
+    {
+      title: 'Algorithm (src/lib/circadian/)',
+      count: 8,
+      files: ['types.ts', 'classify-shifts.ts', 'sleep-windows.ts', 'nap-engine.ts', 'caffeine.ts', 'meals.ts', 'light-protocol.ts', 'index.ts']
+    },
+    {
+      title: 'Calendar (src/lib/calendar/)',
+      count: 3,
+      files: ['ics-parser.ts', 'ics-generator.ts', 'shift-detector.ts']
+    },
+    {
+      title: 'Tips (src/lib/tips/)',
+      count: 1,
+      files: ['tips library module']
+    },
+    {
+      title: 'Stores (src/store/)',
+      count: 4,
+      files: ['schedule-store.ts', 'settings-store.ts', 'recommendations-store.ts', 'onboarding-store.ts']
+    },
+    {
+      title: 'Components - UI (src/components/ui/)',
+      count: 7,
+      files: ['Button.tsx', 'Card.tsx', 'Header.tsx', 'ProgressBar.tsx', 'Badge.tsx', 'TabBar.tsx', 'TimelineItem.tsx']
+    },
+    {
+      title: 'Components - Today (src/components/today/)',
+      count: 5,
+      files: ['SleepCard.tsx', 'CaffeineCard.tsx', 'MealCard.tsx', 'LightCard.tsx', 'NapCard.tsx']
+    },
+    {
+      title: 'Components - Calendar (src/components/calendar/)',
+      count: 3,
+      files: ['CalendarView.tsx', 'ShiftCard.tsx', 'ImportModal.tsx']
+    },
+    {
+      title: 'Screens (app/)',
+      count: 11,
+      files: ['_layout.tsx', 'index.tsx', 'today.tsx', 'calendar.tsx', 'settings.tsx', 'onboarding/step1.tsx', 'onboarding/step2.tsx', 'onboarding/step3.tsx', 'onboarding/step4.tsx', 'onboarding/review.tsx', 'tips.tsx']
+    },
+    {
+      title: 'Tests',
+      count: 7,
+      files: ['classify-shifts.test.ts', 'sleep-windows.test.ts', 'nap-engine.test.ts', 'caffeine.test.ts', 'meals.test.ts', 'light-protocol.test.ts', 'integration.test.ts']
+    },
+    {
+      title: 'Documentation',
+      count: 12,
+      files: ['BUSINESS_PLAN.md', 'PRIVACY_POLICY.md', 'HEALTH_DISCLAIMERS.md', 'APP_ICON_GUIDE.md', 'APP_STORE_LISTING.md', 'DEPLOYMENT_GUIDE.md', 'FOUNDER_ACTION_GUIDE.md', 'VISUAL_ROADMAP.md', 'PROJECT_CONTEXT.md', 'IMPLEMENTATION_PLAN.md', 'ACTIVITY_LOG.md', 'DASHBOARD.html']
+    }
   ];
 
   var inv = document.getElementById('file-inventory');
-  fileData.forEach(function(section) {
-    var div = document.createElement('div');
-    div.className = 'file-section';
-    var header = document.createElement('div');
-    header.className = 'file-section-header';
-    header.innerHTML = '<span>' + section.title + ' <span style="color:var(--text-dim);font-weight:400">(' + section.count + ')</span></span><span class="arrow">&#9654;</span>';
-    header.addEventListener('click', function() { div.classList.toggle('open'); });
-    var ul = document.createElement('ul');
-    ul.className = 'file-list';
-    section.files.forEach(function(f) {
-      var li = document.createElement('li');
-      li.textContent = f;
-      ul.appendChild(li);
-    });
-    div.appendChild(header);
-    div.appendChild(ul);
-    inv.appendChild(div);
-  });
+  if (inv) {
+    var html = '';
+    for (var s = 0; s < fileData.length; s++) {
+      var section = fileData[s];
+      html += '<div class="file-section" id="fs-' + s + '">';
+      html += '<div class="file-section-header" data-section="' + s + '">';
+      html += '<span>' + section.title + ' <span class="count">(' + section.count + ')</span></span>';
+      html += '<span class="arrow">&#9654;</span>';
+      html += '</div>';
+      html += '<ul class="file-list">';
+      for (var f = 0; f < section.files.length; f++) {
+        html += '<li>' + section.files[f] + '</li>';
+      }
+      html += '</ul>';
+      html += '</div>';
+    }
+    inv.innerHTML = html;
 
-  // --- Progress bar animation ---
-  function animateBars() {
-    document.querySelectorAll('.progress-fill').forEach(function(bar) {
-      var w = bar.getAttribute('data-width');
-      setTimeout(function() { bar.style.width = w + '%'; }, 200);
-    });
+    // Event delegation for collapsible sections
+    inv.onclick = function(e) {
+      var header = e.target;
+      while (header && !header.getAttribute('data-section') && header !== inv) {
+        header = header.parentElement;
+      }
+      if (!header || header === inv) return;
+      var idx = header.getAttribute('data-section');
+      var sectionEl = document.getElementById('fs-' + idx);
+      if (sectionEl) {
+        if (sectionEl.className.indexOf('open') !== -1) {
+          sectionEl.className = 'file-section';
+        } else {
+          sectionEl.className = 'file-section open';
+        }
+      }
+    };
   }
 
-  // --- Scroll fade-in (IntersectionObserver) ---
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+  // ===== PROGRESS BAR ANIMATION =====
+  function animateBars() {
+    var bars = document.querySelectorAll('.progress-fill');
+    for (var i = 0; i < bars.length; i++) {
+      (function(bar) {
+        var w = bar.getAttribute('data-width');
+        setTimeout(function() {
+          bar.style.width = w + '%';
+        }, 300);
+      })(bars[i]);
+    }
+  }
+
+  // ===== FADE-IN ON SCROLL =====
+  function handleFadeIn() {
+    var elements = document.querySelectorAll('.fade-in');
+    for (var i = 0; i < elements.length; i++) {
+      var el = elements[i];
+      var rect = el.getBoundingClientRect();
+      var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      if (rect.top < windowHeight - 40) {
+        el.className = el.className.replace('fade-in', 'fade-in visible');
       }
-    });
-  }, { threshold: 0.1 });
+    }
+  }
 
-  document.querySelectorAll('.fade-in').forEach(function(el) {
-    observer.observe(el);
-  });
+  // Use IntersectionObserver if available, fall back to scroll listener
+  if (typeof IntersectionObserver !== 'undefined') {
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          entries[i].target.classList.add('visible');
+          observer.unobserve(entries[i].target);
+        }
+      }
+    }, { threshold: 0.05 });
 
-  // kick off progress bars once the first section is visible
-  animateBars();
+    var fadeEls = document.querySelectorAll('.fade-in');
+    for (var i = 0; i < fadeEls.length; i++) {
+      observer.observe(fadeEls[i]);
+    }
+
+    // Also immediately check elements already in viewport
+    // (IntersectionObserver callback is async, so we force a check)
+    setTimeout(handleFadeIn, 50);
+  } else {
+    // Fallback for older browsers
+    handleFadeIn();
+    window.addEventListener('scroll', handleFadeIn);
+    window.addEventListener('resize', handleFadeIn);
+  }
+
+  // Animate progress bars after a short delay
+  setTimeout(animateBars, 100);
+
 })();
 </script>
 </body>
