@@ -264,3 +264,23 @@ When resuming work on this project in a new conversation:
 6. The founder is a physician with no coding experience — explain decisions clearly
 7. Dark-mode-first UI, professional quality, science-backed everything
 8. Branch: `claude/physician-side-project-ideas-UIAPK`
+
+### Context Window Optimization — Subagent Policy
+
+**Always prefer spawning subagents for parallelizable or self-contained tasks.** This keeps the main conversation context lean and focused on decision-making with the founder.
+
+Use subagents for:
+- **Research tasks** (web searches, competitive analysis, library comparisons)
+- **File generation** (writing new modules, components, tests, documentation)
+- **Exploration** (codebase searches, understanding existing patterns)
+- **Planning** (architecture design, implementation strategy)
+- **Bulk operations** (creating multiple files, refactoring across files)
+- **Documentation updates** (updating PROJECT_CONTEXT.md, IMPLEMENTATION_PLAN.md after milestones)
+
+Keep in the main thread:
+- Key decisions that need the founder's input
+- High-level status updates at milestones
+- Errors or blockers that change the plan
+- Final commit/push operations
+
+When multiple independent tasks exist (e.g., "build 3 UI components"), spawn parallel subagents rather than building sequentially in the main thread. This is faster AND preserves context.
