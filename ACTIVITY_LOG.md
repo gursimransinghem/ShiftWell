@@ -5,6 +5,42 @@
 
 ---
 
+## 2026-03-14 — Session 3: Week 2 Core UI Build
+
+### Completed
+- **Theme system:** Dark-mode-first design tokens — colors (block-type palette), typography scale, spacing/radius constants
+- **Zustand stores (3):**
+  - user-store: profile + onboarding state, AsyncStorage persisted
+  - shifts-store: CRUD for shifts/personal events, date-aware serialization, auto shift classification
+  - plan-store: derived SleepPlan, auto-regenerates on shift/profile changes via subscriptions
+- **UI components (6):** Button (3 variants), Card, ProgressBar, OptionCard, TimeRangePicker, barrel export
+- **Onboarding flow (6 files):**
+  - Entry router (checks onboarding state, redirects)
+  - Welcome screen with value props
+  - Chronotype quiz (5-question MEQ, scores to early/intermediate/late)
+  - Household profile (size, young children, pets)
+  - Sleep preferences (hours, naps, caffeine sensitivity, commute)
+- **Calendar & shift entry (6 files):**
+  - MonthView with color-coded dots per block type
+  - DayDetail panel with chronological event list
+  - Schedule tab wired to stores
+  - Add/edit shift modal
+  - Settings placeholder
+- **Tab navigation:** 3 tabs (Today, Schedule, Settings) with icons
+- **Algorithm wiring:** Plan store subscribes to shifts + profile, auto-regenerates plan
+- All 20 algorithm tests still passing
+
+**Blockers:** None
+
+### Next Steps (Week 3)
+- [ ] Today screen: glanceable timeline with countdowns ("Sleep in 3h", "Caffeine cutoff in 1h")
+- [ ] .ics import flow (expo-document-picker → parse → confirm shifts)
+- [ ] .ics export via share sheet
+- [ ] Sleep tips & insights (contextual, evidence-based)
+- [ ] Visual polish, animations, professional feel
+
+---
+
 ## 2026-03-14 — Session 2: Repository Reorganization
 
 ### Completed
