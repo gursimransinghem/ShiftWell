@@ -1,4 +1,4 @@
-# NightShift — Visual Roadmap
+# ShiftWell — Visual Roadmap
 
 > **Last Updated:** 2026-03-14
 > **Status:** MVP Feature-Complete (Week 4) — 83 Tests Passing — Ready for TestFlight
@@ -576,7 +576,7 @@
           ┌──────────┼─────────────────────────────────────────────┼──────────┐
      High │          │                                             │          │
           │          │                                    ┌────────┴───────┐  │
-          │          │                                    │  NIGHTSHIFT    │  │
+          │          │                                    │  SHIFTWELL     │  │
           │          │              ┌──────────┐          │  ★ Calendar    │  │
           │          │              │Timeshifter│          │    import      │  │
   SCIENCE │          │              │           │          │  ★ Full plan   │  │
@@ -618,7 +618,7 @@
  ┌──────────────────────────────────────────────────────────────────────────────────────┐
  │                    FEATURE-BY-FEATURE COMPARISON                                   │
  ├──────────────────────┬──────────┬──────────┬──────────┬──────────┬─────────────────┤
- │ Feature              │Timeshftr │Arcashift │SleepSync │Sleep Aid │  NightShift     │
+ │ Feature              │Timeshftr │Arcashift │SleepSync │Sleep Aid │  ShiftWell      │
  ├──────────────────────┼──────────┼──────────┼──────────┼──────────┼─────────────────┤
  │ Calendar Import      │    ○     │    ◐     │    ○     │    ●     │      ●          │
  │ Personal Cal Aware   │    ○     │    ○     │    ○     │    ○     │      ●          │
@@ -795,7 +795,7 @@
 
 ---
 
-## 12. What Makes NightShift Different — At a Glance
+## 12. What Makes ShiftWell Different — At a Glance
 
 ```
  ┌──────────────────────────────────────────────────────────────────────────────────────┐
@@ -804,7 +804,7 @@
  │                                                                                     │
  │   ┌─────────────┐        ┌──────────────────┐        ┌─────────────────────────┐   │
  │   │             │        │                  │        │                         │   │
- │   │  Your messy │  ────▶ │  NightShift      │ ────▶  │  A complete, science-   │   │
+ │   │  Your messy │  ────▶ │  ShiftWell       │ ────▶  │  A complete, science-   │   │
  │   │  shift      │        │  Circadian       │        │  backed daily plan in   │   │
  │   │  schedule   │        │  Engine          │        │  your calendar          │   │
  │   │             │        │                  │        │                         │   │
@@ -827,7 +827,7 @@
 
 ---
 
-> **Document Purpose:** This visual roadmap provides a comprehensive overview of the NightShift app's architecture, product vision, competitive positioning, and development trajectory. Designed for sharing with potential investors, collaborators, and advisors.
+> **Document Purpose:** This visual roadmap provides a comprehensive overview of the ShiftWell app's architecture, product vision, competitive positioning, and development trajectory. Designed for sharing with potential investors, collaborators, and advisors.
 >
 > **Companion Documents:**
 > - [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) — Detailed technical build plan

@@ -1,7 +1,7 @@
-# NightShift -- App Store Metadata
+# ShiftWell -- App Store Metadata
 
 ## App Name
-NightShift -- Sleep for Shift Workers
+ShiftWell -- Circadian Sleep Plans for Shift Workers
 
 ## Subtitle
 Science-backed sleep optimization
@@ -18,13 +18,13 @@ Finally, a sleep app that understands your shift schedule.
 
 If you work nights, rotating shifts, or irregular hours, you already know: most sleep advice does not apply to you. "Go to bed at 10pm" is not helpful when your shift starts at 10pm. Generic sleep trackers were not built for your life. You deserve better.
 
-NightShift is the first sleep optimization app designed specifically for shift workers. Whether you are a nurse pulling back-to-back 12-hour nights, a police officer rotating between days and evenings, or a factory worker on a 2-2-3 schedule, NightShift builds a personalized sleep plan around YOUR actual shifts -- not someone else's 9-to-5.
+ShiftWell is the first sleep optimization app designed specifically for shift workers. Whether you are a nurse pulling back-to-back 12-hour nights, a police officer rotating between days and evenings, or a factory worker on a 2-2-3 schedule, ShiftWell builds a personalized sleep plan around YOUR actual shifts -- not someone else's 9-to-5.
 
 HOW IT WORKS
 
-1. Import your schedule. Upload your shift calendar via ICS file, or enter shifts manually. NightShift reads your actual work hours and builds around them.
+1. Import your schedule. Upload your shift calendar via ICS file, or enter shifts manually. ShiftWell reads your actual work hours and builds around them.
 
-2. Get your personalized plan. Based on your shifts, chronotype, and sleep science research, NightShift generates optimized sleep windows, nap recommendations, and transition strategies for your schedule.
+2. Get your personalized plan. Based on your shifts, chronotype, and sleep science research, ShiftWell generates optimized sleep windows, nap recommendations, and transition strategies for your schedule.
 
 3. Follow the timing guidance. Know exactly when to stop caffeine, when to eat your last meal, when to start winding down, and when to set your alarm -- all calibrated to your next shift.
 
@@ -41,7 +41,7 @@ KEY FEATURES
 
 WHO IT IS FOR
 
-NightShift was built for the millions of people who keep the world running while everyone else sleeps:
+ShiftWell was built for the millions of people who keep the world running while everyone else sleeps:
 
 - Nurses and doctors
 - Paramedics and EMTs
@@ -53,7 +53,7 @@ NightShift was built for the millions of people who keep the world running while
 
 THE SCIENCE
 
-NightShift's recommendations are grounded in peer-reviewed circadian rhythm research and sleep medicine guidelines. The app applies evidence-based strategies for shift work sleep disorder, including anchor sleep techniques, strategic napping, light exposure timing, and meal timing protocols.
+ShiftWell's recommendations are grounded in peer-reviewed circadian rhythm research and sleep medicine guidelines. The app applies evidence-based strategies for shift work sleep disorder, including anchor sleep techniques, strategic napping, light exposure timing, and meal timing protocols.
 
 PRIVACY FIRST
 
@@ -61,9 +61,9 @@ Your shift schedule and sleep data never leave your device. There is no account 
 
 FREE TO USE
 
-NightShift is completely free. No subscriptions, no paywalls, no "premium" tiers. Every feature is available to every user from day one.
+ShiftWell is completely free. No subscriptions, no paywalls, no "premium" tiers. Every feature is available to every user from day one.
 
-Download NightShift today and finally get the sleep your schedule has been stealing from you.
+Download ShiftWell today and finally get the sleep your schedule has been stealing from you.
 
 ## Privacy Policy URL
 https://nightshift.app/privacy (placeholder -- replace before submission)

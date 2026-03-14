@@ -17,7 +17,7 @@
 
 ### Splash Screen
 - **Background color:** #0A0E1A (matches the app theme)
-- **Content:** App name "NightShift" centered, optionally with the icon above it
+- **Content:** App name "ShiftWell" centered, optionally with the icon above it
 - **Size:** 1284x2778 px recommended (iPhone 15 Pro Max resolution); Expo scales it for other devices
 - **Location:** Save to `assets/images/splash.png` (update `app.json` splash.image path if the filename differs from the current `splash-icon.png`)
 

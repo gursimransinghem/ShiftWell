@@ -196,7 +196,7 @@ Unit tests verify the algorithm is correct. But they can't tell you:
 ### Step-by-Step Submission
 
 1. **App Store Connect** — Log in at [appstoreconnect.apple.com](https://appstoreconnect.apple.com)
-2. **Create New App** — Click "+", enter name "NightShift", select bundle ID
+2. **Create New App** — Click "+", enter name "ShiftWell", select bundle ID
 3. **Fill App Information** — Description, keywords, category, age rating, URLs
 4. **Upload Screenshots** — Use Simulator: `Cmd+S` to save screenshots in all required sizes
 5. **Upload Build** — Run `eas submit --platform ios` (auto-uploads from EAS)
@@ -222,7 +222,7 @@ Unit tests verify the algorithm is correct. But they can't tell you:
 
 ### Health App Specific Notes
 
-Apple reviews health apps more carefully. NightShift is **not a medical device** — it's a lifestyle/wellness tool. Key language:
+Apple reviews health apps more carefully. ShiftWell is **not a medical device** — it's a lifestyle/wellness tool. Key language:
 
 - ✅ "Helps optimize your sleep schedule"
 - ✅ "Science-informed recommendations"
@@ -232,7 +232,7 @@ Apple reviews health apps more carefully. NightShift is **not a medical device**
 - ❌ "Clinically proven to improve sleep"
 
 Include a disclaimer in the app and App Store description:
-> "NightShift provides general wellness information and schedule suggestions. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Consult your healthcare provider for medical concerns."
+> "ShiftWell provides general wellness information and schedule suggestions. It is not a medical device and does not provide medical advice, diagnosis, or treatment. Consult your healthcare provider for medical concerns."
 
 ---
 
@@ -315,7 +315,7 @@ Introduce premium tier based on beta feedback about what features users value mo
 | Action | Details |
 |--------|---------|
 | **Landing page** | Simple one-page site: problem → solution → waitlist signup. Use Carrd ($19/yr) or GitHub Pages (free) |
-| **Social accounts** | Create @NightShiftApp on Twitter/X, Instagram, TikTok |
+| **Social accounts** | Create @ShiftWellApp on Twitter/X, Instagram, TikTok |
 | **Reddit seeding** | Share genuinely helpful sleep tips (NOT promotional) in r/nursing, r/medicine, r/ems, r/nightshift. Build credibility first |
 | **Email waitlist** | Collect emails via landing page. Use Buttondown (free up to 100 subs) or Mailchimp |
 | **Personal network** | Tell every colleague. "I built an app for our sleep schedules — want to try it?" |
@@ -334,7 +334,7 @@ Introduce premium tier based on beta feedback about what features users value mo
 
 | Channel | Action |
 |---------|--------|
-| **App Store Optimization (ASO)** | Optimize title, subtitle, keywords. "Night Shift Sleep" as subtitle |
+| **App Store Optimization (ASO)** | Optimize title, subtitle, keywords. "Circadian Sleep Plans for Shift Workers" as subtitle |
 | **Content marketing** | Write 2 blog posts/month on shift work sleep science → SEO traffic |
 | **Physician podcasts** | Pitch your story to emergency medicine podcasts (EM:RAP, EMCrit, Taming the SRU) |
 | **Nursing conferences** | Attend 1-2 conferences, demo the app at networking events |
@@ -391,7 +391,7 @@ Lead with your clinical identity in all marketing. This is your moat.
 
 **Assumptions:**
 - 40% 30-day retention (strong for niche utility apps)
-- 8-10% free-to-premium conversion (industry avg is 2-5%, but NightShift's niche audience converts higher)
+- 8-10% free-to-premium conversion (industry avg is 2-5%, but ShiftWell's niche audience converts higher)
 - $4.99/mo average (mix of monthly + annual)
 - Zero paid advertising (organic only)
 
@@ -429,12 +429,12 @@ Lead with your clinical identity in all marketing. This is your moat.
 
 You MUST have a publicly accessible privacy policy URL. Key points to cover:
 
-**What data NightShift collects (v1):**
+**What data ShiftWell collects (v1):**
 - Shift schedule data (stored locally on device only)
 - Chronotype quiz responses (stored locally)
 - Sleep preferences (stored locally)
 
-**What NightShift does NOT do (v1):**
+**What ShiftWell does NOT do (v1):**
 - No data leaves the device
 - No accounts, no server, no analytics
 - No personal health information (PHI) collected
@@ -442,7 +442,7 @@ You MUST have a publicly accessible privacy policy URL. Key points to cover:
 
 **Where to host:** GitHub Pages (free), your domain, or Notion (public page). Must be a URL, not a PDF.
 
-**Template approach:** Use a privacy policy generator (Termly, PrivacyPolicies.com — both have free tiers for simple apps), then customize for NightShift's specifics.
+**Template approach:** Use a privacy policy generator (Termly, PrivacyPolicies.com — both have free tiers for simple apps), then customize for ShiftWell's specifics.
 
 #### 2. Terms of Service
 
@@ -459,14 +459,14 @@ Use a free template and customize. Not required for App Store, but strongly reco
 
 Display during onboarding and in Settings:
 
-> "NightShift provides general wellness suggestions based on published circadian rhythm research. It is not a medical device and does not diagnose, treat, cure, or prevent any disease or condition. These suggestions are not a substitute for professional medical advice. If you have a sleep disorder or medical condition, consult your healthcare provider."
+> "ShiftWell provides general wellness suggestions based on published circadian rhythm research. It is not a medical device and does not diagnose, treat, cure, or prevent any disease or condition. These suggestions are not a substitute for professional medical advice. If you have a sleep disorder or medical condition, consult your healthcare provider."
 
 ### HIPAA Considerations
 
-**NightShift v1 is NOT subject to HIPAA.** Here's why:
+**ShiftWell v1 is NOT subject to HIPAA.** Here's why:
 
 - HIPAA applies to "covered entities" (healthcare providers, insurers, clearinghouses) and their "business associates"
-- NightShift is a consumer wellness app — it's not part of a healthcare provider's practice
+- ShiftWell is a consumer wellness app — it's not part of a healthcare provider's practice
 - No Protected Health Information (PHI) is collected, transmitted, or stored on any server
 - All data stays on the user's device
 
@@ -476,12 +476,12 @@ Display during onboarding and in Settings:
 
 ### FDA Considerations
 
-NightShift is a **general wellness product**, not a medical device. The FDA's 2019 guidance on clinical decision support (CDS) exempts software that:
+ShiftWell is a **general wellness product**, not a medical device. The FDA's 2019 guidance on clinical decision support (CDS) exempts software that:
 - Is intended for maintaining or encouraging a healthy lifestyle
 - Does not claim to diagnose, treat, cure, or prevent disease
 - Allows the user to independently review the basis of recommendations
 
-NightShift meets all three criteria. Do NOT add features that claim to diagnose SWSD or prescribe treatment — that crosses into medical device territory.
+ShiftWell meets all three criteria. Do NOT add features that claim to diagnose SWSD or prescribe treatment — that crosses into medical device territory.
 
 ---
 
@@ -489,10 +489,10 @@ NightShift meets all three criteria. Do NOT add features that claim to diagnose 
 
 ### Trademark
 
-**"NightShift" as an app name:**
+**"ShiftWell" as an app name:**
 - Search the USPTO database ([tmsearch.uspto.gov](https://tmsearch.uspto.gov)) for existing marks in Class 9 (software) and Class 42 (SaaS)
-- "Night Shift" is a common phrase, which makes it harder to trademark but also harder for others to challenge
-- Consider a distinctive variant: "NightShift" (one word), or add a tagline "NightShift — Sleep Smarter"
+- "ShiftWell" is a distinctive coined word, which makes it easier to trademark
+- Consider adding a tagline "ShiftWell — Circadian Sleep Plans for Shift Workers"
 - Filing cost: $250-350 per class via USPTO TEAS Plus
 - **Priority:** Low for v1. Focus on launching first. File before spending on marketing
 
@@ -517,7 +517,7 @@ Your circadian algorithm is your core IP. It's not patentable (mathematical form
 
 ```
 Week -4  ┌─ Register domain, set up landing page with email capture
-         └─ Create social media accounts (@NightShiftApp)
+         └─ Create social media accounts (@ShiftWellApp)
 
 Week -3  ┌─ Start posting helpful shift work sleep tips on social media
          └─ Join and contribute to r/nightshift, r/nursing, r/ems

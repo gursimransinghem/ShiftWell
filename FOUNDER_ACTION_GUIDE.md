@@ -1,4 +1,4 @@
-# NightShift: Your Step-by-Step Launch Guide
+# ShiftWell: Your Step-by-Step Launch Guide
 
 **From "Code Complete" to Live on the App Store**
 
@@ -6,7 +6,7 @@
 
 Hey! If you're reading this, congratulations — you've already done the hardest part. You built an app. That's something most people only talk about doing. Everything from here is just paperwork and clicking buttons. Seriously.
 
-This guide walks you through every step to get NightShift into the hands of real shift workers. No jargon, no assumptions, no skipped steps. Think of it as a friend sitting next to you saying "okay, now click this."
+This guide walks you through every step to get ShiftWell into the hands of real shift workers. No jargon, no assumptions, no skipped steps. Think of it as a friend sitting next to you saying "okay, now click this."
 
 Let's do this.
 
@@ -29,7 +29,7 @@ It also looks more professional. On the App Store, users will see your company n
 2. **Go to your state's Secretary of State website.** Google "[your state] Secretary of State file LLC" and it'll be the first result. Every state has an online filing system now.
 
 3. **File your "Articles of Organization."** This is the official form that creates your LLC. It asks for basic info:
-   - Your LLC name (something like "NightShift Health LLC" or "ShiftWell LLC" — check that the name is available in your state)
+   - Your LLC name (something like "ShiftWell Health LLC" or "ShiftWell LLC" — check that the name is available in your state)
    - Your address
    - What the business does (one sentence is fine: "Mobile health application development")
    - Your name as the organizer
@@ -118,7 +118,7 @@ You cannot publish an app on the App Store or distribute it through TestFlight (
 
 2. **Sign in with your Apple ID.** If you don't have one, create one. Use your business email if you have one.
 
-3. **Choose "Organization"** (not "Individual"). This is important — enrolling as an Organization means the App Store will display your LLC name (like "NightShift Health LLC") instead of your personal name. More professional, more trustworthy.
+3. **Choose "Organization"** (not "Individual"). This is important — enrolling as an Organization means the App Store will display your LLC name (like "ShiftWell Health LLC") instead of your personal name. More professional, more trustworthy.
 
 4. **You'll need a D-U-N-S Number.** This is a free business identifier from Dun & Bradstreet. Sounds intimidating, but Apple walks you through it:
    - Apple will check if your LLC already has one (it probably doesn't yet)
@@ -126,7 +126,7 @@ You cannot publish an app on the App Store or distribute it through TestFlight (
    - It takes 1–5 business days to get approved
    - You'll get an email when it's ready, then you can continue enrollment
 
-5. **You'll also need a website.** It can be a simple one-page site with your LLC name, what NightShift is, and a contact email. You can set one up for free using GitHub Pages, Carrd ($19/year), or even a simple Google Site. This is also where you'll host your privacy policy later (Step 10).
+5. **You'll also need a website.** It can be a simple one-page site with your LLC name, what ShiftWell is, and a contact email. You can set one up for free using GitHub Pages, Carrd ($19/year), or even a simple Google Site. This is also where you'll host your privacy policy later (Step 10).
 
 6. **Pay the $99/year fee** with the business bank account you just opened.
 
@@ -146,7 +146,7 @@ Your app icon is required for the App Store, and it's the very first thing a pot
 
 ### How to do it:
 
-1. **Open the icon guide:** Check out `APP_ICON_GUIDE.md` in this project. It has three design concepts already created for NightShift, along with ready-to-use prompts for AI image generators.
+1. **Open the icon guide:** Check out `APP_ICON_GUIDE.md` in this project. It has three design concepts already created for ShiftWell, along with ready-to-use prompts for AI image generators.
 
 2. **Generate your icon** using one of these AI tools:
    - **DALL-E** (via ChatGPT) — Free if you have a ChatGPT account
@@ -220,7 +220,7 @@ The iPhone simulator on your Mac is useful for development, but it can't test ev
 
 ### Why do this?
 
-TestFlight is Apple's official beta testing platform. It lets you share a pre-release version of NightShift with testers without going through the full App Store review. Testers install it like a regular app — no technical knowledge needed on their end. This is how you get real-world feedback before your public launch.
+TestFlight is Apple's official beta testing platform. It lets you share a pre-release version of ShiftWell with testers without going through the full App Store review. Testers install it like a regular app — no technical knowledge needed on their end. This is how you get real-world feedback before your public launch.
 
 ### How to do it:
 
@@ -248,7 +248,7 @@ TestFlight is Apple's official beta testing platform. It lets you share a pre-re
    - Open the email on their iPhone
    - Download the TestFlight app (free, from Apple)
    - Accept the invitation
-   - Install NightShift through TestFlight
+   - Install ShiftWell through TestFlight
 
 That's it — they now have the app on their phone, and you can see crash reports and feedback right in App Store Connect.
 
@@ -322,7 +322,7 @@ This is the most valuable phase of your entire launch process. Real users using 
 
 ### Why do this?
 
-This is the finish line. Once Apple approves your app, anyone with an iPhone can find and download NightShift. You built something real and put it out into the world. That's a big deal.
+This is the finish line. Once Apple approves your app, anyone with an iPhone can find and download ShiftWell. You built something real and put it out into the world. That's a big deal.
 
 ### How to do it:
 
@@ -362,7 +362,7 @@ This is the finish line. Once Apple approves your app, anyone with an iPhone can
    - Fix the issue, resubmit. Most rejections are resolved in one round.
    - Check `DEPLOYMENT_GUIDE.md` for a list of common rejection reasons and fixes.
 
-7. **Once approved:** Your app goes live. Take a screenshot of NightShift on the App Store. You earned it.
+7. **Once approved:** Your app goes live. Take a screenshot of ShiftWell on the App Store. You earned it.
 
 ---
 
@@ -416,7 +416,7 @@ For now, your LLC provides liability protection, and your disclaimers make clear
 
 ### "What about Android?"
 
-Great news — NightShift is built with Expo, which is a cross-platform framework. That means the same code can run on Android with relatively minimal extra work. But there's a smart reason to launch on iOS first:
+Great news — ShiftWell is built with Expo, which is a cross-platform framework. That means the same code can run on Android with relatively minimal extra work. But there's a smart reason to launch on iOS first:
 
 - One platform means fewer bugs to track, fewer edge cases, fewer support requests
 - iPhone users statistically spend more on apps (relevant if you add a premium tier later)
@@ -428,7 +428,7 @@ When you're ready for Android, you'll need a Google Play Developer account ($25 
 
 Don't. Not yet, and not for a long time probably. Here's why:
 
-- **Your clinical work is your competitive advantage.** You understand shift workers because you ARE one. That insight is what makes NightShift better than anything a pure tech company could build.
+- **Your clinical work is your competitive advantage.** You understand shift workers because you ARE one. That insight is what makes ShiftWell better than anything a pure tech company could build.
 - **Your credibility matters.** "Built by an ER doctor who works nights" is incredibly powerful marketing. Keep that identity.
 - **Financial safety.** Don't quit until the app generates reliable income that could replace your salary, OR you've raised enough funding to pay yourself for at least 18 months. Most apps take 1–2 years to reach meaningful revenue.
 
