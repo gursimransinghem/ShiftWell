@@ -8,7 +8,7 @@
  * Each PlanBlock becomes a VEVENT with appropriate properties:
  * - SUMMARY: Human-readable label
  * - DESCRIPTION: Science-backed context
- * - CATEGORIES: For filtering (NIGHTSHIFT-SLEEP, NIGHTSHIFT-NAP, etc.)
+ * - CATEGORIES: For filtering (SHIFTWELL-SLEEP, SHIFTWELL-NAP, etc.)
  * - VALARM: Reminder before wind-down blocks
  * - COLOR: Visual differentiation by block type
  */

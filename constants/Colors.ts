@@ -1,9 +1,9 @@
 /**
  * Expo Router theme colors.
  *
- * Maps NightShift's dark-mode-first palette into the shape that
+ * Maps ShiftWell's dark-mode-first palette into the shape that
  * Themed.tsx and Expo Router expect. The "light" variant uses the same
- * dark palette because NightShift is designed to always feel dark.
+ * dark palette because ShiftWell is designed to always feel dark.
  */
 import { BACKGROUND, TEXT, ACCENT } from '../src/theme/colors';
 

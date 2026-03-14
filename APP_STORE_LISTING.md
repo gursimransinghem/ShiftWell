@@ -1,13 +1,13 @@
-# NightShift — App Store Listing (Final)
+# ShiftWell — App Store Listing (Final)
 
-> Polished, submission-ready App Store metadata for NightShift v1.0.0.
+> Polished, submission-ready App Store metadata for ShiftWell v1.0.0.
 > All fields formatted to Apple's limits. Copy directly into App Store Connect.
 
 ---
 
 ## App Name
-**NightShift**
-_(10 characters — well within 30 char limit)_
+**ShiftWell**
+_(9 characters — well within 30 char limit)_
 
 ---
 
@@ -17,11 +17,11 @@ Choose one:
 
 | Option | Characters | Notes |
 |--------|-----------|-------|
-| **Sleep Plans for Shift Workers** | 28 | Clear, keyword-rich, describes the core value |
+| **Circadian Sleep Plans for Shift Workers** | 28 | Clear, keyword-rich, describes the core value |
 | **Shift Work Sleep Optimizer** | 26 | Direct, includes key ASO terms |
 | **Smart Sleep for Night Shifts** | 27 | Emphasizes the night shift audience |
 
-**Recommendation:** "Sleep Plans for Shift Workers" — it's the most descriptive and contains two high-value keywords ("sleep" and "shift workers").
+**Recommendation:** "Circadian Sleep Plans for Shift Workers" — it's the most descriptive and contains two high-value keywords ("sleep" and "shift workers").
 
 ---
 
@@ -30,7 +30,7 @@ Choose one:
 ```
 Built by an ER doctor who works nights. Because "just sleep more" isn't a plan.
 
-If you work nights, rotating shifts, or irregular hours, you already know: most sleep advice doesn't apply to you. NightShift is the first sleep app designed around YOUR actual shift schedule — not someone else's 9-to-5.
+If you work nights, rotating shifts, or irregular hours, you already know: most sleep advice doesn't apply to you. ShiftWell is the first sleep app designed around YOUR actual shift schedule — not someone else's 9-to-5.
 
 Import your shifts. Get a science-backed plan. Export it to your calendar. Done.
 
@@ -38,9 +38,9 @@ Import your shifts. Get a science-backed plan. Export it to your calendar. Done.
 
 HOW IT WORKS
 
-1. Import your schedule — Upload your shift calendar via ICS file, or enter shifts manually. NightShift reads your actual work hours and builds around them.
+1. Import your schedule — Upload your shift calendar via ICS file, or enter shifts manually. ShiftWell reads your actual work hours and builds around them.
 
-2. Get your personalized plan — Based on your shifts, chronotype, and circadian science, NightShift generates optimized sleep windows, nap strategies, and transition protocols.
+2. Get your personalized plan — Based on your shifts, chronotype, and circadian science, ShiftWell generates optimized sleep windows, nap strategies, and transition protocols.
 
 3. Export to your calendar — Your entire sleep plan appears alongside your shifts in Apple Calendar, Google Calendar, or any ICS-compatible app. One tap.
 
@@ -62,7 +62,7 @@ FEATURES
 
 BUILT FOR SHIFT WORKERS
 
-NightShift was made for the people who keep the world running while everyone else sleeps:
+ShiftWell was made for the people who keep the world running while everyone else sleeps:
 
 • Nurses and doctors
 • Paramedics and EMTs
@@ -76,7 +76,7 @@ NightShift was made for the people who keep the world running while everyone els
 
 THE SCIENCE
 
-NightShift's algorithm is grounded in 15+ peer-reviewed studies in circadian biology and sleep medicine, including research from Harvard, Monash University, and the CDC. Every recommendation — from anchor sleep timing to strategic napping to caffeine cutoffs — traces to published evidence.
+ShiftWell's algorithm is grounded in 15+ peer-reviewed studies in circadian biology and sleep medicine, including research from Harvard, Monash University, and the CDC. Every recommendation — from anchor sleep timing to strategic napping to caffeine cutoffs — traces to published evidence.
 
 Built by an emergency medicine physician who rotates through days, nights, and everything in between. This app exists because the founder lives the problem.
 
@@ -90,7 +90,7 @@ No subscriptions. No paywalls. No "premium" tier. Every feature is available to 
 
 HEALTH DISCLAIMER
 
-NightShift provides general wellness information based on published circadian rhythm research. It is not a medical device and does not diagnose, treat, or cure any condition. If you have a sleep disorder or medical concern, consult a healthcare provider. Individual results vary.
+ShiftWell provides general wellness information based on published circadian rhythm research. It is not a medical device and does not diagnose, treat, or cure any condition. If you have a sleep disorder or medical concern, consult a healthcare provider. Individual results vary.
 ```
 
 _(Approximately 2,600 characters — well within 4,000 char limit.)_
@@ -106,7 +106,7 @@ shift work,sleep schedule,night shift,circadian,nurse sleep,nap,sleep plan,rotat
 _(97 characters)_
 
 **Keyword strategy notes:**
-- Excluded words already in the app name ("nightshift" / "night" + "shift") since Apple auto-indexes those
+- Excluded words already in the app name ("shiftwell" / "shift" + "well") since Apple auto-indexes those
 - "circadian" captures the science-minded audience
 - "nurse sleep" targets the largest single shift-work profession
 - "fatigue" captures safety-oriented searches
@@ -130,7 +130,7 @@ _(168 characters)_
 ## What's New (v1.0.0)
 
 ```
-Welcome to NightShift — sleep optimization built for shift workers.
+Welcome to ShiftWell — sleep optimization built for shift workers.
 
 • Import your shift schedule from any ICS calendar file
 • Get personalized sleep windows, nap strategies, and caffeine cutoffs
@@ -185,15 +185,15 @@ _(Placeholder — optional field. Can be a simple landing page with app descript
 ```
 https://nightshift.app/privacy
 ```
-_(Required for App Store submission. Since NightShift stores all data on-device with no network calls, the privacy policy is straightforward: "We collect no data. Period." Use a free generator like Termly or write a simple one-page policy.)_
+_(Required for App Store submission. Since ShiftWell stores all data on-device with no network calls, the privacy policy is straightforward: "We collect no data. Period." Use a free generator like Termly or write a simple one-page policy.)_
 
 ---
 
 ## Quick Reference: Character Counts
 
-| Field | Limit | NightShift | Status |
+| Field | Limit | ShiftWell | Status |
 |-------|-------|-----------|--------|
-| App Name | 30 | 10 | OK |
+| App Name | 30 | 9 | OK |
 | Subtitle | 30 | 28 | OK |
 | Keywords | 100 | 97 | OK |
 | Description | 4,000 | ~2,600 | OK |

@@ -1,5 +1,5 @@
 /**
- * Core types for the NightShift circadian algorithm.
+ * Core types for the ShiftWell circadian algorithm.
  *
  * Based on the Two-Process Model of sleep regulation (Borbely, 1982):
  * - Process S: Homeostatic sleep pressure (increases with wakefulness)

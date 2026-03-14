@@ -17,7 +17,7 @@
       "bundleIdentifier": "com.nightshift.app",
       "buildNumber": "1",
       "infoPlist": {
-        "NSDocumentPickerUsageDescription": "NightShift needs access to your files to import shift schedules.",
+        "NSDocumentPickerUsageDescription": "ShiftWell needs access to your files to import shift schedules.",
         "ITSAppUsesNonExemptEncryption": false
       }
     },

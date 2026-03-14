@@ -1,5 +1,5 @@
 /**
- * NightShift Circadian Algorithm — Public API
+ * ShiftWell Circadian Algorithm — Public API
  *
  * This module is the single entry point for generating a complete sleep plan
  * from a list of shifts, personal events, and a user profile.
