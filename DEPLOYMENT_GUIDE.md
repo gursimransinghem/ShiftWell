@@ -1,6 +1,6 @@
-# NightShift Deployment Guide
+# ShiftWell Deployment Guide
 
-A practical, step-by-step guide to getting NightShift onto TestFlight and eventually the App Store. Written for someone who has never deployed an iOS app before.
+A practical, step-by-step guide to getting ShiftWell onto TestFlight and eventually the App Store. Written for someone who has never deployed an iOS app before.
 
 ---
 
@@ -31,7 +31,7 @@ Before you can build and submit anything, you need these things in place:
 - Click the "+" button and select "New App".
 - Fill in:
   - **Platform:** iOS
-  - **Name:** NightShift
+  - **Name:** ShiftWell
   - **Primary Language:** English (U.S.)
   - **Bundle ID:** `com.nightshift.app` (register this first under Certificates, Identifiers & Profiles in the developer portal)
   - **SKU:** `nightshift-app` (any unique string, for your records only)
@@ -168,7 +168,7 @@ After submission, log in to App Store Connect:
 1. Go to your app > TestFlight tab.
 2. You'll likely see a yellow "Missing Compliance" warning.
 3. Click it and answer: **"Does your app use encryption?"**
-   - NightShift does not appear to use custom encryption, so select **"No"** (standard HTTPS doesn't count).
+   - ShiftWell does not appear to use custom encryption, so select **"No"** (standard HTTPS doesn't count).
 4. This clears the warning and makes the build available for testing.
 
 ### Step 9: Invite Beta Testers
@@ -210,7 +210,7 @@ This uploads the build. It does NOT publish it — you still need to configure e
 Log in to https://appstoreconnect.apple.com and fill in everything for your app:
 
 **App Information:**
-- App name: NightShift
+- App name: ShiftWell
 - Subtitle (30 chars max): e.g., "Sleep Better on Shift Work"
 - Category: Health & Fitness
 - Secondary Category: Medical (optional)
@@ -383,7 +383,7 @@ Expo Go is a pre-built app that can run your project without a custom build.
    ```bash
    npx expo start --dev-client
    ```
-6. Open the installed "NightShift" app on your phone — it will connect to the dev server and show your app with live reloading.
+6. Open the installed "ShiftWell" app on your phone — it will connect to the dev server and show your app with live reloading.
 
 ### Debugging Tips
 

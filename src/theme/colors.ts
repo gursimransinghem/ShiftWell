@@ -1,5 +1,5 @@
 /**
- * NightShift dark-mode-first color palette.
+ * ShiftWell dark-mode-first color palette.
  *
  * Designed for a sleep-optimization app used in low-light environments.
  * Every surface starts dark; accents are muted and easy on the eyes.

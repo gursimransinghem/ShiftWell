@@ -1,5 +1,5 @@
 /**
- * NightShift typography scale.
+ * ShiftWell typography scale.
  *
  * Uses system fonts (San Francisco on iOS, Roboto on Android) so there is
  * nothing to preload. Import the pre-built text styles or compose your own

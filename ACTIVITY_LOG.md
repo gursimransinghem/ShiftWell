@@ -1,4 +1,4 @@
-# NightShift — Activity Log
+# ShiftWell — Activity Log
 
 > This log is automatically updated during every development session. Newest entries at the top.
 > Read this file at the start of every session to orient yourself.
@@ -175,7 +175,7 @@
 ### End of Session
 **Completed:**
 - Generated and scored 9 physician side-project ideas (PHYSICIAN_SIDE_PROJECT_IDEAS.md)
-- Identified NightShift as #1 idea (scored 4.70/5) after competitive analysis
+- Identified ShiftWell as #1 idea (scored 4.70/5) after competitive analysis
 - Completed full competitive landscape research (Timeshifter, Arcashift, SleepSync, Sleep Aid)
 - Designed complete implementation plan across 5 phases
 - Made key tech decisions: Expo (React Native), TypeScript, deterministic algorithm (not LLM), iOS-first

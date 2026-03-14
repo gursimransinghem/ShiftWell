@@ -202,7 +202,7 @@ export default function ImportScreen() {
         <View style={styles.content}>
           <Text style={styles.heading}>Import Your Schedule</Text>
           <Text style={styles.description}>
-            Import your work shifts from a .ics calendar file. NightShift will
+            Import your work shifts from a .ics calendar file. ShiftWell will
             automatically detect which events are shifts and build your
             personalized sleep plan.
           </Text>

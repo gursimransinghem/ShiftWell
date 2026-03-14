@@ -31,42 +31,42 @@ const BLOCK_CONFIG: Record<
   { category: string; emoji: string; color: string }
 > = {
   'main-sleep': {
-    category: 'NIGHTSHIFT-SLEEP',
+    category: 'SHIFTWELL-SLEEP',
     emoji: '\u{1F634}', // sleeping face
     color: '#6B5CE7', // Purple
   },
   'nap': {
-    category: 'NIGHTSHIFT-NAP',
+    category: 'SHIFTWELL-NAP',
     emoji: '\u{1F4A4}', // zzz
     color: '#9B8FEF', // Light purple
   },
   'wind-down': {
-    category: 'NIGHTSHIFT-WINDDOWN',
+    category: 'SHIFTWELL-WINDDOWN',
     emoji: '\u{1F319}', // crescent moon
     color: '#4A4080', // Dark purple
   },
   'wake': {
-    category: 'NIGHTSHIFT-WAKE',
+    category: 'SHIFTWELL-WAKE',
     emoji: '\u{2600}\u{FE0F}', // sun
     color: '#FFD700', // Gold
   },
   'caffeine-cutoff': {
-    category: 'NIGHTSHIFT-CAFFEINE',
+    category: 'SHIFTWELL-CAFFEINE',
     emoji: '\u{2615}', // coffee
     color: '#8B4513', // Brown
   },
   'meal-window': {
-    category: 'NIGHTSHIFT-MEAL',
+    category: 'SHIFTWELL-MEAL',
     emoji: '\u{1F957}', // green salad
     color: '#4CAF50', // Green
   },
   'light-seek': {
-    category: 'NIGHTSHIFT-LIGHT',
+    category: 'SHIFTWELL-LIGHT',
     emoji: '\u{2600}\u{FE0F}', // sun
     color: '#FFA500', // Orange
   },
   'light-avoid': {
-    category: 'NIGHTSHIFT-LIGHT',
+    category: 'SHIFTWELL-LIGHT',
     emoji: '\u{1F576}\u{FE0F}', // dark sunglasses
     color: '#333333', // Dark gray
   },
@@ -189,10 +189,10 @@ export function generateICS(
   const header = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//NightShift//Sleep Plan//EN',
+    'PRODID:-//ShiftWell//Sleep Plan//EN',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:NightShift Sleep Plan',
+    'X-WR-CALNAME:ShiftWell Sleep Plan',
     'X-WR-CALDESC:Science-backed sleep schedule optimized for your shift pattern',
     'X-APPLE-CALENDAR-COLOR:#6B5CE7',
   ].join('\r\n');

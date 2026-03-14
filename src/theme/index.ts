@@ -1,5 +1,5 @@
 /**
- * NightShift design tokens — single entry-point.
+ * ShiftWell design tokens — single entry-point.
  *
  * Usage:
  *   import { COLORS, BLOCK_COLORS, TYPOGRAPHY, SPACING, RADIUS } from '@/src/theme';

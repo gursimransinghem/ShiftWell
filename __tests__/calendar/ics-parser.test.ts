@@ -14,7 +14,7 @@ function wrapICS(vevents: string): string {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//NightShift//Test//EN',
+    'PRODID:-//ShiftWell//Test//EN',
   ];
   if (vevents.trim()) {
     // Split on \r\n or \n to handle either line ending

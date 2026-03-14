@@ -321,8 +321,8 @@ export default function SettingsScreen() {
             label="How It Works"
             onPress={() =>
               Alert.alert(
-                'How NightShift Works',
-                'NightShift uses the Two-Process Model of sleep regulation (Borbely, 1982) combined with your chronotype and shift schedule to generate personalized sleep, nap, caffeine, and light exposure timing.\n\nThe algorithm accounts for circadian phase shifts during night work and optimizes recovery on days off.',
+                'How ShiftWell Works',
+                'ShiftWell uses the Two-Process Model of sleep regulation (Borbely, 1982) combined with your chronotype and shift schedule to generate personalized sleep, nap, caffeine, and light exposure timing.\n\nThe algorithm accounts for circadian phase shifts during night work and optimizes recovery on days off.',
               )
             }
           />

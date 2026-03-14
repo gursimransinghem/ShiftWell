@@ -37,7 +37,7 @@ export function useExport() {
         const icsContent = generateICS(plan, options);
 
         // Write to a temp file
-        const fileName = `NightShift-Sleep-Plan.ics`;
+        const fileName = `ShiftWell-Sleep-Plan.ics`;
         const filePath = `${FileSystem.cacheDirectory}${fileName}`;
 
         await FileSystem.writeAsStringAsync(filePath, icsContent, {

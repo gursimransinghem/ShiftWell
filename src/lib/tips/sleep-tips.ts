@@ -1,5 +1,5 @@
 /**
- * Sleep tips engine for NightShift.
+ * Sleep tips engine for ShiftWell.
  *
  * A comprehensive library of evidence-based tips for shift workers,
  * organized by category and mapped to specific day types.
@@ -416,7 +416,7 @@ export function getTipsByCategory(category: TipCategory): SleepTip[] {
 
 /**
  * Returns the category display color (for use in UI badges).
- * Maps to the NightShift color palette.
+ * Maps to the ShiftWell color palette.
  */
 export function getCategoryColor(category: TipCategory): string {
   const colors: Record<TipCategory, string> = {

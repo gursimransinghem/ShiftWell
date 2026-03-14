@@ -1,5 +1,5 @@
 /**
- * Edge case tests for the full NightShift circadian algorithm.
+ * Edge case tests for the full ShiftWell circadian algorithm.
  *
  * These tests exercise unusual but realistic schedule patterns
  * and verify that the algorithm produces valid, non-overlapping plans.

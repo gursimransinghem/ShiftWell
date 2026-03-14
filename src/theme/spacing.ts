@@ -1,5 +1,5 @@
 /**
- * NightShift spacing & layout tokens.
+ * ShiftWell spacing & layout tokens.
  *
  * Based on a 4-pt grid. Every value is a multiple of 4 so elements
  * align consistently across the app.

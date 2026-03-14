@@ -25,7 +25,7 @@ export default function WelcomeScreen() {
 
         <AnimatedTransition delay={0} duration={300}>
           <View style={styles.hero}>
-            <Text style={styles.appName}>NightShift</Text>
+            <Text style={styles.appName}>ShiftWell</Text>
             <Text style={styles.tagline}>
               Science-backed sleep optimization for shift workers
             </Text>
