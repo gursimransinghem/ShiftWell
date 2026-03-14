@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Circadian Sleep Plans for Shift Workers</title>
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  background: #0A0E1A;
+  color: #E0E0E0;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  color: #6C63FF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---- Utility ---- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 96px 0;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  color: #FFFFFF;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: #9CA3AF;
+  max-width: 600px;
+  margin: 0 auto 56px;
+  font-size: 1.1rem;
+}
+
+/* ---- Fade-in on scroll ---- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Nav ---- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(108, 99, 255, 0.12);
+  padding: 16px 0;
+}
+
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.5px;
+}
+
+.nav-logo span {
+  color: #6C63FF;
+}
+
+nav a.nav-cta {
+  background: #6C63FF;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+
+nav a.nav-cta:hover {
+  background: #5A52E0;
+  text-decoration: none;
+}
+
+/* ---- Hero ---- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 80px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108, 99, 255, 0.12) 0%, transparent 70%),
+    #0A0E1A;
+}
+
+.hero-content {
+  max-width: 680px;
+}
+
+.ios-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(108, 99, 255, 0.15);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  color: #A9A4FF;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, #6C63FF, #A78BFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero .tagline {
+  font-size: 1.5rem;
+  color: #D1D5DB;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.hero .subtitle {
+  font-size: 1.05rem;
+  color: #9CA3AF;
+  margin-bottom: 40px;
+}
+
+/* ---- Email Form ---- */
+.email-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.email-form input[type="email"] {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.email-form input[type="email"]::placeholder {
+  color: #6B7280;
+}
+
+.email-form input[type="email"]:focus {
+  border-color: #6C63FF;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.email-form button {
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  background: #6C63FF;
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.email-form button:hover {
+  background: #5A52E0;
+}
+
+.email-form button:active {
+  transform: scale(0.97);
+}
+
+/* ---- Problem ---- */
+.problem {
+  background:
+    linear-gradient(180deg, #0A0E1A 0%, #0F1328 50%, #0A0E1A 100%);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 40px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stat-number {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #6C63FF;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: #9CA3AF;
+  line-height: 1.5;
+}
+
+/* ---- Solution ---- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.feature-card {
+  padding: 36px 28px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(108, 99, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.1);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.feature-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  color: #9CA3AF;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ---- How It Works ---- */
+.how-it-works {
+  background:
+    linear-gradient(180deg, #0A0E1A 0%, #0F1328 50%, #0A0E1A 100%);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+
+.step {
+  text-align: center;
+  padding: 32px 20px;
+  position: relative;
+}
+
+.step-number {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6C63FF, #A78BFA);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.5rem;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.step p {
+  color: #9CA3AF;
+  font-size: 0.95rem;
+}
+
+/* connector line between steps */
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 60px;
+  left: calc(16.67% + 28px);
+  right: calc(16.67% + 28px);
+  height: 2px;
+  background: linear-gradient(90deg, #6C63FF, #A78BFA, #6C63FF);
+  opacity: 0.3;
+}
+
+/* ---- Credibility ---- */
+.credibility-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.credibility-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  background: rgba(108, 99, 255, 0.06);
+  border: 1px solid rgba(108, 99, 255, 0.12);
+}
+
+.credibility-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.credibility-item p {
+  color: #D1D5DB;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ---- CTA Section ---- */
+.cta-section {
+  text-align: center;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(108, 99, 255, 0.1) 0%, transparent 70%),
+    #0A0E1A;
+}
+
+.cta-section .section-title {
+  margin-bottom: 8px;
+}
+
+.cta-section .section-subtitle {
+  margin-bottom: 36px;
+}
+
+/* ---- Footer ---- */
+footer {
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+footer .footer-links {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 0.9rem;
+}
+
+footer .tagline-footer {
+  color: #6B7280;
+  font-size: 0.85rem;
+  margin-top: 12px;
+  font-style: italic;
+}
+
+footer .copyright {
+  color: #6B7280;
+  font-size: 0.85rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  section {
+    padding: 64px 0;
+  }
+
+  .hero h1 {
+    font-size: 2.6rem;
+    letter-spacing: -1px;
+  }
+
+  .hero .tagline {
+    font-size: 1.2rem;
+  }
+
+  .email-form {
+    flex-direction: column;
+  }
+
+  .email-form button {
+    width: 100%;
+  }
+
+  .stats-grid,
+  .features-grid,
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .steps::before {
+    display: none;
+  }
+
+  .credibility-list {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="container">
+    <div class="nav-logo">Shift<span>Well</span></div>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="ios-badge">Coming Soon to iOS</div>
+    <h1>Shift<span>Well</span></h1>
+    <p class="tagline">Circadian Sleep Plans for Shift Workers</p>
+    <p class="subtitle">Built by an ER doctor who works nights. Launching soon on iOS.</p>
+    <form class="email-form" action="#" method="POST">
+      <input type="email" placeholder="Enter your email" required aria-label="Email address">
+      <button type="submit">Join the Waitlist</button>
+    </form>
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="problem" id="problem">
+  <div class="container">
+    <h2 class="section-title fade-in">Shift work is destroying your sleep</h2>
+    <p class="section-subtitle fade-in">The data is clear: working against your circadian rhythm takes a serious toll.</p>
+    <div class="stats-grid">
+      <div class="stat-card fade-in">
+        <div class="stat-number">63%</div>
+        <div class="stat-label">of shift workers report poor sleep quality</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="stat-number">2-3x</div>
+        <div class="stat-label">higher risk of accidents for shift workers</div>
+      </div>
+      <div class="stat-card fade-in">
+        <div class="stat-number">2-4 hrs</div>
+        <div class="stat-label">of quality sleep lost per rotation on average</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solution -->
+<section class="solution" id="solution">
+  <div class="container">
+    <h2 class="section-title fade-in">Your personalized shift-sleep plan in 30 seconds</h2>
+    <p class="section-subtitle fade-in">ShiftWell builds a custom circadian plan around your actual schedule.</p>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <span class="feature-icon">&#128197;</span>
+        <h3>Import Shifts</h3>
+        <p>Paste your schedule or import an .ics calendar file. ShiftWell reads your real-world hours automatically.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <span class="feature-icon">&#129504;</span>
+        <h3>Get Your Plan</h3>
+        <p>AI generates optimal sleep windows, nap timing, caffeine cutoffs, and meal schedules tailored to you.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <span class="feature-icon">&#127775;</span>
+        <h3>Live Better</h3>
+        <p>Every recommendation is evidence-based, drawn from published sleep science and circadian research.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title fade-in">How It Works</h2>
+    <p class="section-subtitle fade-in">Three steps to better sleep, no matter your shift pattern.</p>
+    <div class="steps">
+      <div class="step fade-in">
+        <div class="step-number">&#128338;</div>
+        <h3>Enter your shift schedule</h3>
+        <p>Add your upcoming shifts manually or sync from your calendar.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-number">&#128203;</div>
+        <h3>Get a personalized circadian plan</h3>
+        <p>ShiftWell maps your biology to your schedule and builds your plan.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-number">&#9989;</div>
+        <h3>Follow timing cues throughout your day</h3>
+        <p>Get reminders for sleep, naps, caffeine, meals, and light exposure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Credibility -->
+<section class="credibility" id="credibility">
+  <div class="container">
+    <h2 class="section-title fade-in">Built by a physician, backed by science</h2>
+    <p class="section-subtitle fade-in">ShiftWell isn't another generic sleep app. It's built specifically for people who work when others sleep.</p>
+    <div class="credibility-list">
+      <div class="credibility-item fade-in">
+        <span class="credibility-icon">&#129658;</span>
+        <p>Built by an emergency medicine physician who works overnight shifts</p>
+      </div>
+      <div class="credibility-item fade-in">
+        <span class="credibility-icon">&#128218;</span>
+        <p>Algorithm based on published circadian rhythm and sleep research</p>
+      </div>
+      <div class="credibility-item fade-in">
+        <span class="credibility-icon">&#128300;</span>
+        <p>Every recommendation traces to peer-reviewed scientific evidence</p>
+      </div>
+      <div class="credibility-item fade-in">
+        <span class="credibility-icon">&#128101;</span>
+        <p>Designed for and used by nurses, paramedics, firefighters, and doctors</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Early Access CTA -->
+<section class="cta-section" id="waitlist">
+  <div class="container">
+    <h2 class="section-title fade-in">Be the first to try ShiftWell</h2>
+    <p class="section-subtitle fade-in">Join the waitlist and get early access when we launch.</p>
+    <form class="email-form fade-in" action="#" method="POST" style="justify-content: center;">
+      <input type="email" placeholder="Enter your email" required aria-label="Email address">
+      <button type="submit">Join the Waitlist</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+    </div>
+    <p class="copyright">&copy; 2026 ShiftWell. All rights reserved.</p>
+    <p class="tagline-footer">Made with care for the people who keep the world running at night.</p>
+  </div>
+</footer>
+
+<!-- Scroll fade-in script -->
+<script>
+(function() {
+  var els = document.querySelectorAll('.fade-in');
+  if (!('IntersectionObserver' in window)) {
+    for (var i = 0; i < els.length; i++) els[i].classList.add('visible');
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].isIntersecting) {
+        entries[i].target.classList.add('visible');
+        observer.unobserve(entries[i].target);
+      }
+    }
+  }, { threshold: 0.15 });
+  for (var j = 0; j < els.length; j++) observer.observe(els[j]);
+})();
+</script>
+
+</body>
+</html>
