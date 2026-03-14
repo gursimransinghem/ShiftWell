@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 import { format, differenceInMinutes } from 'date-fns';
 import type { PlanBlock, SleepBlockType } from '@/src/lib/circadian/types';
 import Card from '@/src/components/ui/Card';
@@ -97,6 +97,51 @@ export default function TimelineEvent({
   const color = blockColor(block.type);
   const note = contextualNote(block.type);
 
+  // Pulsing border opacity for active event
+  const borderGlow = useRef(new Animated.Value(1)).current;
+  // Breathing dot opacity for next event
+  const dotBreathing = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (!isActive) return;
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(borderGlow, {
+          toValue: 0.5,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(borderGlow, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, [isActive, borderGlow]);
+
+  useEffect(() => {
+    if (!isNext) return;
+    const breathing = Animated.loop(
+      Animated.sequence([
+        Animated.timing(dotBreathing, {
+          toValue: 0.4,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(dotBreathing, {
+          toValue: 1,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    breathing.start();
+    return () => breathing.stop();
+  }, [isNext, dotBreathing]);
+
   const containerOpacity: ViewStyle = isPast && !isActive ? { opacity: 0.45 } : {};
   const cardBorder: ViewStyle = isActive
     ? { borderColor: color, borderWidth: 1.5 }
@@ -114,55 +159,94 @@ export default function TimelineEvent({
       {/* Center — timeline spine */}
       <View style={styles.spine}>
         <View style={styles.lineTop} />
-        <View
-          style={[
-            styles.dot,
-            { backgroundColor: color },
-            isActive && styles.dotActive,
-            isNext && styles.dotNext,
-          ]}
-        />
+        {isNext ? (
+          <Animated.View
+            style={[
+              styles.dot,
+              { backgroundColor: color },
+              styles.dotNext,
+              { opacity: dotBreathing },
+            ]}
+          />
+        ) : (
+          <View
+            style={[
+              styles.dot,
+              { backgroundColor: color },
+              isActive && styles.dotActive,
+            ]}
+          />
+        )}
         <View style={styles.lineBottom} />
       </View>
 
       {/* Right — content card */}
       <View style={styles.cardWrapper}>
-        <Card style={{ ...styles.card, ...cardBorder }}>
-          {/* Color accent bar */}
-          <View style={[styles.accentBar, { backgroundColor: color }]} />
+        {isActive ? (
+          <Animated.View style={{ opacity: borderGlow }}>
+            <Card style={{ ...styles.card, ...cardBorder }}>
+              {/* Color accent bar */}
+              <View style={[styles.accentBar, { backgroundColor: color }]} />
 
-          <View style={styles.cardContent}>
-            <View style={styles.headerRow}>
-              <Text
-                style={[styles.blockLabel, isActive && { color }]}
-                numberOfLines={1}
-              >
-                {block.label}
-              </Text>
-              {isActive && (
-                <View style={[styles.badge, { backgroundColor: color }]}>
-                  <Text style={styles.badgeText}>NOW</Text>
+              <View style={styles.cardContent}>
+                <View style={styles.headerRow}>
+                  <Text
+                    style={[styles.blockLabel, { color }]}
+                    numberOfLines={1}
+                  >
+                    {block.label}
+                  </Text>
+                  <View style={[styles.badge, { backgroundColor: color }]}>
+                    <Text style={styles.badgeText}>NOW</Text>
+                  </View>
                 </View>
-              )}
-              {isNext && !isActive && (
-                <View style={[styles.badge, { backgroundColor: `${color}33` }]}>
-                  <Text style={[styles.badgeText, { color }]}>NEXT</Text>
+
+                <View style={styles.metaRow}>
+                  <Text style={styles.timeRange}>
+                    {format(block.start, 'HH:mm')} – {format(block.end, 'HH:mm')}
+                  </Text>
+                  <Text style={styles.duration}>
+                    {formatDuration(block.start, block.end)}
+                  </Text>
                 </View>
-              )}
-            </View>
 
-            <View style={styles.metaRow}>
-              <Text style={styles.timeRange}>
-                {format(block.start, 'HH:mm')} – {format(block.end, 'HH:mm')}
-              </Text>
-              <Text style={styles.duration}>
-                {formatDuration(block.start, block.end)}
-              </Text>
-            </View>
+                {note && <Text style={styles.note}>{note}</Text>}
+              </View>
+            </Card>
+          </Animated.View>
+        ) : (
+          <Card style={{ ...styles.card, ...cardBorder }}>
+            {/* Color accent bar */}
+            <View style={[styles.accentBar, { backgroundColor: color }]} />
 
-            {note && <Text style={styles.note}>{note}</Text>}
-          </View>
-        </Card>
+            <View style={styles.cardContent}>
+              <View style={styles.headerRow}>
+                <Text
+                  style={[styles.blockLabel]}
+                  numberOfLines={1}
+                >
+                  {block.label}
+                </Text>
+                {isNext && (
+                  <View style={[styles.badge, { backgroundColor: `${color}33` }]}>
+                    <Text style={[styles.badgeText, { color }]}>NEXT</Text>
+                  </View>
+                )}
+              </View>
+
+              <View style={styles.metaRow}>
+                <Text style={styles.timeRange}>
+                  {format(block.start, 'HH:mm')} – {format(block.end, 'HH:mm')}
+                </Text>
+                <Text style={styles.duration}>
+                  {formatDuration(block.start, block.end)}
+                </Text>
+              </View>
+
+              {note && <Text style={styles.note}>{note}</Text>}
+            </View>
+          </Card>
+        )}
       </View>
     </View>
   );

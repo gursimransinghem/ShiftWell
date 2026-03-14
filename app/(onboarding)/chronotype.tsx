@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/src/components/ui/Button';
@@ -104,12 +104,89 @@ export default function ChronotypeScreen() {
   );
   const [showResult, setShowResult] = useState(false);
 
+  // Question transition animation
+  const questionOpacity = useRef(new Animated.Value(1)).current;
+  const questionTranslateY = useRef(new Animated.Value(0)).current;
+
+  // Result emoji scale bounce
+  const emojiScale = useRef(new Animated.Value(0)).current;
+  const resultOpacity = useRef(new Animated.Value(0)).current;
+
   const question = QUESTIONS[currentQuestion];
   const selectedScore = answers[currentQuestion];
-  const allAnswered = answers.every((a) => a !== null);
 
   const totalScore = answers.reduce<number>((sum, a) => sum + (a ?? 0), 0);
   const chronotype = scoreToChronotype(totalScore);
+
+  // Animate question transition
+  const animateQuestionIn = useCallback(() => {
+    questionOpacity.setValue(0);
+    questionTranslateY.setValue(12);
+    Animated.parallel([
+      Animated.timing(questionOpacity, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(questionTranslateY, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [questionOpacity, questionTranslateY]);
+
+  const animateQuestionOut = useCallback(
+    (onDone: () => void) => {
+      Animated.parallel([
+        Animated.timing(questionOpacity, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(questionTranslateY, {
+          toValue: -8,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start(() => onDone());
+    },
+    [questionOpacity, questionTranslateY],
+  );
+
+  // Animate result screen entrance
+  useEffect(() => {
+    if (showResult) {
+      resultOpacity.setValue(0);
+      emojiScale.setValue(0.3);
+      Animated.parallel([
+        Animated.timing(resultOpacity, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.sequence([
+          Animated.spring(emojiScale, {
+            toValue: 1.15,
+            speed: 14,
+            bounciness: 12,
+            useNativeDriver: true,
+          }),
+          Animated.spring(emojiScale, {
+            toValue: 1,
+            speed: 20,
+            bounciness: 8,
+            useNativeDriver: true,
+          }),
+        ]),
+      ]).start();
+    }
+  }, [showResult, emojiScale, resultOpacity]);
+
+  // Trigger entrance animation on question change
+  useEffect(() => {
+    animateQuestionIn();
+  }, [currentQuestion, animateQuestionIn]);
 
   function selectOption(score: number) {
     const next = [...answers];
@@ -119,9 +196,10 @@ export default function ChronotypeScreen() {
 
   function handleNext() {
     if (currentQuestion < QUESTIONS.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      animateQuestionOut(() => {
+        setCurrentQuestion(currentQuestion + 1);
+      });
     } else {
-      // Last question answered -- show result
       setProfile({ chronotype });
       setShowResult(true);
     }
@@ -131,7 +209,9 @@ export default function ChronotypeScreen() {
     if (showResult) {
       setShowResult(false);
     } else if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
+      animateQuestionOut(() => {
+        setCurrentQuestion(currentQuestion - 1);
+      });
     }
   }
 
@@ -146,14 +226,16 @@ export default function ChronotypeScreen() {
             <ProgressBar currentStep={2} totalSteps={4} />
           </View>
 
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultEmoji}>
+          <Animated.View style={[styles.resultContainer, { opacity: resultOpacity }]}>
+            <Animated.Text
+              style={[styles.resultEmoji, { transform: [{ scale: emojiScale }] }]}
+            >
               {chronotype === 'early'
                 ? '\u{1F305}'
                 : chronotype === 'late'
                   ? '\u{1F319}'
                   : '\u{2600}\uFE0F'}
-            </Text>
+            </Animated.Text>
             <Text style={styles.resultTitle}>
               You're {chronotype === 'intermediate' ? 'an' : 'a'}{' '}
               {chronotypeLabel(chronotype)}
@@ -161,7 +243,7 @@ export default function ChronotypeScreen() {
             <Text style={styles.resultDescription}>
               {chronotypeDescription(chronotype)}
             </Text>
-          </View>
+          </Animated.View>
 
           <View style={styles.footer}>
             <Button
@@ -186,22 +268,29 @@ export default function ChronotypeScreen() {
           <ProgressBar currentStep={2} totalSteps={4} />
         </View>
 
-        <Text style={styles.sectionTitle}>Chronotype Quiz</Text>
-        <Text style={styles.questionCounter}>
-          Question {currentQuestion + 1} of {QUESTIONS.length}
-        </Text>
-        <Text style={styles.questionText}>{question.text}</Text>
+        <Animated.View
+          style={{
+            opacity: questionOpacity,
+            transform: [{ translateY: questionTranslateY }],
+          }}
+        >
+          <Text style={styles.sectionTitle}>Chronotype Quiz</Text>
+          <Text style={styles.questionCounter}>
+            Question {currentQuestion + 1} of {QUESTIONS.length}
+          </Text>
+          <Text style={styles.questionText}>{question.text}</Text>
 
-        <View style={styles.options}>
-          {question.options.map((option) => (
-            <OptionCard
-              key={option.label}
-              title={option.label}
-              selected={selectedScore === option.score}
-              onPress={() => selectOption(option.score)}
-            />
-          ))}
-        </View>
+          <View style={styles.options}>
+            {question.options.map((option) => (
+              <OptionCard
+                key={option.label}
+                title={option.label}
+                selected={selectedScore === option.score}
+                onPress={() => selectOption(option.score)}
+              />
+            ))}
+          </View>
+        </Animated.View>
 
         <View style={styles.navRow}>
           {currentQuestion > 0 && (

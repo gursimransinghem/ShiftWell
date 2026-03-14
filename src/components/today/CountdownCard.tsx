@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 import { differenceInMinutes } from 'date-fns';
 import Card from '@/src/components/ui/Card';
 import {
@@ -18,6 +18,8 @@ interface CountdownCardProps {
   targetTime: Date;
   color: string;
   emoji: string;
+  /** Whether this is the most urgent (first) countdown card */
+  isUrgent?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -41,6 +43,7 @@ export default function CountdownCard({
   targetTime,
   color,
   emoji,
+  isUrgent = false,
 }: CountdownCardProps) {
   const calcDiff = useCallback(
     () => differenceInMinutes(targetTime, new Date()),
@@ -49,21 +52,46 @@ export default function CountdownCard({
 
   const [diffMins, setDiffMins] = useState(calcDiff);
 
+  // Breathing opacity animation for urgent card
+  const glowOpacity = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
     setDiffMins(calcDiff());
     const id = setInterval(() => setDiffMins(calcDiff()), 60_000);
     return () => clearInterval(id);
   }, [calcDiff]);
 
+  useEffect(() => {
+    if (!isUrgent) return;
+
+    const breathing = Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowOpacity, {
+          toValue: 0.7,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(glowOpacity, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    breathing.start();
+    return () => breathing.stop();
+  }, [isUrgent, glowOpacity]);
+
   const isPast = diffMins < 0;
   const isNow = diffMins >= 0 && diffMins <= 0;
 
-  return (
+  const cardContent = (
     <Card
       style={[
         styles.card,
         { borderColor: isPast ? COLORS.border.default : `${color}44` },
         isPast && styles.pastCard,
+        isUrgent && !isPast && { borderColor: `${color}66` },
       ]}
     >
       <View style={styles.inner}>
@@ -86,6 +114,16 @@ export default function CountdownCard({
       </View>
     </Card>
   );
+
+  if (isUrgent && !isPast) {
+    return (
+      <Animated.View style={{ opacity: glowOpacity }}>
+        {cardContent}
+      </Animated.View>
+    );
+  }
+
+  return cardContent;
 }
 
 // ---------------------------------------------------------------------------
