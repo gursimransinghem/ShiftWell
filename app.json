@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "NightShift",
-    "slug": "nightshift",
+    "name": "ShiftWell",
+    "slug": "shiftwell",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "nightshift",
+    "scheme": "shiftwell",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/images/splash-icon.png",
