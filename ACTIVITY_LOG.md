@@ -5,6 +5,29 @@
 
 ---
 
+## 2026-03-14 — Session 2: Repository Reorganization
+
+### Completed
+- Audited full repository structure and identified 4 issues
+- Trimmed IMPLEMENTATION_PLAN.md to remove overlap with PROJECT_CONTEXT.md (clear scoping: Context = why/what, Plan = how/when)
+- Fixed project structure in plan to match Expo Router reality (app/ at root, not src/app/)
+- Deleted 3 template boilerplate files: two.tsx, modal.tsx, EditScreenInfo.tsx
+- Fixed broken imports in app/(tabs)/index.tsx, app/(tabs)/_layout.tsx, app/_layout.tsx
+- Expanded root .gitignore (added .DS_Store, .env, logs, IDE files, build artifacts)
+- All 20 tests still passing
+
+**Blockers:** None
+
+### Next Steps (Week 2)
+- [ ] Onboarding flow: welcome screen, chronotype quiz (MEQ), household profile, preferences
+- [ ] Zustand store for shifts and user profile (persisted to AsyncStorage)
+- [ ] Calendar month view with color-coded shift/sleep/nap/meal blocks
+- [ ] "Add Shift" modal with time pickers
+- [ ] Wire algorithm: shifts change → generateSleepPlan() re-runs → UI updates
+- [ ] Today screen: glanceable timeline with countdowns
+
+---
+
 ## 2026-03-14 — Session 1: Project Genesis + Week 1 Algorithm Build
 
 ### End of Session

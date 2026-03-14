@@ -1,29 +1,7 @@
 # NightShift App — Implementation Plan
 
-## Context
-
-You're an ED physician who works rotating shifts and has never built an app before. You want to build "NightShift" — an AI-powered circadian rhythm optimization app that imports any demanding schedule (via iCal/Google Calendar), generates science-backed sleep/nap/meal/caffeine plans, and exports them back to the user's personal calendar with one click.
-
-No single app on the market does this. Timeshifter ($10/mo) is the closest but has no calendar import, no Apple Health adaptation, no meal timing, and no calendar export.
-
-### Target Audiences (The Vision)
-
-The core engine is universal — anyone whose schedule disrupts their circadian rhythm:
-
-| Audience | Size | Their Pain |
-|----------|------|-----------|
-| **Healthcare workers** (nurses, ED docs, paramedics) | 16M in US alone | Rotating shifts, 12h blocks, night-to-day turnarounds |
-| **Travelers** (frequent flyers, business travelers) | 900M+ international trips/yr | Jet lag across time zones, rapid re-adaptation needed |
-| **Pilots & flight crew** | 300K+ in US | FAA-regulated rest, irregular layover schedules |
-| **Security guards & law enforcement** | 3.5M in US | 24/7 coverage rotations, often solo with no flexibility |
-| **Surgeons & on-call physicians** | 1M+ in US | Unpredictable call schedules, early-morning cases after late nights |
-| **DJs & nightlife industry** | 2M+ in US | Work 10pm-4am, need to function during daytime |
-| **Night students & teachers** | Millions | Evening classes, studying after work, early mornings |
-| **Manufacturing & warehouse workers** | 12M+ in US | 3-shift rotations, mandatory overtime |
-| **New parents** | 3.6M births/yr in US | Fragmented sleep, feeding schedules, recovery optimization |
-| **Military** | 1.3M active duty | Watch schedules, deployments, irregular rotations |
-
-**MVP focuses on shift workers** (largest pain, clearest use case). Jet lag mode and other personas are Phase 2+ expansions — the algorithm is the same math, just different inputs.
+> **Scope:** This document covers the technical "how and when" — stack, structure, build order, phases, and features.
+> **For project background** (problem, market, competitive landscape, decisions, science): see [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md)
 
 **Goal:** Working MVP on TestFlight in ~4-6 weeks, App Store submission shortly after.
 
@@ -72,52 +50,49 @@ The core engine is universal — anyone whose schedule disrupts their circadian 
 
 ```
 nightshift/
-├── app.json
-├── package.json
-├── tsconfig.json
-├── eas.json
+├── app/                           # Expo Router screens (MUST be at root, not src/)
+│   ├── _layout.tsx               # Root layout (providers, fonts, theme)
+│   ├── index.tsx                 # Entry → onboarding or tabs
+│   ├── (onboarding)/
+│   │   ├── welcome.tsx
+│   │   ├── chronotype.tsx        # MEQ quiz
+│   │   └── preferences.tsx       # Sleep need, nap pref
+│   ├── (tabs)/
+│   │   ├── _layout.tsx           # Tab bar
+│   │   ├── schedule.tsx          # Calendar view
+│   │   ├── today.tsx             # Today's plan
+│   │   └── settings.tsx          # Preferences, export, about
+│   ├── add-shift.tsx             # Modal: add/edit shift
+│   └── import.tsx                # Import .ics file
 ├── src/
-│   ├── app/                          # Expo Router screens
-│   │   ├── _layout.tsx               # Root layout (theme, fonts)
-│   │   ├── index.tsx                 # Entry → onboarding or tabs
-│   │   ├── (onboarding)/
-│   │   │   ├── welcome.tsx
-│   │   │   ├── chronotype.tsx        # MEQ quiz
-│   │   │   └── preferences.tsx       # Sleep need, nap pref
-│   │   ├── (tabs)/
-│   │   │   ├── _layout.tsx           # Tab bar
-│   │   │   ├── schedule.tsx          # Calendar view
-│   │   │   ├── today.tsx             # Today's plan
-│   │   │   └── settings.tsx          # Preferences, export, about
-│   │   ├── add-shift.tsx             # Modal: add/edit shift
-│   │   └── import.tsx                # Import .ics file
 │   ├── components/
-│   │   ├── calendar/                 # MonthView, DayCell, ShiftBlock, SleepBlock
-│   │   ├── onboarding/              # ChronotypeQuiz
-│   │   └── ui/                      # Button, Card, TimeRangePicker
+│   │   ├── calendar/             # MonthView, DayCell, ShiftBlock, SleepBlock
+│   │   ├── onboarding/           # ChronotypeQuiz
+│   │   └── ui/                   # Button, Card, TimeRangePicker
 │   ├── lib/
-│   │   ├── circadian/               # THE ALGORITHM (pure TS, no React)
+│   │   ├── circadian/            # THE ALGORITHM (pure TS, no React)
 │   │   │   ├── types.ts
-│   │   │   ├── classify-shifts.ts   # Detect day/night/evening/off/transition
-│   │   │   ├── sleep-windows.ts     # Core sleep block computation
-│   │   │   ├── nap-engine.ts        # Strategic nap placement
-│   │   │   ├── caffeine.ts          # Cutoff calculator
-│   │   │   ├── meals.ts             # Meal timing windows
-│   │   │   ├── light-protocol.ts    # Light exposure/avoidance
-│   │   │   └── index.ts             # Public API: generateSleepPlan()
+│   │   │   ├── classify-shifts.ts
+│   │   │   ├── sleep-windows.ts
+│   │   │   ├── nap-engine.ts
+│   │   │   ├── caffeine.ts
+│   │   │   ├── meals.ts
+│   │   │   ├── light-protocol.ts
+│   │   │   └── index.ts          # Public API: generateSleepPlan()
 │   │   ├── calendar/
-│   │   │   ├── ics-parser.ts        # Parse .ics → ShiftEvent[]
-│   │   │   ├── ics-generator.ts     # SleepPlan → .ics text
-│   │   │   └── shift-detector.ts    # Filter calendar events → shifts
+│   │   │   ├── ics-parser.ts
+│   │   │   ├── ics-generator.ts
+│   │   │   └── shift-detector.ts
 │   │   └── storage/
-│   │       └── async-storage.ts     # Persistence wrapper
-│   ├── hooks/                       # useShifts, useSleepPlan, useOnboarding
+│   │       └── async-storage.ts
+│   ├── hooks/                    # useShifts, useSleepPlan, useOnboarding
 │   ├── store/
-│   │   └── shifts-store.ts          # Zustand store
-│   └── theme/                       # Colors, typography (dark mode)
+│   │   └── shifts-store.ts       # Zustand store
+│   └── theme/                    # Colors, typography (dark mode)
 ├── __tests__/
-│   └── circadian/                   # Unit tests for algorithm
-└── assets/                          # Icon, splash, fonts
+│   └── circadian/                # Unit tests for algorithm
+├── constants/                    # App constants
+└── assets/                       # Icon, splash, fonts
 ```
 
 ---
@@ -318,19 +293,4 @@ All of these are tracked for future phases:
 
 ---
 
-## Scientific Foundation
-
-The algorithm MUST be grounded in the highest-quality evidence. Core references:
-
-1. **Two-Process Model** (Borbely, 1982; Borbely et al., 2016) — Process S (homeostatic sleep pressure) + Process C (circadian oscillator). The foundational model of sleep regulation
-2. **AASM Clinical Practice Guidelines** (2015, updated 2023) — Treatment of Shift Work Disorder. Recommends strategic napping, timed light exposure, and melatonin
-3. **Eastman & Burgess (2009)** — "How To Travel the World Without Jet Lag" — Practical light/dark protocols for circadian shifting, directly applicable to shift work
-4. **Czeisler et al. (1990)** — Exposure to bright light as treatment for maladaptation to night work. Established 1hr/day circadian shift rate
-5. **Drake et al. (2004)** — Shift Work Sleep Disorder prevalence and clinical significance. 10-38% prevalence data
-6. **AHA Scientific Statement (2025)** — Circadian disruption linked to cardiovascular disease, obesity, diabetes
-7. **Boivin & Boudreau (2014)** — Impacts of shift work on sleep and circadian rhythms. Comprehensive review of intervention strategies
-8. **NIOSH Training for Nurses (CDC)** — Anchor sleep strategy for rotating shift workers
-9. **Gander et al. (2011)** — Fatigue risk management systems. Foundation for the B2B fatigue scoring feature
-10. **St. Hilaire et al. (2017)** — Mathematical modeling of circadian phase shifts. The math behind the sleep-window algorithm
-
-The algorithm should cite these in the app's "Science" section and use them as validation benchmarks. Every recommendation must trace back to a published finding — no "common sense" sleep tips.
+> Scientific references and evidence base documented in [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md#scientific-foundation)
