@@ -125,21 +125,23 @@ Build and unit-test these pure TypeScript modules with zero UI:
 2. `shift-detector.ts` — Filter events: duration >= 6h, keyword matching ("shift", "ED", etc.)
 3. `ics-generator.ts` — Generate RFC 5545 .ics with VEVENT blocks for sleep, naps, meals, caffeine cutoffs
 
-### Week 2: Core UI
+### Week 2: Core UI [COMPLETED]
 
 **Days 8-10: Onboarding flow**
 - Welcome screen with app value proposition
 - Simplified chronotype quiz (5 questions from MEQ)
 - Household profile: # of people, kids (ages), pets — factors into noise/interruption modeling and sleep window realism
 - Sleep preferences (hours needed, nap preference, caffeine sensitivity)
-- Personal calendar connection: request read access to Apple Calendar (EventKit) to import non-shift events
 - Store results in Zustand → AsyncStorage
 
 **Days 11-14: Calendar view + shift entry**
-- Month calendar component with color-coded blocks (shifts: blue/orange, sleep: purple, naps: light purple, meals: green)
-- "Add Shift" modal with start/end time pickers
-- Zustand store CRUD for shifts (persisted)
-- Wire algorithm: shifts change → `generateSleepPlan()` re-runs → UI updates
+- Month calendar component with color-coded dots (shifts: blue/orange, sleep: purple, naps: light purple)
+- "Add Shift" modal with start/end time pickers and auto shift type detection
+- Zustand store CRUD for shifts (persisted with date-aware serialization)
+- Plan store auto-regenerates via subscriptions when shifts or profile change
+- Dark theme design system (colors, typography, spacing tokens)
+- Shared UI components: Button (3 variants), Card, ProgressBar, OptionCard, TimeRangePicker
+- 3-tab navigation: Today, Schedule, Settings
 
 ### Week 3: Today Screen + Import/Export
 

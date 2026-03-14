@@ -2,7 +2,7 @@
 
 > **Created:** 2026-03-14
 > **Founder:** ED Physician (Emergency Department) — first-time app builder
-> **Status:** Week 1 Complete — Core algorithm built and tested
+> **Status:** Week 3 In Progress — Core UI complete, building Today screen + import/export + tips
 
 ---
 
@@ -148,14 +148,51 @@ src/lib/calendar/
 
 ---
 
-## What's Next (Week 2)
+## What's Been Built (Week 2) — Core UI
 
-1. **Onboarding flow** — Welcome screen, chronotype quiz (simplified MEQ), household profile, sleep preferences, personal calendar connection
-2. **Calendar view** — Month view with color-coded shift/sleep/nap/meal blocks
-3. **Shift entry** — Manual add/edit modal with time pickers
-4. **Zustand store** — CRUD operations, algorithm re-runs on shift changes
+### Theme & Design System
+- Dark-mode-first color palette with block-type colors (sleep: purple, shifts: blue/orange/amber, meals: green, caffeine: red)
+- Typography scale (xs-4xl), spacing tokens (4pt grid), border radii
+- Updated Expo Router Colors.ts to use new theme
 
-Then Week 3: Today screen + import/export. Week 4: Polish + TestFlight.
+### State Management (3 Zustand Stores)
+- **user-store:** UserProfile + onboarding state, AsyncStorage persisted
+- **shifts-store:** CRUD for shifts/personal events, date-aware serialization, auto shift type classification
+- **plan-store:** Derived SleepPlan, auto-regenerates via subscriptions when shifts or profile change
+
+### Shared UI Components (6)
+Button (primary/secondary/ghost), Card, ProgressBar, OptionCard, TimeRangePicker, barrel export
+
+### Onboarding Flow (6 files)
+- Entry router (checks onboarding state, redirects accordingly)
+- Welcome screen with value propositions
+- Chronotype quiz (5-question simplified MEQ → early/intermediate/late)
+- Household profile (size, young children, pets)
+- Sleep preferences (hours, nap preference, caffeine sensitivity, commute time)
+
+### Calendar & Shift Entry (6 files)
+- MonthView with color-coded dots per block type, day selection, month navigation
+- DayDetail panel showing chronological events with color bars
+- Schedule tab wired to shifts + plan stores
+- Add/edit shift modal with time pickers and auto type detection
+- Settings placeholder
+
+### Navigation
+- 3-tab layout: Today, Schedule, Settings (with icons)
+- Root stack with onboarding group + modal screens
+- 20 algorithm tests still passing
+
+---
+
+## What's In Progress (Week 3)
+
+1. **Today screen** — Glanceable timeline with countdowns ("Sleep in 3h", "Caffeine cutoff in 1h")
+2. **.ics import** — expo-document-picker → parse → confirm shifts → import to store
+3. **.ics export** — Generate plan as .ics → share via expo-sharing
+4. **Sleep tips & insights** — 25-30 evidence-based contextual tips, insight banners
+5. **Settings screen** — Import/export, profile editing, about section, science references
+
+Then Week 4: Visual polish, app icon, EAS/TestFlight config.
 
 ---
 
