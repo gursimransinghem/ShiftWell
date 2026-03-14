@@ -13,11 +13,12 @@
       "backgroundColor": "#0A0E1A"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.nightshift.app",
       "buildNumber": "1",
       "infoPlist": {
-        "NSDocumentPickerUsageDescription": "NightShift needs access to your files to import shift schedules."
+        "NSDocumentPickerUsageDescription": "NightShift needs access to your files to import shift schedules.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
