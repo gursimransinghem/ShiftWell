@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 
 import { generateICS, type ExportOptions, DEFAULT_EXPORT_OPTIONS } from '../lib/calendar/ics-generator';
