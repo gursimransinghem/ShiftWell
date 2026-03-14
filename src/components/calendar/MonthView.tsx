@@ -1,0 +1,283 @@
+import React, { useMemo } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  addMonths,
+  subMonths,
+  getHours,
+} from 'date-fns';
+import type { ShiftEvent, PlanBlock } from '@/src/lib/circadian/types';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER } from '@/src/theme';
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+interface MonthViewProps {
+  month: Date;
+  shifts: ShiftEvent[];
+  planBlocks: PlanBlock[];
+  onDayPress: (date: Date) => void;
+  selectedDate: Date | null;
+  onMonthChange?: (date: Date) => void;
+}
+
+/** Get colored dots for a given day based on shifts and plan blocks. */
+function getDotsForDay(
+  date: Date,
+  shifts: ShiftEvent[],
+  planBlocks: PlanBlock[],
+): { color: string; key: string }[] {
+  const dots: { color: string; key: string }[] = [];
+
+  for (const shift of shifts) {
+    if (isSameDay(shift.start, date) || isSameDay(shift.end, date)) {
+      const startHour = getHours(shift.start);
+      if (shift.shiftType === 'night') {
+        dots.push({ color: BLOCK_COLORS.shiftNight, key: `shift-${shift.id}` });
+      } else if (shift.shiftType === 'evening') {
+        dots.push({ color: BLOCK_COLORS.shiftEvening, key: `shift-${shift.id}` });
+      } else {
+        dots.push({ color: BLOCK_COLORS.shiftDay, key: `shift-${shift.id}` });
+      }
+    }
+  }
+
+  for (const block of planBlocks) {
+    if (isSameDay(block.start, date) || isSameDay(block.end, date)) {
+      if (block.type === 'main-sleep') {
+        if (!dots.some((d) => d.color === BLOCK_COLORS.sleep)) {
+          dots.push({ color: BLOCK_COLORS.sleep, key: `sleep-${block.id}` });
+        }
+      } else if (block.type === 'nap') {
+        if (!dots.some((d) => d.color === BLOCK_COLORS.nap)) {
+          dots.push({ color: BLOCK_COLORS.nap, key: `nap-${block.id}` });
+        }
+      }
+    }
+  }
+
+  return dots.slice(0, 3); // max 3 dots per cell
+}
+
+export default function MonthView({
+  month,
+  shifts,
+  planBlocks,
+  onDayPress,
+  selectedDate,
+  onMonthChange,
+}: MonthViewProps) {
+  const calendarDays = useMemo(() => {
+    const monthStart = startOfMonth(month);
+    const monthEnd = endOfMonth(month);
+    const calStart = startOfWeek(monthStart, { weekStartsOn: 0 });
+    const calEnd = endOfWeek(monthEnd, { weekStartsOn: 0 });
+    return eachDayOfInterval({ start: calStart, end: calEnd });
+  }, [month]);
+
+  const weeks = useMemo(() => {
+    const result: Date[][] = [];
+    for (let i = 0; i < calendarDays.length; i += 7) {
+      result.push(calendarDays.slice(i, i + 7));
+    }
+    return result;
+  }, [calendarDays]);
+
+  const handlePrev = () => onMonthChange?.(subMonths(month, 1));
+  const handleNext = () => onMonthChange?.(addMonths(month, 1));
+
+  return (
+    <View style={styles.container}>
+      {/* Month header with navigation */}
+      <View style={styles.header}>
+        <Pressable
+          onPress={handlePrev}
+          style={styles.navButton}
+          accessibilityRole="button"
+          accessibilityLabel="Previous month"
+          hitSlop={8}
+        >
+          <Text style={styles.navArrow}>{'\u2039'}</Text>
+        </Pressable>
+
+        <Text style={styles.monthTitle}>{format(month, 'MMMM yyyy')}</Text>
+
+        <Pressable
+          onPress={handleNext}
+          style={styles.navButton}
+          accessibilityRole="button"
+          accessibilityLabel="Next month"
+          hitSlop={8}
+        >
+          <Text style={styles.navArrow}>{'\u203A'}</Text>
+        </Pressable>
+      </View>
+
+      {/* Weekday headers */}
+      <View style={styles.weekdayRow}>
+        {WEEKDAYS.map((day) => (
+          <View key={day} style={styles.weekdayCell}>
+            <Text style={styles.weekdayText}>{day}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Calendar grid */}
+      {weeks.map((week, weekIdx) => (
+        <View key={weekIdx} style={styles.weekRow}>
+          {week.map((day) => {
+            const inMonth = isSameMonth(day, month);
+            const today = isToday(day);
+            const selected = selectedDate ? isSameDay(day, selectedDate) : false;
+            const dots = getDotsForDay(day, shifts, planBlocks);
+
+            return (
+              <Pressable
+                key={day.toISOString()}
+                onPress={() => onDayPress(day)}
+                style={[
+                  styles.dayCell,
+                  selected && styles.dayCellSelected,
+                ]}
+                accessibilityRole="button"
+                accessibilityLabel={format(day, 'EEEE, MMMM d')}
+              >
+                <View style={[styles.dayNumberContainer, today && styles.todayCircle]}>
+                  <Text
+                    style={[
+                      styles.dayNumber,
+                      !inMonth && styles.dayNumberDimmed,
+                      today && styles.dayNumberToday,
+                      selected && styles.dayNumberSelected,
+                    ]}
+                  >
+                    {format(day, 'd')}
+                  </Text>
+                </View>
+
+                {/* Event dots */}
+                <View style={styles.dotsRow}>
+                  {dots.map((dot) => (
+                    <View
+                      key={dot.key}
+                      style={[styles.dot, { backgroundColor: dot.color }]}
+                    />
+                  ))}
+                </View>
+              </Pressable>
+            );
+          })}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: BACKGROUND.surface,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 8,
+    marginBottom: 12,
+  },
+  navButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 22,
+  },
+  navArrow: {
+    color: ACCENT.primary,
+    fontSize: 28,
+    fontWeight: '600',
+    lineHeight: 32,
+  },
+  monthTitle: {
+    color: TEXT.primary,
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  weekdayRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
+  },
+  weekdayCell: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  weekdayText: {
+    color: TEXT.tertiary,
+    fontSize: 12,
+    fontWeight: '500',
+    textTransform: 'uppercase',
+  },
+  weekRow: {
+    flexDirection: 'row',
+  },
+  dayCell: {
+    flex: 1,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+  },
+  dayCellSelected: {
+    borderColor: ACCENT.primary,
+    backgroundColor: 'rgba(74, 144, 217, 0.08)',
+  },
+  dayNumberContainer: {
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 14,
+  },
+  todayCircle: {
+    backgroundColor: 'rgba(74, 144, 217, 0.2)',
+  },
+  dayNumber: {
+    color: TEXT.primary,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  dayNumberDimmed: {
+    color: TEXT.tertiary,
+    opacity: 0.4,
+  },
+  dayNumberToday: {
+    color: ACCENT.primary,
+    fontWeight: '700',
+  },
+  dayNumberSelected: {
+    fontWeight: '700',
+  },
+  dotsRow: {
+    flexDirection: 'row',
+    marginTop: 2,
+    gap: 3,
+    height: 6,
+  },
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+  },
+});
