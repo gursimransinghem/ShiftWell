@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { addDays } from 'date-fns';
 import type { SleepPlan } from '../lib/circadian/types';
 import { generateSleepPlan } from '../lib/circadian';
+import { schedulePlanNotifications } from '../lib/notifications/notification-service';
 import { useShiftsStore } from './shifts-store';
 import { useUserStore } from './user-store';
 
@@ -42,6 +43,11 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
         profile,
       );
       set({ plan, isGenerating: false });
+
+      // Schedule push notifications for the next 24h of plan blocks
+      schedulePlanNotifications(plan.blocks).catch(() => {
+        // Notifications may not be permitted yet — fail silently
+      });
     } catch {
       set({ isGenerating: false });
     }

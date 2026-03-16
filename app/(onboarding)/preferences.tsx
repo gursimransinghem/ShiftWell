@@ -21,7 +21,6 @@ const COMMUTE_OPTIONS = [15, 30, 45, 60] as const;
 
 export default function PreferencesScreen() {
   const setProfile = useUserStore((s) => s.setProfile);
-  const completeOnboarding = useUserStore((s) => s.completeOnboarding);
 
   const [sleepNeed, setSleepNeed] = useState(7.5);
   const [napPreference, setNapPreference] = useState(true);
@@ -35,8 +34,7 @@ export default function PreferencesScreen() {
       caffeineHalfLife,
       commuteDuration,
     });
-    completeOnboarding();
-    router.replace('/(tabs)');
+    router.push('/(onboarding)/healthkit');
   }
 
   return (
@@ -46,7 +44,7 @@ export default function PreferencesScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={4} totalSteps={4} />
+          <ProgressBar currentStep={4} totalSteps={5} />
         </View>
 
         <Text style={styles.title}>Your Sleep Preferences</Text>
@@ -129,7 +127,7 @@ export default function PreferencesScreen() {
 
         <View style={styles.footer}>
           <Button
-            title="Complete Setup"
+            title="Next"
             onPress={handleComplete}
             size="lg"
             fullWidth

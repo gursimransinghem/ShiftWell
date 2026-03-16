@@ -5,6 +5,67 @@
 
 ---
 
+## 2026-03-16 — Session 9: Phase 3 — Wire Infrastructure + Recovery Dashboard
+
+### Completed
+- **Auth wired into root layout** — `app/_layout.tsx`
+  - `checkSession()` + `initializePremium()` called on cold launch
+  - Auth and premium stores initialized before any screen renders
+- **Push notifications wired** — `src/store/plan-store.ts`
+  - `schedulePlanNotifications()` called automatically after every `regeneratePlan()`
+  - Schedules next 24h of sleep reminders, caffeine cutoffs, and wake alarms
+- **Premium gating wired** — `app/import.tsx`, `app/(tabs)/settings.tsx`
+  - Import screen: checks `canAccess('ics_import')`, redirects to paywall if locked
+  - Settings: import + export buttons show lock icons when on free tier
+  - Recovery Score gated behind `accuracy_tracking` premium feature
+- **HealthKit onboarding screen** — `app/(onboarding)/healthkit.tsx`
+  - New step 5 of 5 in onboarding flow (optional Apple Health connection)
+  - Auto-skips on non-HealthKit devices (iPad, Android)
+  - Two benefit cards: Track Recovery, Auto Sleep Focus
+  - Connect + Skip buttons, success/error states
+  - Added `healthkitConnected` field + setter to user store
+  - Updated `_layout.tsx` to include healthkit screen
+  - Updated `preferences.tsx`: step 4/5, "Next" button, navigates to healthkit
+- **Recovery Score dashboard** — `src/components/recovery/` (4 files) + `src/hooks/useRecoveryScore.ts`
+  - `useRecoveryScore` hook: fetches HealthKit data, compares planned vs actual, weekly accuracy
+  - `RecoveryScoreCard`: circular score ring (0-100), color-coded (red/yellow/green), trend arrow, streak badge
+  - `SleepComparisonCard`: planned vs actual bedtime/wake/duration with deviation badges
+  - `WeeklyTrendChart`: 7-day bar chart of daily adherence scores
+  - Wired into Today tab as "RECOVERY" section (between header and countdowns)
+- **Settings enhanced** — `app/(tabs)/settings.tsx`
+  - ACCOUNT section: sign-in/out, plan badge (Free/Premium), upgrade button, email display
+  - SYNC section: last synced time, pending writes, Sync Now button, auto-sync toggle
+  - NOTIFICATIONS section: permission status, toggles for sleep/caffeine/wake reminders
+  - All premium features show lock icon when on free tier
+- **New tests** — 27 new tests (110 total, all passing)
+  - `__tests__/accuracy-score.test.ts` (16 tests): comparison scoring, accuracy, trends, streaks, insights
+  - `__tests__/sync-engine.test.ts` (11 tests): queue, flush, retry, pending writes, status
+
+### Key Decisions
+- Recovery Score lives on Today tab (not a separate tab) — keeps 3-tab navigation simple
+- HealthKit onboarding is optional (skip button) — app works fully without it
+- Auth is non-blocking — free features work offline without an account
+- Premium gating is soft — locked features show paywall, no hard blocks on core functionality
+
+### New Files Created (9 total)
+- `app/(onboarding)/healthkit.tsx`, `src/hooks/useRecoveryScore.ts`
+- `src/components/recovery/` — RecoveryScoreCard, SleepComparisonCard, WeeklyTrendChart, index
+- `__tests__/accuracy-score.test.ts`, `__tests__/sync-engine.test.ts`
+
+### Files Modified (9 total)
+- `app/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/settings.tsx`
+- `app/(onboarding)/_layout.tsx`, `app/(onboarding)/preferences.tsx`
+- `app/import.tsx`, `src/store/plan-store.ts`, `src/store/user-store.ts`
+
+### Next Steps
+- [ ] Add WritePlannedSleep call when plan generates (triggers iOS Sleep Focus)
+- [ ] Build caffeine & light tracking dedicated screens
+- [ ] Add post-sleep debrief ("How did you sleep?") quick log
+- [ ] Smart sleep window notifications ("Phone down, head to bed")
+- [ ] Begin Phase 3: Live Activities, widgets, Apple Watch
+
+---
+
 ## 2026-03-16 — Session 8: Phase 2 Implementation (Cloud + Premium + HealthKit)
 
 ### Completed

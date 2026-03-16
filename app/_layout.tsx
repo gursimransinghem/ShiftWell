@@ -6,6 +6,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { useAuthStore } from '@/src/store/auth-store';
+import { usePremiumStore } from '@/src/store/premium-store';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,6 +46,14 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const checkSession = useAuthStore((s) => s.checkSession);
+  const initializePremium = usePremiumStore((s) => s.initializePremium);
+
+  useEffect(() => {
+    // Restore auth session and initialize premium status on cold launch
+    checkSession();
+    initializePremium();
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

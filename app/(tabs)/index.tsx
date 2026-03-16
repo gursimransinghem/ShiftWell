@@ -12,8 +12,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePlanStore } from '@/src/store/plan-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
+import { usePremiumStore } from '@/src/store/premium-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
+import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
 import { TimelineEvent, CountdownCard, TipCard, InsightBanner } from '@/src/components/today';
+import { RecoveryScoreCard, SleepComparisonCard, WeeklyTrendChart } from '@/src/components/recovery';
 import Card from '@/src/components/ui/Card';
 import Button from '@/src/components/ui/Button';
 import { useUserStore } from '@/src/store/user-store';
@@ -62,6 +65,15 @@ export default function TodayScreen() {
 
   const plan = usePlanStore((s) => s.plan);
   const profile = useUserStore((s) => s.profile);
+  const canAccess = usePremiumStore((s) => s.canAccess);
+
+  // Recovery score data (from HealthKit)
+  const recovery = useRecoveryScore();
+  const showRecovery =
+    recovery.isAvailable &&
+    !recovery.isLoading &&
+    canAccess('accuracy_tracking') &&
+    (recovery.lastNight !== null || recovery.weeklyAccuracy !== null);
 
   const hasShifts = shifts.length > 0;
   const now = new Date();
@@ -138,6 +150,31 @@ export default function TodayScreen() {
           <Text style={styles.statusSubtitle}>{statusSubtitle}</Text>
         )}
       </View>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Recovery Score section (HealthKit data)                              */}
+      {/* ------------------------------------------------------------------ */}
+      {showRecovery && (
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>RECOVERY</Text>
+          <RecoveryScoreCard
+            score={recovery.weeklyAccuracy?.overallScore ?? recovery.lastNight?.adherenceScore ?? null}
+            insight={recovery.weeklyAccuracy?.insight ?? recovery.lastNight?.insight ?? ''}
+            streakDays={recovery.weeklyAccuracy?.streakDays ?? 0}
+            weeklyTrend={recovery.weeklyAccuracy?.weeklyTrend ?? 'stable'}
+          />
+          {recovery.lastNight && (
+            <View style={{ marginTop: SPACING.md }}>
+              <SleepComparisonCard comparison={recovery.lastNight} />
+            </View>
+          )}
+          {recovery.dailyScores.length > 0 && (
+            <View style={{ marginTop: SPACING.md }}>
+              <WeeklyTrendChart dailyScores={recovery.dailyScores} />
+            </View>
+          )}
+        </View>
+      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* Countdown section                                                   */}

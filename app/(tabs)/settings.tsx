@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   Pressable,
   ScrollView,
@@ -11,12 +12,17 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Constants from 'expo-constants';
+import { format, formatDistanceToNow, isToday, isYesterday } from 'date-fns';
 
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { useUserStore } from '@/src/store/user-store';
 import { usePlanStore } from '@/src/store/plan-store';
+import { useAuthStore } from '@/src/store/auth-store';
+import { usePremiumStore } from '@/src/store/premium-store';
 import { useExport } from '@/src/hooks/useExport';
 import { DEFAULT_EXPORT_OPTIONS, type ExportOptions } from '@/src/lib/calendar/ics-generator';
+import { fullSync, getSyncStatus } from '@/src/lib/sync/sync-engine';
+import { requestPermissions, getScheduledNotifications } from '@/src/lib/notifications/notification-service';
 import {
   BACKGROUND,
   TEXT,
@@ -124,10 +130,52 @@ export default function SettingsScreen() {
   const resetOnboarding = useUserStore((s) => s.resetOnboarding);
   const plan = usePlanStore((s) => s.plan);
 
+  // Auth & Premium selectors
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const userId = useAuthStore((s) => s.userId);
+  const email = useAuthStore((s) => s.email);
+  const signOut = useAuthStore((s) => s.signOut);
+  const isPremium = usePremiumStore((s) => s.isPremium);
+  const premiumPlan = usePremiumStore((s) => s.plan);
+  const premiumExpiresAt = usePremiumStore((s) => s.expiresAt);
+  const canAccess = usePremiumStore((s) => s.canAccess);
+
+  // Sync state
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncStatus, setSyncStatus] = useState(getSyncStatus());
+  const [autoSync, setAutoSync] = useState(true);
+
+  // Notification state
+  const [notifPermission, setNotifPermission] = useState<boolean | null>(null);
+  const [scheduledCount, setScheduledCount] = useState(0);
+  const [sleepReminders, setSleepReminders] = useState(true);
+  const [caffeineCutoffAlerts, setCaffeineCutoffAlerts] = useState(true);
+  const [wakeAlarms, setWakeAlarms] = useState(true);
+
   // Export options state
   const [exportOptions, setExportOptions] = useState<ExportOptions>({
     ...DEFAULT_EXPORT_OPTIONS,
   });
+
+  // Check notification permission and scheduled count on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const scheduled = await getScheduledNotifications();
+        setScheduledCount(scheduled.length);
+        setNotifPermission(scheduled !== undefined);
+      } catch {
+        setNotifPermission(false);
+      }
+    })();
+  }, []);
+
+  // Refresh sync status periodically
+  useEffect(() => {
+    if (isAuthenticated) {
+      setSyncStatus(getSyncStatus());
+    }
+  }, [isAuthenticated]);
 
   const updateExportOption = useCallback(
     (key: keyof ExportOptions, value: boolean) => {
@@ -140,9 +188,44 @@ export default function SettingsScreen() {
   // Handlers
   // -----------------------------------------------------------------------
 
+  const handleSync = useCallback(async () => {
+    if (!userId) return;
+    setIsSyncing(true);
+    try {
+      await fullSync(userId);
+      setSyncStatus(getSyncStatus());
+    } catch (err) {
+      Alert.alert('Sync Error', 'Could not sync at this time. Please try again later.');
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [userId]);
+
+  const handleSignOut = useCallback(() => {
+    Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign Out',
+        style: 'destructive',
+        onPress: async () => {
+          await signOut();
+        },
+      },
+    ]);
+  }, [signOut]);
+
+  const handleEnableNotifications = useCallback(async () => {
+    const granted = await requestPermissions();
+    setNotifPermission(granted);
+  }, []);
+
   const handleExport = useCallback(async () => {
+    if (!canAccess('ics_export')) {
+      router.push('/paywall');
+      return;
+    }
     await exportPlan(exportOptions);
-  }, [exportPlan, exportOptions]);
+  }, [exportPlan, exportOptions, canAccess]);
 
   const confirmResetOnboarding = useCallback(() => {
     Alert.alert(
@@ -187,6 +270,13 @@ export default function SettingsScreen() {
 
   const appVersion = Constants.expoConfig?.version ?? '1.0.0';
 
+  const formatLastSynced = (date: Date | null): string => {
+    if (!date) return 'Never';
+    if (isToday(date)) return `Today at ${format(date, 'h:mm a')}`;
+    if (isYesterday(date)) return `Yesterday at ${format(date, 'h:mm a')}`;
+    return formatDistanceToNow(date, { addSuffix: true });
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView
@@ -194,6 +284,123 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>Settings</Text>
+
+        {/* ---- Account Section ---- */}
+        <SectionHeader title="ACCOUNT" />
+        <Card style={styles.card}>
+          {isAuthenticated ? (
+            <>
+              <SettingsRow label="Email" value={email ?? '—'} />
+              <View style={styles.cardDivider} />
+              <View style={styles.settingsRow}>
+                <Text style={styles.rowLabel}>Plan</Text>
+                <View style={styles.planBadgeContainer}>
+                  <View
+                    style={[
+                      styles.planBadge,
+                      isPremium ? styles.planBadgePremium : styles.planBadgeFree,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.planBadgeText,
+                        isPremium ? styles.planBadgeTextPremium : styles.planBadgeTextFree,
+                      ]}
+                    >
+                      {isPremium ? 'Premium' : 'Free'}
+                    </Text>
+                  </View>
+                  {isPremium && premiumExpiresAt && (
+                    <Text style={styles.planExpiry}>
+                      Expires {format(premiumExpiresAt, 'MMM d, yyyy')}
+                    </Text>
+                  )}
+                </View>
+              </View>
+              {!isPremium && (
+                <>
+                  <View style={styles.cardDivider} />
+                  <View style={styles.upgradeButtonWrapper}>
+                    <Button
+                      title="Upgrade to Premium"
+                      onPress={() => router.push('/paywall')}
+                      variant="primary"
+                      size="md"
+                      fullWidth
+                    />
+                  </View>
+                </>
+              )}
+              <View style={styles.cardDivider} />
+              <View style={styles.signOutWrapper}>
+                <Button
+                  title="Sign Out"
+                  onPress={handleSignOut}
+                  variant="ghost"
+                  size="sm"
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <Button
+                title="Sign In"
+                onPress={() => router.push('/(auth)/sign-in')}
+                variant="primary"
+                size="md"
+                fullWidth
+              />
+              <Text style={styles.authHint}>
+                Create an account to sync across devices and access premium features
+              </Text>
+            </>
+          )}
+        </Card>
+
+        {/* ---- Sync Section ---- */}
+        {isAuthenticated && (
+          <>
+            <SectionHeader title="SYNC" />
+            <Card style={styles.card}>
+              <SettingsRow
+                label="Last synced"
+                value={formatLastSynced(syncStatus.lastSyncedAt)}
+              />
+              {syncStatus.pendingCount > 0 && (
+                <>
+                  <View style={styles.cardDivider} />
+                  <SettingsRow
+                    label="Pending writes"
+                    value={`${syncStatus.pendingCount}`}
+                  />
+                </>
+              )}
+              <View style={styles.cardDivider} />
+              <View style={styles.syncButtonWrapper}>
+                {isSyncing ? (
+                  <View style={styles.syncingRow}>
+                    <ActivityIndicator size="small" color={ACCENT.primary} />
+                    <Text style={styles.syncingText}>Syncing…</Text>
+                  </View>
+                ) : (
+                  <Button
+                    title="Sync Now"
+                    onPress={handleSync}
+                    variant="secondary"
+                    size="md"
+                    fullWidth
+                  />
+                )}
+              </View>
+              <View style={styles.cardDivider} />
+              <ToggleRow
+                label="Auto-sync"
+                value={autoSync}
+                onValueChange={setAutoSync}
+              />
+            </Card>
+          </>
+        )}
 
         {/* ---- Import Section ---- */}
         <SectionHeader title="IMPORT" />
@@ -210,13 +417,24 @@ export default function SettingsScreen() {
             </View>
           </View>
           <View style={styles.cardDivider} />
-          <Button
-            title="Import Schedule"
-            onPress={() => router.push('/import')}
-            variant="secondary"
-            size="md"
-            fullWidth
-          />
+          <View style={styles.premiumFeatureRow}>
+            <Button
+              title={!canAccess('ics_import') ? '🔒 Import Schedule' : 'Import Schedule'}
+              onPress={() => {
+                if (!canAccess('ics_import')) {
+                  router.push('/paywall');
+                  return;
+                }
+                router.push('/import');
+              }}
+              variant="secondary"
+              size="md"
+              fullWidth
+            />
+            {!canAccess('ics_import') && (
+              <Text style={styles.premiumLabel}>Premium</Text>
+            )}
+          </View>
         </Card>
 
         {/* ---- Export Section ---- */}
@@ -254,15 +472,20 @@ export default function SettingsScreen() {
 
           <View style={{ height: SPACING.md }} />
 
-          <Button
-            title="Export Sleep Plan"
-            onPress={handleExport}
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={isExporting}
-            disabled={!plan}
-          />
+          <View style={styles.premiumFeatureRow}>
+            <Button
+              title={!canAccess('ics_export') ? '🔒 Export Sleep Plan' : 'Export Sleep Plan'}
+              onPress={handleExport}
+              variant="primary"
+              size="lg"
+              fullWidth
+              loading={isExporting}
+              disabled={!plan}
+            />
+            {!canAccess('ics_export') && (
+              <Text style={styles.premiumLabel}>Premium</Text>
+            )}
+          </View>
 
           {!plan && (
             <Text style={styles.exportHint}>
@@ -271,6 +494,55 @@ export default function SettingsScreen() {
           )}
           {exportError && (
             <Text style={styles.exportErrorText}>{exportError}</Text>
+          )}
+        </Card>
+
+        {/* ---- Notifications Section ---- */}
+        <SectionHeader title="NOTIFICATIONS" />
+        <Card style={styles.card}>
+          {notifPermission === false ? (
+            <>
+              <Text style={styles.notifStatusText}>
+                Notifications are not enabled
+              </Text>
+              <View style={{ height: SPACING.sm }} />
+              <Button
+                title="Enable Notifications"
+                onPress={handleEnableNotifications}
+                variant="primary"
+                size="md"
+                fullWidth
+              />
+            </>
+          ) : (
+            <>
+              <ToggleRow
+                label="Sleep reminders"
+                value={sleepReminders}
+                onValueChange={setSleepReminders}
+              />
+              <View style={styles.cardDivider} />
+              <ToggleRow
+                label="Caffeine cutoff alerts"
+                value={caffeineCutoffAlerts}
+                onValueChange={setCaffeineCutoffAlerts}
+              />
+              <View style={styles.cardDivider} />
+              <ToggleRow
+                label="Wake alarms"
+                value={wakeAlarms}
+                onValueChange={setWakeAlarms}
+              />
+              {scheduledCount > 0 && (
+                <>
+                  <View style={styles.cardDivider} />
+                  <SettingsRow
+                    label="Scheduled notifications"
+                    value={`${scheduledCount}`}
+                  />
+                </>
+              )}
+            </>
           )}
         </Card>
 
@@ -463,6 +735,91 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.sm,
     alignItems: 'flex-start',
+  },
+
+  // Account section
+  planBadgeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+  },
+  planBadge: {
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: 2,
+    borderRadius: RADIUS.sm,
+  },
+  planBadgeFree: {
+    backgroundColor: BORDER.strong,
+  },
+  planBadgePremium: {
+    backgroundColor: ACCENT.primaryMuted,
+  },
+  planBadgeText: {
+    ...caption,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  planBadgeTextFree: {
+    color: TEXT.secondary,
+  },
+  planBadgeTextPremium: {
+    color: ACCENT.primary,
+  },
+  planExpiry: {
+    ...caption,
+    color: TEXT.tertiary,
+  },
+  upgradeButtonWrapper: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
+  signOutWrapper: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.sm,
+    alignItems: 'flex-start',
+  },
+  authHint: {
+    ...caption,
+    color: TEXT.tertiary,
+    textAlign: 'center',
+    marginTop: SPACING.sm,
+  },
+
+  // Sync section
+  syncButtonWrapper: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
+  syncingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: SPACING.sm,
+    paddingVertical: SPACING.sm,
+  },
+  syncingText: {
+    ...body,
+    color: ACCENT.primary,
+  },
+
+  // Notifications section
+  notifStatusText: {
+    ...bodySmall,
+    color: TEXT.secondary,
+    marginBottom: SPACING.xs,
+  },
+
+  // Premium gating
+  premiumFeatureRow: {
+    position: 'relative',
+  },
+  premiumLabel: {
+    ...caption,
+    color: ACCENT.primary,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: SPACING.xs,
   },
 
   // Danger zone

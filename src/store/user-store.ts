@@ -7,7 +7,9 @@ import { DEFAULT_PROFILE } from '../lib/circadian/types';
 export interface UserState {
   profile: UserProfile;
   onboardingComplete: boolean;
+  healthkitConnected: boolean;
   setProfile: (profile: Partial<UserProfile>) => void;
+  setHealthkitConnected: (connected: boolean) => void;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
 }
@@ -17,11 +19,15 @@ export const useUserStore = create<UserState>()(
     (set) => ({
       profile: { ...DEFAULT_PROFILE },
       onboardingComplete: false,
+      healthkitConnected: false,
 
       setProfile: (updates) =>
         set((state) => ({
           profile: { ...state.profile, ...updates },
         })),
+
+      setHealthkitConnected: (connected) =>
+        set({ healthkitConnected: connected }),
 
       completeOnboarding: () => set({ onboardingComplete: true }),
 
@@ -29,6 +35,7 @@ export const useUserStore = create<UserState>()(
         set({
           profile: { ...DEFAULT_PROFILE },
           onboardingComplete: false,
+          healthkitConnected: false,
         }),
     }),
     {

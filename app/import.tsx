@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 
 import { parseICSForShifts } from '@/src/lib/calendar/ics-parser';
 import { useShiftsStore } from '@/src/store/shifts-store';
+import { usePremiumStore } from '@/src/store/premium-store';
 import { BACKGROUND, TEXT, ACCENT, BORDER, SEMANTIC, BLOCK_COLORS } from '@/src/theme';
 import { SPACING, RADIUS } from '@/src/theme';
 import { heading2, heading3, body, bodySmall, caption, label } from '@/src/theme';
@@ -55,12 +56,20 @@ export default function ImportScreen() {
 
   const importShifts = useShiftsStore((s) => s.importShifts);
   const importPersonalEvents = useShiftsStore((s) => s.importPersonalEvents);
+  const canAccess = usePremiumStore((s) => s.canAccess);
+
+  // Premium gate: redirect to paywall if ICS import isn't available
+  const isPremiumLocked = !canAccess('ics_import');
 
   // -----------------------------------------------------------------------
   // File picking & parsing
   // -----------------------------------------------------------------------
 
   const pickFile = useCallback(async () => {
+    if (isPremiumLocked) {
+      router.push('/paywall');
+      return;
+    }
     setError(null);
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -219,13 +228,16 @@ export default function ImportScreen() {
 
           <View style={styles.pickActions}>
             <Button
-              title={loading ? 'Reading file...' : 'Choose .ics File'}
+              title={loading ? 'Reading file...' : isPremiumLocked ? 'Upgrade to Import' : 'Choose .ics File'}
               onPress={pickFile}
               variant="primary"
               size="lg"
               fullWidth
               loading={loading}
             />
+            {isPremiumLocked && (
+              <Text style={styles.premiumHint}>Premium feature — tap to learn more</Text>
+            )}
           </View>
 
           <Text style={styles.hint}>
@@ -448,6 +460,12 @@ const styles = StyleSheet.create({
     ...caption,
     color: TEXT.tertiary,
     textAlign: 'center',
+  },
+  premiumHint: {
+    ...caption,
+    color: ACCENT.primary,
+    textAlign: 'center',
+    marginTop: SPACING.sm,
   },
   errorCard: {
     marginTop: SPACING.xl,
