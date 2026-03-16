@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -181,8 +182,21 @@ export default function AddShiftScreen() {
 
   const handleDelete = useCallback(() => {
     if (existingShift) {
-      removeShift(existingShift.id);
-      router.back();
+      Alert.alert(
+        'Delete Shift?',
+        'This will remove the shift and regenerate your sleep plan.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => {
+              removeShift(existingShift.id);
+              router.back();
+            },
+          },
+        ],
+      );
     }
   }, [existingShift, removeShift, router]);
 

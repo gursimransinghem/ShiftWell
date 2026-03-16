@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthStore } from '../../src/store/auth-store';
+import { COLORS, SPACING, TYPOGRAPHY, RADIUS } from '@/src/theme';
 
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
@@ -120,7 +121,7 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0A0E1A',
+    backgroundColor: COLORS.background.primary,
   },
   scrollContent: {
     flexGrow: 1,
@@ -135,12 +136,12 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 36,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 16,
-    color: '#8E8E93',
+    color: COLORS.text.secondary,
     marginTop: 8,
   },
   errorContainer: {
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   appleButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.text.primary,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -186,23 +187,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#2C2C2E',
   },
   dividerText: {
-    color: '#8E8E93',
+    color: COLORS.text.secondary,
     paddingHorizontal: 16,
     fontSize: 14,
   },
   input: {
-    backgroundColor: '#141927',
+    backgroundColor: COLORS.background.surface,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 16,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: '#2C2C2E',
   },
   signInButton: {
-    backgroundColor: '#6C63FF',
+    backgroundColor: COLORS.accent.primary,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   signInButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     fontSize: 17,
     fontWeight: '600',
   },
@@ -222,11 +223,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   linkText: {
-    color: '#8E8E93',
+    color: COLORS.text.secondary,
     fontSize: 15,
   },
   linkAccent: {
-    color: '#6C63FF',
+    color: COLORS.accent.primary,
     fontWeight: '600',
   },
   skipButton: {

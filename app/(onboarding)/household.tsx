@@ -34,7 +34,7 @@ export default function HouseholdScreen() {
   }
 
   function handleContinue() {
-    setProfile({ householdSize, hasYoungChildren });
+    setProfile({ householdSize, hasYoungChildren, hasPets });
     router.push('/(onboarding)/preferences');
   }
 
@@ -45,7 +45,7 @@ export default function HouseholdScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={3} totalSteps={4} />
+          <ProgressBar currentStep={3} totalSteps={5} />
         </View>
 
         <Text style={styles.title}>Tell us about your household</Text>

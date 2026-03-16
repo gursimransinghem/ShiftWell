@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.nightshift.app",
+      "bundleIdentifier": "com.shiftwell.app",
       "buildNumber": "1",
       "usesAppleSignIn": true,
       "infoPlist": {
@@ -31,7 +31,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "package": "com.nightshift.app",
+      "package": "com.shiftwell.app",
       "versionCode": 1
     },
     "web": {

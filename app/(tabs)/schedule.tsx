@@ -75,6 +75,24 @@ export default function ScheduleScreen() {
             onEditShift={handleEditShift}
           />
         )}
+
+        {shifts.length === 0 && !selectedDate && (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyEmoji}>{'\u{1F4C5}'}</Text>
+            <Text style={styles.emptyTitle}>No shifts yet</Text>
+            <Text style={styles.emptyBody}>
+              Add your first shift to get a personalized sleep plan built around your schedule.
+            </Text>
+            <Pressable
+              onPress={() => handleAddShift()}
+              style={styles.emptyCta}
+              accessibilityRole="button"
+              accessibilityLabel="Add your first shift"
+            >
+              <Text style={styles.emptyCtaText}>Add Your First Shift</Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
 
       {/* Floating Action Button */}
@@ -127,5 +145,39 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '400',
     lineHeight: 30,
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 24,
+  },
+  emptyEmoji: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: TEXT.primary,
+    marginBottom: 8,
+  },
+  emptyBody: {
+    fontSize: 15,
+    color: TEXT.secondary,
+    textAlign: 'center',
+    lineHeight: 22,
+    maxWidth: 280,
+    marginBottom: 24,
+  },
+  emptyCta: {
+    backgroundColor: ACCENT.primary,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 14,
+  },
+  emptyCtaText: {
+    color: TEXT.onAccent,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

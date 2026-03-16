@@ -53,6 +53,8 @@ export interface UserProfile {
   householdSize: number;
   /** Whether there are young children (affects noise modeling) */
   hasYoungChildren: boolean;
+  /** Whether there are pets that may disrupt sleep (adds wake buffer) */
+  hasPets: boolean;
   /** Typical commute duration in minutes */
   commuteDuration: number;
 }
@@ -65,6 +67,7 @@ export const DEFAULT_PROFILE: UserProfile = {
   napPreference: true,
   householdSize: 1,
   hasYoungChildren: false,
+  hasPets: false,
   commuteDuration: 30,
 };
 

@@ -20,7 +20,7 @@ export default function WelcomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={1} totalSteps={4} />
+          <ProgressBar currentStep={1} totalSteps={5} />
         </View>
 
         <AnimatedTransition delay={0} duration={300}>
@@ -46,6 +46,14 @@ export default function WelcomeScreen() {
             </AnimatedTransition>
           ))}
         </View>
+
+        <AnimatedTransition delay={450} duration={250}>
+          <View style={styles.disclaimer}>
+            <Text style={styles.disclaimerText}>
+              ShiftWell provides general wellness information based on circadian science research. It is not medical advice and does not replace consultation with a healthcare provider. Always consult your doctor about sleep concerns.
+            </Text>
+          </View>
+        </AnimatedTransition>
 
         <AnimatedTransition delay={450} duration={250}>
           <View style={styles.footer}>
@@ -118,5 +126,19 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: 'auto',
+  },
+  disclaimer: {
+    backgroundColor: COLORS.background.surface,
+    borderRadius: 12,
+    padding: SPACING.lg,
+    marginBottom: SPACING['2xl'],
+    borderWidth: 1,
+    borderColor: COLORS.border.subtle,
+  },
+  disclaimerText: {
+    ...TYPOGRAPHY.caption,
+    color: COLORS.text.tertiary,
+    textAlign: 'center',
+    lineHeight: 16,
   },
 });

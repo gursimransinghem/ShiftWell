@@ -223,7 +223,7 @@ export default function ChronotypeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <ProgressBar currentStep={2} totalSteps={4} />
+            <ProgressBar currentStep={2} totalSteps={5} />
           </View>
 
           <Animated.View style={[styles.resultContainer, { opacity: resultOpacity }]}>
@@ -265,7 +265,7 @@ export default function ChronotypeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={2} totalSteps={4} />
+          <ProgressBar currentStep={2} totalSteps={5} />
         </View>
 
         <Animated.View

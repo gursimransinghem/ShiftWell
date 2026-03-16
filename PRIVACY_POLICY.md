@@ -5,7 +5,7 @@
 
 ## Introduction
 
-ShiftWell ("the App") is a sleep optimization app designed for shift workers. It is developed and maintained by **[Company Name] LLC** ("we," "us," or "our").
+ShiftWell ("the App") is a sleep optimization app designed for shift workers. It is developed and maintained by **Dr. Gursimran Singh** ("we," "us," or "our").
 
 We built ShiftWell with privacy as a core principle. Your data stays on your device. We do not collect, transmit, or store any of your information on external servers. This privacy policy explains what data the App uses, how it is handled, and what rights you have.
 
@@ -134,8 +134,8 @@ For significant changes that affect how your data is handled, we will provide no
 
 If you have any questions or concerns about this privacy policy or the App, please contact us:
 
-**[Company Name] LLC**
-Email: **[contact@example.com]**
+**Dr. Gursimran Singh**
+Email: **shiftwell.app@gmail.com**
 
 ---
 

@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import {
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -64,6 +65,8 @@ export default function TodayScreen() {
   } = useTodayPlan();
 
   const plan = usePlanStore((s) => s.plan);
+  const planError = usePlanStore((s) => s.error);
+  const clearError = usePlanStore((s) => s.clearError);
   const profile = useUserStore((s) => s.profile);
   const canAccess = usePremiumStore((s) => s.canAccess);
 
@@ -150,6 +153,17 @@ export default function TodayScreen() {
           <Text style={styles.statusSubtitle}>{statusSubtitle}</Text>
         )}
       </View>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Error banner                                                         */}
+      {/* ------------------------------------------------------------------ */}
+      {planError && (
+        <Pressable onPress={() => { clearError(); regeneratePlan(); }} style={styles.errorBanner}>
+          <Text style={styles.errorText}>
+            ⚠ Plan generation failed. Tap to retry.
+          </Text>
+        </Pressable>
+      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* Recovery Score section (HealthKit data)                              */}
@@ -325,6 +339,19 @@ const styles = StyleSheet.create({
   /* Header */
   header: {
     marginBottom: SPACING['2xl'],
+  },
+  errorBanner: {
+    backgroundColor: COLORS.semantic.errorMuted,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: COLORS.semantic.error,
+    padding: SPACING.md,
+    marginBottom: SPACING.lg,
+  },
+  errorText: {
+    ...TYPOGRAPHY.bodySmall,
+    color: COLORS.semantic.error,
+    textAlign: 'center',
   },
   statusTitle: {
     ...TYPOGRAPHY.heading2,

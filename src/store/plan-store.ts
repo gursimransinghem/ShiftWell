@@ -10,7 +10,10 @@ export interface PlanState {
   plan: SleepPlan | null;
   dateRange: { start: Date; end: Date };
   isGenerating: boolean;
+  error: string | null;
+  lastGeneratedAt: Date | null;
   regeneratePlan: () => void;
+  clearError: () => void;
   setDateRange: (start: Date, end: Date) => void;
 }
 
@@ -26,13 +29,17 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
   plan: null,
   dateRange: getDefaultDateRange(),
   isGenerating: false,
+  error: null,
+  lastGeneratedAt: null,
+
+  clearError: () => set({ error: null }),
 
   regeneratePlan: () => {
     const { dateRange } = get();
     const { shifts, personalEvents } = useShiftsStore.getState();
     const { profile } = useUserStore.getState();
 
-    set({ isGenerating: true });
+    set({ isGenerating: true, error: null });
 
     try {
       const plan = generateSleepPlan(
@@ -42,14 +49,15 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
         personalEvents,
         profile,
       );
-      set({ plan, isGenerating: false });
+      set({ plan, isGenerating: false, lastGeneratedAt: new Date(), error: null });
 
       // Schedule push notifications for the next 24h of plan blocks
       schedulePlanNotifications(plan.blocks).catch(() => {
         // Notifications may not be permitted yet — fail silently
       });
-    } catch {
-      set({ isGenerating: false });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Failed to generate sleep plan';
+      set({ isGenerating: false, error: message });
     }
   },
 

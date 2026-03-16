@@ -21,11 +21,29 @@ export type Feature =
   | 'light_protocols'
   | 'cloud_backup';
 
+/**
+ * V1 LAUNCH: All features are free.
+ * Committee decision (7/7 consensus): launch free, monetize in v1.2+
+ * when RevenueCat is properly integrated and retention data exists.
+ *
+ * To re-enable premium gating, restore original FREE_FEATURES list:
+ * ['manual_shift_entry', 'basic_sleep_plan', 'today_screen', 'onboarding']
+ */
 const FREE_FEATURES: Feature[] = [
   'manual_shift_entry',
   'basic_sleep_plan',
   'today_screen',
   'onboarding',
+  'ics_import',
+  'ics_export',
+  'healthkit',
+  'accuracy_tracking',
+  'advanced_tips',
+  'push_notifications',
+  'nap_placement',
+  'meal_timing',
+  'light_protocols',
+  'cloud_backup',
 ];
 
 const FEATURE_DESCRIPTIONS: Record<Feature, string> = {

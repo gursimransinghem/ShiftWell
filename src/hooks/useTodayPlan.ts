@@ -105,7 +105,7 @@ const COUNTDOWN_PRIORITY_TYPES: SleepBlockType[] = [
 
 export function useTodayPlan(): TodayPlanData {
   // Force re-render every minute so active/next status stays current.
-  const [, setTick] = useState(0);
+  const [tick, setTick] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 60_000);
     return () => clearInterval(id);
@@ -186,5 +186,5 @@ export function useTodayPlan(): TodayPlanData {
       currentShift,
       isEmpty: todayBlocks.length === 0,
     };
-  }, [plan, shifts]);
+  }, [plan, shifts, tick]);
 }
