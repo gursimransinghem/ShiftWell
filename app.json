@@ -16,8 +16,11 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.nightshift.app",
       "buildNumber": "1",
+      "usesAppleSignIn": true,
       "infoPlist": {
         "NSDocumentPickerUsageDescription": "ShiftWell needs access to your files to import shift schedules.",
+        "NSHealthShareUsageDescription": "ShiftWell reads your sleep data to compare your actual sleep with your planned schedule and improve future recommendations.",
+        "NSHealthUpdateUsageDescription": "ShiftWell writes your planned sleep schedule so iOS Sleep Focus can activate automatically at bedtime.",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -40,7 +43,18 @@
       "expo-router",
       "expo-document-picker",
       "expo-file-system",
-      "expo-sharing"
+      "expo-sharing",
+      "expo-secure-store",
+      "expo-apple-authentication",
+      "expo-notifications",
+      "react-native-purchases",
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "ShiftWell reads your sleep data to compare your actual sleep with your planned schedule and improve future recommendations.",
+          "NSHealthUpdateUsageDescription": "ShiftWell writes your planned sleep schedule so iOS Sleep Focus can activate automatically at bedtime."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

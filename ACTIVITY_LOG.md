@@ -5,6 +5,74 @@
 
 ---
 
+## 2026-03-16 — Session 8: Phase 2 Implementation (Cloud + Premium + HealthKit)
+
+### Completed
+- **Supabase client layer** — `src/lib/supabase/` (5 files)
+  - Client initialization with SecureStore session adapter
+  - Full database types matching schema (6 tables with Row/Insert/Update types)
+  - Auth module: Apple Sign-In, email/password, session management
+- **Auth store + UI** — `src/store/auth-store.ts` + `app/(auth)/` (3 screens)
+  - Zustand auth store with sign-in, sign-up, sign-out, session check
+  - Sign-in screen (Apple Sign-In + email, dark theme, #6C63FF accent)
+  - Sign-up screen (email + password validation)
+  - Auth layout (Stack navigator)
+- **Sync engine** — `src/lib/sync/` (3 files)
+  - Offline-first queue: writes to AsyncStorage first, queues Supabase writes
+  - Full bidirectional sync with last-write-wins conflict resolution
+  - Data migration: one-time Phase 1 → cloud migration on account creation
+- **HealthKit integration** — `src/lib/healthkit/` (4 files + type shim)
+  - Sleep data reading (in-bed, core, deep, REM, unspecified stages)
+  - Write planned sleep to activate iOS Sleep Focus
+  - Sleep comparison: planned vs actual with adherence scoring
+  - Weekly accuracy tracking with trend analysis and streak counting
+- **Push notifications** — `src/lib/notifications/` (2 files)
+  - Schedule sleep reminders (30 min before bedtime), caffeine cutoffs, wake alarms
+  - `schedulePlanNotifications()` auto-schedules from PlanBlock array
+- **Premium / RevenueCat** — `src/lib/premium/` (3 files) + `src/store/premium-store.ts`
+  - RevenueCat SDK integration (initialize, purchase, restore)
+  - 14 features mapped to free/premium tiers
+  - Premium store with entitlement checks
+  - Paywall screen with feature comparison table and pricing cards
+- **Database schema** — `supabase/migrations/001_initial_schema.sql`
+  - 6 tables: users, shifts, personal_events, sleep_plans, health_data, subscriptions
+  - Row-Level Security on all tables
+  - Auto-update triggers for updated_at
+- **Updated existing stores** — shifts-store now queues cloud sync on mutations
+- **app.json updated** — Apple Sign-In, HealthKit, notifications, RevenueCat plugins
+- **Environment config** — `.env.example` with Supabase + RevenueCat placeholders
+- **All 83 existing tests still passing**, zero TypeScript errors
+
+### Key Decisions
+- HealthKit package needs native build (iOS only) — added type declaration shim for compile-time safety
+- Sync engine uses `any` cast for Supabase upsert to handle dynamic table routing
+- Account creation is optional — free features work fully offline (same as Phase 1)
+- Premium tier: $4.99/mo or $39.99/yr (33% discount)
+
+### New Files Created (25 total)
+- `src/lib/supabase/` — client.ts, storage-adapter.ts, auth.ts, database.types.ts, index.ts
+- `src/lib/sync/` — sync-engine.ts, data-migration.ts, index.ts
+- `src/lib/healthkit/` — healthkit-service.ts, sleep-comparison.ts, accuracy-score.ts, index.ts
+- `src/lib/notifications/` — notification-service.ts, index.ts
+- `src/lib/premium/` — premium-service.ts, entitlements.ts, index.ts
+- `src/store/` — auth-store.ts, premium-store.ts
+- `src/types/` — healthkit.d.ts
+- `app/(auth)/` — _layout.tsx, sign-in.tsx, sign-up.tsx
+- `app/paywall.tsx`
+- `supabase/migrations/001_initial_schema.sql`
+- `.env.example`
+
+### Next Steps
+- [ ] Create Supabase project and run migration SQL
+- [ ] Set up RevenueCat account + App Store Connect products
+- [ ] Wire auth into root layout (conditional routing)
+- [ ] Add HealthKit onboarding step (optional, after chronotype quiz)
+- [ ] Build recovery score dashboard UI
+- [ ] Write tests for sync engine and data migration
+- [ ] Test on physical iPhone with `npx expo start`
+
+---
+
 ## 2026-03-14 — Session 7: Design Assets Guide
 
 ### Completed

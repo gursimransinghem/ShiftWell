@@ -3,6 +3,7 @@ import { persist, createJSONStorage, type StateStorage } from 'zustand/middlewar
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { ShiftEvent, PersonalEvent } from '../lib/circadian/types';
 import { classifyShiftType } from '../lib/circadian/classify-shifts';
+import { queueWrite } from '../lib/sync/sync-engine';
 
 export interface ShiftsState {
   shifts: ShiftEvent[];
@@ -69,19 +70,20 @@ export const useShiftsStore = create<ShiftsState>()(
         const start = shift.start instanceof Date ? shift.start : new Date(shift.start);
         const end = shift.end instanceof Date ? shift.end : new Date(shift.end);
         const shiftType = classifyShiftType(start, end);
+        const id = generateId();
 
         set((state) => ({
           shifts: [
             ...state.shifts,
-            {
-              ...shift,
-              id: generateId(),
-              start,
-              end,
-              shiftType,
-            },
+            { ...shift, id, start, end, shiftType },
           ],
         }));
+
+        // Queue cloud sync (async, non-blocking)
+        queueWrite('shifts', 'upsert', {
+          id, title: shift.title, start_time: start.toISOString(),
+          end_time: end.toISOString(), shift_type: shiftType, source: 'manual',
+        });
       },
 
       updateShift: (id, updates) =>
@@ -98,10 +100,12 @@ export const useShiftsStore = create<ShiftsState>()(
           }),
         })),
 
-      removeShift: (id) =>
+      removeShift: (id) => {
         set((state) => ({
           shifts: state.shifts.filter((s) => s.id !== id),
-        })),
+        }));
+        queueWrite('shifts', 'delete', { id });
+      },
 
       importShifts: (shifts) =>
         set((state) => ({
