@@ -3,654 +3,539 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShiftWell — Circadian Sleep Plans for Shift Workers</title>
+<title>ShiftWell — Sleep Science for Shift Workers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
-html {
-  scroll-behavior: smooth;
+:root {
+  --midnight: #050811;
+  --deep: #0B1022;
+  --surface: #111832;
+  --surface-hover: #172042;
+  --amber: #F0A830;
+  --amber-dim: rgba(240, 168, 48, 0.12);
+  --amber-glow: rgba(240, 168, 48, 0.25);
+  --lavender: #A5A0E8;
+  --lavender-dim: rgba(165, 160, 232, 0.1);
+  --text-primary: #E8E6F0;
+  --text-secondary: #8B8AA0;
+  --text-muted: #5C5B6E;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Outfit', -apple-system, sans-serif;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  background: #0A0E1A;
-  color: #E0E0E0;
+  font-family: var(--sans);
+  background: var(--midnight);
+  color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: #6C63FF;
-  text-decoration: none;
-}
+a { color: var(--amber); text-decoration: none; }
 
-a:hover {
-  text-decoration: underline;
-}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
 
-/* ---- Utility ---- */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-section {
-  padding: 96px 0;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 16px;
-  color: #FFFFFF;
-}
-
-.section-subtitle {
-  text-align: center;
-  color: #9CA3AF;
-  max-width: 600px;
-  margin: 0 auto 56px;
-  font-size: 1.1rem;
-}
-
-/* ---- Fade-in on scroll ---- */
-.fade-in {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ---- Nav ---- */
+/* ═══════════════════════════════════════════════════════════════
+   NAV — barely there, just logo + one CTA
+   ═══════════════════════════════════════════════════════════════ */
 nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(10, 14, 26, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(108, 99, 255, 0.12);
-  padding: 16px 0;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 0;
+  background: rgba(5, 8, 17, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(165, 160, 232, 0.06);
 }
-
-nav .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+.logo {
+  font-family: var(--serif); font-size: 1.4rem; color: var(--text-primary);
+  font-style: italic; letter-spacing: -0.5px;
 }
-
-.nav-logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: -0.5px;
+.logo em { color: var(--amber); font-style: italic; }
+.nav-cta {
+  font-family: var(--sans); font-size: 0.85rem; font-weight: 500;
+  color: var(--midnight); background: var(--amber);
+  padding: 10px 24px; border-radius: 100px;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
 }
+.nav-cta:hover { background: #FFB940; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(240, 168, 48, 0.3); }
 
-.nav-logo span {
-  color: #6C63FF;
-}
-
-nav a.nav-cta {
-  background: #6C63FF;
-  color: #FFFFFF;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background 0.2s;
-  text-decoration: none;
-}
-
-nav a.nav-cta:hover {
-  background: #5A52E0;
-  text-decoration: none;
-}
-
-/* ---- Hero ---- */
+/* ═══════════════════════════════════════════════════════════════
+   HERO — editorial, warm, night-sky atmosphere
+   ═══════════════════════════════════════════════════════════════ */
 .hero {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding-top: 80px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 28px 80px;
+  position: relative;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108, 99, 255, 0.12) 0%, transparent 70%),
-    #0A0E1A;
+    radial-gradient(ellipse 70% 50% at 50% 20%, rgba(240, 168, 48, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 70%, rgba(165, 160, 232, 0.04) 0%, transparent 60%),
+    var(--midnight);
 }
 
-.hero-content {
-  max-width: 680px;
+/* subtle stars */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(1px 1px at 40% 65%, rgba(255,255,255,0.15), transparent),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px 1px at 90% 75%, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1.5px 1.5px at 60% 50%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px 1px at 35% 25%, rgba(255,255,255,0.3), transparent);
+  pointer-events: none;
 }
 
-.ios-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(108, 99, 255, 0.15);
-  border: 1px solid rgba(108, 99, 255, 0.3);
-  color: #A9A4FF;
-  padding: 6px 16px;
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 32px;
+.hero-inner { max-width: 680px; position: relative; z-index: 1; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--amber);
+  padding: 8px 20px; border-radius: 100px;
+  background: var(--amber-dim);
+  border: 1px solid rgba(240, 168, 48, 0.15);
+  margin-bottom: 40px;
 }
+.badge::before { content: '☾'; font-size: 1rem; }
 
 .hero h1 {
-  font-size: 4rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -2px;
-  line-height: 1.1;
-  margin-bottom: 8px;
+  font-family: var(--serif);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 400; font-style: italic;
+  line-height: 1.05; letter-spacing: -2px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
 }
-
-.hero h1 span {
-  background: linear-gradient(135deg, #6C63FF, #A78BFA);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--amber), #FFD080);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.hero .tagline {
-  font-size: 1.5rem;
-  color: #D1D5DB;
-  font-weight: 500;
-  margin-bottom: 12px;
-}
-
 .hero .subtitle {
-  font-size: 1.05rem;
-  color: #9CA3AF;
-  margin-bottom: 40px;
+  font-size: 1.2rem; font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7; max-width: 520px; margin: 0 auto 48px;
 }
+.hero .subtitle strong { color: var(--text-primary); font-weight: 500; }
 
-/* ---- Email Form ---- */
+/* email form */
 .email-form {
-  display: flex;
-  gap: 12px;
-  max-width: 480px;
-  margin: 0 auto;
+  display: flex; gap: 12px;
+  max-width: 460px; margin: 0 auto;
 }
-
-.email-form input[type="email"] {
-  flex: 1;
-  padding: 14px 20px;
-  border-radius: 12px;
-  border: 1px solid rgba(108, 99, 255, 0.3);
-  background: rgba(255, 255, 255, 0.06);
-  color: #FFFFFF;
-  font-size: 1rem;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+.email-form input {
+  flex: 1; padding: 16px 22px; border-radius: 14px;
+  border: 1px solid rgba(165, 160, 232, 0.12);
+  background: rgba(255,255,255, 0.04);
+  color: var(--text-primary); font-size: 1rem;
+  font-family: var(--sans); outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
-
-.email-form input[type="email"]::placeholder {
-  color: #6B7280;
+.email-form input::placeholder { color: var(--text-muted); }
+.email-form input:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--amber-dim);
 }
-
-.email-form input[type="email"]:focus {
-  border-color: #6C63FF;
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
-}
-
 .email-form button {
-  padding: 14px 28px;
-  border-radius: 12px;
-  border: none;
-  background: #6C63FF;
-  color: #FFFFFF;
-  font-size: 1rem;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
-  white-space: nowrap;
+  padding: 16px 32px; border-radius: 14px; border: none;
+  background: var(--amber); color: var(--midnight);
+  font-size: 1rem; font-weight: 600; font-family: var(--sans);
+  cursor: pointer; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+.email-form button:hover { background: #FFB940; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(240, 168, 48, 0.3); }
+.email-form button:active { transform: scale(0.97); }
+
+.form-note {
+  font-size: 0.8rem; color: var(--text-muted);
+  margin-top: 14px;
 }
 
-.email-form button:hover {
-  background: #5A52E0;
-}
-
-.email-form button:active {
-  transform: scale(0.97);
-}
-
-/* ---- Problem ---- */
+/* ═══════════════════════════════════════════════════════════════
+   PROBLEM — stark numbers, asymmetric layout
+   ═══════════════════════════════════════════════════════════════ */
 .problem {
-  background:
-    linear-gradient(180deg, #0A0E1A 0%, #0F1328 50%, #0A0E1A 100%);
+  padding: 120px 0;
+  background: linear-gradient(180deg, var(--midnight) 0%, var(--deep) 100%);
+}
+.problem .section-head {
+  text-align: center; margin-bottom: 72px;
+}
+.section-label {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 20px; display: block;
+}
+.section-title {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 400;
+  color: var(--text-primary); line-height: 1.15;
+  letter-spacing: -0.5px;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+.stats-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
 }
-
-.stat-card {
-  text-align: center;
-  padding: 40px 24px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.stat {
+  padding: 48px 32px; border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid rgba(165, 160, 232, 0.06);
+  text-align: left;
+  transition: transform 0.4s ease, border-color 0.4s ease;
 }
-
-.stat-number {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #6C63FF;
-  line-height: 1.2;
-  margin-bottom: 8px;
-}
-
-.stat-label {
-  font-size: 0.95rem;
-  color: #9CA3AF;
-  line-height: 1.5;
-}
-
-/* ---- Solution ---- */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-}
-
-.feature-card {
-  padding: 36px 28px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(108, 99, 255, 0.35);
-  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.1);
-}
-
-.feature-icon {
-  font-size: 2rem;
+.stat:hover { transform: translateY(-4px); border-color: rgba(240, 168, 48, 0.15); }
+.stat-num {
+  font-family: var(--serif); font-style: italic;
+  font-size: 3.5rem; font-weight: 400;
+  color: var(--amber); line-height: 1;
   margin-bottom: 16px;
-  display: block;
 }
+.stat p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
 
-.feature-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 10px;
-}
+/* ═══════════════════════════════════════════════════════════════
+   SOLUTION — feature blocks with warm accents
+   ═══════════════════════════════════════════════════════════════ */
+.solution { padding: 120px 0; }
+.solution .section-head { text-align: center; margin-bottom: 72px; }
 
-.feature-card p {
-  color: #9CA3AF;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.features {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
 }
+.feat {
+  padding: 40px 32px; border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid rgba(165, 160, 232, 0.06);
+  transition: transform 0.4s ease, border-color 0.4s ease;
+  position: relative; overflow: hidden;
+}
+.feat:hover { transform: translateY(-4px); border-color: rgba(240, 168, 48, 0.15); }
+.feat::before {
+  content: ''; position: absolute; top: -60px; right: -60px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: var(--amber-dim); filter: blur(40px);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.feat:hover::before { opacity: 1; }
 
-/* ---- How It Works ---- */
-.how-it-works {
-  background:
-    linear-gradient(180deg, #0A0E1A 0%, #0F1328 50%, #0A0E1A 100%);
+.feat-icon {
+  font-size: 1.6rem; margin-bottom: 20px; display: block;
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--amber-dim);
+  display: flex; align-items: center; justify-content: center;
 }
+.feat h3 {
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.35rem; font-weight: 400;
+  color: var(--text-primary); margin-bottom: 12px;
+}
+.feat p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HOW IT WORKS — numbered steps, horizontal flow
+   ═══════════════════════════════════════════════════════════════ */
+.how {
+  padding: 120px 0;
+  background: linear-gradient(180deg, var(--midnight) 0%, var(--deep) 50%, var(--midnight) 100%);
+}
+.how .section-head { text-align: center; margin-bottom: 72px; }
 
 .steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
   position: relative;
 }
-
-.step {
-  text-align: center;
-  padding: 32px 20px;
-  position: relative;
+/* connector */
+.steps::after {
+  content: ''; position: absolute;
+  top: 32px; left: calc(16.67% + 24px); right: calc(16.67% + 24px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  opacity: 0.2;
 }
-
-.step-number {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6C63FF, #A78BFA);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 1.5rem;
+.step { text-align: center; position: relative; z-index: 1; }
+.step-num {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  font-family: var(--serif); font-style: italic;
+  font-size: 1.5rem; color: var(--midnight);
+  background: linear-gradient(135deg, var(--amber), #FFD080);
+  box-shadow: 0 8px 32px rgba(240, 168, 48, 0.25);
 }
-
 .step h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  margin-bottom: 8px;
+  font-family: var(--sans); font-size: 1.05rem; font-weight: 600;
+  color: var(--text-primary); margin-bottom: 8px;
 }
+.step p { color: var(--text-secondary); font-size: 0.9rem; max-width: 280px; margin: 0 auto; }
 
-.step p {
-  color: #9CA3AF;
-  font-size: 0.95rem;
+/* ═══════════════════════════════════════════════════════════════
+   CREDIBILITY — physician-built trust signals
+   ═══════════════════════════════════════════════════════════════ */
+.trust { padding: 120px 0; }
+.trust .section-head { text-align: center; margin-bottom: 72px; }
+
+.trust-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+  max-width: 760px; margin: 0 auto;
 }
-
-/* connector line between steps */
-.steps::before {
-  content: '';
-  position: absolute;
-  top: 60px;
-  left: calc(16.67% + 28px);
-  right: calc(16.67% + 28px);
-  height: 2px;
-  background: linear-gradient(90deg, #6C63FF, #A78BFA, #6C63FF);
-  opacity: 0.3;
+.trust-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 24px 28px; border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid rgba(165, 160, 232, 0.06);
+  transition: border-color 0.3s ease;
 }
-
-/* ---- Credibility ---- */
-.credibility-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  max-width: 720px;
-  margin: 0 auto;
+.trust-item:hover { border-color: rgba(240, 168, 48, 0.12); }
+.trust-icon {
+  font-size: 1.3rem; flex-shrink: 0; margin-top: 2px;
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--amber-dim);
+  display: flex; align-items: center; justify-content: center;
 }
+.trust-item p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+.trust-item p strong { color: var(--text-primary); font-weight: 500; }
 
-.credibility-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 20px 24px;
-  border-radius: 12px;
-  background: rgba(108, 99, 255, 0.06);
-  border: 1px solid rgba(108, 99, 255, 0.12);
-}
-
-.credibility-icon {
-  font-size: 1.4rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.credibility-item p {
-  color: #D1D5DB;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-/* ---- CTA Section ---- */
-.cta-section {
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM CTA — bold, warm, compelling
+   ═══════════════════════════════════════════════════════════════ */
+.cta-bottom {
+  padding: 120px 0 140px;
   text-align: center;
+  position: relative;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(108, 99, 255, 0.1) 0%, transparent 70%),
-    #0A0E1A;
+    radial-gradient(ellipse 60% 40% at 50% 80%, rgba(240, 168, 48, 0.08) 0%, transparent 70%),
+    var(--midnight);
+}
+.cta-bottom .section-title { margin-bottom: 16px; }
+.cta-bottom .section-sub {
+  font-size: 1.1rem; color: var(--text-secondary);
+  max-width: 460px; margin: 0 auto 48px; font-weight: 300;
 }
 
-.cta-section .section-title {
+/* ═══════════════════════════════════════════════════════════════
+   FOOTER — minimal
+   ═══════════════════════════════════════════════════════════════ */
+footer {
+  padding: 40px 0; text-align: center;
+  border-top: 1px solid rgba(165, 160, 232, 0.06);
+}
+footer p { color: var(--text-muted); font-size: 0.82rem; line-height: 2; }
+footer a { color: var(--text-muted); }
+footer a:hover { color: var(--amber); }
+footer .tagline-f {
+  font-family: var(--serif); font-style: italic;
+  color: var(--text-secondary); font-size: 0.9rem;
   margin-bottom: 8px;
 }
 
-.cta-section .section-subtitle {
-  margin-bottom: 36px;
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
 
-/* ---- Footer ---- */
-footer {
-  padding: 40px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  text-align: center;
-}
-
-footer .footer-links {
-  margin-bottom: 16px;
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  font-size: 0.9rem;
-}
-
-footer .tagline-footer {
-  color: #6B7280;
-  font-size: 0.85rem;
-  margin-top: 12px;
-  font-style: italic;
-}
-
-footer .copyright {
-  color: #6B7280;
-  font-size: 0.85rem;
-}
-
-/* ---- Responsive ---- */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  section {
-    padding: 64px 0;
-  }
-
-  .hero h1 {
-    font-size: 2.6rem;
-    letter-spacing: -1px;
-  }
-
-  .hero .tagline {
-    font-size: 1.2rem;
-  }
-
-  .email-form {
-    flex-direction: column;
-  }
-
-  .email-form button {
-    width: 100%;
-  }
-
-  .stats-grid,
-  .features-grid,
-  .steps {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .steps::before {
-    display: none;
-  }
-
-  .credibility-list {
-    grid-template-columns: 1fr;
-  }
-
-  .section-title {
-    font-size: 1.6rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 2.1rem;
-  }
-
-  .container {
-    padding: 0 16px;
-  }
+  .stats-row, .features, .steps { grid-template-columns: 1fr; }
+  .steps::after { display: none; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .hero h1 { letter-spacing: -1px; }
+  .email-form { flex-direction: column; }
+  .email-form button { width: 100%; }
+  .problem, .solution, .how, .trust, .cta-bottom { padding: 80px 0; }
 }
 </style>
 </head>
 <body>
 
-<!-- Nav -->
+<!-- ─── Nav ─── -->
 <nav>
-  <div class="container">
-    <div class="nav-logo">Shift<span>Well</span></div>
+  <div class="wrap">
+    <div class="logo"><em>Shift</em>Well</div>
     <a href="#waitlist" class="nav-cta">Join Waitlist</a>
   </div>
 </nav>
 
-<!-- Hero -->
-<section class="hero" id="hero">
-  <div class="hero-content">
-    <div class="ios-badge">Coming Soon to iOS</div>
-    <h1>Shift<span>Well</span></h1>
-    <p class="tagline">Circadian Sleep Plans for Shift Workers</p>
-    <p class="subtitle">Built by an ER doctor who works nights. Launching soon on iOS.</p>
+<!-- ─── Hero ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="badge">Coming Soon to iOS</div>
+    <h1>Sleep <span class="highlight">with</span> your<br>schedule, not<br><span class="highlight">against</span> it</h1>
+    <p class="subtitle">
+      <strong>Built by an ER doctor who works nights.</strong>
+      ShiftWell turns your shift schedule into a science-backed circadian plan — sleep windows, naps, caffeine, meals — all in one tap.
+    </p>
     <form class="email-form" action="#" method="POST">
-      <input type="email" placeholder="Enter your email" required aria-label="Email address">
-      <button type="submit">Join the Waitlist</button>
+      <input type="email" placeholder="your@email.com" required aria-label="Email address">
+      <button type="submit">Get Early Access</button>
     </form>
+    <p class="form-note">No spam. Just a heads-up when we launch.</p>
   </div>
 </section>
 
-<!-- Problem -->
-<section class="problem" id="problem">
-  <div class="container">
-    <h2 class="section-title fade-in">Shift work is destroying your sleep</h2>
-    <p class="section-subtitle fade-in">The data is clear: working against your circadian rhythm takes a serious toll.</p>
-    <div class="stats-grid">
-      <div class="stat-card fade-in">
-        <div class="stat-number">63%</div>
-        <div class="stat-label">of shift workers report poor sleep quality</div>
+<!-- ─── Problem ─── -->
+<section class="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label reveal">The Problem</span>
+      <h2 class="section-title reveal">Working nights costs you<br>more than just sleep</h2>
+    </div>
+    <div class="stats-row">
+      <div class="stat reveal reveal-delay-1">
+        <div class="stat-num">63%</div>
+        <p>of shift workers report chronically poor sleep quality — not tiredness, dysfunction.</p>
       </div>
-      <div class="stat-card fade-in">
-        <div class="stat-number">2-3x</div>
-        <div class="stat-label">higher risk of accidents for shift workers</div>
+      <div class="stat reveal reveal-delay-2">
+        <div class="stat-num">2–3×</div>
+        <p>the accident rate. Drowsy driving after a night shift is comparable to driving drunk.</p>
       </div>
-      <div class="stat-card fade-in">
-        <div class="stat-number">2-4 hrs</div>
-        <div class="stat-label">of quality sleep lost per rotation on average</div>
+      <div class="stat reveal reveal-delay-3">
+        <div class="stat-num">10yr</div>
+        <p>of rotating shifts is linked to accelerated cognitive aging equivalent to 6.5 extra years.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Solution -->
-<section class="solution" id="solution">
-  <div class="container">
-    <h2 class="section-title fade-in">Your personalized shift-sleep plan in 30 seconds</h2>
-    <p class="section-subtitle fade-in">ShiftWell builds a custom circadian plan around your actual schedule.</p>
-    <div class="features-grid">
-      <div class="feature-card fade-in">
-        <span class="feature-icon">&#128197;</span>
-        <h3>Import Shifts</h3>
-        <p>Paste your schedule or import an .ics calendar file. ShiftWell reads your real-world hours automatically.</p>
+<!-- ─── Solution ─── -->
+<section class="solution">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label reveal">What ShiftWell Does</span>
+      <h2 class="section-title reveal">A complete circadian plan,<br>built around your life</h2>
+    </div>
+    <div class="features">
+      <div class="feat reveal reveal-delay-1">
+        <div class="feat-icon">📅</div>
+        <h3>Import your shifts</h3>
+        <p>Sync from iCal, Google Calendar, or QGenda. ShiftWell reads your real schedule — shifts, appointments, kid pickups, everything.</p>
       </div>
-      <div class="feature-card fade-in">
-        <span class="feature-icon">&#129504;</span>
-        <h3>Get Your Plan</h3>
-        <p>AI generates optimal sleep windows, nap timing, caffeine cutoffs, and meal schedules tailored to you.</p>
+      <div class="feat reveal reveal-delay-2">
+        <div class="feat-icon">🧬</div>
+        <h3>Get your circadian plan</h3>
+        <p>Optimal sleep windows, strategic naps, caffeine cutoffs, meal timing, and light exposure — computed from peer-reviewed circadian science.</p>
       </div>
-      <div class="feature-card fade-in">
-        <span class="feature-icon">&#127775;</span>
-        <h3>Live Better</h3>
-        <p>Every recommendation is evidence-based, drawn from published sleep science and circadian research.</p>
+      <div class="feat reveal reveal-delay-3">
+        <div class="feat-icon">🗓️</div>
+        <h3>Export to your calendar</h3>
+        <p>One tap puts sleep blocks, nap windows, and timing cues right alongside your existing schedule. No second app to check.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- How It Works -->
-<section class="how-it-works" id="how-it-works">
-  <div class="container">
-    <h2 class="section-title fade-in">How It Works</h2>
-    <p class="section-subtitle fade-in">Three steps to better sleep, no matter your shift pattern.</p>
+<!-- ─── How it Works ─── -->
+<section class="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label reveal">How It Works</span>
+      <h2 class="section-title reveal">Three steps to sleeping<br>with your schedule</h2>
+    </div>
     <div class="steps">
-      <div class="step fade-in">
-        <div class="step-number">&#128338;</div>
-        <h3>Enter your shift schedule</h3>
-        <p>Add your upcoming shifts manually or sync from your calendar.</p>
+      <div class="step reveal reveal-delay-1">
+        <div class="step-num">1</div>
+        <h3>Add your shifts</h3>
+        <p>Import a calendar file or enter shifts manually. Takes under 30 seconds.</p>
       </div>
-      <div class="step fade-in">
-        <div class="step-number">&#128203;</div>
-        <h3>Get a personalized circadian plan</h3>
-        <p>ShiftWell maps your biology to your schedule and builds your plan.</p>
+      <div class="step reveal reveal-delay-2">
+        <div class="step-num">2</div>
+        <h3>Review your plan</h3>
+        <p>ShiftWell generates a full plan — sleep, naps, caffeine, meals, light — personalized to your chronotype.</p>
       </div>
-      <div class="step fade-in">
-        <div class="step-number">&#9989;</div>
-        <h3>Follow timing cues throughout your day</h3>
-        <p>Get reminders for sleep, naps, caffeine, meals, and light exposure.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Credibility -->
-<section class="credibility" id="credibility">
-  <div class="container">
-    <h2 class="section-title fade-in">Built by a physician, backed by science</h2>
-    <p class="section-subtitle fade-in">ShiftWell isn't another generic sleep app. It's built specifically for people who work when others sleep.</p>
-    <div class="credibility-list">
-      <div class="credibility-item fade-in">
-        <span class="credibility-icon">&#129658;</span>
-        <p>Built by an emergency medicine physician who works overnight shifts</p>
-      </div>
-      <div class="credibility-item fade-in">
-        <span class="credibility-icon">&#128218;</span>
-        <p>Algorithm based on published circadian rhythm and sleep research</p>
-      </div>
-      <div class="credibility-item fade-in">
-        <span class="credibility-icon">&#128300;</span>
-        <p>Every recommendation traces to peer-reviewed scientific evidence</p>
-      </div>
-      <div class="credibility-item fade-in">
-        <span class="credibility-icon">&#128101;</span>
-        <p>Designed for and used by nurses, paramedics, firefighters, and doctors</p>
+      <div class="step reveal reveal-delay-3">
+        <div class="step-num">3</div>
+        <h3>Follow the cues</h3>
+        <p>Get reminders and timing guidance throughout your day. Adapts as your schedule changes.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Early Access CTA -->
-<section class="cta-section" id="waitlist">
-  <div class="container">
-    <h2 class="section-title fade-in">Be the first to try ShiftWell</h2>
-    <p class="section-subtitle fade-in">Join the waitlist and get early access when we launch.</p>
-    <form class="email-form fade-in" action="#" method="POST" style="justify-content: center;">
-      <input type="email" placeholder="Enter your email" required aria-label="Email address">
-      <button type="submit">Join the Waitlist</button>
+<!-- ─── Trust ─── -->
+<section class="trust">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-label reveal">Why Trust ShiftWell</span>
+      <h2 class="section-title reveal">Built by a physician who<br>lives this problem</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item reveal reveal-delay-1">
+        <div class="trust-icon">🩺</div>
+        <p><strong>Emergency medicine physician</strong> who rotates day, evening, and night shifts every week</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-2">
+        <div class="trust-icon">📄</div>
+        <p><strong>15+ peer-reviewed papers</strong> cited in the algorithm — Borbely, Czeisler, Eastman, AASM guidelines</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-3">
+        <div class="trust-icon">🔬</div>
+        <p><strong>Deterministic, not AI-guessing.</strong> The circadian math is provable and reproducible. Every recommendation traces to evidence.</p>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-icon">🔒</div>
+        <p><strong>Privacy-first.</strong> All computation happens on your device. Your schedule data never leaves your phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Bottom CTA ─── -->
+<section class="cta-bottom" id="waitlist">
+  <div class="wrap">
+    <span class="section-label reveal">Early Access</span>
+    <h2 class="section-title reveal">Ready to sleep better<br>on your worst rotation?</h2>
+    <p class="section-sub reveal">Join the waitlist. We'll let you know when ShiftWell launches on iOS.</p>
+    <form class="email-form reveal" action="#" method="POST">
+      <input type="email" placeholder="your@email.com" required aria-label="Email address">
+      <button type="submit">Get Early Access</button>
     </form>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ─── Footer ─── -->
 <footer>
-  <div class="container">
-    <div class="footer-links">
-      <a href="#">Privacy Policy</a>
-    </div>
-    <p class="copyright">&copy; 2026 ShiftWell. All rights reserved.</p>
-    <p class="tagline-footer">Made with care for the people who keep the world running at night.</p>
+  <div class="wrap">
+    <p class="tagline-f">For the people who keep the world running at night.</p>
+    <p><a href="#">Privacy Policy</a> · © 2026 ShiftWell</p>
   </div>
 </footer>
 
-<!-- Scroll fade-in script -->
+<!-- ─── Scroll reveal ─── -->
 <script>
 (function() {
-  var els = document.querySelectorAll('.fade-in');
+  var els = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
     for (var i = 0; i < els.length; i++) els[i].classList.add('visible');
     return;
   }
-  var observer = new IntersectionObserver(function(entries) {
-    for (var i = 0; i < entries.length; i++) {
-      if (entries[i].isIntersecting) {
-        entries[i].target.classList.add('visible');
-        observer.unobserve(entries[i].target);
-      }
-    }
-  }, { threshold: 0.15 });
-  for (var j = 0; j < els.length; j++) observer.observe(els[j]);
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function(el) { obs.observe(el); });
 })();
 </script>
 

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night-Shifter — Planning & Completion Dashboard</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+  }
+  #root { max-width: 1400px; margin: 0 auto; padding: 24px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {
+  ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis,
+  CartesianGrid, Tooltip, Legend, RadialBarChart, RadialBar, Treemap
+} = Recharts;
+
+// ── Data ──────────────────────────────────────────────────────────────────
+
+const COLORS = {
+  green: '#3fb950', blue: '#58a6ff', purple: '#bc8cff', orange: '#f0883e',
+  red: '#f85149', yellow: '#d29922', teal: '#39d353', pink: '#f778ba',
+  gray: '#484f58', darkBg: '#161b22', cardBg: '#21262d', border: '#30363d',
+  text: '#c9d1d9', textMuted: '#8b949e', white: '#f0f6fc',
+};
+
+const overallProgress = {
+  completed: 72,
+  label: 'Overall Completion'
+};
+
+const components = [
+  { name: 'Custom Skills', total: 8, done: 8, items: ['balance-update','debt-check','ed-note','morning-dispatch','reminders-cleanup','session-close','setup-mcp','skill-workspace'] },
+  { name: 'MCP Servers', total: 5, done: 5, items: ['github','apple-reminders-calendar','mac-automation','google-workspace','notion'] },
+  { name: 'Hooks', total: 5, done: 5, items: ['SessionStart (prereqs)','SessionStart (MCP health)','PreToolUse (iCloud)','PreToolUse (sensitive)','UserPromptSubmit (wrap up)'] },
+  { name: 'CLAUDE.md Files', total: 7, done: 7, items: ['~/.claude/','~/','~/Life/','Autopilot','Scheduled','GitHub','automation-tests'] },
+  { name: 'Memory Files', total: 5, done: 5, items: ['MEMORY.md','financial.md','clinical.md','active-projects.md','reminders.md'] },
+  { name: 'Commands', total: 1, done: 1, items: ['summary'] },
+  { name: 'Integration Tests', total: 6, done: 6, items: ['test-calendar','test-github','test-gmail','test-notion','test-reminders','mcp-heal'] },
+  { name: 'Plugins Enabled', total: 11, done: 11, items: ['frontend-design','superpowers','claude-md-management','claude-code-setup','context7','commit-commands','pr-review-toolkit','feature-dev','code-review','code-simplifier','explanatory-output-style'] },
+];
+
+const activeProjects = [
+  { name: 'SBOS Financial Autopilot', status: 'Running', progress: 95, phase: 'Maintenance' },
+  { name: 'SBOS v2 Buildout', status: 'In Progress', progress: 35, phase: 'Infrastructure' },
+  { name: 'iPhone Shortcuts Suite', status: 'Active', progress: 70, phase: 'Refinement' },
+  { name: 'Debt Avalanche System', status: 'Active', progress: 20, phase: 'Phase 0-1' },
+  { name: 'Custom Claude Skills', status: 'Locked', progress: 100, phase: 'Complete' },
+  { name: 'MCP Server Validation', status: 'Active', progress: 90, phase: 'Monitoring' },
+  { name: 'Automation Test Suite', status: 'Passing', progress: 100, phase: 'Complete' },
+  { name: 'iCloud Drive Cleanup', status: 'Blocked', progress: 40, phase: 'Awaiting Google Drive' },
+];
+
+const financialPhases = [
+  { name: 'Phase 0', label: 'Foundation', status: 'complete', progress: 100, detail: 'Account setup, autopay config' },
+  { name: 'Phase 1', label: 'CC Debt Kill', status: 'active', progress: 25, detail: '$10k/mo avalanche, ~$41k remaining' },
+  { name: 'Phase 2', label: 'Doc2Doc Kill', status: 'upcoming', progress: 0, detail: 'Redirect attack to Doc2Doc loans' },
+  { name: 'Phase 3', label: 'Emergency Fund', status: 'upcoming', progress: 0, detail: '$30k fund + student loan plan' },
+  { name: 'Phase 4', label: 'Wealth Build', status: 'upcoming', progress: 0, detail: 'Student loans + 401(k) + Roth' },
+];
+
+const scriptBreakdown = [
+  { name: 'Skills Config', lines: 630, color: COLORS.blue },
+  { name: 'Settings/Hooks', lines: 160, color: COLORS.purple },
+  { name: 'CLAUDE.md Files', lines: 470, color: COLORS.green },
+  { name: 'Memory Files', lines: 320, color: COLORS.orange },
+  { name: 'Sub-project Docs', lines: 175, color: COLORS.teal },
+  { name: 'Shell Framework', lines: 50, color: COLORS.gray },
+];
+
+const milestones = [
+  { date: '2026-02-12', event: 'Chase Prime & Delta Amex paid off', done: true },
+  { date: '2026-03-05', event: 'File system reorganization (6,615 files)', done: true },
+  { date: '2026-03-06', event: 'All 5 MCP servers configured & validated', done: true },
+  { date: '2026-03-06', event: 'Automation test suite built (5/5 passing)', done: true },
+  { date: '2026-03-06', event: 'CLAUDE.md validation deployed across all projects', done: true },
+  { date: '2026-03-08', event: 'Knowledge Transfer Dossier created', done: true },
+  { date: '2026-03-08', event: 'CLAUDE.md audit & improvements (5 files)', done: true },
+  { date: '2026-03-15', event: 'FL Medical License renewal due', done: false },
+  { date: '2026-04-15', event: '2025 Tax filing deadline', done: false },
+  { date: '2026-06-xx', event: 'CC debt eliminated (target)', done: false },
+  { date: '2026-07-xx', event: 'Student loan plan selection due', done: false },
+  { date: '2026-10-xx', event: 'Doc2Doc loans killed (target)', done: false },
+];
+
+const debtData = [
+  { name: 'Costco Citi', balance: 3790, apr: 29.99 },
+  { name: 'Jess Prime', balance: 5766, apr: 27.49 },
+  { name: 'Cap One QS', balance: 4650, apr: 27.24 },
+  { name: 'Apple Card', balance: 8782, apr: 27.00 },
+  { name: 'Spirit BOA', balance: 1722, apr: 26.74 },
+  { name: 'Sapphire', balance: 15157, apr: 26.49 },
+  { name: 'BOA Cash', balance: 1216, apr: 26.00 },
+];
+
+const blockedItems = [
+  { item: 'Inspira Financial rollover', reason: 'Requires Sim to initiate transfer' },
+  { item: 'TurboTax filing', reason: 'Needs W-2 import to unblock' },
+  { item: 'Student loan plan', reason: 'Research needed, due July 2026' },
+  { item: 'iCloud cleanup', reason: 'Google Drive for Desktop required' },
+];
+
+// ── Components ────────────────────────────────────────────────────────────
+
+const cardStyle = {
+  background: COLORS.cardBg,
+  border: `1px solid ${COLORS.border}`,
+  borderRadius: 12,
+  padding: 20,
+  marginBottom: 16,
+};
+
+function StatCard({ label, value, sub, color = COLORS.blue }) {
+  return (
+    <div style={{ ...cardStyle, textAlign: 'center', flex: 1, minWidth: 140 }}>
+      <div style={{ fontSize: 32, fontWeight: 700, color, fontFamily: 'SF Mono, monospace' }}>{value}</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text, marginTop: 4 }}>{label}</div>
+      {sub && <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 2 }}>{sub}</div>}
+    </div>
+  );
+}
+
+function ProgressRing({ percent, size = 160, stroke = 12, color = COLORS.green }) {
+  const r = (size - stroke) / 2;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (percent / 100) * circ;
+  return (
+    <svg width={size} height={size} style={{ display: 'block', margin: '0 auto' }}>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={COLORS.border} strokeWidth={stroke} />
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={stroke}
+        strokeDasharray={circ} strokeDashoffset={offset}
+        strokeLinecap="round" transform={`rotate(-90 ${size/2} ${size/2})`}
+        style={{ transition: 'stroke-dashoffset 1s ease' }} />
+      <text x={size/2} y={size/2 - 8} textAnchor="middle" fill={COLORS.white} fontSize={36} fontWeight={700} fontFamily="SF Mono, monospace">{percent}%</text>
+      <text x={size/2} y={size/2 + 18} textAnchor="middle" fill={COLORS.textMuted} fontSize={12}>COMPLETE</text>
+    </svg>
+  );
+}
+
+function SectionHeader({ title, sub }) {
+  return (
+    <div style={{ marginBottom: 16, marginTop: 32 }}>
+      <h2 style={{ fontSize: 18, fontWeight: 700, color: COLORS.white, letterSpacing: 1, textTransform: 'uppercase' }}>{title}</h2>
+      {sub && <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 2 }}>{sub}</div>}
+    </div>
+  );
+}
+
+function Badge({ text, color }) {
+  return (
+    <span style={{
+      display: 'inline-block', padding: '2px 8px', borderRadius: 12,
+      fontSize: 11, fontWeight: 600, background: color + '22', color,
+      border: `1px solid ${color}44`, marginLeft: 6
+    }}>{text}</span>
+  );
+}
+
+function ComponentGrid() {
+  const pieColors = [COLORS.blue, COLORS.purple, COLORS.green, COLORS.orange, COLORS.teal, COLORS.yellow, COLORS.pink, COLORS.red];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
+      {components.map((c, i) => {
+        const pct = Math.round((c.done / c.total) * 100);
+        const col = pieColors[i % pieColors.length];
+        return (
+          <div key={c.name} style={{ ...cardStyle, padding: 16, marginBottom: 0 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontWeight: 600, color: COLORS.white, fontSize: 14 }}>{c.name}</span>
+              <span style={{ fontFamily: 'SF Mono, monospace', color: col, fontWeight: 700, fontSize: 14 }}>
+                {c.done}/{c.total}
+              </span>
+            </div>
+            <div style={{ background: COLORS.darkBg, borderRadius: 6, height: 6, overflow: 'hidden', marginBottom: 8 }}>
+              <div style={{ width: `${pct}%`, height: '100%', background: col, borderRadius: 6, transition: 'width 0.8s ease' }} />
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+              {c.items.map(item => (
+                <span key={item} style={{
+                  fontSize: 10, padding: '2px 6px', borderRadius: 4,
+                  background: COLORS.darkBg, color: COLORS.textMuted, border: `1px solid ${COLORS.border}`
+                }}>{item}</span>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ActiveProjectsTable() {
+  const statusColor = s => {
+    if (s === 'Running' || s === 'Passing' || s === 'Locked') return COLORS.green;
+    if (s === 'Active' || s === 'In Progress') return COLORS.blue;
+    if (s === 'Blocked') return COLORS.red;
+    return COLORS.yellow;
+  };
+  return (
+    <div style={{ ...cardStyle, overflow: 'auto' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <thead>
+          <tr style={{ borderBottom: `1px solid ${COLORS.border}` }}>
+            {['Project','Status','Phase','Progress'].map(h => (
+              <th key={h} style={{ textAlign: 'left', padding: '8px 12px', color: COLORS.textMuted, fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {activeProjects.map(p => (
+            <tr key={p.name} style={{ borderBottom: `1px solid ${COLORS.border}22` }}>
+              <td style={{ padding: '10px 12px', fontWeight: 600, color: COLORS.white }}>{p.name}</td>
+              <td style={{ padding: '10px 12px' }}><Badge text={p.status} color={statusColor(p.status)} /></td>
+              <td style={{ padding: '10px 12px', color: COLORS.textMuted }}>{p.phase}</td>
+              <td style={{ padding: '10px 12px', width: 160 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ flex: 1, background: COLORS.darkBg, borderRadius: 4, height: 6, overflow: 'hidden' }}>
+                    <div style={{ width: `${p.progress}%`, height: '100%', background: p.progress === 100 ? COLORS.green : COLORS.blue, borderRadius: 4 }} />
+                  </div>
+                  <span style={{ fontFamily: 'SF Mono, monospace', fontSize: 11, color: COLORS.textMuted, minWidth: 32, textAlign: 'right' }}>{p.progress}%</span>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function FinancialRoadmap() {
+  return (
+    <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 8 }}>
+      {financialPhases.map((p, i) => {
+        const bg = p.status === 'complete' ? COLORS.green : p.status === 'active' ? COLORS.blue : COLORS.gray;
+        return (
+          <div key={p.name} style={{
+            ...cardStyle, flex: '1 0 200px', marginBottom: 0,
+            borderTop: `3px solid ${bg}`, position: 'relative'
+          }}>
+            {p.status === 'active' && (
+              <div style={{ position: 'absolute', top: 8, right: 8 }}>
+                <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: COLORS.green, animation: 'pulse 2s infinite' }} />
+              </div>
+            )}
+            <div style={{ fontSize: 11, fontWeight: 700, color: bg, textTransform: 'uppercase', letterSpacing: 1 }}>{p.name}</div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: COLORS.white, marginTop: 4 }}>{p.label}</div>
+            <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 6 }}>{p.detail}</div>
+            <div style={{ marginTop: 10, background: COLORS.darkBg, borderRadius: 4, height: 4, overflow: 'hidden' }}>
+              <div style={{ width: `${p.progress}%`, height: '100%', background: bg, borderRadius: 4 }} />
+            </div>
+            <div style={{ fontSize: 10, color: COLORS.textMuted, marginTop: 4, textAlign: 'right', fontFamily: 'SF Mono, monospace' }}>
+              {p.progress}%
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DebtChart() {
+  const totalDebt = debtData.reduce((s, d) => s + d.balance, 0);
+  const monthlyInterest = debtData.reduce((s, d) => s + (d.balance * d.apr / 100 / 12), 0);
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={cardStyle}>
+        <div style={{ fontSize: 12, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>CC Debt by Card (Avalanche Order)</div>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={debtData} layout="vertical" margin={{ left: 10, right: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke={COLORS.border} />
+            <XAxis type="number" tick={{ fill: COLORS.textMuted, fontSize: 11 }} tickFormatter={v => `$${(v/1000).toFixed(0)}k`} />
+            <YAxis type="category" dataKey="name" tick={{ fill: COLORS.text, fontSize: 11 }} width={90} />
+            <Tooltip
+              contentStyle={{ background: COLORS.darkBg, border: `1px solid ${COLORS.border}`, borderRadius: 8, fontSize: 12 }}
+              formatter={(v, name) => [`$${v.toLocaleString()}`, name === 'balance' ? 'Balance' : 'APR']}
+            />
+            <Bar dataKey="balance" fill={COLORS.red} radius={[0, 4, 4, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ ...cardStyle, marginBottom: 0, textAlign: 'center', background: '#1a1a2e' }}>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1 }}>Total CC Debt</div>
+          <div style={{ fontSize: 36, fontWeight: 700, color: COLORS.red, fontFamily: 'SF Mono, monospace', marginTop: 4 }}>
+            ${totalDebt.toLocaleString()}
+          </div>
+          <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 4 }}>across 7 active cards</div>
+        </div>
+        <div style={{ ...cardStyle, marginBottom: 0, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1 }}>Monthly Interest Burn</div>
+          <div style={{ fontSize: 28, fontWeight: 700, color: COLORS.orange, fontFamily: 'SF Mono, monospace', marginTop: 4 }}>
+            ${Math.round(monthlyInterest).toLocaleString()}/mo
+          </div>
+        </div>
+        <div style={{ ...cardStyle, marginBottom: 0, textAlign: 'center' }}>
+          <div style={{ fontSize: 11, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1 }}>Attack Budget</div>
+          <div style={{ fontSize: 28, fontWeight: 700, color: COLORS.green, fontFamily: 'SF Mono, monospace', marginTop: 4 }}>$10,000/mo</div>
+          <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 4 }}>avalanche method</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MilestoneTimeline() {
+  return (
+    <div style={cardStyle}>
+      <div style={{ display: 'grid', gap: 0 }}>
+        {milestones.map((m, i) => (
+          <div key={i} style={{
+            display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px 0',
+            borderBottom: i < milestones.length - 1 ? `1px solid ${COLORS.border}22` : 'none',
+            opacity: m.done ? 1 : 0.7
+          }}>
+            <div style={{
+              width: 20, height: 20, borderRadius: '50%', flexShrink: 0, marginTop: 1,
+              background: m.done ? COLORS.green : COLORS.gray,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11, color: COLORS.white, fontWeight: 700
+            }}>
+              {m.done ? '✓' : '○'}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: m.done ? COLORS.text : COLORS.textMuted }}>{m.event}</div>
+            </div>
+            <div style={{ fontFamily: 'SF Mono, monospace', fontSize: 11, color: COLORS.textMuted, flexShrink: 0 }}>{m.date}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BlockedItems() {
+  return (
+    <div style={cardStyle}>
+      {blockedItems.map((b, i) => (
+        <div key={i} style={{
+          display: 'flex', gap: 12, padding: '10px 0', alignItems: 'center',
+          borderBottom: i < blockedItems.length - 1 ? `1px solid ${COLORS.border}22` : 'none'
+        }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%', background: COLORS.red, flexShrink: 0
+          }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.white }}>{b.item}</div>
+            <div style={{ fontSize: 11, color: COLORS.textMuted }}>{b.reason}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ScriptComposition() {
+  const total = scriptBreakdown.reduce((s, d) => s + d.lines, 0);
+  return (
+    <div style={cardStyle}>
+      <div style={{ fontSize: 12, color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 }}>
+        setup-claude-code.sh — ~{total.toLocaleString()} lines
+      </div>
+      <div style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', height: 24, marginBottom: 12 }}>
+        {scriptBreakdown.map(s => (
+          <div key={s.name} style={{
+            width: `${(s.lines / total) * 100}%`, background: s.color, height: '100%',
+            transition: 'width 0.5s ease'
+          }} title={`${s.name}: ${s.lines} lines`} />
+        ))}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+        {scriptBreakdown.map(s => (
+          <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ width: 10, height: 10, borderRadius: 2, background: s.color }} />
+            <span style={{ fontSize: 11, color: COLORS.textMuted }}>{s.name}</span>
+            <span style={{ fontSize: 11, fontFamily: 'SF Mono, monospace', color: COLORS.text }}>{s.lines}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TechStack() {
+  const techs = [
+    { name: 'Bash', role: 'Setup script, strict mode', icon: '⌘' },
+    { name: 'Python 3', role: 'Financial engine (stdlib only)', icon: '🐍' },
+    { name: 'Node.js / npm', role: 'MCP server runtimes', icon: '⬡' },
+    { name: 'GitHub CLI', role: 'Git integration', icon: '⑃' },
+    { name: 'uv / uvx', role: 'Python MCP management', icon: '⚡' },
+    { name: 'AppleScript', role: 'macOS automation', icon: '🍎' },
+    { name: 'JSON', role: 'All config files', icon: '{}' },
+    { name: 'Markdown', role: 'Docs, skills, memory', icon: '#' },
+  ];
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8 }}>
+      {techs.map(t => (
+        <div key={t.name} style={{
+          ...cardStyle, marginBottom: 0, padding: 12,
+          display: 'flex', alignItems: 'center', gap: 10
+        }}>
+          <span style={{ fontSize: 20, width: 28, textAlign: 'center' }}>{t.icon}</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: COLORS.white }}>{t.name}</div>
+            <div style={{ fontSize: 11, color: COLORS.textMuted }}>{t.role}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Main Dashboard ─────────────────────────────────────────────────────────
+
+function Dashboard() {
+  const totalItems = components.reduce((s, c) => s + c.total, 0);
+  const doneItems = components.reduce((s, c) => s + c.done, 0);
+  const completedProjects = activeProjects.filter(p => p.progress === 100).length;
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{
+        textAlign: 'center', padding: '32px 0 24px', marginBottom: 24,
+        borderBottom: `1px solid ${COLORS.border}`
+      }}>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: COLORS.white, letterSpacing: 2 }}>
+          NIGHT-SHIFTER
+        </h1>
+        <div style={{ fontSize: 13, color: COLORS.textMuted, marginTop: 6, letterSpacing: 1 }}>
+          CLAUDE CODE SETUP AUTOMATION — PLANNING & COMPLETION DASHBOARD
+        </div>
+        <div style={{ fontSize: 12, color: COLORS.textMuted, marginTop: 4, fontFamily: 'SF Mono, monospace' }}>
+          Dr. Gursimran Singh (Sim) &middot; Generated {new Date().toISOString().split('T')[0]}
+        </div>
+      </div>
+
+      {/* Top Stats Row */}
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 24 }}>
+        <div style={{ ...cardStyle, flex: '0 0 200px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 0 }}>
+          <ProgressRing percent={overallProgress.completed} />
+        </div>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <StatCard label="Infrastructure Items" value={`${doneItems}/${totalItems}`} sub="All components configured" color={COLORS.green} />
+            <StatCard label="Active Projects" value={activeProjects.length} sub={`${completedProjects} complete`} color={COLORS.blue} />
+            <StatCard label="Script Lines" value="~1,805" sub="setup-claude-code.sh" color={COLORS.purple} />
+            <StatCard label="Milestones Hit" value={`${milestones.filter(m => m.done).length}/${milestones.length}`} sub="Key deliverables" color={COLORS.teal} />
+          </div>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <StatCard label="CC Cards Paid Off" value="2" sub="Chase Prime, Delta Amex" color={COLORS.green} />
+            <StatCard label="CC Debt Remaining" value="$41.1k" sub="7 active cards" color={COLORS.red} />
+            <StatCard label="Monthly Attack" value="$10k" sub="Avalanche method" color={COLORS.orange} />
+            <StatCard label="CC-Free Target" value="Jun '26" sub="~3 months" color={COLORS.yellow} />
+          </div>
+        </div>
+      </div>
+
+      {/* Infrastructure Components */}
+      <SectionHeader title="Infrastructure Components" sub="All setup script outputs — skills, servers, hooks, configs, tests" />
+      <ComponentGrid />
+
+      {/* Script Composition */}
+      <SectionHeader title="Script Composition" sub="Breakdown of setup-claude-code.sh by section" />
+      <ScriptComposition />
+
+      {/* Active Projects */}
+      <SectionHeader title="Active Projects" sub="Current workstreams and their completion status" />
+      <ActiveProjectsTable />
+
+      {/* Financial Roadmap */}
+      <SectionHeader title="Financial Roadmap" sub="Debt elimination phases — avalanche method at $10k/mo" />
+      <FinancialRoadmap />
+
+      {/* Debt + Blocked */}
+      <SectionHeader title="Debt Snapshot & Attack Order" sub="Credit card balances sorted by APR (highest first)" />
+      <DebtChart />
+
+      {/* Two column: Timeline + Blocked */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 16 }}>
+        <div>
+          <SectionHeader title="Milestone Timeline" sub="Key deliverables and upcoming deadlines" />
+          <MilestoneTimeline />
+        </div>
+        <div>
+          <SectionHeader title="Blocked Items" sub="Requires manual action from Sim" />
+          <BlockedItems />
+
+          <SectionHeader title="Tech Stack" sub="Languages, tools, and runtimes" />
+          <TechStack />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        textAlign: 'center', padding: '24px 0', marginTop: 32,
+        borderTop: `1px solid ${COLORS.border}`, fontSize: 11, color: COLORS.textMuted
+      }}>
+        Night-Shifter &middot; Co-authored by Claude Opus 4.6 &middot; Single-script automation for Claude Code
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Dashboard />);
+</script>
+</body>
+</html>
