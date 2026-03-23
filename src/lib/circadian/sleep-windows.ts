@@ -213,6 +213,12 @@ function computeNightShiftSleep(
   }
 
   let mainSleepEnd = addHours(mainSleepStart, Math.max(profile.sleepNeed - 1, 5));
+
+  // Pets (especially dogs) require morning feeding/walking that can cut daytime recovery short.
+  // Cap sleep 30 min earlier to reflect real-world interruption.
+  if (profile.hasPets) {
+    mainSleepEnd = addMinutes(mainSleepEnd, -30);
+  }
   // Reserve 1h of sleep need for pre-shift nap if user wants naps
 
   // Adjust for personal event conflicts

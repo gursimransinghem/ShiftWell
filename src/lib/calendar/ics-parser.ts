@@ -33,50 +33,58 @@ function parseICSToEvents(icsString: string): Array<{
   }> = [];
 
   for (const vevent of vevents) {
-    const event = new ICAL.Event(vevent);
-    const uid = event.uid || crypto.randomUUID();
-    const summary = event.summary || 'Untitled Event';
+    try {
+      const event = new ICAL.Event(vevent);
+      const uid = event.uid || crypto.randomUUID();
+      const summary = event.summary || 'Untitled Event';
 
-    if (event.isRecurring()) {
-      // Expand recurring events for the next 4 weeks
-      const iterator = event.iterator();
-      const fourWeeksFromNow = new Date();
-      fourWeeksFromNow.setDate(fourWeeksFromNow.getDate() + 28);
+      if (event.isRecurring()) {
+        // Expand recurring events for the next 4 weeks
+        const iterator = event.iterator();
+        const fourWeeksFromNow = new Date();
+        fourWeeksFromNow.setDate(fourWeeksFromNow.getDate() + 28);
 
-      let occurrence = iterator.next();
-      let count = 0;
-      const maxOccurrences = 100; // Safety limit
+        let occurrence = iterator.next();
+        let count = 0;
+        const maxOccurrences = 100; // Safety limit
 
-      while (occurrence && count < maxOccurrences) {
-        const start = occurrence.toJSDate();
-        if (start > fourWeeksFromNow) break;
+        while (occurrence && count < maxOccurrences) {
+          const start = occurrence.toJSDate();
+          if (!start || isNaN(start.getTime())) { occurrence = iterator.next(); count++; continue; }
+          if (start > fourWeeksFromNow) break;
 
-        const duration = event.duration;
-        const durationMs = duration
-          ? (duration.weeks * 7 * 24 * 3600 + duration.days * 24 * 3600 + duration.hours * 3600 + duration.minutes * 60) * 1000
-          : 0;
-        const end = new Date(start.getTime() + durationMs);
-        const durationHours = durationMs / (1000 * 3600);
+          const duration = event.duration;
+          const durationMs = duration
+            ? (duration.weeks * 7 * 24 * 3600 + duration.days * 24 * 3600 + duration.hours * 3600 + duration.minutes * 60) * 1000
+            : 0;
+          const end = new Date(start.getTime() + durationMs);
+          const durationHours = durationMs / (1000 * 3600);
 
-        if (start >= new Date()) {
-          events.push({
-            uid: `${uid}-${count}`,
-            summary,
-            start,
-            end,
-            durationHours,
-          });
+          if (start >= new Date()) {
+            events.push({
+              uid: `${uid}-${count}`,
+              summary,
+              start,
+              end,
+              durationHours,
+            });
+          }
+
+          occurrence = iterator.next();
+          count++;
         }
+      } else {
+        if (!event.startDate || !event.endDate) continue;
+        const start = event.startDate.toJSDate();
+        const end = event.endDate.toJSDate();
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) continue;
+        const durationHours = (end.getTime() - start.getTime()) / (1000 * 3600);
 
-        occurrence = iterator.next();
-        count++;
+        events.push({ uid, summary, start, end, durationHours });
       }
-    } else {
-      const start = event.startDate.toJSDate();
-      const end = event.endDate.toJSDate();
-      const durationHours = (end.getTime() - start.getTime()) / (1000 * 3600);
-
-      events.push({ uid, summary, start, end, durationHours });
+    } catch {
+      // Skip malformed events — don't let one bad event abort the whole parse
+      continue;
     }
   }
 

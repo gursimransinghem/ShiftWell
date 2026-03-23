@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   View,
   Text,
   TouchableOpacity,
@@ -40,11 +41,19 @@ const FEATURES: FeatureRow[] = [
 
 export default function PaywallScreen() {
   const handleStartTrial = () => {
-    // TODO: integrate with RevenueCat / StoreKit
+    Alert.alert(
+      'Coming Soon',
+      'ShiftWell is currently 100% free. Premium features will be available in a future update. Thank you for your support!',
+      [{ text: 'OK', onPress: () => router.back() }],
+    );
   };
 
   const handleRestorePurchases = () => {
-    // TODO: integrate with RevenueCat / StoreKit
+    Alert.alert(
+      'No Purchases to Restore',
+      'ShiftWell is currently 100% free — no purchase required.',
+      [{ text: 'OK' }],
+    );
   };
 
   const handleClose = () => {
