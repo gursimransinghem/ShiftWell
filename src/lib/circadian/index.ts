@@ -56,6 +56,29 @@ export { computeCaffeineCutoff, computeCaffeineWindow } from './caffeine';
 export { generateMealWindows } from './meals';
 export { generateLightProtocol } from './light-protocol';
 
+// ─── Borbely Two-Process Energy Model ────────────────────────────────────────
+export {
+  // Core math functions (exported for testing + ULOS interop)
+  circadianSignal,
+  sleepPressure,
+  recoveryModifier,
+  caffeineEffect,
+  calculateAcrophase,
+  normalizeTo100,
+  getEnergyLabel,
+  // Main prediction functions
+  predictEnergy,
+  getEnergyWindows,
+} from './energy-model';
+
+export type {
+  EnergyLabel,
+  EnergyPrediction,
+  EnergyCurve,
+  CaffeineEntry,
+  EnergyModelInput,
+} from './energy-types';
+
 /**
  * Generate a complete sleep plan for a date range.
  *
