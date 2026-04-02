@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-04-02T09:34:14.449Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-04-02T09:41:02.413Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
+  completed_plans: 3
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 ## Current Position
 
 Phase: 01 (Foundation & Onboarding) — EXECUTING
-Plan: 2 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-04-02
 
@@ -48,6 +48,8 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 
 *Updated after each plan completion*
 | Phase 01-foundation-onboarding P01 | 8min | 3 tasks | 11 files |
+| Phase 01-foundation-onboarding P02 | 5min | 2 tasks | 3 files |
+| Phase 01-foundation-onboarding P01-03 | 18min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -62,6 +64,11 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 01-01]: ACCENT.primary is warm gold (#C8A84B) — all UI components reference theme token, never hardcode
 - [Phase 01-01]: Legacy ACCENT.blue (#4A90D9) retained for calendar block colors only
 - [Phase 01-01]: RoutineStep uses string icon field (emoji-compatible) not numeric icon ID
+- [Phase 01-02]: AM/PM marker activities (wake, phone-down, lights-out) have durationMinutes=0 and no duration picker — they mark time boundaries, not durations
+- [Phase 01-02]: Duration options are fixed presets (10, 15, 20, 30, 45, 60 min) not free-entry — reduces cognitive load and keeps data clean for algorithm
+- [Phase 01-03]: expo-location geocoding returns LocationGeocodedLocation with optional altitude/accuracy — test mocks use minimal object shape
+- [Phase 01-03]: estimateCommuteDuration uses 30 km/h urban average — consistent distance-to-time conversion, fallback to 30 min on geocoding failure
+- [Phase 01-03]: Skip option always writes commuteDuration=30 — user never blocked from completing onboarding
 
 ### Pending Todos
 
@@ -76,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T09:34:14.446Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-04-02T09:41:02.410Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None

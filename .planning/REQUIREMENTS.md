@@ -19,11 +19,11 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 ### Onboarding
 
 - [ ] **ONB-01**: User completes chronotype quiz (simplified MEQ → early/intermediate/late)
-- [ ] **ONB-02**: User builds AM routine (wake, shower, breakfast, kids/pets, exercise, commute time)
-- [ ] **ONB-03**: User builds PM routine (dinner, wind-down activities, phone-down, lights-out)
+- [x] **ONB-02**: User builds AM routine (wake, shower, breakfast, kids/pets, exercise, commute time)
+- [x] **ONB-03**: User builds PM routine (dinner, wind-down activities, phone-down, lights-out)
 - [ ] **ONB-04**: User enters work and home addresses for commute calculation
 - [ ] **ONB-05**: User sets household profile (size, young children, pets)
-- [ ] **ONB-06**: User sets sleep preferences (target hours, nap preference, caffeine sensitivity)
+- [x] **ONB-06**: User sets sleep preferences (target hours, nap preference, caffeine sensitivity)
 
 ### Sleep Plan Generation
 
@@ -74,7 +74,7 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 ### Design & Polish
 
 - [x] **DES-01**: App uses blend design (dark base + warm accents)
-- [ ] **DES-02**: Smooth animations throughout (transitions, feedback, staggered loading)
+- [x] **DES-02**: Smooth animations throughout (transitions, feedback, staggered loading)
 - [x] **DES-03**: Premium, confident visual identity — never cluttered or clinical
 
 ### Settings & Referral
@@ -135,14 +135,14 @@ _Updated 2026-04-02 after roadmap creation._
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | DES-01 | Phase 1 | Complete |
-| DES-02 | Phase 1 | Pending |
+| DES-02 | Phase 1 | Complete |
 | DES-03 | Phase 1 | Complete |
 | ONB-01 | Phase 1 | Pending |
-| ONB-02 | Phase 1 | Pending |
-| ONB-03 | Phase 1 | Pending |
+| ONB-02 | Phase 1 | Complete |
+| ONB-03 | Phase 1 | Complete |
 | ONB-04 | Phase 1 | Pending |
 | ONB-05 | Phase 1 | Pending |
-| ONB-06 | Phase 1 | Pending |
+| ONB-06 | Phase 1 | Complete |
 | CAL-01 | Phase 2 | Pending |
 | CAL-02 | Phase 2 | Pending |
 | CAL-03 | Phase 2 | Pending |
