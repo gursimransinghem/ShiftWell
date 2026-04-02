@@ -21,7 +21,11 @@
         "NSDocumentPickerUsageDescription": "ShiftWell needs access to your files to import shift schedules.",
         "NSHealthShareUsageDescription": "ShiftWell reads your sleep data to compare your actual sleep with your planned schedule and improve future recommendations.",
         "NSHealthUpdateUsageDescription": "ShiftWell writes your planned sleep schedule so iOS Sleep Focus can activate automatically at bedtime.",
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCalendarsFullAccessUsageDescription": "ShiftWell reads your calendar to detect work shifts and writes sleep blocks back as events.",
+        "NSCalendarsWriteOnlyAccessUsageDescription": "ShiftWell adds sleep plan events to your calendar.",
+        "UIBackgroundModes": ["processing"],
+        "BGTaskSchedulerPermittedIdentifiers": ["com.expo.modules.backgroundtask.processing"]
       }
     },
     "android": {
@@ -57,7 +61,10 @@
           "NSHealthShareUsageDescription": "ShiftWell reads your sleep data to compare your actual sleep with your planned schedule and improve future recommendations.",
           "NSHealthUpdateUsageDescription": "ShiftWell writes your planned sleep schedule so iOS Sleep Focus can activate automatically at bedtime."
         }
-      ]
+      ],
+      "expo-calendar",
+      "expo-background-task",
+      "expo-task-manager"
     ],
     "experiments": {
       "typedRoutes": true
