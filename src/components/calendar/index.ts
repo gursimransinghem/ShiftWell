@@ -3,3 +3,4 @@ export { default as DayDetail } from './DayDetail';
 export { CalendarProviderCard } from './CalendarProviderCard';
 export { CalendarToggleList } from './CalendarToggleList';
 export { ShiftReviewList } from './ShiftReviewList';
+export { CalendarSettingsSection } from './CalendarSettingsSection';
