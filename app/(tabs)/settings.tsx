@@ -23,7 +23,8 @@ import { usePremiumStore } from '@/src/store/premium-store';
 import { useExport } from '@/src/hooks/useExport';
 import { DEFAULT_EXPORT_OPTIONS, type ExportOptions } from '@/src/lib/calendar/ics-generator';
 import { fullSync, getSyncStatus } from '@/src/lib/sync/sync-engine';
-import { requestPermissions, getScheduledNotifications } from '@/src/lib/notifications/notification-service';
+import { requestPermissions, getScheduledNotifications, schedulePlanNotifications } from '@/src/lib/notifications/notification-service';
+import { useNotificationStore } from '@/src/store/notification-store';
 import {
   BACKGROUND,
   TEXT,
@@ -153,6 +154,15 @@ export default function SettingsScreen() {
   const [caffeineCutoffAlerts, setCaffeineCutoffAlerts] = useState(true);
   const [wakeAlarms, setWakeAlarms] = useState(true);
 
+  // Notification preferences from store (persisted)
+  const windDownEnabled = useNotificationStore((s) => s.windDownEnabled);
+  const windDownLeadMinutes = useNotificationStore((s) => s.windDownLeadMinutes);
+  const caffeineCutoffEnabled = useNotificationStore((s) => s.caffeineCutoffEnabled);
+  const morningBriefEnabled = useNotificationStore((s) => s.morningBriefEnabled);
+  const setWindDown = useNotificationStore((s) => s.setWindDown);
+  const setCaffeineCutoff = useNotificationStore((s) => s.setCaffeineCutoff);
+  const setMorningBrief = useNotificationStore((s) => s.setMorningBrief);
+
   // Export options state
   const [exportOptions, setExportOptions] = useState<ExportOptions>({
     ...DEFAULT_EXPORT_OPTIONS,
@@ -219,6 +229,58 @@ export default function SettingsScreen() {
     const granted = await requestPermissions();
     setNotifPermission(granted);
   }, []);
+
+  const handleToggleWindDown = useCallback((val: boolean) => {
+    setWindDown(val);
+    const currentPlan = usePlanStore.getState().plan;
+    if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+  }, [setWindDown]);
+
+  const handleToggleCaffeineCutoff = useCallback((val: boolean) => {
+    setCaffeineCutoff(val);
+    const currentPlan = usePlanStore.getState().plan;
+    if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+  }, [setCaffeineCutoff]);
+
+  const handleToggleMorningBrief = useCallback((val: boolean) => {
+    setMorningBrief(val);
+    const currentPlan = usePlanStore.getState().plan;
+    if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+  }, [setMorningBrief]);
+
+  const handleWindDownLeadTime = useCallback(() => {
+    Alert.alert(
+      'Wind-down Lead Time',
+      'How many minutes before bedtime should we remind you?',
+      [
+        {
+          text: '30 min',
+          onPress: () => {
+            setWindDown(true, 30);
+            const currentPlan = usePlanStore.getState().plan;
+            if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+          },
+        },
+        {
+          text: '45 min',
+          onPress: () => {
+            setWindDown(true, 45);
+            const currentPlan = usePlanStore.getState().plan;
+            if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+          },
+        },
+        {
+          text: '60 min',
+          onPress: () => {
+            setWindDown(true, 60);
+            const currentPlan = usePlanStore.getState().plan;
+            if (currentPlan) schedulePlanNotifications(currentPlan.blocks).catch(() => {});
+          },
+        },
+        { text: 'Cancel', style: 'cancel' },
+      ],
+    );
+  }, [setWindDown]);
 
   const handleExport = useCallback(async () => {
     if (!canAccess('ics_export')) {
@@ -540,6 +602,37 @@ export default function SettingsScreen() {
                 value={wakeAlarms}
                 onValueChange={setWakeAlarms}
               />
+              <View style={styles.cardDivider} />
+
+              {/* ---- Notification Preferences (store-backed, persisted) ---- */}
+              <ToggleRow
+                label="Wind-down reminder"
+                value={windDownEnabled}
+                onValueChange={handleToggleWindDown}
+              />
+              {windDownEnabled && (
+                <>
+                  <View style={styles.cardDivider} />
+                  <SettingsRow
+                    label="Wind-down lead time"
+                    value={`${windDownLeadMinutes} min`}
+                    onPress={handleWindDownLeadTime}
+                  />
+                </>
+              )}
+              <View style={styles.cardDivider} />
+              <ToggleRow
+                label="Caffeine cutoff reminder"
+                value={caffeineCutoffEnabled}
+                onValueChange={handleToggleCaffeineCutoff}
+              />
+              <View style={styles.cardDivider} />
+              <ToggleRow
+                label="Morning brief"
+                value={morningBriefEnabled}
+                onValueChange={handleToggleMorningBrief}
+              />
+
               {scheduledCount > 0 && (
                 <>
                   <View style={styles.cardDivider} />
