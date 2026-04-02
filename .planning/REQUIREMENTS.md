@@ -21,7 +21,7 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 - [ ] **ONB-01**: User completes chronotype quiz (simplified MEQ → early/intermediate/late)
 - [x] **ONB-02**: User builds AM routine (wake, shower, breakfast, kids/pets, exercise, commute time)
 - [x] **ONB-03**: User builds PM routine (dinner, wind-down activities, phone-down, lights-out)
-- [ ] **ONB-04**: User enters work and home addresses for commute calculation
+- [x] **ONB-04**: User enters work and home addresses for commute calculation
 - [ ] **ONB-05**: User sets household profile (size, young children, pets)
 - [x] **ONB-06**: User sets sleep preferences (target hours, nap preference, caffeine sensitivity)
 
@@ -140,7 +140,7 @@ _Updated 2026-04-02 after roadmap creation._
 | ONB-01 | Phase 1 | Pending |
 | ONB-02 | Phase 1 | Complete |
 | ONB-03 | Phase 1 | Complete |
-| ONB-04 | Phase 1 | Pending |
+| ONB-04 | Phase 1 | Complete |
 | ONB-05 | Phase 1 | Pending |
 | ONB-06 | Phase 1 | Complete |
 | CAL-01 | Phase 2 | Pending |
