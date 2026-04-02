@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 03-sleep-plan-generation 03-01-PLAN.md
-last_updated: "2026-04-02T12:56:41.254Z"
+stopped_at: Completed 03-sleep-plan-generation 03-02-PLAN.md
+last_updated: "2026-04-02T13:02:36.543Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 2
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 ## Current Position
 
 Phase: 03 (sleep-plan-generation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-04-02
 
@@ -54,6 +54,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 02-calendar-sync P02 | 7min | 2 tasks | 15 files |
 | Phase 02-calendar-sync P04 | 12min | 3 tasks | 3 files |
 | Phase 03-sleep-plan-generation P01 | 5min | 2 tasks | 3 files |
+| Phase 03-sleep-plan-generation P02 | 8min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,7 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 03-sleep-plan-generation]: plan-write-service handles all 8 SleepBlockType values — calendar-service.ts only handles main-sleep/nap (D-04 two-tier write preserved)
 - [Phase 03-sleep-plan-generation]: recalculationNeeded cleared BEFORE debouncedRegenerate to prevent subscription loop
 - [Phase 03-sleep-plan-generation]: writeChangedBlocks diffs by block ID — unchanged blocks not deleted/recreated (anti-flicker)
+- [Phase 03-sleep-plan-generation]: detectPatterns not called in buildPreviewMessage — night count computed directly from futureDays filter (simpler, avoids redundant pass)
 
 ### Pending Todos
 
@@ -100,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T12:56:41.251Z
-Stopped at: Completed 03-sleep-plan-generation 03-01-PLAN.md
+Last session: 2026-04-02T13:02:36.541Z
+Stopped at: Completed 03-sleep-plan-generation 03-02-PLAN.md
 Resume file: None

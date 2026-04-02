@@ -31,7 +31,7 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 - [x] **PLAN-02**: Plan includes: sleep windows, naps, caffeine cutoffs, meal timing, light protocols
 - [x] **PLAN-03**: Plan accounts for commute time when calculating wake-up
 - [x] **PLAN-04**: Plan detects free mornings and extends sleep-in opportunity
-- [ ] **PLAN-05**: Plan provides schedule preview ("3 nights next week, pre-adapt starting Thursday")
+- [x] **PLAN-05**: Plan provides schedule preview ("3 nights next week, pre-adapt starting Thursday")
 - [x] **PLAN-06**: Plan updates dynamically when calendar or profile changes
 
 ### Night Sky Mode
@@ -153,7 +153,7 @@ _Updated 2026-04-02 after roadmap creation._
 | PLAN-02 | Phase 3 | Complete |
 | PLAN-03 | Phase 3 | Complete |
 | PLAN-04 | Phase 3 | Complete |
-| PLAN-05 | Phase 3 | Pending |
+| PLAN-05 | Phase 3 | Complete |
 | PLAN-06 | Phase 3 | Complete |
 | NSM-01 | Phase 4 | Pending |
 | NSM-02 | Phase 4 | Pending |
