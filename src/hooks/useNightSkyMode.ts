@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useRef } from 'react';
 import { differenceInMinutes, isAfter, addDays, startOfDay } from 'date-fns';
+import { startSleepActivity, endSleepActivity } from '@/src/lib/adherence/live-activity-service';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useNotificationStore } from '@/src/store/notification-store';
 import { useUserStore } from '@/src/store/user-store';
@@ -50,7 +51,7 @@ export function useNightSkyMode(): NightSkyModeData {
   const windDownLeadMinutes = useNotificationStore((s) => s.windDownLeadMinutes);
   const profile = useUserStore((s) => s.profile);
 
-  return useMemo(() => {
+  const data = useMemo(() => {
     const now = new Date();
 
     const fallback: NightSkyModeData = {
@@ -128,4 +129,31 @@ export function useNightSkyMode(): NightSkyModeData {
       tomorrowSchedule,
     };
   }, [plan, windDownLeadMinutes, profile]);
+
+  // Trigger Live Activity when Night Sky Mode activates (D-03)
+  // useEffect from react (not reanimated — Phase 04 decision)
+  const prevIsActive = useRef(false);
+
+  useEffect(() => {
+    if (data.isActive && !prevIsActive.current) {
+      // Transitioning to active — start Live Activity
+      startSleepActivity({
+        phase: 'wind-down',
+        countdownMinutes: data.minutesUntilSleep > 0 ? Math.round(data.minutesUntilSleep) : undefined,
+        label: data.minutesUntilSleep > 0
+          ? `Wind-down in ${Math.round(data.minutesUntilSleep)} min`
+          : 'Time to wind down',
+        bedtimeISO: data.alarmTime?.toISOString(),
+        wakeTimeISO: data.latestWakeTime?.toISOString(),
+      }).catch((e) => console.warn('[useNightSkyMode] Live Activity start failed:', e));
+    } else if (!data.isActive && prevIsActive.current) {
+      // Transitioning to inactive — end Live Activity
+      endSleepActivity().catch((e) =>
+        console.warn('[useNightSkyMode] Live Activity end failed:', e),
+      );
+    }
+    prevIsActive.current = data.isActive;
+  }, [data.isActive]);
+
+  return data;
 }
