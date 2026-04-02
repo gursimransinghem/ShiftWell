@@ -50,11 +50,11 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 
 ### Notifications
 
-- [ ] **NOTIF-01**: Wind-down reminder push notification (30-60 min before bedtime)
-- [ ] **NOTIF-02**: Caffeine cutoff reminder push notification
-- [ ] **NOTIF-03**: Morning brief push notification (score + first open block in schedule)
-- [ ] **NOTIF-04**: Notifications are warm, emoji, minimal (not clinical)
-- [ ] **NOTIF-05**: User can customize notification timing and preferences
+- [x] **NOTIF-01**: Wind-down reminder push notification (30-60 min before bedtime)
+- [x] **NOTIF-02**: Caffeine cutoff reminder push notification
+- [x] **NOTIF-03**: Morning brief push notification (score + first open block in schedule)
+- [x] **NOTIF-04**: Notifications are warm, emoji, minimal (not clinical)
+- [x] **NOTIF-05**: User can customize notification timing and preferences
 
 ### Recovery Score
 
@@ -160,11 +160,11 @@ _Updated 2026-04-02 after roadmap creation._
 | NSM-03 | Phase 4 | Pending |
 | NSM-04 | Phase 4 | Pending |
 | NSM-05 | Phase 4 | Pending |
-| NOTIF-01 | Phase 4 | Pending |
-| NOTIF-02 | Phase 4 | Pending |
-| NOTIF-03 | Phase 4 | Pending |
-| NOTIF-04 | Phase 4 | Pending |
-| NOTIF-05 | Phase 4 | Pending |
+| NOTIF-01 | Phase 4 | Complete |
+| NOTIF-02 | Phase 4 | Complete |
+| NOTIF-03 | Phase 4 | Complete |
+| NOTIF-04 | Phase 4 | Complete |
+| NOTIF-05 | Phase 4 | Complete |
 | LIVE-01 | Phase 5 | Pending |
 | LIVE-02 | Phase 5 | Pending |
 | LIVE-03 | Phase 5 | Pending |
