@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthStore } from '../../src/store/auth-store';
-import { COLORS, SPACING, TYPOGRAPHY, RADIUS } from '@/src/theme';
+import { COLORS } from '@/src/theme';
 
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
@@ -68,7 +68,7 @@ export default function SignInScreen() {
         <TextInput
           style={styles.input}
           placeholder="Email"
-          placeholderTextColor="#8E8E93"
+          placeholderTextColor={COLORS.text.secondary}
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -79,7 +79,7 @@ export default function SignInScreen() {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          placeholderTextColor="#8E8E93"
+          placeholderTextColor={COLORS.text.secondary}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -92,7 +92,7 @@ export default function SignInScreen() {
           disabled={isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={COLORS.text.primary} />
           ) : (
             <Text style={styles.signInButtonText}>Sign In</Text>
           )}
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorText: {
-    color: '#FF3B30',
+    color: COLORS.semantic.error,
     fontSize: 14,
     flex: 1,
   },
   errorDismiss: {
-    color: '#FF3B30',
+    color: COLORS.semantic.error,
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 12,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   appleButtonText: {
-    color: '#000000',
+    color: COLORS.text.inverse,
     fontSize: 17,
     fontWeight: '600',
   },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#2C2C2E',
+    backgroundColor: COLORS.border.default,
   },
   dividerText: {
     color: COLORS.text.secondary,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.primary,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#2C2C2E',
+    borderColor: COLORS.border.default,
   },
   signInButton: {
     backgroundColor: COLORS.accent.primary,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   skipText: {
-    color: '#636366',
+    color: COLORS.text.tertiary,
     fontSize: 14,
   },
 });

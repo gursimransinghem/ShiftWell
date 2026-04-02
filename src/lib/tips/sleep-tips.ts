@@ -425,7 +425,7 @@ export function getCategoryColor(category: TipCategory): string {
     light: '#FCD34D',     // BLOCK_COLORS.lightProtocol
     nutrition: '#34D399',  // BLOCK_COLORS.meal
     recovery: '#B794F6',   // BLOCK_COLORS.nap
-    general: '#4A90D9',    // ACCENT.primary
+    general: '#C8A84B',    // ACCENT.primary (warm gold)
   };
   return colors[category];
 }

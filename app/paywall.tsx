@@ -8,17 +8,18 @@ import {
   StyleSheet,
 } from 'react-native';
 import { router } from 'expo-router';
+import { COLORS as THEME } from '@/src/theme';
 
-const COLORS = {
-  background: '#0A0E1A',
-  card: '#141927',
-  accent: '#6C63FF',
-  text: '#FFFFFF',
-  secondaryText: '#8E8E93',
-  success: '#34C759',
-  locked: '#8E8E93',
-  divider: '#2C2C3E',
-  gold: '#FFD700',
+const C = {
+  background: THEME.background.primary,
+  card: THEME.background.surface,
+  accent: THEME.accent.primary,
+  text: THEME.text.primary,
+  secondaryText: THEME.text.secondary,
+  success: THEME.semantic.success,
+  locked: THEME.text.secondary,
+  divider: THEME.border.default,
+  gold: THEME.accent.primary,
 };
 
 interface FeatureRow {
@@ -166,7 +167,7 @@ export default function PaywallScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: C.background,
   },
   closeButton: {
     position: 'absolute',
@@ -176,12 +177,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: COLORS.card,
+    backgroundColor: C.card,
     alignItems: 'center',
     justifyContent: 'center',
   },
   closeButtonText: {
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -197,24 +198,24 @@ const styles = StyleSheet.create({
   premiumBadge: {
     fontSize: 14,
     fontWeight: '700',
-    color: COLORS.gold,
+    color: C.gold,
     letterSpacing: 2,
     marginBottom: 12,
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: COLORS.text,
+    color: C.text,
     marginBottom: 8,
     textAlign: 'center',
   },
   headerSubtitle: {
     fontSize: 16,
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     textAlign: 'center',
   },
   comparisonCard: {
-    backgroundColor: COLORS.card,
+    backgroundColor: C.card,
     borderRadius: 16,
     padding: 16,
     marginBottom: 32,
@@ -224,13 +225,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    borderBottomColor: C.divider,
     marginBottom: 4,
   },
   columnLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     textAlign: 'center',
     width: 48,
   },
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   proLabel: {
-    color: COLORS.accent,
+    color: C.accent,
   },
   featureRow: {
     flexDirection: 'row',
@@ -248,11 +249,11 @@ const styles = StyleSheet.create({
   },
   featureRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.divider,
+    borderBottomColor: C.divider,
   },
   featureLabel: {
     fontSize: 14,
-    color: COLORS.text,
+    color: C.text,
   },
   featureIcon: {
     width: 48,
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   checkIcon: {
-    color: COLORS.success,
+    color: C.success,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -274,20 +275,20 @@ const styles = StyleSheet.create({
   },
   priceCard: {
     flex: 1,
-    backgroundColor: COLORS.card,
+    backgroundColor: C.card,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: COLORS.divider,
+    borderColor: C.divider,
   },
   priceCardHighlighted: {
-    borderColor: COLORS.accent,
+    borderColor: C.accent,
   },
   saveBadge: {
     position: 'absolute',
     top: -12,
-    backgroundColor: COLORS.accent,
+    backgroundColor: C.accent,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -295,26 +296,26 @@ const styles = StyleSheet.create({
   saveBadgeText: {
     fontSize: 11,
     fontWeight: '700',
-    color: COLORS.text,
+    color: C.text,
     letterSpacing: 0.5,
   },
   priceLabel: {
     fontSize: 14,
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     marginBottom: 8,
   },
   priceAmount: {
     fontSize: 28,
     fontWeight: '700',
-    color: COLORS.text,
+    color: C.text,
   },
   pricePeriod: {
     fontSize: 13,
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     marginTop: 4,
   },
   trialButton: {
-    backgroundColor: COLORS.accent,
+    backgroundColor: C.accent,
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -323,11 +324,11 @@ const styles = StyleSheet.create({
   trialButtonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.text,
+    color: C.text,
   },
   trialDisclaimer: {
     fontSize: 12,
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     textAlign: 'center',
     marginTop: 12,
   },
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   },
   restoreText: {
     fontSize: 14,
-    color: COLORS.secondaryText,
+    color: C.secondaryText,
     textDecorationLine: 'underline',
   },
 });

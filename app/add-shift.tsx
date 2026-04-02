@@ -16,7 +16,7 @@ import DateTimePicker, { type DateTimePickerEvent } from '@react-native-communit
 import Button from '@/src/components/ui/Button';
 import { useShiftsStore } from '@/src/store';
 import type { ShiftType } from '@/src/lib/circadian/types';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER } from '@/src/theme';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, SEMANTIC } from '@/src/theme';
 
 /** Auto-detect shift type from start hour */
 function detectShiftType(start: Date, end: Date): ShiftType {
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   deleteText: {
-    color: '#FF6B6B',
+    color: SEMANTIC.error,
     fontSize: 16,
     fontWeight: '600',
   },
