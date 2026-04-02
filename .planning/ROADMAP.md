@@ -97,7 +97,7 @@ Plans:
 Plans:
 - [x] 04-01-PLAN.md — Jest mocks + notification-store Zustand slice
 - [x] 04-02-PLAN.md — Notification service upgrade (warm copy, morning brief, SDK 55 handler)
-- [ ] 04-03-PLAN.md — Night Sky components (StarParticles, RechargeArc, BedtimeTipCycler, NightSkyOverlay)
+- [x] 04-03-PLAN.md — Night Sky components (StarParticles, RechargeArc, BedtimeTipCycler, NightSkyOverlay)
 - [ ] 04-04-PLAN.md — useNightSkyMode hook + Today screen wiring + Settings notification preferences
 
 **UI hint**: yes
@@ -138,6 +138,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation & Onboarding | 3/4 | In Progress|  |
 | 2. Calendar Sync | 0/4 | Planned | - |
 | 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
-| 4. Night Sky Mode & Notifications | 1/4 | In Progress|  |
+| 4. Night Sky Mode & Notifications | 3/4 | In Progress|  |
 | 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |
