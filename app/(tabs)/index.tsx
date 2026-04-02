@@ -7,6 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useNightSkyMode } from '@/src/hooks/useNightSkyMode';
+import { NightSkyOverlay } from '@/src/components/night-sky';
 import { useRouter } from 'expo-router';
 import { format, isWithinInterval } from 'date-fns';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -88,6 +90,9 @@ export default function TodayScreen() {
   )?.dayType ?? 'off';
   const tipOfTheDay = getTipOfTheDay(todayDayType, profile);
 
+  // Night Sky Mode detection
+  const nightSky = useNightSkyMode();
+
   // Pull-to-refresh
   const onRefresh = useCallback(() => {
     regeneratePlan();
@@ -128,6 +133,7 @@ export default function TodayScreen() {
   };
 
   return (
+    <View style={{ flex: 1 }}>
     <ScrollView
       ref={scrollRef}
       style={styles.screen}
@@ -330,6 +336,18 @@ export default function TodayScreen() {
         </Card>
       )}
     </ScrollView>
+
+    {/* Night Sky Mode overlay — absolute positioned over the Today screen */}
+    {nightSky.isActive && nightSky.alarmTime && nightSky.latestWakeTime && (
+      <NightSkyOverlay
+        alarmTime={nightSky.alarmTime}
+        latestWakeTime={nightSky.latestWakeTime}
+        tomorrowSchedule={nightSky.tomorrowSchedule}
+        fillFraction={nightSky.fillFraction}
+        onDismiss={() => {/* no-op: Night Sky auto-dismisses when time passes */}}
+      />
+    )}
+    </View>
   );
 }
 
