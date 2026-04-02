@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 02-calendar-sync 02-02-PLAN.md
-last_updated: "2026-04-02T12:15:33.953Z"
+stopped_at: Completed 02-calendar-sync 02-04-PLAN.md
+last_updated: "2026-04-02T12:30:00.297Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 8
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 ## Current Position
 
 Phase: 02 (calendar-sync) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-04-02
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 01-foundation-onboarding P01-03 | 18min | 2 tasks | 5 files |
 | Phase 02-calendar-sync P01 | 6min | 2 tasks | 13 files |
 | Phase 02-calendar-sync P02 | 7min | 2 tasks | 15 files |
+| Phase 02-calendar-sync P04 | 12min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 02-calendar-sync]: Google Calendar API client is pure fetch-based — no SDK at runtime. SDK used only for OAuth auth flow.
 - [Phase 02-calendar-sync]: D-10 two-tier write: Phase 2 writes sleep blocks only. Full plan items (caffeine/meal/light) deferred to Phase 3.
 - [Phase 02-calendar-sync]: syncToken polling interval 20 minutes — middle of D-14 range. Supabase env vars injected via jest.setup.ts to prevent module-load error.
+- [Phase 02-04]: CalendarSettingsSection placed after EXPORT section — calendar management logically follows data operations
+- [Phase 02-04]: Disconnect handlers unregister background sync only when no providers remain — avoids premature task cancellation
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T12:15:33.950Z
-Stopped at: Completed 02-calendar-sync 02-02-PLAN.md
+Last session: 2026-04-02T12:30:00.293Z
+Stopped at: Completed 02-calendar-sync 02-04-PLAN.md
 Resume file: None

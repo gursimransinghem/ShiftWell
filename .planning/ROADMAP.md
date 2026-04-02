@@ -60,8 +60,8 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Dependencies, types, calendar store, Apple CalendarService, shift confidence scoring, Jest mocks
 - [x] 02-02-PLAN.md — Google Calendar REST API client, background sync task, AppState sync wiring
-- [ ] 02-03-PLAN.md — Onboarding calendar screen, provider cards, calendar toggles, shift review UI
-- [ ] 02-04-PLAN.md — Settings calendar management section with write/notification preferences
+- [x] 02-03-PLAN.md — Onboarding calendar screen, provider cards, calendar toggles, shift review UI
+- [x] 02-04-PLAN.md — Settings calendar management section with write/notification preferences
 
 **UI hint**: yes
 
