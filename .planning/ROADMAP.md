@@ -78,7 +78,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Test scaffold + plan-store calendar write-back + Circadian Reset subscription + debounce
+- [x] 03-01-PLAN.md — Test scaffold + plan-store calendar write-back + Circadian Reset subscription + debounce
 - [ ] 03-02-PLAN.md — SchedulePreview component + Today screen WHAT'S AHEAD section
 - [ ] 03-03-PLAN.md — Final validation + visual checkpoint (autonomous: false)
 

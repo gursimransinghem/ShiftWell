@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 02-calendar-sync 02-04-PLAN.md
-last_updated: "2026-04-02T12:36:07.154Z"
+stopped_at: Completed 03-sleep-plan-generation 03-01-PLAN.md
+last_updated: "2026-04-02T12:56:41.254Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
   percent: 0
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 02 — calendar-sync
+**Current focus:** Phase 03 — sleep-plan-generation
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
+Phase: 03 (sleep-plan-generation) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
 Last activity: 2026-04-02
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 02-calendar-sync P01 | 6min | 2 tasks | 13 files |
 | Phase 02-calendar-sync P02 | 7min | 2 tasks | 15 files |
 | Phase 02-calendar-sync P04 | 12min | 3 tasks | 3 files |
+| Phase 03-sleep-plan-generation P01 | 5min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 02-calendar-sync]: syncToken polling interval 20 minutes — middle of D-14 range. Supabase env vars injected via jest.setup.ts to prevent module-load error.
 - [Phase 02-04]: CalendarSettingsSection placed after EXPORT section — calendar management logically follows data operations
 - [Phase 02-04]: Disconnect handlers unregister background sync only when no providers remain — avoids premature task cancellation
+- [Phase 03-sleep-plan-generation]: plan-write-service handles all 8 SleepBlockType values — calendar-service.ts only handles main-sleep/nap (D-04 two-tier write preserved)
+- [Phase 03-sleep-plan-generation]: recalculationNeeded cleared BEFORE debouncedRegenerate to prevent subscription loop
+- [Phase 03-sleep-plan-generation]: writeChangedBlocks diffs by block ID — unchanged blocks not deleted/recreated (anti-flicker)
 
 ### Pending Todos
 
@@ -96,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T12:30:00.293Z
-Stopped at: Completed 02-calendar-sync 02-04-PLAN.md
+Last session: 2026-04-02T12:56:41.251Z
+Stopped at: Completed 03-sleep-plan-generation 03-01-PLAN.md
 Resume file: None
