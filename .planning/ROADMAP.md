@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Design system gold tokens + UI component color audit + data model extension
+- [x] 01-01-PLAN.md — Design system gold tokens + UI component color audit + data model extension
 - [ ] 01-02-PLAN.md — AM/PM routine builder screens + preferences cleanup
 - [ ] 01-03-PLAN.md — Address entry screen + commute estimation utility + expo-location config
 - [ ] 01-04-PLAN.md — Layout wiring + existing screen polish + user store tests + visual checkpoint
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Onboarding | 0/4 | Planned | - |
+| 1. Foundation & Onboarding | 1/4 | In Progress|  |
 | 2. Calendar Sync | 0/TBD | Not started | - |
 | 3. Sleep Plan Generation | 0/TBD | Not started | - |
 | 4. Night Sky Mode & Notifications | 0/TBD | Not started | - |

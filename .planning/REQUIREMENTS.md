@@ -73,9 +73,9 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 
 ### Design & Polish
 
-- [ ] **DES-01**: App uses blend design (dark base + warm accents)
+- [x] **DES-01**: App uses blend design (dark base + warm accents)
 - [ ] **DES-02**: Smooth animations throughout (transitions, feedback, staggered loading)
-- [ ] **DES-03**: Premium, confident visual identity — never cluttered or clinical
+- [x] **DES-03**: Premium, confident visual identity — never cluttered or clinical
 
 ### Settings & Referral
 
@@ -134,9 +134,9 @@ _Updated 2026-04-02 after roadmap creation._
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DES-01 | Phase 1 | Pending |
+| DES-01 | Phase 1 | Complete |
 | DES-02 | Phase 1 | Pending |
-| DES-03 | Phase 1 | Pending |
+| DES-03 | Phase 1 | Complete |
 | ONB-01 | Phase 1 | Pending |
 | ONB-02 | Phase 1 | Pending |
 | ONB-03 | Phase 1 | Pending |
