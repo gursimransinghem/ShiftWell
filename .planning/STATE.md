@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-04-02T09:41:02.413Z"
+stopped_at: "01-04-PLAN.md — Tasks 1+2 complete, awaiting Task 3 visual checkpoint"
+last_updated: "2026-04-02T10:05:00.000Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 ## Current Position
 
 Phase: 01 (Foundation & Onboarding) — EXECUTING
-Plan: 4 of 4
-Status: Ready to execute
+Plan: 4 of 4 (Tasks 1+2 done, Task 3 checkpoint pending)
+Status: Awaiting visual checkpoint
 Last activity: 2026-04-02
 
 Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
@@ -69,6 +69,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 01-03]: expo-location geocoding returns LocationGeocodedLocation with optional altitude/accuracy — test mocks use minimal object shape
 - [Phase 01-03]: estimateCommuteDuration uses 30 km/h urban average — consistent distance-to-time conversion, fallback to 30 min on geocoding failure
 - [Phase 01-03]: Skip option always writes commuteDuration=30 — user never blocked from completing onboarding
+- [Phase 01-04]: All onboarding screens import ONBOARDING_STEPS/ONBOARDING_TOTAL_STEPS — single source of truth for step count
+- [Phase 01-04]: shadowColor in schedule.tsx FAB uses BACKGROUND.primary (named import already present) — same value as COLORS.background.primary
+- [Phase 01-04]: rgba() backgrounds in healthkit.tsx use decimal RGB not hex — passes zero-hex grep audit correctly
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T09:41:02.410Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-04-02T10:05:00.000Z
+Stopped at: "01-04-PLAN.md — Tasks 1+2 complete, paused at Task 3 visual checkpoint"
 Resume file: None
