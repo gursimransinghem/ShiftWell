@@ -16,7 +16,7 @@ import { useShiftsStore } from '@/src/store/shifts-store';
 import { usePremiumStore } from '@/src/store/premium-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
 import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
-import { TimelineEvent, CountdownCard, TipCard, InsightBanner } from '@/src/components/today';
+import { TimelineEvent, CountdownCard, TipCard, InsightBanner, SchedulePreview } from '@/src/components/today';
 import { RecoveryScoreCard, SleepComparisonCard, WeeklyTrendChart } from '@/src/components/recovery';
 import Card from '@/src/components/ui/Card';
 import Button from '@/src/components/ui/Button';
@@ -65,6 +65,7 @@ export default function TodayScreen() {
   } = useTodayPlan();
 
   const plan = usePlanStore((s) => s.plan);
+  const lastResetAt = usePlanStore((s) => s.lastResetAt);
   const planError = usePlanStore((s) => s.error);
   const clearError = usePlanStore((s) => s.clearError);
   const profile = useUserStore((s) => s.profile);
@@ -260,6 +261,16 @@ export default function TodayScreen() {
               />
             );
           })}
+        </View>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Schedule preview — forward-looking shift intelligence               */}
+      {/* ------------------------------------------------------------------ */}
+      {plan && hasShifts && (
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>WHAT&apos;S AHEAD</Text>
+          <SchedulePreview plan={plan} lastResetAt={lastResetAt} />
         </View>
       )}
 
