@@ -35,7 +35,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can enter work and home addresses during onboarding so commute time is captured
   4. Onboarding captures chronotype, household profile, and sleep preferences in a single cohesive flow
   5. Animations feel smooth and premium throughout — no jank, no clinical sterility
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Design system gold tokens + UI component color audit + data model extension
+- [ ] 01-02-PLAN.md — AM/PM routine builder screens + preferences cleanup
+- [ ] 01-03-PLAN.md — Address entry screen + commute estimation utility + expo-location config
+- [ ] 01-04-PLAN.md — Layout wiring + existing screen polish + user store tests + visual checkpoint
+
 **UI hint**: yes
 
 ### Phase 2: Calendar Sync
@@ -109,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Onboarding | 0/TBD | Not started | - |
+| 1. Foundation & Onboarding | 0/4 | Planned | - |
 | 2. Calendar Sync | 0/TBD | Not started | - |
 | 3. Sleep Plan Generation | 0/TBD | Not started | - |
 | 4. Night Sky Mode & Notifications | 0/TBD | Not started | - |
