@@ -14,6 +14,7 @@ import { router } from 'expo-router';
 import Constants from 'expo-constants';
 import { format, formatDistanceToNow, isToday, isYesterday } from 'date-fns';
 
+import { CalendarSettingsSection } from '@/src/components/calendar';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { useUserStore } from '@/src/store/user-store';
 import { usePlanStore } from '@/src/store/plan-store';
@@ -495,6 +496,12 @@ export default function SettingsScreen() {
           {exportError && (
             <Text style={styles.exportErrorText}>{exportError}</Text>
           )}
+        </Card>
+
+        {/* ---- Calendar Sync Section ---- */}
+        <SectionHeader title="CALENDAR SYNC" />
+        <Card style={styles.card}>
+          <CalendarSettingsSection />
         </Card>
 
         {/* ---- Notifications Section ---- */}
