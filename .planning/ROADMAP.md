@@ -112,7 +112,13 @@ Plans:
   3. In the morning, the Live Activity shows the sleep score or AM routine countdown
   4. The Today screen prominently displays a Shift Readiness Score based on how closely the user followed their plan
   5. Score trends are visible over time — user can see if they're improving or slipping
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — adherence-calculator + score-store (data layer, SCORE-01/03)
+- [ ] 05-02-PLAN.md — useRecoveryScore extension + Today screen gate fix (SCORE-01/02/03)
+- [ ] 05-03-PLAN.md — live-activity-service stub + useNightSkyMode wiring (LIVE-01/02/03)
+
 **UI hint**: yes
 
 ### Phase 6: Premium, Settings & Polish
@@ -139,5 +145,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Calendar Sync | 0/4 | Planned | - |
 | 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
 | 4. Night Sky Mode & Notifications | 4/4 | Complete   | 2026-04-02 |
-| 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
+| 5. Live Activities & Recovery Score | 0/3 | Not started | - |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |
