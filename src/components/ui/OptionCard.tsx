@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Pressable, StyleSheet, Text, View } from 'react-native';
+import { COLORS, ACCENT } from '@/src/theme';
 
 interface OptionCardProps {
   title: string;
@@ -47,12 +48,12 @@ export default function OptionCard({
 
   const animatedBorderColor = selectionAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#1E2235', '#4A90D9'],
+    outputRange: [COLORS.border.default, ACCENT.primary],
   });
 
   const animatedBackgroundColor = selectionAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#141929', 'rgba(74, 144, 217, 0.08)'],
+    outputRange: [COLORS.background.surface, 'rgba(200, 168, 75, 0.08)'],
   });
 
   return (
@@ -107,15 +108,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     fontSize: 16,
     fontWeight: '600',
   },
   titleSelected: {
-    color: '#4A90D9',
+    color: ACCENT.primary,
   },
   description: {
-    color: '#9CA3AF',
+    color: COLORS.text.secondary,
     fontSize: 14,
     marginTop: 4,
     lineHeight: 20,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { COLORS, ACCENT } from '@/src/theme';
 
 interface TimeRangePickerProps {
   startTime: Date;
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    color: '#9CA3AF',
+    color: COLORS.text.secondary,
     fontSize: 14,
     marginBottom: 8,
     fontWeight: '500',
@@ -75,10 +76,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   timeButton: {
-    backgroundColor: '#141929',
+    backgroundColor: COLORS.background.surface,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1E2235',
+    borderColor: COLORS.border.default,
     paddingVertical: 14,
     paddingHorizontal: 24,
     minHeight: 44,
@@ -88,15 +89,15 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
-    borderColor: '#4A90D9',
+    borderColor: ACCENT.primary,
   },
   timeText: {
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     fontSize: 18,
     fontWeight: '600',
   },
   arrow: {
-    color: '#9CA3AF',
+    color: COLORS.text.secondary,
     fontSize: 20,
     marginHorizontal: 16,
   },

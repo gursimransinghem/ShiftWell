@@ -38,8 +38,14 @@ export const BORDER = {
 // ---------------------------------------------------------------------------
 
 export const ACCENT = {
-  primary: '#4A90D9',
-  primaryMuted: '#3468A3',
+  /** Warm gold — primary brand accent (per DES-01) */
+  primary: '#C8A84B',
+  primaryMuted: '#8B6914',
+  /** Soft highlight for positive states */
+  highlight: '#F59E0B',
+  /** Legacy blue — retained for calendar block colors only */
+  blue: '#4A90D9',
+  blueMuted: '#3468A3',
 } as const;
 
 // ---------------------------------------------------------------------------

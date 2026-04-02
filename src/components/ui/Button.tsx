@@ -8,6 +8,7 @@ import {
   type ViewStyle,
   type TextStyle,
 } from 'react-native';
+import { COLORS, ACCENT } from '@/src/theme';
 
 interface ButtonProps {
   title: string;
@@ -19,16 +20,6 @@ interface ButtonProps {
   fullWidth?: boolean;
   icon?: React.ReactNode;
 }
-
-const COLORS = {
-  primary: '#4A90D9',
-  textPrimary: '#FFFFFF',
-  textSecondary: '#4A90D9',
-  textGhost: '#4A90D9',
-  disabledBg: '#1E2235',
-  disabledText: '#555B6E',
-  border: '#4A90D9',
-};
 
 const SIZE_CONFIG: Record<string, { height: number; paddingHorizontal: number; fontSize: number }> = {
   sm: { height: 44, paddingHorizontal: 16, fontSize: 14 },
@@ -108,7 +99,7 @@ export default function Button({
     textStyle.push(styles.disabledText);
   }
 
-  const indicatorColor = variant === 'primary' ? '#FFFFFF' : COLORS.primary;
+  const indicatorColor = variant === 'primary' ? COLORS.text.primary : ACCENT.primary;
 
   return (
     <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
@@ -145,32 +136,32 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   primaryBg: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: ACCENT.primary,
   },
   secondaryBg: {
     backgroundColor: 'transparent',
     borderWidth: 1.5,
-    borderColor: COLORS.border,
+    borderColor: ACCENT.primary,
   },
   fullWidth: {
     width: '100%',
   },
   disabled: {
-    backgroundColor: COLORS.disabledBg,
-    borderColor: COLORS.disabledBg,
+    backgroundColor: COLORS.background.elevated,
+    borderColor: COLORS.background.elevated,
     opacity: 0.6,
   },
   text: {
     fontWeight: '600',
   },
   primaryText: {
-    color: COLORS.textPrimary,
+    color: COLORS.text.primary,
   },
   secondaryText: {
-    color: COLORS.textSecondary,
+    color: ACCENT.primary,
   },
   disabledText: {
-    color: COLORS.disabledText,
+    color: COLORS.text.tertiary,
   },
   iconSpacing: {
     marginLeft: 8,

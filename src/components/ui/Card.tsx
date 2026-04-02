@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { COLORS } from '@/src/theme';
 
 interface CardProps {
   children: React.ReactNode;
@@ -17,10 +18,10 @@ export default function Card({ children, style, padding = true }: CardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#141929',
+    backgroundColor: COLORS.background.surface,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#1E2235',
+    borderColor: COLORS.border.default,
   },
   padding: {
     padding: 16,
