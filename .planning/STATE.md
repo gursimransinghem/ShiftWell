@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
 status: executing
-stopped_at: Completed 02-calendar-sync 02-01-PLAN.md
-last_updated: "2026-04-02T12:05:38.053Z"
+stopped_at: Completed 02-calendar-sync 02-02-PLAN.md
+last_updated: "2026-04-02T12:15:33.953Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 ## Current Position
 
 Phase: 02 (calendar-sync) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-04-02
 
@@ -51,6 +51,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 01-foundation-onboarding P02 | 5min | 2 tasks | 3 files |
 | Phase 01-foundation-onboarding P01-03 | 18min | 2 tasks | 5 files |
 | Phase 02-calendar-sync P01 | 6min | 2 tasks | 13 files |
+| Phase 02-calendar-sync P02 | 7min | 2 tasks | 15 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 01-04]: rgba() backgrounds in healthkit.tsx use decimal RGB not hex — passes zero-hex grep audit correctly
 - [Phase 02-01]: birthday removed from NEGATIVE_KEYWORDS — test spec (Test 5) takes precedence; birthday party 7h scores 0.70 (shift length, no keyword)
 - [Phase 02-01]: googleAccessToken excluded from Zustand persist via partialize — stored in expo-secure-store only to keep credentials out of AsyncStorage
+- [Phase 02-calendar-sync]: Google Calendar API client is pure fetch-based — no SDK at runtime. SDK used only for OAuth auth flow.
+- [Phase 02-calendar-sync]: D-10 two-tier write: Phase 2 writes sleep blocks only. Full plan items (caffeine/meal/light) deferred to Phase 3.
+- [Phase 02-calendar-sync]: syncToken polling interval 20 minutes — middle of D-14 range. Supabase env vars injected via jest.setup.ts to prevent module-load error.
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T12:05:38.050Z
-Stopped at: Completed 02-calendar-sync 02-01-PLAN.md
+Last session: 2026-04-02T12:15:33.950Z
+Stopped at: Completed 02-calendar-sync 02-02-PLAN.md
 Resume file: None

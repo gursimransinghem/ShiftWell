@@ -10,10 +10,10 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 ### Calendar Sync
 
 - [x] **CAL-01**: User can connect Apple Calendar (read access to shifts + personal events)
-- [ ] **CAL-02**: User can connect Google Calendar (read access to shifts + personal events)
+- [x] **CAL-02**: User can connect Google Calendar (read access to shifts + personal events)
 - [x] **CAL-03**: App auto-detects shift events from connected calendars
 - [x] **CAL-04**: App writes sleep blocks back to user's calendar as real events
-- [ ] **CAL-05**: Sleep blocks auto-update when calendar changes (dynamic rescheduling)
+- [x] **CAL-05**: Sleep blocks auto-update when calendar changes (dynamic rescheduling)
 - [x] **CAL-06**: User can configure which calendars to read and write to
 
 ### Onboarding
@@ -144,10 +144,10 @@ _Updated 2026-04-02 after roadmap creation._
 | ONB-05 | Phase 1 | Pending |
 | ONB-06 | Phase 1 | Complete |
 | CAL-01 | Phase 2 | Complete |
-| CAL-02 | Phase 2 | Pending |
+| CAL-02 | Phase 2 | Complete |
 | CAL-03 | Phase 2 | Complete |
 | CAL-04 | Phase 2 | Complete |
-| CAL-05 | Phase 2 | Pending |
+| CAL-05 | Phase 2 | Complete |
 | CAL-06 | Phase 2 | Complete |
 | PLAN-01 | Phase 3 | Pending |
 | PLAN-02 | Phase 3 | Pending |
