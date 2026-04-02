@@ -73,13 +73,15 @@ export default function TodayScreen() {
   const profile = useUserStore((s) => s.profile);
   const canAccess = usePremiumStore((s) => s.canAccess);
 
-  // Recovery score data (from HealthKit)
+  // Recovery score data (from HealthKit or score-store adherence fallback)
   const recovery = useRecoveryScore();
+  // Show score if EITHER HealthKit data OR adherence store data is available (per SCORE-02)
   const showRecovery =
-    recovery.isAvailable &&
     !recovery.isLoading &&
     canAccess('accuracy_tracking') &&
-    (recovery.lastNight !== null || recovery.weeklyAccuracy !== null);
+    (recovery.lastNight !== null ||
+     recovery.weeklyAccuracy !== null ||
+     recovery.adherenceScore !== null);
 
   const hasShifts = shifts.length > 0;
   const now = new Date();
@@ -179,7 +181,7 @@ export default function TodayScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>RECOVERY</Text>
           <RecoveryScoreCard
-            score={recovery.weeklyAccuracy?.overallScore ?? recovery.lastNight?.adherenceScore ?? null}
+            score={recovery.weeklyAccuracy?.overallScore ?? recovery.lastNight?.adherenceScore ?? recovery.adherenceScore ?? null}
             insight={recovery.weeklyAccuracy?.insight ?? recovery.lastNight?.insight ?? ''}
             streakDays={recovery.weeklyAccuracy?.streakDays ?? 0}
             weeklyTrend={recovery.weeklyAccuracy?.weeklyTrend ?? 'stable'}
@@ -189,9 +191,16 @@ export default function TodayScreen() {
               <SleepComparisonCard comparison={recovery.lastNight} />
             </View>
           )}
-          {recovery.dailyScores.length > 0 && (
+          {/* Show HK scores if available, else adherence scores (per SCORE-03) */}
+          {(recovery.dailyScores.length > 0 || recovery.adherenceDailyScores.length > 0) && (
             <View style={{ marginTop: SPACING.md }}>
-              <WeeklyTrendChart dailyScores={recovery.dailyScores} />
+              <WeeklyTrendChart
+                dailyScores={
+                  recovery.dailyScores.length > 0
+                    ? recovery.dailyScores
+                    : recovery.adherenceDailyScores
+                }
+              />
             </View>
           )}
         </View>

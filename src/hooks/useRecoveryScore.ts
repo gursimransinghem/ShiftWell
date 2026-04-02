@@ -18,6 +18,7 @@ import { comparePlannedVsActual } from '@/src/lib/healthkit/sleep-comparison';
 import type { SleepComparison } from '@/src/lib/healthkit/sleep-comparison';
 import { calculateWeeklyAccuracy } from '@/src/lib/healthkit/accuracy-score';
 import type { PlanAccuracy } from '@/src/lib/healthkit/accuracy-score';
+import { useScoreStore } from '@/src/store/score-store';
 
 export interface RecoveryScoreData {
   isLoading: boolean;
@@ -26,6 +27,10 @@ export interface RecoveryScoreData {
   weeklyAccuracy: PlanAccuracy | null;
   /** Daily adherence scores for the past 7 days (for the bar chart) */
   dailyScores: { day: string; score: number | null }[];
+  /** Non-HealthKit adherence score (0-100 or null) for v1.0 display */
+  adherenceScore: number | null;
+  /** 7-day daily scores from score-store for WeeklyTrendChart fallback */
+  adherenceDailyScores: { day: string; score: number | null }[];
   refresh: () => void;
 }
 
@@ -37,6 +42,8 @@ export function useRecoveryScore(): RecoveryScoreData {
   const [lastNight, setLastNight] = useState<SleepComparison | null>(null);
   const [weeklyAccuracy, setWeeklyAccuracy] = useState<PlanAccuracy | null>(null);
   const [dailyScores, setDailyScores] = useState<{ day: string; score: number | null }[]>([]);
+  const [adherenceScore, setAdherenceScore] = useState<number | null>(null);
+  const [adherenceDailyScores, setAdherenceDailyScores] = useState<{ day: string; score: number | null }[]>([]);
 
   const plan = usePlanStore((s) => s.plan);
 
@@ -78,6 +85,12 @@ export function useRecoveryScore(): RecoveryScoreData {
     try {
       const hkAvailable = await isAvailable();
       setAvailable(hkAvailable);
+
+      // Non-HealthKit adherence path (v1.0 primary path — per SCORE-01)
+      // Use .getState() (Zustand imperative accessor) — safe inside useCallback
+      const scoreStore = useScoreStore.getState();
+      setAdherenceScore(scoreStore.todayScore());
+      setAdherenceDailyScores(scoreStore.weeklyScores());
 
       if (!hkAvailable || !plan) {
         setIsLoading(false);
@@ -153,6 +166,8 @@ export function useRecoveryScore(): RecoveryScoreData {
     lastNight,
     weeklyAccuracy,
     dailyScores,
+    adherenceScore,
+    adherenceDailyScores,
     refresh: fetchData,
   };
 }
