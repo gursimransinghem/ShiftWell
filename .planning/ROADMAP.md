@@ -145,5 +145,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Calendar Sync | 0/4 | Planned | - |
 | 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
 | 4. Night Sky Mode & Notifications | 4/4 | Complete   | 2026-04-02 |
-| 5. Live Activities & Recovery Score | 0/3 | Not started | - |
+| 5. Live Activities & Recovery Score | 2/3 | In Progress|  |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |
