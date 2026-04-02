@@ -3,6 +3,8 @@ import { addDays } from 'date-fns';
 import type { SleepPlan } from '../lib/circadian/types';
 import { generateSleepPlan } from '../lib/circadian';
 import { schedulePlanNotifications } from '../lib/notifications/notification-service';
+import { writeChangedBlocks } from '../lib/calendar/plan-write-service';
+import { useCalendarStore } from '../lib/calendar/calendar-store';
 import { useShiftsStore } from './shifts-store';
 import { useUserStore } from './user-store';
 
@@ -12,7 +14,9 @@ export interface PlanState {
   isGenerating: boolean;
   error: string | null;
   lastGeneratedAt: Date | null;
-  regeneratePlan: () => void;
+  /** Set when Circadian Reset (recalculationNeeded) triggered regeneration */
+  lastResetAt: Date | null;
+  regeneratePlan: (opts?: { isCircadianReset?: boolean }) => Promise<void>;
   clearError: () => void;
   setDateRange: (start: Date, end: Date) => void;
 }
@@ -31,10 +35,11 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
   isGenerating: false,
   error: null,
   lastGeneratedAt: null,
+  lastResetAt: null,
 
   clearError: () => set({ error: null }),
 
-  regeneratePlan: () => {
+  regeneratePlan: async (opts) => {
     const { dateRange } = get();
     const { shifts, personalEvents } = useShiftsStore.getState();
     const { profile } = useUserStore.getState();
@@ -49,7 +54,22 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
         personalEvents,
         profile,
       );
-      set({ plan, isGenerating: false, lastGeneratedAt: new Date(), error: null });
+
+      const oldPlan = get().plan;
+      const calStore = useCalendarStore.getState();
+
+      set({
+        plan,
+        isGenerating: false,
+        lastGeneratedAt: new Date(),
+        lastResetAt: opts?.isCircadianReset ? new Date() : get().lastResetAt,
+        error: null,
+      });
+
+      // Write calendar changes (non-blocking — errors logged, don't fail the plan)
+      writeChangedBlocks(oldPlan, plan, calStore).catch((e) => {
+        console.warn('[PlanStore] Calendar write-back failed:', e);
+      });
 
       // Schedule push notifications for the next 24h of plan blocks
       schedulePlanNotifications(plan.blocks).catch(() => {
@@ -67,6 +87,20 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
     get().regeneratePlan();
   },
 }));
+
+// ── Debounce helper ────────────────────────────────────────────────────────────
+
+let regenerateTimer: ReturnType<typeof setTimeout> | null = null;
+
+function debouncedRegenerate(opts?: { isCircadianReset?: boolean }, ms = 500): void {
+  if (regenerateTimer) clearTimeout(regenerateTimer);
+  regenerateTimer = setTimeout(() => {
+    usePlanStore.getState().regeneratePlan(opts);
+    regenerateTimer = null;
+  }, ms);
+}
+
+// ── Subscriptions ──────────────────────────────────────────────────────────────
 
 /**
  * Subscribe to shifts and user profile changes.
@@ -87,5 +121,21 @@ useShiftsStore.subscribe((state, prevState) => {
 useUserStore.subscribe((state, prevState) => {
   if (state.profile !== prevState.profile) {
     usePlanStore.getState().regeneratePlan();
+  }
+});
+
+/**
+ * Subscribe to recalculationNeeded — Phase 3 Circadian Reset (D-16).
+ * When shifts are removed via calendar sync, this flag is set.
+ * We clear it BEFORE regenerating to prevent loops (Pitfall 2 avoided).
+ */
+useShiftsStore.subscribe((state, prevState) => {
+  if (
+    state.recalculationNeeded !== prevState.recalculationNeeded &&
+    state.recalculationNeeded.length > 0
+  ) {
+    // Clear the flag BEFORE regenerating to prevent subscription loop
+    useShiftsStore.setState({ recalculationNeeded: [] });
+    debouncedRegenerate({ isCircadianReset: true });
   }
 });

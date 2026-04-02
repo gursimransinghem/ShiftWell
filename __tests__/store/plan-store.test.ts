@@ -69,10 +69,14 @@ const MOCK_PLAN: SleepPlan = {
 // ── Setup ─────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  jest.clearAllMocks();
   jest.useRealTimers();
 
-  // Reset stores
+  // Default: generateSleepPlan returns MOCK_PLAN
+  (generateSleepPlan as jest.Mock).mockReturnValue(MOCK_PLAN);
+
+  // Reset stores — use setState directly to avoid triggering subscriptions
+  // Note: Zustand subscriptions DO fire on setState calls. We reset mocks AFTER
+  // store reset so that any subscription-triggered calls during setup are discarded.
   usePlanStore.setState({
     plan: null,
     isGenerating: false,
@@ -94,8 +98,13 @@ beforeEach(() => {
     eventIdMap: {},
   } as any);
 
-  // Default: generateSleepPlan returns MOCK_PLAN
+  // Clear mocks AFTER store resets so subscription-triggered calls are discarded
+  jest.clearAllMocks();
   (generateSleepPlan as jest.Mock).mockReturnValue(MOCK_PLAN);
+  (writeChangedBlocks as jest.Mock).mockResolvedValue(undefined);
+
+  // Reset plan to null AFTER clearing mocks — subscription may have set a plan during reset
+  usePlanStore.setState({ plan: null, lastGeneratedAt: null, lastResetAt: null } as any);
 });
 
 // ── Tests ──────────────────────────────────────────────────────────────────────
@@ -111,8 +120,11 @@ describe('usePlanStore — plan generation wiring', () => {
       source: 'manual' as const,
     };
 
+    // Use setState to set both values atomically, then clear mocks to discard subscription-triggered calls
     useShiftsStore.setState({ shifts: [shift] });
-    useUserStore.getState().setProfile({ chronotype: 'late' });
+    useUserStore.setState({ profile: { ...DEFAULT_PROFILE, chronotype: 'late' } });
+    jest.clearAllMocks();
+    (generateSleepPlan as jest.Mock).mockReturnValue(MOCK_PLAN);
 
     await usePlanStore.getState().regeneratePlan();
 
@@ -137,10 +149,14 @@ describe('usePlanStore — plan generation wiring', () => {
   });
 
   it('PLAN-03: commuteDuration=45 in profile passes through to generateSleepPlan', async () => {
-    useUserStore.getState().setProfile({ commuteDuration: 45 });
+    // Set profile via setState to avoid triggering subscription; then explicitly call regeneratePlan
+    useUserStore.setState({ profile: { ...DEFAULT_PROFILE, commuteDuration: 45 } });
+    jest.clearAllMocks();
+    (generateSleepPlan as jest.Mock).mockReturnValue(MOCK_PLAN);
 
     await usePlanStore.getState().regeneratePlan();
 
+    expect(generateSleepPlan).toHaveBeenCalledTimes(1);
     const callArgs = (generateSleepPlan as jest.Mock).mock.calls[0];
     const profile = callArgs[4];
     expect(profile.commuteDuration).toBe(45);
