@@ -75,7 +75,12 @@ Plans:
   3. Free mornings are detected and the plan automatically proposes sleeping in rather than defaulting to an alarm
   4. The Today screen shows a "preview" message like "3 nights next week — pre-adapt starting Thursday"
   5. When calendar changes (new shift added, shift moved), the sleep plan recalculates and the calendar updates
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Test scaffold + plan-store calendar write-back + Circadian Reset subscription + debounce
+- [ ] 03-02-PLAN.md — SchedulePreview component + Today screen WHAT'S AHEAD section
+- [ ] 03-03-PLAN.md — Final validation + visual checkpoint (autonomous: false)
 
 ### Phase 4: Night Sky Mode & Notifications
 **Goal**: The app guides users into sleep with a calming bedtime experience and delivers warm, timely push notifications throughout the day
@@ -125,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation & Onboarding | 3/4 | In Progress|  |
 | 2. Calendar Sync | 0/4 | Planned | - |
-| 3. Sleep Plan Generation | 0/TBD | Not started | - |
+| 3. Sleep Plan Generation | 0/3 | Planned | - |
 | 4. Night Sky Mode & Notifications | 0/TBD | Not started | - |
 | 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |
