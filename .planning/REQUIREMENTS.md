@@ -44,9 +44,9 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 
 ### Live Activities
 
-- [ ] **LIVE-01**: Wind-down countdown appears on Dynamic Island / lock screen
-- [ ] **LIVE-02**: At bedtime, Live Activity displays "Sleep [logo]" or calm message
-- [ ] **LIVE-03**: Morning Live Activity shows sleep score or AM routine countdown
+- [x] **LIVE-01**: Wind-down countdown appears on Dynamic Island / lock screen
+- [x] **LIVE-02**: At bedtime, Live Activity displays "Sleep [logo]" or calm message
+- [x] **LIVE-03**: Morning Live Activity shows sleep score or AM routine countdown
 
 ### Notifications
 
@@ -165,9 +165,9 @@ _Updated 2026-04-02 after roadmap creation._
 | NOTIF-03 | Phase 4 | Complete |
 | NOTIF-04 | Phase 4 | Complete |
 | NOTIF-05 | Phase 4 | Complete |
-| LIVE-01 | Phase 5 | Pending |
-| LIVE-02 | Phase 5 | Pending |
-| LIVE-03 | Phase 5 | Pending |
+| LIVE-01 | Phase 5 | Complete |
+| LIVE-02 | Phase 5 | Complete |
+| LIVE-03 | Phase 5 | Complete |
 | SCORE-01 | Phase 5 | Pending |
 | SCORE-02 | Phase 5 | Pending |
 | SCORE-03 | Phase 5 | Pending |

@@ -115,9 +115,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — adherence-calculator + score-store (data layer, SCORE-01/03)
+- [x] 05-01-PLAN.md — adherence-calculator + score-store (data layer, SCORE-01/03)
 - [ ] 05-02-PLAN.md — useRecoveryScore extension + Today screen gate fix (SCORE-01/02/03)
-- [ ] 05-03-PLAN.md — live-activity-service stub + useNightSkyMode wiring (LIVE-01/02/03)
+- [x] 05-03-PLAN.md — live-activity-service stub + useNightSkyMode wiring (LIVE-01/02/03)
 
 **UI hint**: yes
 

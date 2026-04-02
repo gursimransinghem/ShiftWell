@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
-status: verifying
-stopped_at: Completed 04-night-sky-mode-notifications 04-04-PLAN.md
-last_updated: "2026-04-02T13:54:38.491Z"
+status: executing
+stopped_at: Completed 05-live-activities-recovery-score 05-01-PLAN.md
+last_updated: "2026-04-02T14:14:59.240Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 15
-  completed_plans: 15
+  total_plans: 18
+  completed_plans: 17
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 04 — night-sky-mode-notifications
+**Current focus:** Phase 05 — live-activities-recovery-score
 
 ## Current Position
 
-Phase: 5
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 05 (live-activities-recovery-score) — EXECUTING
+Plan: 3 of 3
+Status: Ready to execute
 Last activity: 2026-04-02
 
 Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
@@ -60,6 +60,8 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 04-night-sky-mode-notifications P01 | 18min | 2 tasks | 7 files |
 | Phase 04-night-sky-mode-notifications P03 | 3min | 2 tasks | 5 files |
 | Phase 04-night-sky-mode-notifications P04 | 12min | 3 tasks | 4 files |
+| Phase 05-live-activities-recovery-score P01 | 3min | 2 tasks | 3 files |
+| Phase 05-live-activities-recovery-score P03 | 4 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -102,6 +104,10 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 04]: useEffect from react (not react-native-reanimated) — reanimated v4.2.1 does not export useEffect as named export
 - [Phase 04]: useNightSkyMode reads plan/notification/user stores with no new setInterval — piggybacks on 60s tick
 - [Phase 04]: Priority=1 + hour window [18-12) guard in useNightSkyMode prevents nap false-positives (Pitfall 4)
+- [Phase 05-live-activities-recovery-score]: Live Activity trigger uses SchedulableTriggerInputTypes.TIME_INTERVAL (seconds-based) for stub fallback; DateTriggerInput used for scheduled notifications in notification-service.ts
+- [Phase 05-03]: useNightSkyMode useEffect dependency is [data.isActive] only — avoids redundant service calls on unrelated plan/schedule changes
+- [Phase 05-live-activities-recovery-score]: pendingEvents not cleared after finalizeDay — filtered by date at score time, avoids consumed-event tracking complexity
+- [Phase 05-live-activities-recovery-score]: null vs 0 distinction: computeAdherenceScore returns null for no-sleep-block dates (no-shift day), 0 for shift day with zero adherence
 
 ### Pending Todos
 
@@ -116,6 +122,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T13:49:41.598Z
-Stopped at: Completed 04-night-sky-mode-notifications 04-04-PLAN.md
+Last session: 2026-04-02T14:14:59.235Z
+Stopped at: Completed 05-live-activities-recovery-score 05-01-PLAN.md
 Resume file: None
