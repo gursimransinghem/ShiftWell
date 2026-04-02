@@ -19,6 +19,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="pm-routine" />
       <Stack.Screen name="addresses" />
       <Stack.Screen name="healthkit" />
+      <Stack.Screen name="calendar" />
     </Stack>
   );
 }
