@@ -7,19 +7,21 @@
 
 ## The Mission
 
-**Give people their nights back.**
+**Give the world back its time and health.**
 
-700 million people worldwide work shifts. They sacrifice their sleep, their health, their moods, their relationships, their sharpness — not because they want to, but because nobody built them a real solution. They're left guessing when to sleep, dreading the boomerang of switching from nights to days, and slowly accumulating a debt their body can never fully repay.
+It's not just night shift workers. It's the parent working 7-4 who coaches soccer at 5, makes dinner at 6, helps with homework until 9, and scrolls their phone until midnight because it's the only "me time" they get. It's the student juggling classes and a part-time job. It's the 9-to-5er whose kids, fatigue, responsibilities, and life quietly derail their sleep without them even noticing.
 
-ShiftWell exists to end that guessing game. Permanently.
+700 million people work shifts — but billions more have hectic, unpredictable lives that make consistent sleep feel impossible. Anyone can get off track. Everyone deserves a system that keeps them on it.
+
+ShiftWell exists to automate the one thing everyone needs and nobody prioritizes: rest. Personalized to your daily choices. Adapted to your real life. Consistent when everything else isn't.
 
 ---
 
 ## The Vision
 
-A world where no one has to think about when to sleep. Where your schedule — no matter how chaotic, rotating, or unpredictable — is met with an intelligent system that handles sleep for you. Where shift workers wake up rested, show up sharp, and go home safe. Where the night shift doesn't mean sacrificing your health for your paycheck.
+A world where no one has to think about when to sleep. Whether you're a nurse rotating through nights, a parent barely keeping up with Monday through Friday, or a founder running on caffeine and ambition — your schedule is met with an intelligent system that handles sleep for you. You wake up rested. You show up sharp. You go home with energy left for the people who matter.
 
-**ShiftWell is not a sleep tracker. It's sleep autopilot.**
+**ShiftWell is not a sleep tracker. It's sleep autopilot — for everyone whose life doesn't fit a textbook.**
 
 ---
 
@@ -188,7 +190,7 @@ Want it personalized? Take a 3-question chronotype quiz → enter your email →
 
 **Honest over optimized.** We'll tell you the truth about your sleep, even when it's uncomfortable. But we'll never guilt you. We'll just help you do better tomorrow.
 
-**Inclusive over exclusive.** Night shift nurses, airline pilots, new parents, medical residents, factory workers, bartenders, security guards — if the sun doesn't dictate your schedule, ShiftWell is for you.
+**Inclusive over exclusive.** Night shift nurses, airline pilots, new parents, medical residents, factory workers, bartenders, security guards, overwhelmed parents working 9-to-5, students, founders — if life makes sleep harder than it should be, ShiftWell is for you.
 
 **Physician-built over influencer-endorsed.** Our credibility comes from clinical expertise and peer-reviewed research, not celebrity partnerships. An ED physician who works 3 AM shifts built this because they needed it to exist.
 
@@ -224,7 +226,7 @@ Now I want every shift worker in the world to have the same thing.
 
 **Year 5:** ShiftWell is the standard. Every hospital, every airline, every trucking company, every military base. The question isn't "should we use ShiftWell?" — it's "why haven't you deployed it yet?"
 
-**The endgame:** Nobody should have to sacrifice their health to work the night shift. Period.
+**The endgame:** Nobody should sacrifice their health because life is busy. Not the night shift nurse. Not the exhausted parent. Not the overworked resident. Not anyone. Sleep is the foundation everything else is built on — and ShiftWell makes sure it never crumbles.
 
 ---
 *This document is the north star. Return to it when the roadmap gets complicated, when feature creep tempts us, when we're tired and want to ship something mediocre. Read it again. Then build something worthy of the mission.*
