@@ -130,17 +130,62 @@ Deferred to next release. Tracked but not in current roadmap.
 
 ## Traceability
 
-_Updated during roadmap creation._
+_Updated 2026-04-02 after roadmap creation._
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| _To be populated by roadmapper_ | | |
+| DES-01 | Phase 1 | Pending |
+| DES-02 | Phase 1 | Pending |
+| DES-03 | Phase 1 | Pending |
+| ONB-01 | Phase 1 | Pending |
+| ONB-02 | Phase 1 | Pending |
+| ONB-03 | Phase 1 | Pending |
+| ONB-04 | Phase 1 | Pending |
+| ONB-05 | Phase 1 | Pending |
+| ONB-06 | Phase 1 | Pending |
+| CAL-01 | Phase 2 | Pending |
+| CAL-02 | Phase 2 | Pending |
+| CAL-03 | Phase 2 | Pending |
+| CAL-04 | Phase 2 | Pending |
+| CAL-05 | Phase 2 | Pending |
+| CAL-06 | Phase 2 | Pending |
+| PLAN-01 | Phase 3 | Pending |
+| PLAN-02 | Phase 3 | Pending |
+| PLAN-03 | Phase 3 | Pending |
+| PLAN-04 | Phase 3 | Pending |
+| PLAN-05 | Phase 3 | Pending |
+| PLAN-06 | Phase 3 | Pending |
+| NSM-01 | Phase 4 | Pending |
+| NSM-02 | Phase 4 | Pending |
+| NSM-03 | Phase 4 | Pending |
+| NSM-04 | Phase 4 | Pending |
+| NSM-05 | Phase 4 | Pending |
+| NOTIF-01 | Phase 4 | Pending |
+| NOTIF-02 | Phase 4 | Pending |
+| NOTIF-03 | Phase 4 | Pending |
+| NOTIF-04 | Phase 4 | Pending |
+| NOTIF-05 | Phase 4 | Pending |
+| LIVE-01 | Phase 5 | Pending |
+| LIVE-02 | Phase 5 | Pending |
+| LIVE-03 | Phase 5 | Pending |
+| SCORE-01 | Phase 5 | Pending |
+| SCORE-02 | Phase 5 | Pending |
+| SCORE-03 | Phase 5 | Pending |
+| PREM-01 | Phase 6 | Pending |
+| PREM-02 | Phase 6 | Pending |
+| PREM-03 | Phase 6 | Pending |
+| PREM-04 | Phase 6 | Pending |
+| PREM-05 | Phase 6 | Pending |
+| PREM-06 | Phase 6 | Pending |
+| SET-01 | Phase 6 | Pending |
+| SET-02 | Phase 6 | Pending |
+| SET-03 | Phase 6 | Pending |
 
 **Coverage:**
-- v1.0 requirements: 38 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 38
+- v1.0 requirements: 46 total
+- Mapped to phases: 46
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-02*
-*Last updated: 2026-04-02 after initial definition*
+*Last updated: 2026-04-02 after roadmap creation*
