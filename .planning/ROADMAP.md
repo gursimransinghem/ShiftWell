@@ -95,7 +95,7 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Jest mocks + notification-store Zustand slice
+- [x] 04-01-PLAN.md — Jest mocks + notification-store Zustand slice
 - [x] 04-02-PLAN.md — Notification service upgrade (warm copy, morning brief, SDK 55 handler)
 - [ ] 04-03-PLAN.md — Night Sky components (StarParticles, RechargeArc, BedtimeTipCycler, NightSkyOverlay)
 - [ ] 04-04-PLAN.md — useNightSkyMode hook + Today screen wiring + Settings notification preferences
