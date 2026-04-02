@@ -8,6 +8,7 @@ import OptionCard from '@/src/components/ui/OptionCard';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
+import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 
 const SLEEP_HOURS = [5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9] as const;
 
@@ -17,24 +18,20 @@ const CAFFEINE_OPTIONS = [
   { label: 'High', description: '~7 hour half-life', halfLife: 7 },
 ] as const;
 
-const COMMUTE_OPTIONS = [15, 30, 45, 60] as const;
-
 export default function PreferencesScreen() {
   const setProfile = useUserStore((s) => s.setProfile);
 
   const [sleepNeed, setSleepNeed] = useState(7.5);
   const [napPreference, setNapPreference] = useState(true);
   const [caffeineHalfLife, setCaffeineHalfLife] = useState(5);
-  const [commuteDuration, setCommuteDuration] = useState(30);
 
   function handleComplete() {
     setProfile({
       sleepNeed,
       napPreference,
       caffeineHalfLife,
-      commuteDuration,
     });
-    router.push('/(onboarding)/healthkit');
+    router.push('/(onboarding)/am-routine');
   }
 
   return (
@@ -44,7 +41,10 @@ export default function PreferencesScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={4} totalSteps={5} />
+          <ProgressBar
+            currentStep={ONBOARDING_STEPS.preferences}
+            totalSteps={ONBOARDING_TOTAL_STEPS}
+          />
         </View>
 
         <Text style={styles.title}>Your Sleep Preferences</Text>
@@ -105,22 +105,6 @@ export default function PreferencesScreen() {
                 selected={caffeineHalfLife === option.halfLife}
                 onPress={() => setCaffeineHalfLife(option.halfLife)}
               />
-            ))}
-          </View>
-        </Card>
-
-        {/* Commute duration */}
-        <Card style={styles.card}>
-          <Text style={styles.cardLabel}>Commute time after shift</Text>
-          <View style={styles.chipGrid}>
-            {COMMUTE_OPTIONS.map((minutes) => (
-              <View key={minutes} style={styles.chipWrapper}>
-                <OptionCard
-                  title={`${minutes} min`}
-                  selected={commuteDuration === minutes}
-                  onPress={() => setCommuteDuration(minutes)}
-                />
-              </View>
             ))}
           </View>
         </Card>
