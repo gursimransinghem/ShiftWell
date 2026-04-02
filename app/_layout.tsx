@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import 'react-native-reanimated';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import * as Notifications from 'expo-notifications';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuthStore } from '@/src/store/auth-store';
@@ -15,6 +16,16 @@ import { registerCalendarBackgroundSync } from '@/src/lib/calendar/background-sy
 import { runCalendarSync } from '@/src/lib/calendar/calendar-service';
 // Side-effect import: registers SHIFTWELL_CALENDAR_SYNC task via TaskManager.defineTask at module scope
 import '@/src/lib/calendar/background-sync';
+
+// Register foreground notification handler — SDK 55 API (shouldShowBanner replaces shouldShowAlert)
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export {
   // Catch any errors thrown by the Layout component.
