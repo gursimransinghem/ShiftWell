@@ -92,7 +92,14 @@ Plans:
   3. The recharge animation updates in real time — if the user is 30 minutes past bedtime, projected sleep quality drops visibly
   4. User receives a wind-down push notification 30-60 minutes before bedtime with warm tone and emoji (not clinical)
   5. User receives a caffeine cutoff reminder and a morning brief (score + first open block) — all notifications customizable in timing
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Jest mocks + notification-store Zustand slice
+- [ ] 04-02-PLAN.md — Notification service upgrade (warm copy, morning brief, SDK 55 handler)
+- [ ] 04-03-PLAN.md — Night Sky components (StarParticles, RechargeArc, BedtimeTipCycler, NightSkyOverlay)
+- [ ] 04-04-PLAN.md — useNightSkyMode hook + Today screen wiring + Settings notification preferences
+
 **UI hint**: yes
 
 ### Phase 5: Live Activities & Recovery Score
