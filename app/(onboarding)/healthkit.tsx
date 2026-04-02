@@ -30,9 +30,8 @@ export default function HealthKitScreen() {
       if (!mounted) return;
 
       if (!available) {
-        // HealthKit not available (iPad, Android) — skip to completion
-        completeOnboarding();
-        router.replace('/(tabs)');
+        // HealthKit not available (iPad, Android) — proceed to calendar onboarding
+        router.replace('/(onboarding)/calendar');
         return;
       }
 
@@ -47,8 +46,8 @@ export default function HealthKitScreen() {
   }, [completeOnboarding]);
 
   function finishOnboarding() {
-    completeOnboarding();
-    router.replace('/(tabs)');
+    // Calendar is the final onboarding step — push to it
+    router.push('/(onboarding)/calendar');
   }
 
   async function handleConnect() {
