@@ -30,6 +30,8 @@ export interface ShiftEvent {
   start: Date;
   end: Date;
   shiftType: ShiftType;
+  /** Whether this shift came from calendar sync or manual entry (D-16) */
+  source?: 'calendar' | 'manual';
 }
 
 /** A non-shift calendar event (appointments, activities, etc.) */

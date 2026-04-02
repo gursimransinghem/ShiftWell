@@ -3,11 +3,18 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 import 'react-native-reanimated';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import { useAuthStore } from '@/src/store/auth-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useCalendarStore } from '@/src/lib/calendar/calendar-store';
+import { registerCalendarBackgroundSync } from '@/src/lib/calendar/background-sync';
+import { runCalendarSync } from '@/src/lib/calendar/calendar-service';
+// Side-effect import: registers SHIFTWELL_CALENDAR_SYNC task via TaskManager.defineTask at module scope
+import '@/src/lib/calendar/background-sync';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,6 +60,35 @@ function RootLayoutNav() {
     // Restore auth session and initialize premium status on cold launch
     checkSession();
     initializePremium();
+
+    // Configure Google Sign-In with calendar scopes
+    // Safe to call before sign-in — just sets up the client configuration
+    GoogleSignin.configure({
+      scopes: [
+        'https://www.googleapis.com/auth/calendar.readonly',
+        'https://www.googleapis.com/auth/calendar.events',
+      ],
+      iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    });
+
+    // Calendar sync on app open (D-14)
+    const calState = useCalendarStore.getState();
+    if (calState.appleConnected || calState.googleConnected) {
+      registerCalendarBackgroundSync().catch(() => {});
+      runCalendarSync().catch(() => {});
+    }
+
+    let lastState: AppStateStatus = AppState.currentState;
+    const sub = AppState.addEventListener('change', (next) => {
+      if (lastState !== 'active' && next === 'active') {
+        const s = useCalendarStore.getState();
+        if (s.appleConnected || s.googleConnected) {
+          runCalendarSync().catch(() => {});
+        }
+      }
+      lastState = next;
+    });
+    return () => sub.remove();
   }, []);
 
   return (

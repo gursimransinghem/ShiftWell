@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  setupFiles: ['<rootDir>/jest.setup.ts'],
   roots: ['<rootDir>/__tests__', '<rootDir>/src'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
@@ -10,5 +11,11 @@ module.exports = {
     '^expo-secure-store$': '<rootDir>/__mocks__/expo-secure-store.ts',
     '^@react-native-google-signin/google-signin$':
       '<rootDir>/__mocks__/@react-native-google-signin/google-signin.ts',
+    '^expo-task-manager$': '<rootDir>/__mocks__/expo-task-manager.ts',
+    '^expo-background-task$': '<rootDir>/__mocks__/expo-background-task.ts',
+    '^@/src/lib/supabase/client$': '<rootDir>/__mocks__/supabase-client.ts',
+    '^src/lib/supabase/client$': '<rootDir>/__mocks__/supabase-client.ts',
+    '^@/src/lib/sync/sync-engine$': '<rootDir>/__mocks__/sync-engine.ts',
+    '^src/lib/sync/sync-engine$': '<rootDir>/__mocks__/sync-engine.ts',
   },
 };

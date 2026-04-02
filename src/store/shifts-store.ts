@@ -8,6 +8,8 @@ import { queueWrite } from '../lib/sync/sync-engine';
 export interface ShiftsState {
   shifts: ShiftEvent[];
   personalEvents: PersonalEvent[];
+  /** IDs of shifts that need circadian recalculation (Phase 3 consumes this — D-16) */
+  recalculationNeeded: string[];
   addShift: (shift: Omit<ShiftEvent, 'id'>) => void;
   updateShift: (id: string, updates: Partial<ShiftEvent>) => void;
   removeShift: (id: string) => void;
@@ -15,6 +17,10 @@ export interface ShiftsState {
   clearShifts: () => void;
   addPersonalEvent: (event: PersonalEvent) => void;
   importPersonalEvents: (events: PersonalEvent[]) => void;
+  /** Returns IDs of all shifts that originated from calendar sync (D-16 deletion detection) */
+  getCalendarSyncedShiftIds: () => string[];
+  /** Flag a shift for recalculation — Phase 3 Circadian Reset will consume this (D-16) */
+  markRecalculationNeeded: (shiftId: string) => void;
 }
 
 function generateId(): string {
@@ -62,9 +68,10 @@ const dateAwareStorage: StateStorage = {
 
 export const useShiftsStore = create<ShiftsState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       shifts: [],
       personalEvents: [],
+      recalculationNeeded: [],
 
       addShift: (shift) => {
         const start = shift.start instanceof Date ? shift.start : new Date(shift.start);
@@ -146,6 +153,18 @@ export const useShiftsStore = create<ShiftsState>()(
               end: e.end instanceof Date ? e.end : new Date(e.end),
             })),
           ],
+        })),
+
+      getCalendarSyncedShiftIds: () =>
+        get().shifts
+          .filter((s) => s.source === 'calendar')
+          .map((s) => s.id),
+
+      markRecalculationNeeded: (shiftId) =>
+        set((state) => ({
+          recalculationNeeded: state.recalculationNeeded.includes(shiftId)
+            ? state.recalculationNeeded
+            : [...state.recalculationNeeded, shiftId],
         })),
     }),
     {

@@ -64,7 +64,10 @@
       ],
       "expo-calendar",
       "expo-background-task",
-      "expo-task-manager"
+      "expo-task-manager",
+      ["@react-native-google-signin/google-signin", {
+        "iosUrlScheme": "com.googleusercontent.apps.PLACEHOLDER_CLIENT_ID"
+      }]
     ],
     "experiments": {
       "typedRoutes": true

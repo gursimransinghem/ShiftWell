@@ -7,9 +7,13 @@
  */
 
 import * as ExpoCalendar from 'expo-calendar';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import type { RawCalendarEvent, CalendarMeta } from './calendar-types';
 import type { PlanBlock } from '../circadian/types';
+import { useCalendarStore } from './calendar-store';
+import { useShiftsStore } from '../../store/shifts-store';
+import { shiftConfidence } from './shift-detector';
+import { fetchGoogleEvents, fetchGoogleEventsDelta } from './google-calendar-api';
 
 /**
  * Request full calendar access permission.
@@ -148,4 +152,131 @@ export async function updateSleepBlock(
  */
 export async function deleteSleepBlock(eventId: string, _calendarId: string): Promise<void> {
   await ExpoCalendar.deleteEventAsync(eventId);
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Sync orchestrator
+// ──────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Compute event duration in hours.
+ */
+function durationInHours(evt: RawCalendarEvent): number {
+  return (evt.end.getTime() - evt.start.getTime()) / (1000 * 3600);
+}
+
+/**
+ * Full calendar sync orchestrator.
+ *
+ * Handles:
+ * - Apple Calendar full fetch
+ * - Google Calendar delta sync (with 410/syncToken expiry fallback)
+ * - Additive path: newly detected shifts are added to shifts-store
+ * - Deletion path (D-16): shifts no longer in calendar are removed from store,
+ *   orphaned sleep block events are cleaned up, and a recalculation flag is
+ *   set for Phase 3's Circadian Reset algorithm
+ *
+ * NOTE on D-10 (two-tier write strategy): Phase 2 only writes sleep blocks
+ * (main-sleep, nap) to the ShiftWell calendar. Full plan items — caffeine
+ * cutoff, meal timing, light protocols — are intentionally deferred to Phase 3
+ * when the circadian algorithm produces them.
+ */
+export async function runCalendarSync(): Promise<void> {
+  const calStore = useCalendarStore.getState();
+  const shiftsStore = useShiftsStore.getState();
+  const now = new Date();
+  const endDate = addDays(now, 28);
+
+  // ── 1. Fetch current calendar events ────────────────────────────────────────
+  let allEvents: RawCalendarEvent[] = [];
+
+  if (calStore.appleConnected) {
+    const appleIds = calStore.getEnabledAppleCalendarIds();
+    if (appleIds.length > 0) {
+      const appleEvents = await fetchAppleEvents(appleIds, now, endDate);
+      allEvents.push(...appleEvents);
+    }
+  }
+
+  if (calStore.googleConnected && calStore.googleAccessToken) {
+    const googleIds = calStore.getEnabledGoogleCalendarIds();
+    for (const gCalId of googleIds) {
+      const syncToken = calStore.googleSyncTokens[gCalId];
+      if (syncToken) {
+        const delta = await fetchGoogleEventsDelta(gCalId, calStore.googleAccessToken, syncToken);
+        if (delta.nextSyncToken) {
+          calStore.updateGoogleSyncToken(gCalId, delta.nextSyncToken);
+          allEvents.push(...delta.events);
+        } else {
+          // 410 Gone — syncToken expired, fall back to full fetch
+          const events = await fetchGoogleEvents([gCalId], calStore.googleAccessToken, now, endDate);
+          allEvents.push(...events);
+        }
+      } else {
+        const events = await fetchGoogleEvents([gCalId], calStore.googleAccessToken, now, endDate);
+        allEvents.push(...events);
+      }
+    }
+  }
+
+  // ── 2. Run shift detection on fetched events ─────────────────────────────────
+  const workCalId = calStore.workCalendarId;
+  const scoredEvents = allEvents.map((evt) => ({
+    ...evt,
+    confidence: shiftConfidence(evt.title, durationInHours(evt), {
+      isWorkCalendar: !!workCalId && evt.calendarId === workCalId,
+    }),
+  }));
+
+  const detectedShiftIds = new Set(
+    scoredEvents.filter((e) => e.confidence >= 0.80).map((e) => e.id),
+  );
+
+  // ── 3. Additive path — add newly detected shifts ─────────────────────────────
+  const existingShiftIds = new Set(shiftsStore.shifts.map((s) => s.id));
+  for (const evt of scoredEvents) {
+    if (evt.confidence >= 0.80 && !existingShiftIds.has(evt.id)) {
+      shiftsStore.addShift({
+        id: evt.id,
+        title: evt.title,
+        start: evt.start,
+        end: evt.end,
+        shiftType: 'day', // classifyShiftType is called inside addShift
+        source: 'calendar',
+      } as Parameters<typeof shiftsStore.addShift>[0]);
+    }
+  }
+
+  // ── 4. Deletion path (D-16) ──────────────────────────────────────────────────
+  // Compare: calendar-synced shifts in store vs. shifts still present in calendar
+  const previousCalendarShiftIds = shiftsStore.getCalendarSyncedShiftIds();
+  const removedShiftIds = previousCalendarShiftIds.filter((id) => !detectedShiftIds.has(id));
+
+  for (const removedId of removedShiftIds) {
+    // 4a. Remove shift from shifts-store
+    shiftsStore.removeShift(removedId);
+
+    // 4b. Clean up orphaned sleep block calendar events
+    // planBlockId convention: "{shiftId}-sleep-{n}" or "{shiftId}-nap-{n}" — match prefix
+    const eventIdMap = calStore.eventIdMap;
+    for (const [calEventId, planBlockId] of Object.entries(eventIdMap)) {
+      if (planBlockId.startsWith(removedId)) {
+        try {
+          const swCalId = calStore.shiftWellCalendarId;
+          if (swCalId) await deleteSleepBlock(calEventId, swCalId);
+          calStore.removeEventId(calEventId);
+        } catch {
+          // Best-effort cleanup — log but don't fail sync
+          console.warn(`[CalendarSync] Failed to delete orphaned sleep block event ${calEventId}`);
+        }
+      }
+    }
+
+    // 4c. Set recalculation flag for Phase 3's Circadian Reset algorithm (D-16)
+    // Phase 3 will check recalculationNeeded and optimize sleep for the freed time
+    shiftsStore.markRecalculationNeeded(removedId);
+  }
+
+  // ── 5. Update sync timestamp ─────────────────────────────────────────────────
+  calStore.setLastSyncedAt(now.toISOString());
 }
