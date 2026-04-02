@@ -40,6 +40,15 @@ export interface PersonalEvent {
   end: Date;
 }
 
+/** A single activity in an AM or PM routine */
+export interface RoutineStep {
+  id: string;
+  label: string;
+  icon: string;
+  durationMinutes: number;
+  enabled: boolean;
+}
+
 /** User profile collected during onboarding */
 export interface UserProfile {
   chronotype: Chronotype;
@@ -57,6 +66,14 @@ export interface UserProfile {
   hasPets: boolean;
   /** Typical commute duration in minutes */
   commuteDuration: number;
+  /** Work address for commute calculation */
+  workAddress: string;
+  /** Home address for commute calculation */
+  homeAddress: string;
+  /** Morning routine activities */
+  amRoutine: RoutineStep[];
+  /** Evening routine activities */
+  pmRoutine: RoutineStep[];
 }
 
 /** Default profile for new users */
@@ -69,6 +86,10 @@ export const DEFAULT_PROFILE: UserProfile = {
   hasYoungChildren: false,
   hasPets: false,
   commuteDuration: 30,
+  workAddress: '',
+  homeAddress: '',
+  amRoutine: [],
+  pmRoutine: [],
 };
 
 /** A classified day in the schedule with its type */
