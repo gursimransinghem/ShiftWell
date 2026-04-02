@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
-status: Awaiting visual checkpoint
-stopped_at: Phase 2 context gathered
-last_updated: "2026-04-02T11:22:45.973Z"
+status: executing
+stopped_at: Completed 02-calendar-sync 02-01-PLAN.md
+last_updated: "2026-04-02T12:05:38.053Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 8
+  completed_plans: 5
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 01 — Foundation & Onboarding
+**Current focus:** Phase 02 — calendar-sync
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
-Status: Awaiting visual checkpoint
+Phase: 02 (calendar-sync) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
 Last activity: 2026-04-02
 
 Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 01-foundation-onboarding P01 | 8min | 3 tasks | 11 files |
 | Phase 01-foundation-onboarding P02 | 5min | 2 tasks | 3 files |
 | Phase 01-foundation-onboarding P01-03 | 18min | 2 tasks | 5 files |
+| Phase 02-calendar-sync P01 | 6min | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 01-04]: All onboarding screens import ONBOARDING_STEPS/ONBOARDING_TOTAL_STEPS — single source of truth for step count
 - [Phase 01-04]: shadowColor in schedule.tsx FAB uses BACKGROUND.primary (named import already present) — same value as COLORS.background.primary
 - [Phase 01-04]: rgba() backgrounds in healthkit.tsx use decimal RGB not hex — passes zero-hex grep audit correctly
+- [Phase 02-01]: birthday removed from NEGATIVE_KEYWORDS — test spec (Test 5) takes precedence; birthday party 7h scores 0.70 (shift length, no keyword)
+- [Phase 02-01]: googleAccessToken excluded from Zustand persist via partialize — stored in expo-secure-store only to keep credentials out of AsyncStorage
 
 ### Pending Todos
 
@@ -86,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T11:22:45.970Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-calendar-sync/02-CONTEXT.md
+Last session: 2026-04-02T12:05:38.050Z
+Stopped at: Completed 02-calendar-sync 02-01-PLAN.md
+Resume file: None
