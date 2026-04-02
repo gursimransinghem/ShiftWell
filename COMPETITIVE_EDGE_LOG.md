@@ -21,6 +21,7 @@ These are the features and ideas that set this product in its own league. **Nobo
 | 5 | **Commute-Aware Wake Times** | Work address + traffic → dynamic alarm. "Leave by 6:12 AM" | Nobody | No sleep app knows where you work |
 | 6 | **Dynamic Rescheduling** | Calendar change → sleep plan auto-updates → user notified why | Nobody | Every competitor's plans are static |
 | 7 | **Paywall on Calendar Export** | Free tier shows the plan; premium exports it to your calendar | Nobody | Novel monetization trigger |
+| 29 | **🏆 Circadian Reset (3-Phase Automated System)** | Pre-Adapt → Sleep Bank → Reset Protocol. App knows your schedule → gradually shifts circadian rhythm before night shifts (no whiplash) → banks extra sleep before a stretch → auto-triggers a personalized recovery protocol when the stretch ends | **NOBODY. Not even close.** | Timeshifter does manual jet lag plans. Rise doesn't know your schedule. Arcashift has "digital twin" but no predictive adaptation. ShiftWell is the ONLY app that anticipates schedule changes and automates the full cycle: prepare → endure → recover. This is the flagship feature. |
 
 ### Tier 2 — Intelligence Layer (v1.1)
 
@@ -52,10 +53,10 @@ These are the features and ideas that set this product in its own league. **Nobo
 | 21 | **Seasonal/Latitude Light Adjustments** | Algorithm factors in sunrise/sunset at user's location | Future |
 | 22 | **Travel/Timezone Detection** | Calendar shows different timezone → pre-adjust sleep plan | Future |
 | 23 | **Apple Watch** | Haptic wind-down tap, complications, sleep tracking | Future |
-| 24 | **Transition Coach** | Advanced night↔day switching protocols | Future |
+| 24 | **Transition Coach** | ~~Standalone~~ → Merged into Circadian Reset (#29) | MERGED |
 | 25 | **AI Sleep Coach** | Conversational AI beyond weekly check-in | Future |
 | 26 | **B2B Team Dashboards** | Fatigue risk scoring for departments/units | Future |
-| 27 | **"Bad Night" Recovery Protocol** | Detects deviation → recalculates: nap window, caffeine extension, early bedtime | Future |
+| 27 | **"Bad Night" Recovery Protocol** | ~~Standalone~~ → Feeds into Circadian Reset Phase 3 (#29) | MERGED |
 | 28 | **Shift Pattern Auto-Detection** | Recognizes rotation pattern → pre-plans weeks ahead without manual input | Future |
 
 ---

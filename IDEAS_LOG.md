@@ -48,6 +48,11 @@
 | 36 | Meal timing calendar events | Joint | v1.0 | IDEA | Export meal blocks to calendar? Or just notifications? |
 | 37 | Quick tips at bedtime (water, phone across room, temp) | Sim | v1.0 | APPROVED | Contextual, rotating, evidence-based |
 | 38 | Calendar event as micro-marketing (event description includes app link) | Claude | v1.0 | IDEA | Every exported sleep block is subtle marketing |
+| 51 | **CIRCADIAN RESET — branded flagship feature** | Sim | v1.0-v2.0 | **FLAGSHIP** | See detailed write-up below. No competitor offers this. Three-phase automated system: (1) Pre-Adapt — gradually shift sleep timing ahead of schedule changes, (2) Sleep Bank — extra hour/night leading up to a stretch, (3) Reset Protocol — post-stretch recovery plan. This is the "killer feature" — the thing no one else does. |
+| 52 | Pre-Adapt phase: gradual circadian shift before night schedule | Sim | v1.0 | FLAGSHIP | App knows schedule → shifts sleep windows incrementally → no whiplash/boomerang → smooth transition to later schedule |
+| 53 | Sleep Bank phase: science-backed pre-stretch sleep banking | Sim | v1.0 | FLAGSHIP | Extra hour/night in the days before a work stretch. Research-backed (Rupp et al. 2009, Arnal et al. 2015). Automated — app calculates and extends sleep windows. |
+| 54 | Reset Protocol: post-stretch circadian recovery plan | Sim | v1.0-v2.0 | FLAGSHIP | Auto-triggers (or manual) after finishing a stretch. AI generates personalized recovery: sleep immediately but not past calculated cutoff, morning routine to trick the brain, 20min sunlight, good meal, recovery-only activities (yoga/stretch/bath), hard no on work/admin/chores, calculated early wind-down to land back on normal schedule. |
+| 55 | Reset Protocol naming candidates | Sim | — | IDEA | Needs a branded name. Candidates: "CircaReset", "ShiftWell Reset", "Recovery Mode", "Return to Base", "Rhythm Reset", "Soft Landing" — pick one that's marketable and trademarkable |
 
 ## Business / Marketing Ideas
 
