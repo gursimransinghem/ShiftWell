@@ -131,7 +131,14 @@ Plans:
   3. Pricing is clearly presented ($6.99/mo, $49.99/yr, $149.99 lifetime) with easy cancellation
   4. User can share a referral link from Settings — "Spread the Sleep" is findable without hunting
   5. User can edit their profile, AM/PM routines, and preferences post-onboarding without starting over
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Trial state in premium-store + entitlement gating (PREM-01/02/03/04)
+- [ ] 06-02-PLAN.md — Paywall redesign + downgrade screen (PREM-05/06)
+- [ ] 06-03-PLAN.md — Referral + profile editing + Sleep Focus in Settings (SET-01/02/03)
+- [ ] 06-04-PLAN.md — TypeScript polish + downgrade redirect + trial countdown badge
+
 **UI hint**: yes
 
 ## Progress
@@ -146,4 +153,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
 | 4. Night Sky Mode & Notifications | 4/4 | Complete   | 2026-04-02 |
 | 5. Live Activities & Recovery Score | 2/3 | In Progress|  |
-| 6. Premium, Settings & Polish | 0/TBD | Not started | - |
+| 6. Premium, Settings & Polish | 0/4 | Not started | - |
