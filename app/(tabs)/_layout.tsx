@@ -5,6 +5,7 @@ import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { COLORS } from '@/src/theme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -15,14 +16,14 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
         tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
         tabBarStyle: {
-          backgroundColor: '#0A0E1A',
-          borderTopColor: '#1F2937',
+          backgroundColor: COLORS.background.primary,
+          borderTopColor: COLORS.border.default,
         },
         headerShown: useClientOnlyValue(false, true),
         headerStyle: {
-          backgroundColor: '#0A0E1A',
+          backgroundColor: COLORS.background.primary,
         },
-        headerTintColor: '#FFFFFF',
+        headerTintColor: COLORS.text.primary,
       }}>
       <Tabs.Screen
         name="index"

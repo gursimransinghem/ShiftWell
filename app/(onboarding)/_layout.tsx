@@ -15,6 +15,9 @@ export default function OnboardingLayout() {
       <Stack.Screen name="chronotype" />
       <Stack.Screen name="household" />
       <Stack.Screen name="preferences" />
+      <Stack.Screen name="am-routine" />
+      <Stack.Screen name="pm-routine" />
+      <Stack.Screen name="addresses" />
       <Stack.Screen name="healthkit" />
     </Stack>
   );

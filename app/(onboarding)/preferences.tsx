@@ -88,7 +88,7 @@ export default function PreferencesScreen() {
                 false: COLORS.background.elevated,
                 true: COLORS.accent.primary,
               }}
-              thumbColor="#FFFFFF"
+              thumbColor={COLORS.text.primary}
             />
           </View>
         </Card>

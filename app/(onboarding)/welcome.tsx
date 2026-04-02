@@ -5,11 +5,12 @@ import Button from '@/src/components/ui/Button';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 
 const VALUE_POINTS = [
-  { icon: '\u{1F4C5}', text: 'Import your shift schedule' },
-  { icon: '\u{1F4A4}', text: 'Get personalized sleep plans' },
-  { icon: '\u{1F4E4}', text: 'Export to your calendar' },
+  { icon: '\u{1F4A4}', text: 'Sleep on autopilot — set it and forget it' },
+  { icon: '\u{1F4C5}', text: 'Syncs with your shift schedule automatically' },
+  { icon: '\u2728',  text: 'Science-backed plans that adapt to your life' },
 ] as const;
 
 export default function WelcomeScreen() {
@@ -20,14 +21,14 @@ export default function WelcomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={1} totalSteps={5} />
+          <ProgressBar currentStep={ONBOARDING_STEPS.welcome} totalSteps={ONBOARDING_TOTAL_STEPS} />
         </View>
 
         <AnimatedTransition delay={0} duration={300}>
           <View style={styles.hero}>
             <Text style={styles.appName}>ShiftWell</Text>
             <Text style={styles.tagline}>
-              Science-backed sleep optimization for shift workers
+              Sleep on autopilot for everyone who works against the clock
             </Text>
           </View>
         </AnimatedTransition>

@@ -14,6 +14,7 @@ import Card from '@/src/components/ui/Card';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
+import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 
 const MIN_HOUSEHOLD = 1;
 const MAX_HOUSEHOLD = 8;
@@ -45,7 +46,7 @@ export default function HouseholdScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={3} totalSteps={5} />
+          <ProgressBar currentStep={ONBOARDING_STEPS.household} totalSteps={ONBOARDING_TOTAL_STEPS} />
         </View>
 
         <Text style={styles.title}>Tell us about your household</Text>
@@ -121,7 +122,7 @@ export default function HouseholdScreen() {
                 false: COLORS.background.elevated,
                 true: COLORS.accent.primary,
               }}
-              thumbColor="#FFFFFF"
+              thumbColor={COLORS.text.primary}
             />
           </View>
         </Card>
@@ -144,7 +145,7 @@ export default function HouseholdScreen() {
                 false: COLORS.background.elevated,
                 true: COLORS.accent.primary,
               }}
-              thumbColor="#FFFFFF"
+              thumbColor={COLORS.text.primary}
             />
           </View>
         </Card>
