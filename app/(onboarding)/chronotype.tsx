@@ -8,6 +8,7 @@ import ProgressBar from '@/src/components/ui/ProgressBar';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
 import type { Chronotype } from '@/src/lib/circadian/types';
+import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 
 interface Question {
   id: number;
@@ -223,7 +224,7 @@ export default function ChronotypeScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <ProgressBar currentStep={2} totalSteps={5} />
+            <ProgressBar currentStep={ONBOARDING_STEPS.chronotype} totalSteps={ONBOARDING_TOTAL_STEPS} />
           </View>
 
           <Animated.View style={[styles.resultContainer, { opacity: resultOpacity }]}>

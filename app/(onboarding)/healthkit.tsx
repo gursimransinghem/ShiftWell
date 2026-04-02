@@ -7,6 +7,7 @@ import Card from '@/src/components/ui/Card';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
+import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 import {
   isAvailable,
   requestAuthorization,
@@ -90,7 +91,7 @@ export default function HealthKitScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <ProgressBar currentStep={5} totalSteps={5} />
+          <ProgressBar currentStep={ONBOARDING_STEPS.healthkit} totalSteps={ONBOARDING_TOTAL_STEPS} />
         </View>
 
         <View style={styles.titleRow}>
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     ...TYPOGRAPHY.bodySmall,
-    color: '#EF4444',
+    color: COLORS.semantic.error,
     lineHeight: 20,
   },
   successContainer: {
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
   },
   successText: {
     ...TYPOGRAPHY.body,
-    color: '#22C55E',
+    color: COLORS.semantic.success,
     fontWeight: '600',
     textAlign: 'center',
   },
