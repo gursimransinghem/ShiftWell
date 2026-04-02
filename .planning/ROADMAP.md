@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Foundation & Onboarding** - Design system refresh + complete routine builder onboarding
 - [ ] **Phase 2: Calendar Sync** - Apple + Google read/write with auto-detection and dynamic updates
 - [x] **Phase 3: Sleep Plan Generation** - Algorithm-to-calendar pipeline with dynamic rescheduling (completed 2026-04-02)
-- [ ] **Phase 4: Night Sky Mode & Notifications** - Bedtime UI + warm push notification cadence
+- [x] **Phase 4: Night Sky Mode & Notifications** - Bedtime UI + warm push notification cadence (completed 2026-04-02)
 - [ ] **Phase 5: Live Activities & Recovery Score** - Dynamic Island pipeline + plan adherence score
 - [ ] **Phase 6: Premium, Settings & Polish** - Trial flow, free tier, referral, and final quality pass
 
@@ -98,7 +98,7 @@ Plans:
 - [x] 04-01-PLAN.md — Jest mocks + notification-store Zustand slice
 - [x] 04-02-PLAN.md — Notification service upgrade (warm copy, morning brief, SDK 55 handler)
 - [x] 04-03-PLAN.md — Night Sky components (StarParticles, RechargeArc, BedtimeTipCycler, NightSkyOverlay)
-- [ ] 04-04-PLAN.md — useNightSkyMode hook + Today screen wiring + Settings notification preferences
+- [x] 04-04-PLAN.md — useNightSkyMode hook + Today screen wiring + Settings notification preferences
 
 **UI hint**: yes
 
@@ -138,6 +138,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Foundation & Onboarding | 3/4 | In Progress|  |
 | 2. Calendar Sync | 0/4 | Planned | - |
 | 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
-| 4. Night Sky Mode & Notifications | 3/4 | In Progress|  |
+| 4. Night Sky Mode & Notifications | 4/4 | Complete   | 2026-04-02 |
 | 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |

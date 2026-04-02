@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
-status: executing
-stopped_at: Completed 04-night-sky-mode-notifications 04-03-PLAN.md
-last_updated: "2026-04-02T13:44:03.209Z"
+status: verifying
+stopped_at: Completed 04-night-sky-mode-notifications 04-04-PLAN.md
+last_updated: "2026-04-02T13:49:41.602Z"
 last_activity: 2026-04-02
 progress:
   total_phases: 6
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 15
-  completed_plans: 14
+  completed_plans: 15
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-02)
 
 Phase: 04 (night-sky-mode-notifications) — EXECUTING
 Plan: 4 of 4
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-02
 
 Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
 | Phase 04-night-sky-mode-notifications P02 | 9min | 2 tasks | 5 files |
 | Phase 04-night-sky-mode-notifications P01 | 18min | 2 tasks | 7 files |
 | Phase 04-night-sky-mode-notifications P03 | 3min | 2 tasks | 5 files |
+| Phase 04-night-sky-mode-notifications P04 | 12min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 04-01]: react-native-svg mock uses plain HTML elements not View — avoids node test environment import errors
 - [Phase 04-01]: notification-store exports NotificationPrefs interface with partialize excluding setters from AsyncStorage
 - [Phase 04]: useEffect from react (not react-native-reanimated) — reanimated v4.2.1 does not export useEffect as named export
+- [Phase 04]: useNightSkyMode reads plan/notification/user stores with no new setInterval — piggybacks on 60s tick
+- [Phase 04]: Priority=1 + hour window [18-12) guard in useNightSkyMode prevents nap false-positives (Pitfall 4)
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T13:44:03.206Z
-Stopped at: Completed 04-night-sky-mode-notifications 04-03-PLAN.md
+Last session: 2026-04-02T13:49:41.598Z
+Stopped at: Completed 04-night-sky-mode-notifications 04-04-PLAN.md
 Resume file: None

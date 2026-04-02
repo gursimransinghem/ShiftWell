@@ -36,7 +36,7 @@ Requirements for TestFlight release. Each maps to roadmap phases.
 
 ### Night Sky Mode
 
-- [ ] **NSM-01**: App transitions to dark night-sky theme as bedtime approaches
+- [x] **NSM-01**: App transitions to dark night-sky theme as bedtime approaches
 - [x] **NSM-02**: Night Sky Mode shows only critical info: alarm confirmation, latest wake time, morning schedule
 - [x] **NSM-03**: Recharge animation shows projected sleep quality (adjusts if user is up past bedtime)
 - [x] **NSM-04**: Quick bedtime tips cycle (water, phone placement, room temp based on weather)
@@ -155,7 +155,7 @@ _Updated 2026-04-02 after roadmap creation._
 | PLAN-04 | Phase 3 | Complete |
 | PLAN-05 | Phase 3 | Complete |
 | PLAN-06 | Phase 3 | Complete |
-| NSM-01 | Phase 4 | Pending |
+| NSM-01 | Phase 4 | Complete |
 | NSM-02 | Phase 4 | Complete |
 | NSM-03 | Phase 4 | Complete |
 | NSM-04 | Phase 4 | Complete |
