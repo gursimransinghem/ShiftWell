@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: Foundation & Onboarding** - Design system refresh + complete routine builder onboarding
 - [ ] **Phase 2: Calendar Sync** - Apple + Google read/write with auto-detection and dynamic updates
-- [ ] **Phase 3: Sleep Plan Generation** - Algorithm-to-calendar pipeline with dynamic rescheduling
+- [x] **Phase 3: Sleep Plan Generation** - Algorithm-to-calendar pipeline with dynamic rescheduling (completed 2026-04-02)
 - [ ] **Phase 4: Night Sky Mode & Notifications** - Bedtime UI + warm push notification cadence
 - [ ] **Phase 5: Live Activities & Recovery Score** - Dynamic Island pipeline + plan adherence score
 - [ ] **Phase 6: Premium, Settings & Polish** - Trial flow, free tier, referral, and final quality pass
@@ -80,7 +80,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Test scaffold + plan-store calendar write-back + Circadian Reset subscription + debounce
 - [x] 03-02-PLAN.md — SchedulePreview component + Today screen WHAT'S AHEAD section
-- [ ] 03-03-PLAN.md — Final validation + visual checkpoint (autonomous: false)
+- [x] 03-03-PLAN.md — Final validation + visual checkpoint (autonomous: false)
 
 ### Phase 4: Night Sky Mode & Notifications
 **Goal**: The app guides users into sleep with a calming bedtime experience and delivers warm, timely push notifications throughout the day
@@ -130,7 +130,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Foundation & Onboarding | 3/4 | In Progress|  |
 | 2. Calendar Sync | 0/4 | Planned | - |
-| 3. Sleep Plan Generation | 0/3 | Planned | - |
+| 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
 | 4. Night Sky Mode & Notifications | 0/TBD | Not started | - |
 | 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
 | 6. Premium, Settings & Polish | 0/TBD | Not started | - |
