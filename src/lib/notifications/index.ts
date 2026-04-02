@@ -4,6 +4,7 @@ export {
   scheduleCaffeineCutoff,
   scheduleWakeReminder,
   schedulePlanNotifications,
+  scheduleMorningBrief,
   cancelAllNotifications,
   getScheduledNotifications,
 } from './notification-service';

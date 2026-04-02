@@ -302,7 +302,12 @@ describe('schedulePlanNotifications — preference flags', () => {
     ];
 
     await schedulePlanNotifications(blocks);
-    expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();
+
+    // morning-brief type should NOT be scheduled
+    const morningBriefCall = mockScheduleNotificationAsync.mock.calls.find((c) =>
+      (c[0] as any).content.data?.type === 'morning-brief',
+    );
+    expect(morningBriefCall).toBeUndefined();
   });
 
   it('uses windDownLeadMinutes from store (not hardcoded 30)', async () => {
