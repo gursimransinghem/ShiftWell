@@ -55,7 +55,14 @@ Plans:
   3. App correctly identifies shift events from calendar noise without user tagging each one
   4. After plan generation, sleep blocks appear in the user's calendar as real events (not just in-app)
   5. When the user adds or changes a shift in their calendar, sleep blocks update automatically
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Dependencies, types, calendar store, Apple CalendarService, shift confidence scoring, Jest mocks
+- [ ] 02-02-PLAN.md — Google Calendar REST API client, background sync task, AppState sync wiring
+- [ ] 02-03-PLAN.md — Onboarding calendar screen, provider cards, calendar toggles, shift review UI
+- [ ] 02-04-PLAN.md — Settings calendar management section with write/notification preferences
+
 **UI hint**: yes
 
 ### Phase 3: Sleep Plan Generation
@@ -117,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Onboarding | 3/4 | In Progress|  |
-| 2. Calendar Sync | 0/TBD | Not started | - |
+| 2. Calendar Sync | 0/4 | Planned | - |
 | 3. Sleep Plan Generation | 0/TBD | Not started | - |
 | 4. Night Sky Mode & Notifications | 0/TBD | Not started | - |
 | 5. Live Activities & Recovery Score | 0/TBD | Not started | - |
