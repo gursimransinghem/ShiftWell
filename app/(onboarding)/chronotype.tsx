@@ -266,7 +266,7 @@ export default function ChronotypeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={2} totalSteps={5} />
+          <ProgressBar currentStep={ONBOARDING_STEPS.chronotype} totalSteps={ONBOARDING_TOTAL_STEPS} />
         </View>
 
         <Animated.View
