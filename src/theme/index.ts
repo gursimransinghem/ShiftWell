@@ -27,6 +27,14 @@ export {
   bodySmall,
   caption,
   label,
+  heroNumber,
+  screenHeading,
+  countdownValue,
+  cardTitle,
+  meta,
+  sectionLabel,
+  timestamp,
+  captionSmall,
 } from './typography';
 
 export {
@@ -34,4 +42,6 @@ export {
   SPACING,
   RADIUS,
   MIN_TOUCH_TARGET,
+  V6_LAYOUT,
+  V6_RADIUS,
 } from './spacing';

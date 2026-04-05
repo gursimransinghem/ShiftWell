@@ -22,6 +22,9 @@ const SYSTEM_FONT = Platform.select({
 // ---------------------------------------------------------------------------
 
 export const FONT_SIZE = {
+  '2xs': 8,
+  '3xs': 9,
+  xxs: 10,
   xs: 11,
   sm: 13,
   base: 15,
@@ -101,6 +104,55 @@ export const label: TextStyle = {
   fontWeight: FONT_WEIGHT.medium,
   lineHeight: lh(FONT_SIZE.sm),
   letterSpacing: 0.3,
+};
+
+// ---------------------------------------------------------------------------
+// V6 text styles
+// ---------------------------------------------------------------------------
+
+export const heroNumber: TextStyle = {
+  fontSize: 36,
+  fontWeight: '700',
+};
+
+export const screenHeading: TextStyle = {
+  fontSize: 28,
+  fontWeight: '700',
+  letterSpacing: -0.5,
+};
+
+export const countdownValue: TextStyle = {
+  fontSize: 22,
+  fontWeight: '700',
+  letterSpacing: -0.5,
+};
+
+export const cardTitle: TextStyle = {
+  fontSize: 14,
+  fontWeight: '600',
+};
+
+export const meta: TextStyle = {
+  fontSize: 11,
+  fontWeight: '500',
+};
+
+export const sectionLabel: TextStyle = {
+  fontSize: 10,
+  fontWeight: '600',
+  letterSpacing: 1,
+  textTransform: 'uppercase' as const,
+};
+
+export const timestamp: TextStyle = {
+  fontSize: 9,
+  fontWeight: '500',
+  letterSpacing: -0.3,
+};
+
+export const captionSmall: TextStyle = {
+  fontSize: 8,
+  fontWeight: '500',
 };
 
 // ---------------------------------------------------------------------------

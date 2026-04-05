@@ -11,9 +11,9 @@
 
 export const BACKGROUND = {
   /** App-level background — very dark navy */
-  primary: '#0A0E1A',
+  primary: '#0B0D16',
   /** Cards, sheets, modals */
-  surface: '#141929',
+  surface: '#151A2A',
   /** Elevated surfaces (e.g. floating action buttons) */
   elevated: '#1C2137',
 } as const;
@@ -25,6 +25,12 @@ export const TEXT = {
   /** For text rendered on accent-colored backgrounds */
   onAccent: '#FFFFFF',
   inverse: '#0A0E1A',
+  /** V6 spec's text.secondary — brighter than current secondary */
+  secondaryBright: '#D1D5DB',
+  /** Alias for tertiary */
+  muted: '#6B7280',
+  /** For section headers and collapsed items */
+  dim: '#4B5563',
 } as const;
 
 export const BORDER = {

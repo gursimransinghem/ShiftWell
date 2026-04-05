@@ -40,6 +40,29 @@ export const RADIUS = {
 export const MIN_TOUCH_TARGET = 44;
 
 // ---------------------------------------------------------------------------
+// V6 layout constants
+// ---------------------------------------------------------------------------
+
+export const V6_LAYOUT = {
+  headerToStatus: 16,
+  statusToHero: 20,
+  heroToCountdown: 16,
+  countdownToTimeline: 16,
+  timelineEventGap: 4,
+  screenToTab: 12,
+  timeColumn: 32,
+  spineColumn: 18,
+  accentBar: 3.5,
+} as const;
+
+export const V6_RADIUS = {
+  pill: 14,
+  countdown: 18,
+  tabBar: 22,
+  timelineCard: 12,
+} as const;
+
+// ---------------------------------------------------------------------------
 // Convenience collection
 // ---------------------------------------------------------------------------
 
