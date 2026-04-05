@@ -1,13 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   ActivityIndicator,
-  Animated,
   Pressable,
   StyleSheet,
   Text,
   type ViewStyle,
   type TextStyle,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import { COLORS, ACCENT } from '@/src/theme';
 
 interface ButtonProps {
@@ -40,25 +44,21 @@ export default function Button({
   const sizeConfig = SIZE_CONFIG[size];
   const isDisabled = disabled || loading;
 
-  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const scale = useSharedValue(1);
 
   const handlePressIn = () => {
     if (isDisabled) return;
-    Animated.timing(scaleAnim, {
-      toValue: 0.97,
-      duration: 80,
-      useNativeDriver: true,
-    }).start();
+    scale.value = withSpring(0.97, { damping: 20, stiffness: 400 });
   };
 
   const handlePressOut = () => {
     if (isDisabled) return;
-    Animated.timing(scaleAnim, {
-      toValue: 1,
-      duration: 120,
-      useNativeDriver: true,
-    }).start();
+    scale.value = withSpring(1, { damping: 20, stiffness: 400 });
   };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   const containerStyle: ViewStyle[] = [
     styles.base,
@@ -102,7 +102,7 @@ export default function Button({
   const indicatorColor = variant === 'primary' ? COLORS.text.primary : ACCENT.primary;
 
   return (
-    <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+    <Animated.View style={animatedStyle}>
       <Pressable
         onPress={onPress}
         onPressIn={handlePressIn}

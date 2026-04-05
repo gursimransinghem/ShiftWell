@@ -1,5 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { format, differenceInMinutes } from 'date-fns';
 import type { PlanBlock, SleepBlockType } from '@/src/lib/circadian/types';
 import Card from '@/src/components/ui/Card';
@@ -9,6 +16,11 @@ import {
   SPACING,
   RADIUS,
   TYPOGRAPHY,
+  V6_LAYOUT,
+  V6_RADIUS,
+  timestamp,
+  cardTitle,
+  meta,
 } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -97,63 +109,67 @@ export default function TimelineEvent({
   const color = blockColor(block.type);
   const note = contextualNote(block.type);
 
-  // Pulsing border opacity for active event
-  const borderGlow = useRef(new Animated.Value(1)).current;
-  // Breathing dot opacity for next event
-  const dotBreathing = useRef(new Animated.Value(1)).current;
+  // Pulsing border opacity for active event (reanimated)
+  const borderGlow = useSharedValue(1);
+  // Breathing dot opacity for next event (reanimated)
+  const dotBreathing = useSharedValue(1);
 
   useEffect(() => {
     if (!isActive) return;
-    const pulse = Animated.loop(
-      Animated.sequence([
-        Animated.timing(borderGlow, {
-          toValue: 0.5,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(borderGlow, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ]),
+    borderGlow.value = withRepeat(
+      withSequence(
+        withTiming(0.5, { duration: 1500 }),
+        withTiming(1, { duration: 1500 }),
+      ),
+      -1,
+      false,
     );
-    pulse.start();
-    return () => pulse.stop();
+    return () => {
+      borderGlow.value = 1;
+    };
   }, [isActive, borderGlow]);
 
   useEffect(() => {
     if (!isNext) return;
-    const breathing = Animated.loop(
-      Animated.sequence([
-        Animated.timing(dotBreathing, {
-          toValue: 0.4,
-          duration: 1200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(dotBreathing, {
-          toValue: 1,
-          duration: 1200,
-          useNativeDriver: true,
-        }),
-      ]),
+    dotBreathing.value = withRepeat(
+      withSequence(
+        withTiming(0.4, { duration: 1200 }),
+        withTiming(1, { duration: 1200 }),
+      ),
+      -1,
+      false,
     );
-    breathing.start();
-    return () => breathing.stop();
+    return () => {
+      dotBreathing.value = 1;
+    };
   }, [isNext, dotBreathing]);
 
-  const containerOpacity: ViewStyle = isPast && !isActive ? { opacity: 0.45 } : {};
-  const cardBorder: ViewStyle = isActive
-    ? { borderColor: color, borderWidth: 1.5 }
-    : isNext
-      ? { borderColor: color, borderWidth: 1, opacity: 1 }
-      : {};
+  const animatedBorderStyle = useAnimatedStyle(() => ({
+    opacity: borderGlow.value,
+  }));
+
+  const animatedDotStyle = useAnimatedStyle(() => ({
+    opacity: dotBreathing.value,
+  }));
+
+  const containerOpacity: ViewStyle = isPast && !isActive ? { opacity: 0.35 } : {};
+  const cardBorderActive: ViewStyle = isActive
+    ? { borderColor: `${color}4D`, borderWidth: 1 } // rgba(color, 0.3)
+    : {};
+  const cardBorderNext: ViewStyle = isNext
+    ? { borderColor: `${color}40`, borderWidth: 1 } // rgba(color, 0.25)
+    : {};
+  const cardBgActive: ViewStyle = isActive
+    ? { backgroundColor: `${color}12` } // rgba(color, 0.07) approx
+    : {};
+
+  const dotSize = isActive ? DOT_ACTIVE_SIZE : DOT_SIZE;
 
   return (
     <View style={[styles.row, containerOpacity]}>
       {/* Left — time label */}
       <View style={styles.timeColumn}>
-        <Text style={styles.timeText}>{format(block.start, 'HH:mm')}</Text>
+        <Text style={styles.timeText}>{format(block.start, 'h:mma')}</Text>
       </View>
 
       {/* Center — timeline spine */}
@@ -163,16 +179,16 @@ export default function TimelineEvent({
           <Animated.View
             style={[
               styles.dot,
-              { backgroundColor: color },
+              { backgroundColor: color, width: dotSize, height: dotSize, borderRadius: dotSize / 2 },
               styles.dotNext,
-              { opacity: dotBreathing },
+              animatedDotStyle,
             ]}
           />
         ) : (
           <View
             style={[
               styles.dot,
-              { backgroundColor: color },
+              { backgroundColor: color, width: dotSize, height: dotSize, borderRadius: dotSize / 2 },
               isActive && styles.dotActive,
             ]}
           />
@@ -183,17 +199,14 @@ export default function TimelineEvent({
       {/* Right — content card */}
       <View style={styles.cardWrapper}>
         {isActive ? (
-          <Animated.View style={{ opacity: borderGlow }}>
-            <Card style={{ ...styles.card, ...cardBorder }}>
+          <Animated.View style={animatedBorderStyle}>
+            <Card style={[styles.card, cardBorderActive, cardBgActive]}>
               {/* Color accent bar */}
               <View style={[styles.accentBar, { backgroundColor: color }]} />
 
               <View style={styles.cardContent}>
                 <View style={styles.headerRow}>
-                  <Text
-                    style={[styles.blockLabel, { color }]}
-                    numberOfLines={1}
-                  >
+                  <Text style={[styles.blockLabel, { color }]} numberOfLines={1}>
                     {block.label}
                   </Text>
                   <View style={[styles.badge, { backgroundColor: color }]}>
@@ -215,16 +228,13 @@ export default function TimelineEvent({
             </Card>
           </Animated.View>
         ) : (
-          <Card style={{ ...styles.card, ...cardBorder }}>
+          <Card style={[styles.card, cardBorderNext]}>
             {/* Color accent bar */}
             <View style={[styles.accentBar, { backgroundColor: color }]} />
 
             <View style={styles.cardContent}>
               <View style={styles.headerRow}>
-                <Text
-                  style={[styles.blockLabel]}
-                  numberOfLines={1}
-                >
+                <Text style={styles.blockLabel} numberOfLines={1}>
                   {block.label}
                 </Text>
                 {isNext && (
@@ -256,33 +266,33 @@ export default function TimelineEvent({
 // Styles
 // ---------------------------------------------------------------------------
 
-const DOT_SIZE = 12;
-const DOT_ACTIVE_SIZE = 16;
-const SPINE_WIDTH = 2;
+const DOT_SIZE = 10;
+const DOT_ACTIVE_SIZE = 12;
+const SPINE_WIDTH = 1.5;
 
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: SPACING.xs,
+    marginBottom: V6_LAYOUT.timelineEventGap,
   },
 
   /* Time column */
   timeColumn: {
-    width: 48,
+    width: V6_LAYOUT.timeColumn,
     alignItems: 'flex-end',
-    paddingTop: SPACING.lg,
-    paddingRight: SPACING.sm,
+    paddingTop: 11,
+    paddingRight: 4,
   },
   timeText: {
-    ...TYPOGRAPHY.label,
-    color: COLORS.text.secondary,
-    fontSize: TYPOGRAPHY.fontSize.sm,
+    ...timestamp,
+    color: COLORS.text.muted,
+    fontVariant: ['tabular-nums'],
   },
 
   /* Spine */
   spine: {
-    width: 24,
+    width: V6_LAYOUT.spineColumn,
     alignItems: 'center',
   },
   lineTop: {
@@ -302,9 +312,6 @@ const styles = StyleSheet.create({
     borderRadius: DOT_SIZE / 2,
   },
   dotActive: {
-    width: DOT_ACTIVE_SIZE,
-    height: DOT_ACTIVE_SIZE,
-    borderRadius: DOT_ACTIVE_SIZE / 2,
     shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
@@ -328,15 +335,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     overflow: 'hidden',
     padding: 0,
+    borderRadius: V6_RADIUS.timelineCard,
+    marginBottom: 0,
   },
   accentBar: {
-    width: 4,
-    borderTopLeftRadius: RADIUS.md,
-    borderBottomLeftRadius: RADIUS.md,
+    width: V6_LAYOUT.accentBar,
+    borderTopLeftRadius: V6_RADIUS.timelineCard,
+    borderBottomLeftRadius: V6_RADIUS.timelineCard,
   },
   cardContent: {
     flex: 1,
-    padding: SPACING.md,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
 
   /* Header */
@@ -347,8 +357,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xs,
   },
   blockLabel: {
-    ...TYPOGRAPHY.body,
-    fontWeight: TYPOGRAPHY.fontWeight.semibold,
+    fontSize: 15,
+    fontWeight: '600',
     color: COLORS.text.primary,
     flex: 1,
   },
@@ -372,12 +382,12 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xs,
   },
   timeRange: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
+    ...meta,
+    color: COLORS.text.muted,
   },
   duration: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.tertiary,
+    ...meta,
+    color: COLORS.text.muted,
   },
 
   /* Note */
