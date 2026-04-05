@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — All Versions Full Size</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B0D16; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; padding: 24px 12px; }
+  h1 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+  .ps { color: #9CA3AF; font-size: 13px; text-align: center; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
+  .grid-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px; margin: 24px auto 0; }
+  .ver-label { text-align: center; margin-bottom: 8px; }
+  .ver-label .tag { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 6px; letter-spacing: 0.5px; }
+
+  /* Common phone frame */
+  .p { border-radius: 40px; border: 2px solid #1F2937; padding: 44px 14px 26px; min-height: 660px; position: relative; overflow: hidden; font-size: 10px; }
+  .p.final { border-color: #C8A84B; }
+  .pl { position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:8px;color:#374151;font-weight:600;letter-spacing:1px;text-transform:uppercase; }
+  .bar { display:flex;justify-content:space-between;padding:0 4px 6px;font-size:9px;color:#6B7280;font-weight:600; }
+  .lbl { font-size:8px;color:#4B5563;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px; }
+
+  /* Tab bars */
+  .tab-old { display:flex;justify-content:space-around;padding:5px 0;border-top:1px solid #1F2937;position:absolute;bottom:8px;left:12px;right:12px;font-size:7px;color:#6B7280; }
+  .tab-old .on { color:#C8A84B; }
+  .tab-new { display:flex;justify-content:space-around;padding:5px 0;position:absolute;bottom:8px;left:12px;right:12px;background:rgba(11,13,22,0.9);backdrop-filter:blur(10px);border-radius:14px;border:1px solid rgba(255,255,255,0.04);font-size:7px;color:#4B5563; }
+  .tab-new .on { color:#D1D5DB; }
+
+  /* Screen descriptions */
+  .sdesc { text-align: center; margin-top: 8px; }
+  .sdesc h4 { font-size: 12px; font-weight: 700; }
+  .sdesc p { font-size: 10px; color: #6B7280; margin-top: 2px; line-height: 1.4; }
+
+  /* Shared small components */
+  .s-pill { padding:4px 6px;border-radius:6px;font-size:7px;margin-bottom:5px;display:inline-flex;align-items:center;gap:4px; }
+  .s-score { display:flex;align-items:center;gap:6px;padding:6px;border-radius:8px;margin-bottom:5px; }
+  .s-ring { width:28px;height:28px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0; }
+  .s-big-ring { width:56px;height:56px;border-radius:50%;border:2.5px solid;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;margin:8px auto; }
+  .s-counts { display:flex;gap:0;border-radius:8px;overflow:hidden;margin-bottom:5px; }
+  .s-ct { flex:1;padding:5px 3px;text-align:center; }
+  .s-ct .v { font-size:12px;font-weight:700;font-variant-numeric:tabular-nums; }
+  .s-ct .l { font-size:7px;color:#6B7280;margin-top:1px; }
+  .s-ins { padding:4px 6px;border-radius:5px;margin-bottom:5px;display:flex;gap:3px;font-size:8px;line-height:1.3; }
+
+  /* Timeline variants */
+  .tl-row { display:flex;gap:0;margin-bottom:0; }
+  .tl-tm { text-align:right;padding-top:7px;font-size:8px;color:#6B7280;font-weight:500;flex-shrink:0;font-variant-numeric:tabular-nums; }
+  .tl-sp { display:flex;flex-direction:column;align-items:center;flex-shrink:0; }
+  .tl-ln { width:1px;background:#1F2937;flex:1;min-height:3px; }
+  .tl-dt { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
+  .tl-dt.gl { box-shadow:0 0 5px currentColor; }
+  .tl-cd { flex:1;display:flex;overflow:hidden;margin-bottom:3px;border-radius:6px; }
+  .tl-br { width:2px;flex-shrink:0; }
+  .tl-cn { padding:5px 6px;flex:1;display:flex;justify-content:space-between;align-items:center; }
+  .tl-cn .nm { font-size:10px;font-weight:600; }
+  .tl-cn .mt { font-size:8px;color:#6B7280;margin-top:1px; }
+  .tl-cn .cd { font-size:10px;font-weight:700;flex-shrink:0;margin-left:4px; }
+
+  /* Horizontal scroll cards (V1) */
+  .scroll-cards { display:flex;gap:3px;margin-bottom:5px;overflow:hidden; }
+  .scroll-card { min-width:70px;border-radius:6px;padding:4px;text-align:center;flex-shrink:0; }
+  .scroll-card .em { font-size:10px; }
+  .scroll-card .vv { font-size:11px;font-weight:700; }
+  .scroll-card .ll { font-size:6px;color:#9CA3AF; }
+
+  /* Bento cards (V3) */
+  .bento { display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px; }
+  .bento-card { border-radius:8px;padding:5px;position:relative; }
+  .bento-card .ic { position:absolute;top:4px;right:4px;font-size:8px;opacity:.4; }
+  .bento-card .cl { font-size:6px;color:#6B7280;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:3px; }
+  .bento-card .vl { font-size:14px;font-weight:700;letter-spacing:-.5px; }
+  .bento-card .sb { font-size:7px;color:#9CA3AF;margin-top:1px; }
+
+  /* Collapsed past */
+  .tl-collapsed { display:flex;align-items:center;gap:3px;padding:3px 0;font-size:8px;color:#4B5563;margin-bottom:1px; }
+  .tl-collapsed .dd { width:4px;height:4px;border-radius:50%;opacity:.4; }
+</style>
+</head>
+<body>
+
+<h1>All 5 Versions &mdash; Full Size</h1>
+<p class="ps">The complete evolution of ShiftWell's Today screen. Scroll right if needed.</p>
+
+<div class="grid">
+
+<!-- ===== V1: ORIGINAL (AS-BUILT) ===== -->
+<div>
+  <div class="ver-label"><span class="tag" style="background:#1F2937;color:#9CA3AF;">V1 Original</span></div>
+  <div class="p" style="background:#0A0E1A;">
+    <div class="pl">V1</div>
+    <div class="bar"><span>9:41</span><span>100%</span></div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:#9CA3AF;">Good morning</div>
+      <div style="font-size:18px;font-weight:700;margin-top:2px;">Saturday, April 5</div>
+    </div>
+    <div class="lbl">COMING UP</div>
+    <div class="scroll-cards">
+      <div class="scroll-card" style="background:#141929;border:1px solid rgba(123,97,255,.2);"><div class="em">&#x2615;</div><div class="ll">Caffeine cutoff</div><div class="vv" style="color:#B794F6;">2h 14m</div></div>
+      <div class="scroll-card" style="background:#141929;border:1px solid rgba(255,255,255,.06);"><div class="em">&#x1F319;</div><div class="ll">Wind-down</div><div class="vv" style="color:#818CF8;">5h 30m</div></div>
+      <div class="scroll-card" style="background:#141929;border:1px solid rgba(255,255,255,.06);"><div class="em">&#x1F634;</div><div class="ll">Sleep</div><div class="vv" style="color:#7B61FF;">6h 45m</div></div>
+    </div>
+    <div class="lbl">TODAY'S PLAN</div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">6:00a</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#FCD34D;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid #1F2937;opacity:.4;"><div class="tl-br" style="background:#FCD34D;"></div><div class="tl-cn"><div><div class="nm">&#x1F31E; Light Exposure</div><div class="mt">6:00-6:30 AM</div></div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">7:00a</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#34D399;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid #1F2937;opacity:.4;"><div class="tl-br" style="background:#34D399;"></div><div class="tl-cn"><div><div class="nm">&#x1F37D; Breakfast</div><div class="mt">7:00-7:30 AM</div></div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">2:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt gl" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1.5px solid rgba(255,107,107,.3);"><div class="tl-br" style="background:#FF6B6B;"></div><div class="tl-cn"><div><div class="nm">&#x2615; Caffeine Cutoff</div><div class="mt">2:00 PM</div></div><div class="cd" style="color:#FF6B6B;">Now</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">9:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#818CF8;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid rgba(129,140,248,.2);"><div class="tl-br" style="background:#818CF8;"></div><div class="tl-cn"><div><div class="nm">&#x1F319; Wind-down</div><div class="mt">9:00-10:00 PM</div></div><div class="cd" style="color:#818CF8;">5h 30m</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">10:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#7B61FF;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid #1F2937;"><div class="tl-br" style="background:#7B61FF;"></div><div class="tl-cn"><div><div class="nm">&#x1F634; Sleep Window</div><div class="mt">10 PM-6 AM</div></div><div class="cd" style="color:#B794F6;">6h 45m</div></div></div></div>
+    <div class="tab-old"><span class="on">&#x1F3E0; Today</span><span>&#x1F4C5; Schedule</span><span>&#x2699; Settings</span></div>
+  </div>
+  <div class="sdesc"><h4>V1: As-Built</h4><p>Horizontal countdowns, spine timeline, 3-tab Settings</p></div>
+</div>
+
+<!-- ===== V2: PATH A POLISH ===== -->
+<div>
+  <div class="ver-label"><span class="tag" style="background:rgba(200,168,75,.12);color:#C8A84B;">V2 Path A</span></div>
+  <div class="p" style="background:#0A0E1A;">
+    <div class="pl">V2</div>
+    <div class="bar"><span>9:41</span><span>100%</span></div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:10px;color:#9CA3AF;">Good morning, Sim</div>
+      <div style="font-size:17px;font-weight:700;margin-top:1px;">Saturday, Apr 5</div>
+      <div style="font-size:8px;color:#6B7280;margin-top:2px;">Day shift tomorrow &bull; 12h recovery</div>
+    </div>
+    <div class="s-score" style="background:linear-gradient(135deg,#141929,#1A1D35);border:1px solid #1F2937;">
+      <div class="s-ring" style="border-color:rgba(52,211,153,.3);">78</div>
+      <div><div style="font-size:7px;color:#6B7280;font-weight:600;letter-spacing:.5px;text-transform:uppercase;">Recovery Score</div><div style="font-size:9px;color:#D1D5DB;margin-top:2px;">7.2h of 7.5h</div><div style="font-size:8px;color:#34D399;font-weight:600;margin-top:1px;">&#x2191; 6 pts</div></div>
+    </div>
+    <div class="s-counts" style="border:1px solid #1F2937;">
+      <div class="s-ct" style="background:linear-gradient(180deg,rgba(255,107,107,.06),#141929);"><div class="v" style="color:#FF6B6B;">2:14</div><div class="l">Caffeine</div></div>
+      <div class="s-ct" style="background:#141929;border-left:1px solid #1F2937;"><div class="v" style="color:#818CF8;">5:30</div><div class="l">Wind-down</div></div>
+      <div class="s-ct" style="background:#141929;border-left:1px solid #1F2937;"><div class="v" style="color:#B794F6;">6:45</div><div class="l">Sleep</div></div>
+    </div>
+    <div class="lbl">TODAY'S PLAN</div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">6:00a</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#FCD34D;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid #1F2937;opacity:.4;"><div class="tl-br" style="background:#FCD34D;"></div><div class="tl-cn"><div><div class="nm">&#x1F31E; Light Exposure</div><div class="mt">6:00-6:30 AM</div></div><div class="cd" style="color:#6B7280;">Done</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">2:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt gl" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:linear-gradient(90deg,rgba(255,107,107,.05),#141929 40%);border:1px solid rgba(255,107,107,.3);"><div class="tl-br" style="background:#FF6B6B;"></div><div class="tl-cn"><div><div class="nm">&#x2615; Caffeine Cutoff</div><div class="mt">No caffeine after this</div></div><div class="cd" style="color:#FF6B6B;">Now</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">9:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#818CF8;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid rgba(129,140,248,.2);"><div class="tl-br" style="background:#818CF8;"></div><div class="tl-cn"><div><div class="nm">&#x1F319; Wind-down</div><div class="mt">9:00-10:00 PM</div></div><div class="cd" style="color:#818CF8;">5h 30m</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">10:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#7B61FF;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:#141929;border:1px solid #1F2937;"><div class="tl-br" style="background:#7B61FF;"></div><div class="tl-cn"><div><div class="nm">&#x1F634; Sleep Window</div><div class="mt">10 PM-6 AM &bull; 8h</div></div><div class="cd" style="color:#B794F6;">6h 45m</div></div></div></div>
+    <div class="tab-old"><span class="on">&#x1F3E0; Today</span><span>&#x1F4C5; Schedule</span><span>&#x2699; Settings</span></div>
+  </div>
+  <div class="sdesc"><h4>V2: Path A Polish</h4><p>Inline score card, refined typography, gradients on active</p></div>
+</div>
+
+<!-- ===== V3: HYBRID ===== -->
+<div>
+  <div class="ver-label"><span class="tag" style="background:rgba(123,97,255,.12);color:#7B61FF;">V3 Hybrid</span></div>
+  <div class="p" style="background:#080B14;">
+    <div class="pl">V3</div>
+    <div class="bar"><span>9:41</span><span>100%</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+      <div><div style="font-size:10px;color:#9CA3AF;">Good morning, Sim</div><div style="font-size:17px;font-weight:700;margin-top:1px;">Saturday, Apr 5</div></div>
+      <div style="width:22px;height:22px;border-radius:11px;background:linear-gradient(135deg,#7B61FF,#C8A84B);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">S</div>
+    </div>
+    <div class="s-pill" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2);color:#34D399;">&#x1F33F; <b>Recovery Day</b></div>
+    <div class="s-score" style="background:linear-gradient(135deg,#141929,#1A1D35);border:1px solid #1F2937;">
+      <div class="s-ring" style="border-color:rgba(52,211,153,.3);">78</div>
+      <div><div style="font-size:7px;color:#6B7280;font-weight:600;text-transform:uppercase;">Recovery Score</div><div style="font-size:9px;color:#D1D5DB;margin-top:2px;">7.2h of 7.5h</div><div style="font-size:8px;color:#34D399;font-weight:600;">&#x2191; 6 pts</div></div>
+    </div>
+    <div class="bento">
+      <div class="bento-card" style="background:rgba(255,107,107,.06);border:1px solid rgba(255,255,255,.05);"><div class="ic">&#x2615;</div><div class="cl">Caffeine cutoff</div><div class="vl" style="color:#FF6B6B;">2:14</div><div class="sb">hours left</div></div>
+      <div class="bento-card" style="background:rgba(123,97,255,.06);border:1px solid rgba(255,255,255,.05);"><div class="ic">&#x1F634;</div><div class="cl">Sleep window</div><div class="vl" style="color:#B794F6;">6:45</div><div class="sb">hours away</div></div>
+    </div>
+    <div class="s-ins" style="background:rgba(200,168,75,.05);border:1px solid rgba(200,168,75,.1);color:#D1D5DB;"><span>&#x1F4A1;</span><span>Sleep debt clearing &mdash; one solid night...</span></div>
+    <div class="lbl">TIMELINE</div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">6:00a</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#FCD34D;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);opacity:.35;"><div class="tl-br" style="background:#FCD34D;"></div><div class="tl-cn"><div><div class="nm">&#x1F31E; Light Exposure</div></div><div class="cd" style="color:#6B7280;">Done</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">2:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt gl" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:linear-gradient(90deg,rgba(255,107,107,.06),rgba(255,255,255,.03) 50%);border:1px solid rgba(255,107,107,.3);"><div class="tl-br" style="background:#FF6B6B;"></div><div class="tl-cn"><div><div class="nm">&#x2615; Caffeine Cutoff</div></div><div class="cd" style="color:#FF6B6B;">Now</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:30px;padding-right:4px;">9:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#818CF8;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.2);"><div class="tl-br" style="background:#818CF8;"></div><div class="tl-cn"><div><div class="nm">&#x1F319; Wind-down</div></div><div class="cd" style="color:#818CF8;">5h 30m</div></div></div></div>
+    <div class="tab-new"><span class="on">&#x2728; Today</span><span>&#x1F4C5; Schedule</span><span>&#x1F464; Profile</span></div>
+  </div>
+  <div class="sdesc"><h4>V3: Hybrid</h4><p>Status pill, bento cards, insight card, floating nav, avatar</p></div>
+</div>
+
+</div><!-- end grid row 1 -->
+<div class="grid-row-2">
+<!-- ===== V4: PREMIUM REFINED ===== -->
+<div>
+  <div class="ver-label"><span class="tag" style="background:rgba(52,211,153,.12);color:#34D399;">V4 Premium</span></div>
+  <div class="p" style="background:#0B0D16;">
+    <div class="pl">V4</div>
+    <div class="bar"><span>9:41</span><span>100%</span></div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;color:#6B7280;">Good morning, Sim</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.3px;margin-top:1px;">Saturday, Apr 5</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-bottom:14px;font-size:9px;color:#9CA3AF;">
+      <span style="width:5px;height:5px;border-radius:50%;background:#34D399;"></span>
+      <span><b style="color:#D1D5DB;">Recovery Day</b> &bull; Day shift tomorrow</span>
+    </div>
+    <div style="text-align:center;padding:10px 0 14px;position:relative;">
+      <div class="s-big-ring" style="border-color:rgba(52,211,153,.15);">78</div>
+      <div style="font-size:9px;color:#6B7280;margin-top:5px;">Recovery Score &bull; 7.2h of 7.5h</div>
+      <div style="font-size:9px;color:#34D399;font-weight:600;margin-top:2px;">&#x2191; 6 pts from yesterday</div>
+    </div>
+    <div class="s-counts" style="border:1px solid rgba(255,255,255,.05);">
+      <div class="s-ct" style="background:rgba(255,107,107,.05);"><div class="v" style="color:#FF6B6B;">2:14</div><div class="l">Caffeine</div></div>
+      <div class="s-ct" style="border-left:1px solid rgba(255,255,255,.04);"><div class="v" style="color:#818CF8;">5:30</div><div class="l">Wind-down</div></div>
+      <div class="s-ct" style="border-left:1px solid rgba(255,255,255,.04);"><div class="v" style="color:#B794F6;">6:45</div><div class="l">Sleep</div></div>
+    </div>
+    <div class="lbl" style="margin-top:8px;">TODAY'S PLAN</div>
+    <div class="tl-collapsed"><div class="dd" style="background:#FCD34D;"></div><div class="dd" style="background:#34D399;"></div><span>2 completed</span></div>
+    <!-- FLAT timeline (no spine, no time column) -->
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);">
+      <div style="width:6px;height:6px;border-radius:50%;background:#FF6B6B;box-shadow:0 0 6px #FF6B6B;"></div>
+      <div style="flex:1;"><div style="font-size:10px;font-weight:600;">&#x2615; Caffeine Cutoff</div><div style="font-size:8px;color:#6B7280;">2:00 PM</div></div>
+      <div style="font-size:10px;font-weight:700;color:#FF6B6B;">Now</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);">
+      <div style="width:6px;height:6px;border-radius:50%;background:#818CF8;"></div>
+      <div style="flex:1;"><div style="font-size:10px;font-weight:600;">&#x1F319; Wind-down</div><div style="font-size:8px;color:#6B7280;">9:00-10:00 PM</div></div>
+      <div style="font-size:10px;font-weight:700;color:#818CF8;">5h 30m</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;">
+      <div style="width:6px;height:6px;border-radius:50%;background:#7B61FF;"></div>
+      <div style="flex:1;"><div style="font-size:10px;font-weight:600;">&#x1F634; Sleep Window</div><div style="font-size:8px;color:#6B7280;">10 PM-6 AM</div></div>
+      <div style="font-size:10px;font-weight:700;color:#B794F6;">6h 45m</div>
+    </div>
+    <div style="margin-top:8px;padding:6px;border-top:1px solid rgba(255,255,255,.04);display:flex;gap:4px;font-size:8px;color:#9CA3AF;"><span>&#x1F4A1;</span><span>Sleep debt clearing &mdash; one solid night...</span></div>
+    <div class="tab-new"><span class="on">&#x2728; Today</span><span>&#x1F4C5; Schedule</span><span>&#x1F464; Profile</span></div>
+  </div>
+  <div class="sdesc"><h4>V4: Premium Refined</h4><p>Hero score, status line, flat timeline (no spine). Too flat.</p></div>
+</div>
+
+<!-- ===== V5: FINAL ===== -->
+<div>
+  <div class="ver-label"><span class="tag" style="background:rgba(200,168,75,.15);color:#C8A84B;">V5 FINAL</span></div>
+  <div class="p final" style="background:#0B0D16;">
+    <div class="pl" style="color:#C8A84B;">FINAL</div>
+    <div class="bar"><span>9:41</span><span>100%</span></div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10px;color:#6B7280;">Good morning, Sim</div>
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.3px;margin-top:1px;">Saturday, Apr 5</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-bottom:14px;font-size:9px;color:#9CA3AF;">
+      <span>&#x1F33F;</span>
+      <span><b style="color:#D1D5DB;">Recovery Day</b> &bull; Day shift tomorrow</span>
+    </div>
+    <div style="text-align:center;padding:8px 0 12px;position:relative;">
+      <div class="s-big-ring" style="border-color:rgba(52,211,153,.15);">78</div>
+      <div style="display:flex;align-items:flex-end;gap:2px;justify-content:center;margin-top:6px;height:14px;">
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:6px;"></div>
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:10px;"></div>
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:8px;"></div>
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:5px;"></div>
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:9px;"></div>
+        <div style="width:3px;border-radius:1px;background:rgba(52,211,153,.25);height:12px;"></div>
+        <div style="width:3px;border-radius:1px;background:#34D399;height:14px;"></div>
+      </div>
+      <div style="font-size:9px;color:#6B7280;margin-top:5px;">Recovery Score &bull; 7.2h of 7.5h</div>
+      <div style="font-size:9px;color:#34D399;font-weight:600;margin-top:2px;">&#x2191; 6 pts</div>
+    </div>
+    <div class="s-counts" style="border:1px solid rgba(255,255,255,.05);">
+      <div class="s-ct" style="background:rgba(255,107,107,.05);"><div class="v" style="color:#FF6B6B;">2:14</div><div class="l">Caffeine</div></div>
+      <div class="s-ct" style="border-left:1px solid rgba(255,255,255,.04);"><div class="v" style="color:#818CF8;">5:30</div><div class="l">Wind-down</div></div>
+      <div class="s-ct" style="border-left:1px solid rgba(255,255,255,.04);"><div class="v" style="color:#B794F6;">6:45</div><div class="l">Sleep</div></div>
+    </div>
+    <div class="s-ins" style="background:rgba(200,168,75,.04);border:1px solid rgba(200,168,75,.08);color:#D1D5DB;"><span>&#x1F4A1;</span><span>One solid night clears debt for Thursday's night block.</span></div>
+    <div class="lbl">TODAY'S PLAN</div>
+    <div class="tl-collapsed"><div class="dd" style="background:#FCD34D;"></div><div class="dd" style="background:#34D399;"></div><span>2 completed &#x25BC;</span></div>
+    <!-- Spine timeline with NARROW timestamps -->
+    <div class="tl-row"><div class="tl-tm" style="width:24px;padding-right:3px;font-size:8px;">2:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt gl" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:linear-gradient(90deg,rgba(255,107,107,.06),rgba(255,255,255,.02) 50%);border:1px solid rgba(255,107,107,.3);"><div class="tl-br" style="background:#FF6B6B;"></div><div class="tl-cn"><div><div class="nm" style="font-size:11px;">&#x2615; Caffeine Cutoff</div><div class="mt">No caffeine after this</div></div><div class="cd" style="font-size:11px;color:#FF6B6B;">Now</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:24px;padding-right:3px;font-size:8px;">9:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#818CF8;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:rgba(255,255,255,.025);border:1px solid rgba(129,140,248,.2);"><div class="tl-br" style="background:#818CF8;"></div><div class="tl-cn"><div><div class="nm" style="font-size:11px;">&#x1F319; Wind-down</div><div class="mt">9:00-10:00 PM</div></div><div class="cd" style="font-size:11px;color:#818CF8;">5h 30m</div></div></div></div>
+    <div class="tl-row"><div class="tl-tm" style="width:24px;padding-right:3px;font-size:8px;">10:00p</div><div class="tl-sp" style="width:14px;"><div class="tl-ln"></div><div class="tl-dt" style="background:#7B61FF;"></div><div class="tl-ln"></div></div><div class="tl-cd" style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);"><div class="tl-br" style="background:#7B61FF;"></div><div class="tl-cn"><div><div class="nm" style="font-size:11px;">&#x1F634; Sleep Window</div><div class="mt">10 PM-6 AM &bull; 8h</div></div><div class="cd" style="font-size:11px;color:#B794F6;">6h 45m</div></div></div></div>
+    <div class="tab-new"><span class="on">&#x2728; Today</span><span>&#x1F4C5; Schedule</span><span>&#x1F464; Profile</span></div>
+  </div>
+  <div class="sdesc"><h4>V5: Final Target</h4><p>Hero + sparkline + insight + spine timeline (narrow timestamps) + floating nav</p></div>
+</div>
+
+</div><!-- end grid row 2 -->
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Final Today Screen (Locked)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0F1117; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; padding: 32px 16px; }
+  h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 40px; max-width: 550px; margin-inline: auto; line-height: 1.5; }
+
+  .phone-wrap {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .phone {
+    background: #0B0D16;
+    border-radius: 48px;
+    border: 2.5px solid #1F2937;
+    padding: 52px 18px 32px;
+    min-height: 800px;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Noise texture */
+  .phone::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    border-radius: 48px; pointer-events: none; z-index: 0;
+  }
+  .phone > * { position: relative; z-index: 1; }
+  .phone-lbl { position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:10px;color:#374151;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;z-index:2; }
+  .sbar { display:flex;justify-content:space-between;padding:0 6px 10px;font-size:12px;color:#6B7280;font-weight:600; }
+
+  /* ===== FINAL DESIGN ===== */
+
+  /* Header: clean, no avatar */
+  .header { margin-bottom: 18px; }
+  .header .greeting { font-size: 14px; color: #6B7280; font-weight: 400; letter-spacing: 0.3px; }
+  .header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-top: 2px; }
+
+  /* Status line: emoji + text, one line */
+  .status-line {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 2px; margin-bottom: 20px;
+  }
+  .status-line .emoji { font-size: 14px; }
+  .status-line .text { font-size: 13px; color: #9CA3AF; }
+  .status-line .text strong { color: #D1D5DB; font-weight: 600; }
+
+  /* Hero score: centered ring with glow + sparkline */
+  .hero { text-align: center; padding: 16px 0 20px; margin-bottom: 16px; position: relative; }
+  .hero-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%);
+    width: 130px; height: 130px;
+    background: radial-gradient(circle, rgba(52,211,153,0.1), transparent 70%);
+    border-radius: 50%;
+    animation: glow 4s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100% { opacity:0.4; } 50% { opacity:1; } }
+  .hero-ring {
+    width: 96px; height: 96px; border-radius: 50%;
+    border: 3px solid rgba(52,211,153,0.12);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto; position: relative;
+  }
+  .hero-ring::before {
+    content: '';
+    position: absolute; inset: -3px; border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #34D399; border-right-color: #34D399; border-bottom-color: #34D399;
+    transform: rotate(-30deg);
+    filter: drop-shadow(0 0 6px rgba(52,211,153,0.3));
+  }
+  .hero-ring .num { font-size: 36px; font-weight: 700; }
+  /* Sparkline */
+  .sparkline { display: flex; align-items: flex-end; gap: 3px; justify-content: center; margin-top: 10px; height: 20px; }
+  .sparkline .bar { width: 4px; border-radius: 2px; background: rgba(52,211,153,0.25); transition: height 0.5s; }
+  .sparkline .bar.today { background: #34D399; }
+  .hero-label { font-size: 12px; color: #6B7280; margin-top: 8px; letter-spacing: 0.2px; }
+  .hero-trend { font-size: 13px; color: #34D399; font-weight: 600; margin-top: 4px; }
+
+  /* Countdown row: unified */
+  .counts {
+    display: flex; gap: 0; margin-bottom: 16px;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .count {
+    flex: 1; padding: 14px 8px; text-align: center;
+    background: rgba(255,255,255,0.02);
+  }
+  .count + .count { border-left: 1px solid rgba(255,255,255,0.04); }
+  .count .emoji { font-size: 16px; margin-bottom: 4px; }
+  .count .val { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .count .lbl { font-size: 10px; color: #6B7280; margin-top: 2px; font-weight: 500; }
+  .count.hl { background: linear-gradient(180deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02)); }
+  .count.hl .val { color: #FF6B6B; }
+
+  /* INSIGHT: Visible, elegant, compact */
+  .insight {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    background: rgba(200,168,75,0.04);
+    border: 1px solid rgba(200,168,75,0.1);
+  }
+  .insight .icon {
+    width: 24px; height: 24px; border-radius: 8px;
+    background: rgba(200,168,75,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; flex-shrink: 0; margin-top: 1px;
+  }
+  .insight .text { font-size: 13px; color: #D1D5DB; line-height: 1.5; }
+
+  /* TIMELINE: Time column + spine + inline countdowns */
+  .tl-label { font-size: 10px; color: #4B5563; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Collapsed past */
+  .tl-collapsed {
+    display: flex; align-items: center; gap: 0; margin-bottom: 2px;
+    cursor: pointer;
+  }
+  .tl-collapsed .time-col { width: 46px; text-align: right; padding-right: 8px; }
+  .tl-collapsed .spine-col { width: 20px; display: flex; flex-direction: column; align-items: center; }
+  .tl-collapsed .spine-line { width: 1.5px; background: #1F2937; height: 8px; }
+  .tl-collapsed .content {
+    flex: 1; display: flex; align-items: center; gap: 6px;
+    padding: 6px 0;
+    font-size: 12px; color: #4B5563;
+  }
+  .tl-collapsed .dots { display: flex; gap: 4px; }
+  .tl-collapsed .dots .d { width: 6px; height: 6px; border-radius: 50%; opacity: 0.4; }
+  .tl-collapsed .chevron { font-size: 9px; color: #374151; margin-left: auto; }
+
+  /* Timeline events with time + spine */
+  .tl-event { display: flex; gap: 0; }
+  .tl-time {
+    width: 46px; text-align: right; padding-right: 8px; padding-top: 12px;
+    font-size: 12px; color: #6B7280; font-weight: 500; flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .tl-spine {
+    width: 20px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0;
+  }
+  .tl-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 6px; }
+  .tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; transition: all 0.3s; }
+  .tl-dot.glow { width: 10px; height: 10px; }
+  .tl-dot.breathing { animation: dotBreathe 1.5s ease-in-out infinite; }
+  @keyframes dotBreathe {
+    0%, 100% { box-shadow: 0 0 4px currentColor; }
+    50% { box-shadow: 0 0 12px currentColor; }
+  }
+
+  .tl-card {
+    flex: 1;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.2s;
+  }
+  .tl-card.active {
+    border-color: rgba(255,107,107,0.3);
+    background: linear-gradient(90deg, rgba(255,107,107,0.06), rgba(255,255,255,0.02) 60%);
+  }
+  .tl-card.next {
+    border-color: rgba(129,140,248,0.2);
+  }
+  .tl-left {}
+  .tl-left .name { font-size: 14px; font-weight: 600; }
+  .tl-left .meta { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .tl-countdown { font-size: 14px; font-weight: 700; flex-shrink: 0; margin-left: 8px; }
+
+  /* Floating tab bar */
+  .tab-bar {
+    display: flex; justify-content: space-around; padding: 8px 0;
+    position: absolute; bottom: 14px; left: 16px; right: 16px;
+    background: rgba(11,13,22,0.9);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  }
+  .tab { text-align: center; font-size: 10px; color: #4B5563; padding: 4px 0; flex: 1; transition: color 0.2s; }
+  .tab.on { color: #D1D5DB; }
+  .tab .icon { font-size: 18px; margin-bottom: 2px; }
+  .tab.on .icon { filter: drop-shadow(0 0 6px rgba(200,168,75,0.3)); }
+
+  /* ===== ANNOTATIONS ===== */
+  .callouts {
+    max-width: 420px;
+    margin: 24px auto 0;
+  }
+  .callout {
+    display: flex; gap: 10px; padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .callout:last-child { border-bottom: none; }
+  .callout .num {
+    width: 20px; height: 20px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .callout .num.a { background: rgba(200,168,75,0.15); color: #C8A84B; }
+  .callout .num.b { background: rgba(123,97,255,0.15); color: #7B61FF; }
+  .callout .num.p { background: rgba(52,211,153,0.15); color: #34D399; }
+  .callout .desc { font-size: 12px; color: #9CA3AF; line-height: 1.5; }
+  .callout .desc strong { color: #D1D5DB; }
+
+  .lock-badge {
+    text-align: center;
+    margin-top: 32px;
+    padding: 12px 24px;
+    display: inline-block;
+    border-radius: 12px;
+    border: 2px solid #C8A84B;
+    background: rgba(200,168,75,0.06);
+    font-size: 14px;
+    font-weight: 700;
+    color: #C8A84B;
+    letter-spacing: 0.5px;
+  }
+  .lock-wrap { text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>Final Today Screen &mdash; Locked</h1>
+<p class="page-sub">Premium refined + visible insight card + time column with spine. This is the build target.</p>
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="phone-lbl">Final Design</div>
+    <div class="sbar"><span>9:41</span><span>100%</span></div>
+
+    <!-- 1. Header: clean greeting + date -->
+    <div class="header">
+      <div class="greeting">Good morning, Sim</div>
+      <h2>Saturday, Apr 5</h2>
+    </div>
+
+    <!-- 2. Status line with leaf emoji -->
+    <div class="status-line">
+      <span class="emoji">&#x1F33F;</span>
+      <span class="text"><strong>Recovery Day</strong> &bull; Day shift tomorrow</span>
+    </div>
+
+    <!-- 3. Hero score: centered ring + sparkline -->
+    <div class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-ring">
+        <div class="num">78</div>
+      </div>
+      <div class="sparkline">
+        <div class="bar" style="height:8px;"></div>
+        <div class="bar" style="height:14px;"></div>
+        <div class="bar" style="height:10px;"></div>
+        <div class="bar" style="height:6px;"></div>
+        <div class="bar" style="height:12px;"></div>
+        <div class="bar" style="height:16px;"></div>
+        <div class="bar today" style="height:18px;"></div>
+      </div>
+      <div class="hero-label">Recovery Score &bull; 7.2h of 7.5h</div>
+      <div class="hero-trend">&#x2191; 6 pts from yesterday</div>
+    </div>
+
+    <!-- 4. Unified countdown row -->
+    <div class="counts">
+      <div class="count hl">
+        <div class="emoji">&#x2615;</div>
+        <div class="val" style="color:#FF6B6B;">2:14</div>
+        <div class="lbl">Caffeine</div>
+      </div>
+      <div class="count">
+        <div class="emoji">&#x1F319;</div>
+        <div class="val" style="color:#818CF8;">5:30</div>
+        <div class="lbl">Wind-down</div>
+      </div>
+      <div class="count">
+        <div class="emoji">&#x1F634;</div>
+        <div class="val" style="color:#B794F6;">6:45</div>
+        <div class="lbl">Sleep</div>
+      </div>
+    </div>
+
+    <!-- 5. VISIBLE insight card (kept from Before) -->
+    <div class="insight">
+      <div class="icon">&#x1F4A1;</div>
+      <div class="text">Sleep debt clearing &mdash; one more solid night and you'll be fully recovered for your night block Thursday.</div>
+    </div>
+
+    <!-- 6. TIMELINE with time column + spine (kept from Before) + inline countdowns -->
+    <div class="tl-label">Today's Plan</div>
+
+    <!-- Collapsed past events -->
+    <div class="tl-collapsed">
+      <div class="time-col"></div>
+      <div class="spine-col"><div class="spine-line"></div></div>
+      <div class="content">
+        <div class="dots">
+          <div class="d" style="background:#FCD34D;"></div>
+          <div class="d" style="background:#34D399;"></div>
+        </div>
+        <span>2 completed</span>
+        <span class="chevron">&#x25BC;</span>
+      </div>
+    </div>
+
+    <!-- Active event: Caffeine Cutoff -->
+    <div class="tl-event">
+      <div class="tl-time">2:00p</div>
+      <div class="tl-spine">
+        <div class="tl-line"></div>
+        <div class="tl-dot glow breathing" style="background:#FF6B6B; color:#FF6B6B;"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-card active">
+        <div class="tl-left">
+          <div class="name">&#x2615; Caffeine Cutoff</div>
+          <div class="meta">No caffeine after this</div>
+        </div>
+        <div class="tl-countdown" style="color:#FF6B6B;">Now</div>
+      </div>
+    </div>
+
+    <!-- Next: Wind-down -->
+    <div class="tl-event">
+      <div class="tl-time">9:00p</div>
+      <div class="tl-spine">
+        <div class="tl-line"></div>
+        <div class="tl-dot" style="background:#818CF8;"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-card next">
+        <div class="tl-left">
+          <div class="name">&#x1F319; Wind-down</div>
+          <div class="meta">9:00 &ndash; 10:00 PM</div>
+        </div>
+        <div class="tl-countdown" style="color:#818CF8;">5h 30m</div>
+      </div>
+    </div>
+
+    <!-- Sleep Window -->
+    <div class="tl-event">
+      <div class="tl-time">10:00p</div>
+      <div class="tl-spine">
+        <div class="tl-line"></div>
+        <div class="tl-dot" style="background:#7B61FF;"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-card">
+        <div class="tl-left">
+          <div class="name">&#x1F634; Sleep Window</div>
+          <div class="meta">10:00 PM &ndash; 6:00 AM &bull; 8h</div>
+        </div>
+        <div class="tl-countdown" style="color:#B794F6;">6h 45m</div>
+      </div>
+    </div>
+
+    <!-- Floating tab bar -->
+    <div class="tab-bar">
+      <div class="tab on"><div class="icon">&#x2728;</div>Today</div>
+      <div class="tab"><div class="icon">&#x1F4C5;</div>Schedule</div>
+      <div class="tab"><div class="icon">&#x1F464;</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Callouts -->
+  <div class="callouts">
+    <div class="callout"><div class="num p">1</div><div class="desc"><strong>Clean header</strong> &mdash; greeting + date. No avatar (moved to Profile).</div></div>
+    <div class="callout"><div class="num b">2</div><div class="desc"><strong>Status line</strong> &mdash; &#x1F33F; leaf + "Recovery Day". Adapts per state.</div></div>
+    <div class="callout"><div class="num p">3</div><div class="desc"><strong>Hero score</strong> &mdash; centered 96px ring with ambient glow + 7-day sparkline.</div></div>
+    <div class="callout"><div class="num p">4</div><div class="desc"><strong>Countdown row</strong> &mdash; 3 unified cells. Emoji + number + label. One scan.</div></div>
+    <div class="callout"><div class="num a">5</div><div class="desc"><strong>Visible insight</strong> &mdash; kept from hybrid. Compact card with &#x1F4A1; icon. Always visible, tap for more.</div></div>
+    <div class="callout"><div class="num a">6</div><div class="desc"><strong>Timeline with spine</strong> &mdash; kept time column (6:00a, 9:00p) + spine dots from Path A. Added inline countdowns from Path B. Past events collapsed.</div></div>
+    <div class="callout"><div class="num b">7</div><div class="desc"><strong>Floating nav</strong> &mdash; glassmorphic tab bar. Today / Schedule / Profile.</div></div>
+  </div>
+
+  <div class="lock-wrap">
+    <div class="lock-badge">&#x1F512; DESIGN LOCKED</div>
+  </div>
+</div>
+
+</body>
+</html>

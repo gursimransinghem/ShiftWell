@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Master Design Gallery</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B0D16; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro', system-ui, sans-serif; padding: 32px 16px; }
+
+  h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 48px; max-width: 600px; margin-inline: auto; line-height: 1.5; }
+
+  .section-hdr {
+    max-width: 1400px; margin: 0 auto 20px;
+    padding-bottom: 12px; border-bottom: 1px solid #1F2937;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .section-hdr h2 { font-size: 20px; }
+  .section-hdr .sub { font-size: 13px; color: #6B7280; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, #1F2937, transparent); max-width: 1400px; margin: 48px auto; }
+
+  .screen-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    max-width: 1400px;
+    margin: 0 auto 16px;
+  }
+  .screen-label { text-align: center; font-size: 12px; font-weight: 600; margin-top: 10px; }
+  .screen-label.gold { color: #C8A84B; }
+  .screen-desc { text-align: center; font-size: 11px; color: #6B7280; margin-top: 3px; line-height: 1.4; max-width: 300px; margin-inline: auto; }
+
+  /* ===== PHONE FRAME ===== */
+  .phone {
+    background: #0B0D16;
+    border-radius: 44px;
+    border: 2.5px solid #1F2937;
+    padding: 48px 16px 28px;
+    min-height: 680px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    border-radius: 44px; pointer-events: none; z-index: 0;
+  }
+  .phone > * { position: relative; z-index: 1; }
+  .plbl { position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:9px;color:#374151;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;z-index:2; }
+  .sb { display:flex;justify-content:space-between;padding:0 4px 8px;font-size:11px;color:#6B7280;font-weight:600; }
+
+  /* ===== SHARED COMPONENT STYLES ===== */
+  .hdr { margin-bottom: 18px; }
+  .hdr .gr { font-size: 14px; color: #6B7280; font-weight: 400; letter-spacing: 0.3px; }
+  .hdr h3 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-top: 2px; }
+  .hdr .ctx { font-size: 12px; color: #6B7280; margin-top: 3px; }
+
+  .sl { display:flex;align-items:center;gap:8px;padding:0 2px;margin-bottom:18px; }
+  .sl .e { font-size:14px; }
+  .sl .tx { font-size:13px;color:#9CA3AF; }
+  .sl .tx b { color:#D1D5DB;font-weight:600; }
+
+  /* Hero */
+  .hero { text-align:center;padding:16px 0 18px;margin-bottom:14px;position:relative; }
+  .hg { position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:130px;height:130px;background:radial-gradient(circle,rgba(52,211,153,0.1),transparent 70%);border-radius:50%;animation:g 4s ease-in-out infinite; }
+  @keyframes g { 0%,100%{opacity:.4} 50%{opacity:1} }
+  .hr { width:96px;height:96px;border-radius:50%;border:3px solid rgba(52,211,153,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative; }
+  .hr::before { content:'';position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:#34D399;border-right-color:#34D399;border-bottom-color:#34D399;transform:rotate(-30deg);filter:drop-shadow(0 0 6px rgba(52,211,153,0.3)); }
+  .hr .n { font-size:36px;font-weight:700; }
+  .sp { display:flex;align-items:flex-end;gap:3px;justify-content:center;margin-top:10px;height:20px; }
+  .sp .b { width:4px;border-radius:2px;background:rgba(52,211,153,0.25); }
+  .sp .b.td { background:#34D399; }
+  .hl { font-size:12px;color:#6B7280;margin-top:8px; }
+  .ht { font-size:13px;color:#34D399;font-weight:600;margin-top:4px; }
+
+  /* Counts */
+  .cts { display:flex;gap:0;margin-bottom:14px;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.05); }
+  .ct { flex:1;padding:12px 6px;text-align:center;background:rgba(255,255,255,0.02); }
+  .ct + .ct { border-left:1px solid rgba(255,255,255,0.04); }
+  .ct .em { font-size:14px;margin-bottom:3px; }
+  .ct .v { font-size:20px;font-weight:700;letter-spacing:-0.5px;font-variant-numeric:tabular-nums; }
+  .ct .l { font-size:9px;color:#6B7280;margin-top:2px;font-weight:500; }
+  .ct.red { background:linear-gradient(180deg,rgba(255,107,107,0.08),rgba(255,107,107,0.02)); }
+  .ct.red .v { color:#FF6B6B; }
+
+  /* Insight */
+  .ins { display:flex;align-items:flex-start;gap:10px;padding:11px 13px;margin-bottom:14px;border-radius:12px;background:rgba(200,168,75,0.04);border:1px solid rgba(200,168,75,0.1); }
+  .ins .ic { width:22px;height:22px;border-radius:7px;background:rgba(200,168,75,0.12);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px; }
+  .ins .tx { font-size:12px;color:#D1D5DB;line-height:1.5; }
+
+  /* Timeline */
+  .tll { font-size:9px;color:#4B5563;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px; }
+  .tlc { display:flex;align-items:center;gap:0;margin-bottom:2px; }
+  .tlc .tc { width:42px; }
+  .tlc .sc { width:18px;display:flex;flex-direction:column;align-items:center; }
+  .tlc .ln { width:1.5px;background:#1F2937;height:6px; }
+  .tlc .cc { flex:1;display:flex;align-items:center;gap:5px;padding:5px 0;font-size:11px;color:#4B5563; }
+  .tlc .ds { display:flex;gap:3px; }
+  .tlc .ds .dd { width:5px;height:5px;border-radius:50%;opacity:.4; }
+  .tlc .ch { font-size:8px;color:#374151;margin-left:auto; }
+
+  .tle { display:flex;gap:0; }
+  .tle .tc { width:42px;text-align:right;padding-right:6px;padding-top:10px;font-size:11px;color:#6B7280;font-weight:500;flex-shrink:0;font-variant-numeric:tabular-nums; }
+  .tle .sc { width:18px;display:flex;flex-direction:column;align-items:center;flex-shrink:0; }
+  .tle .ln { width:1.5px;background:#1F2937;flex:1;min-height:5px; }
+  .tle .dt { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+  .tle .dt.gl { width:10px;height:10px;animation:db 1.5s ease-in-out infinite; }
+  @keyframes db { 0%,100%{box-shadow:0 0 4px currentColor} 50%{box-shadow:0 0 12px currentColor} }
+  .tle .cd { flex:1;display:flex;justify-content:space-between;align-items:center;padding:9px 11px;margin-bottom:4px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04); }
+  .tle .cd.act { border-color:rgba(255,107,107,0.3);background:linear-gradient(90deg,rgba(255,107,107,0.06),rgba(255,255,255,0.02) 60%); }
+  .tle .cd.nxt { border-color:rgba(129,140,248,0.2); }
+  .tle .nm { font-size:13px;font-weight:600; }
+  .tle .mt { font-size:10px;color:#6B7280;margin-top:1px; }
+  .tle .cdown { font-size:13px;font-weight:700;flex-shrink:0;margin-left:6px; }
+
+  /* Tab */
+  .tb { display:flex;justify-content:space-around;padding:7px 0;position:absolute;bottom:12px;left:14px;right:14px;background:rgba(11,13,22,0.9);backdrop-filter:blur(14px);border-radius:20px;border:1px solid rgba(255,255,255,0.05);box-shadow:0 -4px 20px rgba(0,0,0,0.3); }
+  .tb .t { text-align:center;font-size:9px;color:#4B5563;padding:4px 0;flex:1; }
+  .tb .t.on { color:#D1D5DB; }
+  .tb .t .i { font-size:16px;margin-bottom:1px; }
+  .tb .t.on .i { filter:drop-shadow(0 0 6px rgba(200,168,75,0.3)); }
+
+  /* Night sky styles */
+  .phone-ns { background:radial-gradient(ellipse at 50% 25%,#0D1025,#060811); }
+  .star { position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.25; }
+  .star.br { width:3px;height:3px;opacity:.6;animation:tw 3s ease-in-out infinite; }
+  .star.sl { animation-duration:5s; }
+  .star.fs { animation-duration:2s; }
+  @keyframes tw { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:.15;transform:scale(.7)} }
+  .ff { position:absolute;width:4px;height:4px;border-radius:50%;background:#C8A84B;opacity:0;animation:ffl 8s ease-in-out infinite;filter:blur(1px); }
+  .ff:nth-child(2) { animation-delay:2s;animation-duration:10s; }
+  .ff:nth-child(3) { animation-delay:4s;animation-duration:7s; }
+  @keyframes ffl { 0%{opacity:0;transform:translate(0,0)} 20%{opacity:.7} 50%{opacity:.4;transform:translate(30px,-20px)} 80%{opacity:.6;transform:translate(-10px,-40px)} 100%{opacity:0;transform:translate(20px,-60px)} }
+  .arc-w { position:relative;margin:0 auto 16px;width:160px;height:160px; }
+  .arc-g { position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;background:radial-gradient(circle,rgba(123,97,255,0.12),transparent 70%);border-radius:50%;animation:ag 4s ease-in-out infinite;z-index:-1; }
+  @keyframes ag { 0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.1)} }
+  .arc-r { width:160px;height:160px;border-radius:50%;border:3.5px solid rgba(123,97,255,0.12);display:flex;align-items:center;justify-content:center;position:relative; }
+  .arc-r::before { content:'';position:absolute;inset:-3.5px;border-radius:50%;border:3.5px solid transparent;border-top-color:#7B61FF;border-right-color:#7B61FF;transform:rotate(-45deg);filter:drop-shadow(0 0 8px rgba(123,97,255,0.5)); }
+  .arc-r .pct { font-size:40px;font-weight:700;letter-spacing:-1px; }
+  .arc-r .pct span { font-size:18px;color:#6B7280; }
+  .arc-r .sub { font-size:10px;color:#6B7280;letter-spacing:.5px; }
+  .nsi { text-align:center;margin-bottom:14px; }
+  .nsi .al { font-size:18px;font-weight:600; }
+  .nsi .dt { font-size:11px;color:#6B7280;margin-top:3px; }
+  .nsc { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px;margin-bottom:8px;width:100%; }
+  .nsc .h { font-size:9px;color:#C8A84B;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px; }
+  .nsc .r { display:flex;align-items:center;gap:7px;padding:4px 0; }
+  .nsc .r .e { font-size:13px; }
+  .nsc .r .txt { font-size:12px;color:#D1D5DB;flex:1; }
+  .nsc .r .tm { font-size:11px;color:#6B7280; }
+  .nst { background:rgba(200,168,75,0.04);border:1px solid rgba(200,168,75,0.08);border-radius:10px;padding:10px;text-align:center;font-size:11px;color:#D1D5DB;line-height:1.5; }
+  .ns-x { position:absolute;top:48px;right:16px;font-size:13px;color:#4B5563;background:none;border:none;width:26px;height:26px;border-radius:13px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.06); }
+
+  /* Onboarding */
+  .ob-dots { display:flex;justify-content:center;gap:5px;margin-bottom:12px; }
+  .ob-dots .d { width:7px;height:7px;border-radius:50%;background:#1F2937; }
+  .ob-dots .d.on { background:#7B61FF;width:20px;border-radius:4px; }
+  .ob-hero { text-align:center;padding:32px 0 20px; }
+  .ob-hero .logo { font-size:44px;margin-bottom:14px; }
+  .ob-hero h3 { font-size:26px;font-weight:700;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 30%,#C8A84B);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .ob-hero p { color:#9CA3AF;font-size:13px;margin-top:10px;max-width:240px;margin-inline:auto;line-height:1.5; }
+  .ob-feat { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px; }
+  .ob-icon { width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+  .ob-feat .ti { font-size:13px;font-weight:600; }
+  .ob-feat .de { font-size:11px;color:#9CA3AF;margin-top:2px; }
+  .btn-grad { background:linear-gradient(135deg,#7B61FF,#C8A84B);color:#fff;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:600;width:100%;cursor:pointer;margin-top:12px; }
+  .ob-legal { text-align:center;font-size:9px;color:#4B5563;margin-top:8px;line-height:1.4; }
+
+  /* Schedule */
+  .wk { display:flex;gap:5px;margin-bottom:14px; }
+  .wd { flex:1;text-align:center;padding:7px 0;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04); }
+  .wd .dy { font-size:9px;color:#6B7280;font-weight:500; }
+  .wd .nu { font-size:14px;font-weight:600;margin-top:2px;color:#9CA3AF; }
+  .wd.today { border-color:#C8A84B;background:rgba(200,168,75,0.08); }
+  .wd.today .nu { color:#C8A84B; }
+  .wd .dr { display:flex;justify-content:center;gap:3px;margin-top:3px; }
+  .wd .dr .md { width:4px;height:4px;border-radius:50%; }
+  .sc { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;margin-bottom:7px; }
+  .sc .si { width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0; }
+  .sc .sn { font-size:13px;font-weight:600; }
+  .sc .st { font-size:11px;color:#9CA3AF;margin-top:1px; }
+  .sc .sd { margin-left:auto;font-size:12px;color:#6B7280;font-weight:500; }
+  .fab { position:absolute;bottom:50px;right:20px;width:48px;height:48px;background:linear-gradient(135deg,#7B61FF,#C8A84B);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;box-shadow:0 4px 12px rgba(123,97,255,0.3); }
+
+  /* Profile */
+  .pf-hdr { text-align:center;margin-bottom:16px; }
+  .pf-av { width:56px;height:56px;border-radius:28px;background:linear-gradient(135deg,#7B61FF,#C8A84B);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700; }
+  .pf-name { font-size:17px;font-weight:700; }
+  .pf-sub { font-size:11px;color:#6B7280;margin-top:2px; }
+  .pf-badge { margin-top:6px; }
+  .pf-badge span { font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:6px;background:rgba(200,168,75,0.12);color:#C8A84B; }
+  .pf-stats { display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px; }
+  .pf-stat { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:10px;text-align:center; }
+  .pf-stat .v { font-size:18px;font-weight:700; }
+  .pf-stat .l { font-size:9px;color:#6B7280;margin-top:2px; }
+  .pf-sec { margin-bottom:12px; }
+  .pf-sec-lbl { font-size:9px;color:#4B5563;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;padding-left:2px; }
+  .pf-card { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);border-radius:12px;overflow:hidden; }
+  .pf-row { display:flex;justify-content:space-between;align-items:center;padding:10px 12px;min-height:40px; }
+  .pf-row + .pf-row { border-top:1px solid rgba(255,255,255,0.03); }
+  .pf-row .k { font-size:13px; }
+  .pf-row .val { font-size:13px;color:#9CA3AF; }
+  .pf-row .arr { font-size:12px;color:#374151; }
+
+  /* Wind-down */
+  .phone-wd { background:linear-gradient(180deg,#0B0D16 0%,#0D0F22 100%); }
+  .wd-big { text-align:center;padding:16px 0; }
+  .wd-big .num { font-size:52px;font-weight:700;letter-spacing:-3px;color:#818CF8;text-shadow:0 0 30px rgba(129,140,248,0.2); }
+  .wd-big .lbl { font-size:12px;color:#6B7280;margin-top:3px; }
+  .wd-check { margin-bottom:5px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:9px 11px;display:flex;align-items:center;gap:9px; }
+  .wd-check .ck { font-size:14px; }
+  .wd-check .tx { font-size:12px; }
+  .wd-check .tx.done { text-decoration:line-through;color:#4B5563; }
+
+  /* Improvement notes */
+  .improvements {
+    max-width: 900px;
+    margin: 48px auto 0;
+    padding: 24px;
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 16px;
+    background: rgba(52,211,153,0.03);
+  }
+  .improvements h3 { font-size: 16px; text-align: center; margin-bottom: 16px; color: #34D399; }
+  .imp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .imp { padding: 14px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
+  .imp h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .imp p { font-size: 11px; color: #9CA3AF; line-height: 1.5; }
+  .imp .tag { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
+  .imp .tag.critical { background: rgba(255,107,107,0.12); color: #FF6B6B; }
+  .imp .tag.nice { background: rgba(200,168,75,0.12); color: #C8A84B; }
+  .imp .tag.polish { background: rgba(123,97,255,0.12); color: #B794F6; }
+</style>
+</head>
+<body>
+
+<h1>ShiftWell &mdash; Master Design Gallery</h1>
+<p class="page-sub">Every screen in final form. 8 screens across 3 sections with expert-level visual improvements applied.</p>
+
+<!-- ============================================
+     SECTION 1: CORE APP (TODAY STATES)
+     ============================================ -->
+<div class="section-hdr">
+  <h2>Core App &mdash; Today Screen (5 States)</h2>
+  <span class="sub">The heart of the app. Each state adapts the same layout.</span>
+</div>
+
+<div class="screen-row">
+
+  <!-- TODAY: Recovery Day -->
+  <div>
+    <div class="phone">
+      <div class="plbl">Recovery Day</div>
+      <div class="sb"><span>9:41</span><span>100%</span></div>
+      <div class="hdr"><div class="gr">Good morning, Sim</div><h3>Saturday, Apr 5</h3></div>
+      <div class="sl"><span class="e">&#x1F33F;</span><span class="tx"><b>Recovery Day</b> &bull; Day shift tomorrow</span></div>
+      <div class="hero">
+        <div class="hg"></div>
+        <div class="hr"><div class="n">78</div></div>
+        <div class="sp"><div class="b" style="height:8px;"></div><div class="b" style="height:14px;"></div><div class="b" style="height:10px;"></div><div class="b" style="height:6px;"></div><div class="b" style="height:12px;"></div><div class="b" style="height:16px;"></div><div class="b td" style="height:18px;"></div></div>
+        <div class="hl">Recovery Score &bull; 7.2h of 7.5h</div>
+        <div class="ht">&#x2191; 6 pts from yesterday</div>
+      </div>
+      <div class="cts">
+        <div class="ct red"><div class="em">&#x2615;</div><div class="v" style="color:#FF6B6B;">2:14</div><div class="l">Caffeine</div></div>
+        <div class="ct"><div class="em">&#x1F319;</div><div class="v" style="color:#818CF8;">5:30</div><div class="l">Wind-down</div></div>
+        <div class="ct"><div class="em">&#x1F634;</div><div class="v" style="color:#B794F6;">6:45</div><div class="l">Sleep</div></div>
+      </div>
+      <div class="ins"><div class="ic">&#x1F4A1;</div><div class="tx">Sleep debt clearing &mdash; one solid night and you're recovered for Thursday's night block.</div></div>
+      <div class="tll">Today's Plan</div>
+      <div class="tlc"><div class="tc"></div><div class="sc"><div class="ln"></div></div><div class="cc"><div class="ds"><div class="dd" style="background:#FCD34D;"></div><div class="dd" style="background:#34D399;"></div></div><span>2 completed</span><span class="ch">&#x25BC;</span></div></div>
+      <div class="tle"><div class="tc">2:00p</div><div class="sc"><div class="ln"></div><div class="dt gl" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="ln"></div></div><div class="cd act"><div><div class="nm">&#x2615; Caffeine Cutoff</div><div class="mt">No caffeine after this</div></div><div class="cdown" style="color:#FF6B6B;">Now</div></div></div>
+      <div class="tle"><div class="tc">9:00p</div><div class="sc"><div class="ln"></div><div class="dt" style="background:#818CF8;"></div><div class="ln"></div></div><div class="cd nxt"><div><div class="nm">&#x1F319; Wind-down</div><div class="mt">9:00 &ndash; 10:00 PM</div></div><div class="cdown" style="color:#818CF8;">5h 30m</div></div></div>
+      <div class="tle"><div class="tc">10:00p</div><div class="sc"><div class="ln"></div><div class="dt" style="background:#7B61FF;"></div><div class="ln"></div></div><div class="cd"><div><div class="nm">&#x1F634; Sleep Window</div><div class="mt">10 PM &ndash; 6 AM &bull; 8h</div></div><div class="cdown" style="color:#B794F6;">6h 45m</div></div></div>
+      <div class="tb"><div class="t on"><div class="i">&#x2728;</div>Today</div><div class="t"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">Recovery Day</p>
+    <p class="screen-desc">Primary state. Green score, standard countdowns, visible insight.</p>
+  </div>
+
+  <!-- TODAY: On Shift -->
+  <div>
+    <div class="phone">
+      <div class="plbl">On Shift</div>
+      <div class="sb"><span>1:30</span><span></span></div>
+      <div class="hdr"><div class="gr">On Shift</div><h3>Night Shift</h3><div class="ctx">4h 30m remaining &bull; 7 PM &ndash; 6 AM</div></div>
+      <div class="sl"><span class="e">&#x1F3E5;</span><span class="tx"><b>Night Shift Active</b> &bull; Plan your recovery</span></div>
+      <div class="cts">
+        <div class="ct" style="background:linear-gradient(180deg,rgba(255,159,67,0.08),rgba(255,159,67,0.02));"><div class="em">&#x23F1;</div><div class="v" style="color:#FF9F43;">4:30</div><div class="l">Shift ends</div></div>
+        <div class="ct"><div class="em">&#x1F634;</div><div class="v" style="color:#B794F6;">6:30a</div><div class="l">Sleep</div></div>
+        <div class="ct"><div class="em">&#x1F4A4;</div><div class="v" style="color:#818CF8;">7.5h</div><div class="l">Target</div></div>
+      </div>
+      <div class="ins" style="background:rgba(255,159,67,0.04);border-color:rgba(255,159,67,0.1);"><div class="ic" style="background:rgba(255,159,67,0.12);">&#x26A0;&#xFE0F;</div><div class="tx">Wear sunglasses on the drive home. Morning light will shift your clock the wrong way.</div></div>
+      <div class="tll">After Shift</div>
+      <div class="tle"><div class="tc">6:00a</div><div class="sc"><div class="ln"></div><div class="dt" style="background:#FCD34D;"></div><div class="ln"></div></div><div class="cd nxt"><div><div class="nm">&#x1F576; Light Avoidance</div><div class="mt">Sunglasses on drive</div></div><div class="cdown" style="color:#FCD34D;">4h 30m</div></div></div>
+      <div class="tle"><div class="tc">6:15a</div><div class="sc"><div class="ln"></div><div class="dt" style="background:#34D399;"></div><div class="ln"></div></div><div class="cd"><div><div class="nm">&#x1F37D; Light Meal</div><div class="mt">Keep it light before sleep</div></div><div class="cdown" style="color:#34D399;">4h 45m</div></div></div>
+      <div class="tle"><div class="tc">6:30a</div><div class="sc"><div class="ln"></div><div class="dt" style="background:#7B61FF;"></div><div class="ln"></div></div><div class="cd"><div><div class="nm">&#x1F634; Sleep Window</div><div class="mt">6:30 AM &ndash; 2 PM</div></div><div class="cdown" style="color:#B794F6;">5h</div></div></div>
+      <div class="tb"><div class="t on"><div class="i">&#x2728;</div>Today</div><div class="t"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">On Shift (Night)</p>
+    <p class="screen-desc">Orange-tinted. Shift countdown replaces score. Warning insight.</p>
+  </div>
+
+  <!-- TODAY: Wind-down -->
+  <div>
+    <div class="phone phone-wd">
+      <div class="plbl">Wind-down</div>
+      <div class="sb"><span>9:15</span><span></span></div>
+      <div class="hdr"><div class="gr">Wind-down Time</div><h3>Bedtime in 45m</h3></div>
+      <div class="sl"><span class="e">&#x1F319;</span><span class="tx"><b>Wind-down Active</b> &bull; Sleep at 10:00 PM</span></div>
+      <div class="wd-big"><div class="num">0:45</div><div class="lbl">until bedtime</div></div>
+      <div class="tll">Checklist</div>
+      <div class="wd-check"><span class="ck">&#x2705;</span><span class="tx done">Dim the lights</span></div>
+      <div class="wd-check"><span class="ck">&#x2705;</span><span class="tx done">Screens off</span></div>
+      <div class="wd-check"><span class="ck">&#x2B1C;</span><span class="tx">Set alarm for 6:00 AM</span></div>
+      <div class="wd-check"><span class="ck">&#x2B1C;</span><span class="tx">Cool room to 65&ndash;68&deg;F</span></div>
+      <div style="margin-top:12px;">
+        <div class="ins" style="background:rgba(129,140,248,0.04);border-color:rgba(129,140,248,0.1);"><div class="ic" style="background:rgba(129,140,248,0.12);">&#x1F4A1;</div><div class="tx">You got 7.2h last night. Aim for 7.5h to clear remaining debt.</div></div>
+      </div>
+      <div class="tb"><div class="t on"><div class="i">&#x2728;</div>Today</div><div class="t"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">Wind-down</p>
+    <p class="screen-desc">Large countdown + checklist. Background darkens as bedtime nears.</p>
+  </div>
+
+  <!-- NIGHT SKY -->
+  <div>
+    <div class="phone phone-ns">
+      <div class="plbl" style="color:#374151;">Night Sky</div>
+      <div class="sb"><span>10:15</span><span></span></div>
+      <button class="ns-x">&#x2715;</button>
+      <div class="star" style="top:75px;left:25px;"></div><div class="star br" style="top:105px;left:180px;"></div><div class="star" style="top:90px;left:120px;"></div><div class="star br sl" style="top:150px;left:55px;"></div><div class="star" style="top:130px;left:230px;"></div><div class="star br fs" style="top:170px;left:160px;"></div><div class="star" style="top:200px;left:80px;"></div><div class="star br" style="top:220px;left:200px;"></div><div class="star br sl" style="top:300px;left:40px;"></div><div class="star" style="top:340px;left:210px;"></div><div class="star br fs" style="top:370px;left:100px;"></div><div class="star" style="top:400px;left:180px;"></div><div class="star br" style="top:450px;left:60px;"></div>
+      <div class="ff" style="top:200px;left:60px;"></div><div class="ff" style="top:300px;left:180px;"></div><div class="ff" style="top:400px;left:100px;"></div>
+      <div style="position:relative;z-index:1;padding:32px 8px 0;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-size:9px;color:#4B5563;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Sleep Quality</div>
+        <div class="arc-w"><div class="arc-g"></div><div class="arc-r"><div style="text-align:center;"><div class="pct">62<span>%</span></div><div class="sub">recharging</div></div></div></div>
+        <div class="nsi"><div class="al">&#x23F0; 6:00 AM</div><div class="dt">Latest wake: 6:30 AM &bull; 5h 45m left</div></div>
+        <div class="nsc"><div class="h">Tomorrow</div><div class="r"><span class="e">&#x1F31E;</span><span class="txt">Light Exposure</span><span class="tm">6:00</span></div><div class="r"><span class="e">&#x2615;</span><span class="txt">Caffeine OK</span><span class="tm">7:00</span></div><div class="r"><span class="e">&#x1F37D;</span><span class="txt">Breakfast</span><span class="tm">7:30</span></div><div class="r"><span class="e">&#x1F3E5;</span><span class="txt">Day Shift</span><span class="tm">7:00</span></div></div>
+        <div class="nst">&#x1F4A1; Cool your room to 65&ndash;68&deg;F. Your body drops 2&ndash;3&deg; to initiate deep sleep.</div>
+      </div>
+    </div>
+    <p class="screen-label gold">Night Sky</p>
+    <p class="screen-desc">Fireflies + glowing arc + twinkling stars. Bedtime tip + tomorrow schedule.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================
+     SECTION 2: NAVIGATION SCREENS
+     ============================================ -->
+<div class="section-hdr">
+  <h2>Navigation Screens</h2>
+  <span class="sub">Onboarding, Schedule, and Profile</span>
+</div>
+
+<div class="screen-row">
+
+  <!-- ONBOARDING -->
+  <div>
+    <div class="phone">
+      <div class="plbl">Welcome</div>
+      <div class="sb"><span>9:41</span><span></span></div>
+      <div class="ob-dots"><div class="d on"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>
+      <div class="ob-hero">
+        <div class="logo">&#x1F319;</div>
+        <h3>Sleep on Autopilot</h3>
+        <p>ShiftWell reads your schedule and builds a complete sleep plan &mdash; zero effort.</p>
+      </div>
+      <div class="ob-feat"><div class="ob-icon" style="background:rgba(123,97,255,0.12);">&#x1F9E0;</div><div><div class="ti">AI-Powered Plans</div><div class="de">Personalized to your chronotype</div></div></div>
+      <div class="ob-feat"><div class="ob-icon" style="background:rgba(52,211,153,0.12);">&#x1F4C5;</div><div><div class="ti">Calendar Sync</div><div class="de">Reads shifts, writes sleep blocks</div></div></div>
+      <div class="ob-feat"><div class="ob-icon" style="background:rgba(200,168,75,0.12);">&#x1F4CA;</div><div><div class="ti">Recovery Tracking</div><div class="de">Watch your sleep quality improve</div></div></div>
+      <button class="btn-grad">Get Started</button>
+      <div class="ob-legal">Not a medical device. Based on peer-reviewed research.</div>
+    </div>
+    <p class="screen-label gold">Onboarding</p>
+    <p class="screen-desc">Swipeable cards. Gradient CTA. Dot navigation.</p>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div>
+    <div class="phone" style="padding-bottom:56px;">
+      <div class="plbl">Schedule</div>
+      <div class="sb"><span>9:41</span><span></span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><h3 style="font-size:20px;font-weight:700;">April 2026</h3><div style="color:#4B5563;font-size:13px;display:flex;gap:14px;"><span>&#9664;</span><span>&#9654;</span></div></div>
+      <div class="wk">
+        <div class="wd"><div class="dy">SUN</div><div class="nu">3</div></div>
+        <div class="wd"><div class="dy">MON</div><div class="nu">4</div></div>
+        <div class="wd today"><div class="dy">TUE</div><div class="nu">5</div><div class="dr"><div class="md" style="background:#4A90D9;"></div><div class="md" style="background:#7B61FF;"></div></div></div>
+        <div class="wd"><div class="dy">WED</div><div class="nu">6</div><div class="dr"><div class="md" style="background:#4A90D9;"></div></div></div>
+        <div class="wd"><div class="dy">THU</div><div class="nu">7</div><div class="dr"><div class="md" style="background:#4A90D9;"></div></div></div>
+        <div class="wd"><div class="dy">FRI</div><div class="nu">8</div></div>
+        <div class="wd"><div class="dy">SAT</div><div class="nu">9</div><div class="dr"><div class="md" style="background:#FF9F43;"></div></div></div>
+      </div>
+      <div style="font-size:9px;color:#4B5563;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px;">Saturday, April 5</div>
+      <div class="sc"><div class="si" style="background:rgba(74,144,217,0.12);">&#x1F3E5;</div><div><div class="sn">Day Shift</div><div class="st">7:00 AM &ndash; 7:00 PM</div></div><div class="sd">12h</div></div>
+      <div class="sc"><div class="si" style="background:rgba(123,97,255,0.12);">&#x1F634;</div><div><div class="sn">Sleep Window</div><div class="st">10:00 PM &ndash; 6:00 AM</div></div><div class="sd">8h</div></div>
+      <div class="sc"><div class="si" style="background:rgba(255,107,107,0.12);">&#x2615;</div><div><div class="sn">Caffeine Cutoff</div><div class="st">2:00 PM</div></div><div class="sd"></div></div>
+      <div class="sc"><div class="si" style="background:rgba(129,140,248,0.12);">&#x1F319;</div><div><div class="sn">Wind-down</div><div class="st">9:00 &ndash; 10:00 PM</div></div><div class="sd">1h</div></div>
+      <div class="fab">+</div>
+      <div class="tb"><div class="t"><div class="i">&#x2728;</div>Today</div><div class="t on"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">Schedule</p>
+    <p class="screen-desc">Week strip + icon shift cards + FAB. Swipe for more weeks.</p>
+  </div>
+
+  <!-- PROFILE -->
+  <div>
+    <div class="phone" style="padding-bottom:56px;">
+      <div class="plbl">Profile</div>
+      <div class="sb"><span>9:41</span><span></span></div>
+      <div class="pf-hdr">
+        <div class="pf-av">S</div>
+        <div class="pf-name">Sim</div>
+        <div class="pf-sub">Bear Chronotype &bull; 7.5h sleep need</div>
+        <div class="pf-badge"><span>Free Plan</span></div>
+      </div>
+      <div class="pf-stats">
+        <div class="pf-stat"><div class="v" style="color:#34D399;">78</div><div class="l">Avg Score</div></div>
+        <div class="pf-stat"><div class="v">14</div><div class="l">Day Streak</div></div>
+        <div class="pf-stat"><div class="v" style="color:#B794F6;">7.2h</div><div class="l">Avg Sleep</div></div>
+      </div>
+      <div class="pf-sec">
+        <div class="pf-sec-lbl">Preferences</div>
+        <div class="pf-card">
+          <div class="pf-row"><span class="k">Notifications</span><span class="val">3 active</span></div>
+          <div class="pf-row"><span class="k">Nap preference</span><span class="val">20 min</span></div>
+          <div class="pf-row"><span class="k">Caffeine half-life</span><span class="val">5h</span></div>
+        </div>
+      </div>
+      <div class="pf-sec">
+        <div class="pf-sec-lbl">Data</div>
+        <div class="pf-card">
+          <div class="pf-row"><span class="k">Export schedule</span><span class="arr">&#x2192;</span></div>
+          <div class="pf-row"><span class="k">Import shifts</span><span class="arr">&#x2192;</span></div>
+          <div class="pf-row"><span class="k">HealthKit</span><span class="val" style="color:#34D399;">Connected</span></div>
+        </div>
+      </div>
+      <div class="pf-sec">
+        <div class="pf-sec-lbl">Account</div>
+        <div class="pf-card">
+          <div class="pf-row"><span class="k" style="color:#C8A84B;font-weight:600;">Upgrade to Premium</span><span style="color:#C8A84B;">&#x2192;</span></div>
+          <div class="pf-row"><span class="k" style="color:#FF6B6B;">Sign Out</span></div>
+        </div>
+      </div>
+      <div class="tb"><div class="t"><div class="i">&#x2728;</div>Today</div><div class="t"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t on"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">Profile</p>
+    <p class="screen-desc">Avatar + stats + preferences + data + account. Replaces Settings.</p>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div>
+    <div class="phone">
+      <div class="plbl">Empty</div>
+      <div class="sb"><span>9:41</span><span></span></div>
+      <div class="hdr"><div class="gr">Good morning</div><h3>Saturday, Apr 5</h3></div>
+      <div style="text-align:center;padding:60px 16px 0;">
+        <div style="font-size:40px;margin-bottom:16px;">&#x1F680;</div>
+        <h3 style="font-size:20px;font-weight:700;margin-bottom:10px;">Let's Get Started</h3>
+        <p style="font-size:13px;color:#9CA3AF;line-height:1.5;max-width:240px;margin:0 auto;">Add your shifts and ShiftWell builds your complete sleep plan automatically.</p>
+        <button class="btn-grad" style="max-width:260px;margin:20px auto 0;">Add Your Shifts</button>
+        <div style="margin-top:12px;"><span style="font-size:12px;color:#6B7280;text-decoration:underline;cursor:pointer;">Import from calendar</span></div>
+      </div>
+      <div class="tb"><div class="t on"><div class="i">&#x2728;</div>Today</div><div class="t"><div class="i">&#x1F4C5;</div>Schedule</div><div class="t"><div class="i">&#x1F464;</div>Profile</div></div>
+    </div>
+    <p class="screen-label gold">Empty State</p>
+    <p class="screen-desc">First launch. Gradient CTA + calendar import link.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================
+     FINAL IMPROVEMENTS
+     ============================================ -->
+<div class="improvements">
+  <h3>Final Expert Audit &mdash; 8 Visual Improvements</h3>
+  <div class="imp-grid">
+    <div class="imp">
+      <h4>Tabular Numerals <span class="tag critical">Must-have</span></h4>
+      <p>All countdown numbers use <code>font-variant-numeric: tabular-nums</code> so digits don't jump when counting down. Without this, "2:14" shifting to "2:13" causes the layout to jitter.</p>
+    </div>
+    <div class="imp">
+      <h4>Noise Texture Overlay <span class="tag polish">Polish</span></h4>
+      <p>2.5% opacity fractal noise over the background. Adds depth and tactile quality. Hallmark of Linear, Raycast, Arc. Already applied in this gallery.</p>
+    </div>
+    <div class="imp">
+      <h4>Warmer Background <span class="tag polish">Polish</span></h4>
+      <p>Shifted from cold #0A0E1A to warmer #0B0D16. Subtle but makes the app feel cozy rather than clinical. Critical for a sleep app.</p>
+    </div>
+    <div class="imp">
+      <h4>Consistent 8px Vertical Rhythm <span class="tag critical">Must-have</span></h4>
+      <p>All margins between sections snap to 8px multiples (8, 16, 24). Prevents the "something feels off" sensation from inconsistent spacing.</p>
+    </div>
+    <div class="imp">
+      <h4>Card Elevation Hierarchy <span class="tag nice">Nice-to-have</span></h4>
+      <p>Three card levels: flat (timeline), raised (countdowns, insight), floating (tab bar). Each gets progressively more border opacity + shadow. Creates visual depth.</p>
+    </div>
+    <div class="imp">
+      <h4>Active State Gradient Direction <span class="tag polish">Polish</span></h4>
+      <p>Active timeline cards have a left-to-right gradient (color fades from left). This draws the eye to the event name first, then naturally to the countdown on the right.</p>
+    </div>
+    <div class="imp">
+      <h4>Score Ring Accuracy <span class="tag nice">Nice-to-have</span></h4>
+      <p>The arc should be mathematically proportional to the score (78% = 281 degrees). Use SVG with <code>stroke-dasharray</code> for pixel-perfect arcs.</p>
+    </div>
+    <div class="imp">
+      <h4>SF Symbols for Tab Icons <span class="tag critical">Must-have</span></h4>
+      <p>Replace emoji tab icons with SF Symbols (sparkles, calendar, person.circle) for native iOS feel. Emoji in tabs looks amateur on iOS.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

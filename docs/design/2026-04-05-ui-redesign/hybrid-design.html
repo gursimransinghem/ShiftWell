@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Hybrid Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0F1117; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; padding: 32px 16px; }
+
+  h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 12px; line-height: 1.5; }
+
+  .sources {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .source-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 1px solid;
+  }
+  .source-tag.a { color: #C8A84B; border-color: rgba(200,168,75,0.3); background: rgba(200,168,75,0.06); }
+  .source-tag.b { color: #7B61FF; border-color: rgba(123,97,255,0.3); background: rgba(123,97,255,0.06); }
+  .source-tag.new { color: #34D399; border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.06); }
+
+  .screen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Phone Frame */
+  .phone {
+    background: #080B14;
+    border-radius: 44px;
+    border: 2.5px solid #1F2937;
+    padding: 48px 16px 28px;
+    min-height: 700px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-lbl {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: #4B5563; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  }
+  .sbar { display: flex; justify-content: space-between; padding: 0 4px 8px; font-size: 11px; color: #6B7280; font-weight: 600; }
+
+  /* ===== HYBRID TODAY ===== */
+
+  /* Header: Path A greeting + Path B avatar */
+  .h-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .h-header .left {}
+  .h-header .greeting { font-size: 14px; color: #9CA3AF; font-weight: 500; }
+  .h-header h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; margin-top: 2px; }
+  .h-header .context { font-size: 12px; color: #6B7280; margin-top: 3px; }
+  .h-avatar {
+    width: 34px; height: 34px; border-radius: 17px;
+    background: linear-gradient(135deg, #7B61FF, #C8A84B);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* Status Pill: From Path B */
+  .h-pill {
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+    animation: pillGlow 3s ease-in-out infinite;
+  }
+  .h-pill.recovery {
+    background: linear-gradient(135deg, rgba(52,211,153,0.12), rgba(52,211,153,0.04));
+    border: 1px solid rgba(52,211,153,0.2);
+  }
+  .h-pill.shift {
+    background: linear-gradient(135deg, rgba(255,159,67,0.12), rgba(255,159,67,0.04));
+    border: 1px solid rgba(255,159,67,0.2);
+  }
+  .h-pill.winddown {
+    background: linear-gradient(135deg, rgba(129,140,248,0.15), rgba(123,97,255,0.05));
+    border: 1px solid rgba(129,140,248,0.2);
+  }
+  @keyframes pillGlow {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 20px rgba(52,211,153,0.08); }
+  }
+  .h-pill-icon {
+    width: 36px; height: 36px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .h-pill .pri { font-size: 14px; font-weight: 600; }
+  .h-pill .sec { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+
+  /* Recovery Score: Path A's larger card */
+  .h-score {
+    background: linear-gradient(135deg, #141929 0%, #1A1D35 100%);
+    border: 1px solid #1F2937;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .h-score::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(52,211,153,0.08), transparent);
+    border-radius: 50%;
+  }
+  .h-score-ring {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 4px solid #1F2937;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative;
+    animation: ringPulse 4s ease-in-out infinite;
+  }
+  @keyframes ringPulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(52,211,153,0); }
+    50% { box-shadow: 0 0 12px rgba(52,211,153,0.15); }
+  }
+  .h-score-ring::before {
+    content: '';
+    position: absolute; inset: -4px; border-radius: 50%;
+    border: 4px solid transparent;
+    border-top-color: #34D399; border-right-color: #34D399; border-bottom-color: #34D399;
+    transform: rotate(-30deg);
+  }
+  .h-score-ring .num { font-size: 22px; font-weight: 700; }
+  .h-score-info { flex: 1; position: relative; z-index: 1; }
+  .h-score-info .lbl { font-size: 10px; color: #6B7280; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .h-score-info .desc { font-size: 13px; color: #D1D5DB; margin-top: 4px; }
+  .h-score-info .trend { font-size: 12px; color: #34D399; font-weight: 600; margin-top: 3px; }
+
+  /* Bento Cards: From Path B */
+  .h-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .h-bento-card {
+    border-radius: 16px; padding: 14px;
+    position: relative; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: transform 0.2s;
+  }
+  .h-bento-card:active { transform: scale(0.97); }
+  .h-bento-card .ic { position: absolute; top: 12px; right: 12px; font-size: 16px; opacity: 0.5; }
+  .h-bento-card .cl { font-size: 10px; color: #6B7280; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
+  .h-bento-card .val { font-size: 28px; font-weight: 700; letter-spacing: -1px; }
+  .h-bento-card .sub { font-size: 11px; color: #9CA3AF; margin-top: 3px; }
+  .h-bento-card.caffeine { background: linear-gradient(135deg, rgba(255,107,107,0.1), rgba(255,107,107,0.02)); }
+  .h-bento-card.caffeine .val { color: #FF6B6B; }
+  .h-bento-card.sleep { background: linear-gradient(135deg, rgba(123,97,255,0.1), rgba(123,97,255,0.02)); }
+  .h-bento-card.sleep .val { color: #B794F6; }
+
+  /* Insight Card: From Path B */
+  .h-insight {
+    background: linear-gradient(135deg, rgba(200,168,75,0.08), transparent);
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 14px;
+    animation: insightFade 0.6s ease-out;
+  }
+  @keyframes insightFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .h-insight .emoji { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .h-insight .text { font-size: 13px; color: #D1D5DB; line-height: 1.5; }
+
+  /* Timeline: HYBRID — Path A spine + Path B inline countdowns */
+  .h-section-lbl { font-size: 10px; color: #6B7280; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 10px; }
+
+  .h-tl-event { display: flex; gap: 0; margin-bottom: 0; }
+  .h-tl-time {
+    width: 46px; text-align: right; padding-right: 8px; padding-top: 12px;
+    font-size: 12px; color: #6B7280; font-weight: 500; flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .h-tl-spine { width: 20px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .h-tl-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 6px; }
+  .h-tl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; transition: all 0.3s; }
+  .h-tl-dot.glow { width: 12px; height: 12px; }
+  .h-tl-dot.breathing { animation: dotBreathe 1.5s ease-in-out infinite; }
+  @keyframes dotBreathe {
+    0%, 100% { box-shadow: 0 0 4px currentColor; opacity: 1; }
+    50% { box-shadow: 0 0 12px currentColor; opacity: 0.85; }
+  }
+
+  .h-tl-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    flex: 1; display: flex; overflow: hidden;
+    margin-bottom: 6px;
+    transition: all 0.3s;
+  }
+  .h-tl-card.active {
+    border-color: rgba(255,107,107,0.35);
+    background: linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,255,255,0.03) 50%);
+  }
+  .h-tl-card.next {
+    border-color: rgba(129,140,248,0.25);
+    background: linear-gradient(90deg, rgba(129,140,248,0.05), rgba(255,255,255,0.03) 50%);
+  }
+  .h-tl-bar { width: 3px; flex-shrink: 0; border-radius: 3px 0 0 3px; }
+  .h-tl-content { padding: 10px 12px; flex: 1; display: flex; justify-content: space-between; align-items: center; }
+  .h-tl-left {}
+  .h-tl-left .name { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .h-tl-left .meta { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .h-tl-left .note { font-size: 10px; color: #6B7280; font-style: italic; margin-top: 3px; }
+  /* Path B inline countdown label */
+  .h-tl-countdown { font-size: 13px; font-weight: 700; flex-shrink: 0; margin-left: 8px; }
+  .h-tl-past { opacity: 0.35; }
+
+  /* Floating Tab Bar: From Path B */
+  .h-tab {
+    display: flex; justify-content: space-around; padding: 8px 0;
+    position: absolute; bottom: 12px; left: 14px; right: 14px;
+    background: rgba(8,11,20,0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+  }
+  .h-tab .t { text-align: center; font-size: 10px; color: #6B7280; padding: 4px 0; flex: 1; transition: color 0.2s; }
+  .h-tab .t.on { color: #fff; }
+  .h-tab .t .i { font-size: 18px; margin-bottom: 2px; }
+  .h-tab .t.on .i { filter: drop-shadow(0 0 6px rgba(200,168,75,0.4)); }
+
+  /* ===== NIGHT SKY: ENHANCED ===== */
+  .phone-night {
+    background: radial-gradient(ellipse at 50% 25%, #0D1025, #060811);
+  }
+
+  /* Animated stars */
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff; border-radius: 50%;
+    opacity: 0.25;
+  }
+  .star.bright {
+    width: 3px; height: 3px; opacity: 0.6;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  .star.slow { animation-duration: 5s; }
+  .star.fast { animation-duration: 2s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 0.15; transform: scale(0.7); }
+  }
+
+  /* Fireflies */
+  .firefly {
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #C8A84B;
+    opacity: 0;
+    animation: fireflyFloat 8s ease-in-out infinite;
+    filter: blur(1px);
+  }
+  .firefly:nth-child(2) { animation-delay: 2s; animation-duration: 10s; }
+  .firefly:nth-child(3) { animation-delay: 4s; animation-duration: 7s; }
+  .firefly:nth-child(4) { animation-delay: 6s; animation-duration: 9s; }
+  @keyframes fireflyFloat {
+    0% { opacity: 0; transform: translate(0, 0); }
+    20% { opacity: 0.7; }
+    50% { opacity: 0.4; transform: translate(30px, -20px); }
+    80% { opacity: 0.6; transform: translate(-10px, -40px); }
+    100% { opacity: 0; transform: translate(20px, -60px); }
+  }
+
+  /* Glowing recharge arc */
+  .h-arc-wrap { position: relative; margin: 0 auto 20px; width: 180px; height: 180px; }
+  .h-arc-ring {
+    width: 180px; height: 180px; border-radius: 50%;
+    border: 4px solid rgba(123,97,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    animation: arcGlow 3s ease-in-out infinite;
+  }
+  @keyframes arcGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(123,97,255,0.1); }
+    50% { box-shadow: 0 0 40px rgba(123,97,255,0.2); }
+  }
+  .h-arc-ring::before {
+    content: '';
+    position: absolute; inset: -4px; border-radius: 50%;
+    border: 4px solid transparent;
+    border-top-color: #7B61FF; border-right-color: #7B61FF;
+    transform: rotate(-45deg);
+    filter: drop-shadow(0 0 8px rgba(123,97,255,0.5));
+    animation: arcSpin 60s linear infinite;
+  }
+  @keyframes arcSpin {
+    from { transform: rotate(-45deg); }
+    to { transform: rotate(315deg); }
+  }
+  .h-arc-ring .inner { text-align: center; }
+  .h-arc-ring .pct { font-size: 44px; font-weight: 700; letter-spacing: -1px; }
+  .h-arc-ring .pct span { font-size: 20px; color: #6B7280; }
+  .h-arc-ring .sub { font-size: 11px; color: #6B7280; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* Ambient glow behind arc */
+  .h-arc-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(123,97,255,0.15), transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 4s ease-in-out infinite;
+    z-index: -1;
+  }
+  @keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  }
+
+  .ns-info { text-align: center; margin-bottom: 16px; }
+  .ns-info .alarm { font-size: 20px; font-weight: 600; }
+  .ns-info .detail { font-size: 12px; color: #6B7280; margin-top: 4px; }
+
+  .ns-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  .ns-card .hdr { font-size: 10px; color: #C8A84B; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
+  .ns-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+  .ns-row .e { font-size: 14px; }
+  .ns-row .txt { font-size: 13px; color: #D1D5DB; flex: 1; }
+  .ns-row .time { font-size: 12px; color: #6B7280; }
+
+  .ns-tip {
+    background: rgba(200,168,75,0.05);
+    border: 1px solid rgba(200,168,75,0.1);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    font-size: 12px; color: #D1D5DB; line-height: 1.5;
+  }
+
+  .ns-dismiss {
+    position: absolute; top: 48px; right: 16px;
+    font-size: 14px; color: #4B5563; background: none; border: none;
+    width: 28px; height: 28px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Screen label */
+  .screen-title { text-align: center; font-size: 13px; color: #C8A84B; font-weight: 600; margin-top: 12px; }
+  .screen-desc { text-align: center; font-size: 11px; color: #6B7280; margin-top: 4px; }
+
+  /* Origin tags on elements */
+  .origin {
+    font-size: 8px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 1px 5px; border-radius: 4px;
+    position: absolute; top: -8px; right: 8px;
+    z-index: 2;
+  }
+  .origin.a { background: rgba(200,168,75,0.2); color: #C8A84B; }
+  .origin.b { background: rgba(123,97,255,0.2); color: #7B61FF; }
+  .origin.new { background: rgba(52,211,153,0.2); color: #34D399; }
+
+  /* Annotations */
+  .annotation-section {
+    max-width: 1400px;
+    margin: 40px auto 0;
+    padding: 24px;
+    border: 1px solid #1F2937;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+  }
+  .annotation-section h3 { font-size: 16px; margin-bottom: 16px; text-align: center; }
+  .anno-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .anno-card {
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #1F2937;
+    background: rgba(255,255,255,0.02);
+  }
+  .anno-card h4 { font-size: 13px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .anno-card h4 .tag {
+    font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .anno-card h4 .tag.a { background: rgba(200,168,75,0.15); color: #C8A84B; }
+  .anno-card h4 .tag.b { background: rgba(123,97,255,0.15); color: #7B61FF; }
+  .anno-card h4 .tag.new { background: rgba(52,211,153,0.15); color: #34D399; }
+  .anno-card p { font-size: 12px; color: #9CA3AF; line-height: 1.5; }
+  .anno-card .anim { font-size: 11px; color: #34D399; margin-top: 6px; font-style: italic; }
+
+  /* Animation plan */
+  .anim-section {
+    max-width: 1400px;
+    margin: 32px auto 0;
+    padding: 24px;
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 16px;
+    background: rgba(52,211,153,0.03);
+  }
+  .anim-section h3 { font-size: 16px; margin-bottom: 16px; text-align: center; color: #34D399; }
+  .anim-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+  .anim-item { padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
+  .anim-item .name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .anim-item .desc { font-size: 11px; color: #9CA3AF; line-height: 1.4; }
+  .anim-item .where { font-size: 10px; color: #6B7280; margin-top: 4px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>ShiftWell &mdash; Hybrid Design</h1>
+<p class="page-sub">Best of both paths, combined. Premium, plush, animated.</p>
+
+<div class="sources">
+  <span class="source-tag a">From Path A</span>
+  <span class="source-tag b">From Path B</span>
+  <span class="source-tag new">New / Enhanced</span>
+</div>
+
+<div class="screen-grid">
+
+  <!-- ===== HYBRID TODAY: RECOVERY DAY ===== -->
+  <div>
+    <div class="phone">
+      <div class="phone-lbl">Hybrid Today</div>
+      <div class="sbar"><span>9:41</span><span>100%</span></div>
+
+      <!-- Header: A greeting + B avatar -->
+      <div class="h-header">
+        <div class="left">
+          <div class="greeting">Good morning, Sim</div>
+          <h2>Saturday, Apr 5</h2>
+          <div class="context">Day shift tomorrow &bull; 12h recovery window</div>
+        </div>
+        <div class="h-avatar">S</div>
+      </div>
+
+      <!-- Status Pill: From B -->
+      <div class="h-pill recovery">
+        <div class="h-pill-icon" style="background:rgba(52,211,153,0.15);">&#x1F33F;</div>
+        <div>
+          <div class="pri">Recovery Day</div>
+          <div class="sec">Clear schedule &bull; prioritize rest</div>
+        </div>
+      </div>
+
+      <!-- Recovery Score: From A (larger card) -->
+      <div class="h-score">
+        <div class="h-score-ring">
+          <div class="num">78</div>
+        </div>
+        <div class="h-score-info">
+          <div class="lbl">Recovery Score</div>
+          <div class="desc">You slept 7.2h of planned 7.5h</div>
+          <div class="trend">&#x2191; 6 pts from yesterday</div>
+        </div>
+      </div>
+
+      <!-- Bento Cards: From B -->
+      <div class="h-bento">
+        <div class="h-bento-card caffeine">
+          <div class="ic">&#x2615;</div>
+          <div class="cl">Caffeine cutoff</div>
+          <div class="val">2:14</div>
+          <div class="sub">hours left</div>
+        </div>
+        <div class="h-bento-card sleep">
+          <div class="ic">&#x1F634;</div>
+          <div class="cl">Sleep window</div>
+          <div class="val">6:45</div>
+          <div class="sub">hours away</div>
+        </div>
+      </div>
+
+      <!-- Insight: From B -->
+      <div class="h-insight">
+        <div class="emoji">&#x1F4A1;</div>
+        <div class="text">Your sleep debt is clearing. One more solid night and you'll be fully recovered for your night block starting Thursday.</div>
+      </div>
+
+      <!-- Timeline: HYBRID — A spine + B inline countdowns -->
+      <div class="h-section-lbl">Today's Plan</div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">6:00a</div>
+        <div class="h-tl-spine">
+          <div class="h-tl-line"></div>
+          <div class="h-tl-dot" style="background:#FCD34D;"></div>
+          <div class="h-tl-line"></div>
+        </div>
+        <div class="h-tl-card h-tl-past">
+          <div class="h-tl-bar" style="background:#FCD34D;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F31E; Light Exposure</div><div class="meta">6:00 &ndash; 6:30 AM</div></div>
+            <div class="h-tl-countdown" style="color:#6B7280;">Done</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">7:00a</div>
+        <div class="h-tl-spine">
+          <div class="h-tl-line"></div>
+          <div class="h-tl-dot" style="background:#34D399;"></div>
+          <div class="h-tl-line"></div>
+        </div>
+        <div class="h-tl-card h-tl-past">
+          <div class="h-tl-bar" style="background:#34D399;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F37D; Breakfast</div><div class="meta">7:00 &ndash; 7:30 AM</div></div>
+            <div class="h-tl-countdown" style="color:#6B7280;">Done</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">2:00p</div>
+        <div class="h-tl-spine">
+          <div class="h-tl-line"></div>
+          <div class="h-tl-dot glow breathing" style="background:#FF6B6B; color:#FF6B6B;"></div>
+          <div class="h-tl-line"></div>
+        </div>
+        <div class="h-tl-card active">
+          <div class="h-tl-bar" style="background:#FF6B6B;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left">
+              <div class="name">&#x2615; Caffeine Cutoff</div>
+              <div class="meta">2:00 PM &bull; No caffeine after this</div>
+            </div>
+            <div class="h-tl-countdown" style="color:#FF6B6B;">Now</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">9:00p</div>
+        <div class="h-tl-spine">
+          <div class="h-tl-line"></div>
+          <div class="h-tl-dot" style="background:#818CF8;"></div>
+          <div class="h-tl-line"></div>
+        </div>
+        <div class="h-tl-card next">
+          <div class="h-tl-bar" style="background:#818CF8;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F319; Wind-down</div><div class="meta">9:00 &ndash; 10:00 PM</div></div>
+            <div class="h-tl-countdown" style="color:#818CF8;">5h 30m</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">10:00p</div>
+        <div class="h-tl-spine">
+          <div class="h-tl-line"></div>
+          <div class="h-tl-dot" style="background:#7B61FF;"></div>
+          <div class="h-tl-line"></div>
+        </div>
+        <div class="h-tl-card">
+          <div class="h-tl-bar" style="background:#7B61FF;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">10:00 PM &ndash; 6:00 AM &bull; 8h</div></div>
+            <div class="h-tl-countdown" style="color:#B794F6;">6h 45m</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Tab Bar: From B -->
+      <div class="h-tab">
+        <div class="t on"><div class="i">&#x2728;</div>Today</div>
+        <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+        <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+      </div>
+    </div>
+    <p class="screen-title">Hybrid Today &mdash; Recovery Day</p>
+    <p class="screen-desc">A's header + score card | B's status pill + bento + insight + floating nav | Hybrid timeline</p>
+  </div>
+
+  <!-- ===== HYBRID TODAY: ON SHIFT ===== -->
+  <div>
+    <div class="phone">
+      <div class="phone-lbl">On Shift</div>
+      <div class="sbar"><span>1:30</span><span></span></div>
+
+      <div class="h-header">
+        <div class="left">
+          <div class="greeting">On Shift</div>
+          <h2>Night Shift</h2>
+          <div class="context">4h 30m remaining &bull; 7:00 PM &ndash; 6:00 AM</div>
+        </div>
+        <div class="h-avatar">S</div>
+      </div>
+
+      <div class="h-pill shift">
+        <div class="h-pill-icon" style="background:rgba(255,159,67,0.15);">&#x1F3E5;</div>
+        <div>
+          <div class="pri">Night Shift Active</div>
+          <div class="sec">Stay alert &bull; plan your post-shift recovery</div>
+        </div>
+      </div>
+
+      <div class="h-bento">
+        <div class="h-bento-card" style="background:linear-gradient(135deg,rgba(255,159,67,0.1),rgba(255,159,67,0.02));">
+          <div class="ic">&#x23F1;</div>
+          <div class="cl">Shift ends</div>
+          <div class="val" style="color:#FF9F43;">4:30</div>
+          <div class="sub">hours left</div>
+        </div>
+        <div class="h-bento-card sleep">
+          <div class="ic">&#x1F634;</div>
+          <div class="cl">Sleep window</div>
+          <div class="val">6:30a</div>
+          <div class="sub">post-shift nap</div>
+        </div>
+      </div>
+
+      <div class="h-insight" style="background:linear-gradient(135deg,rgba(255,159,67,0.08),transparent); border-color:rgba(255,159,67,0.15);">
+        <div class="emoji">&#x26A0;&#xFE0F;</div>
+        <div class="text">Wear sunglasses on the drive home. Bright morning light will shift your circadian clock the wrong way.</div>
+      </div>
+
+      <div class="h-section-lbl">After Shift</div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">6:00a</div>
+        <div class="h-tl-spine"><div class="h-tl-line"></div><div class="h-tl-dot" style="background:#FCD34D;"></div><div class="h-tl-line"></div></div>
+        <div class="h-tl-card next">
+          <div class="h-tl-bar" style="background:#FCD34D;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F576; Light Avoidance</div><div class="meta">Wear sunglasses on drive home</div></div>
+            <div class="h-tl-countdown" style="color:#FCD34D;">4h 30m</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">6:15a</div>
+        <div class="h-tl-spine"><div class="h-tl-line"></div><div class="h-tl-dot" style="background:#34D399;"></div><div class="h-tl-line"></div></div>
+        <div class="h-tl-card">
+          <div class="h-tl-bar" style="background:#34D399;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F37D; Light Meal</div><div class="meta">Keep it light before sleep</div></div>
+            <div class="h-tl-countdown" style="color:#34D399;">4h 45m</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tl-event">
+        <div class="h-tl-time">6:30a</div>
+        <div class="h-tl-spine"><div class="h-tl-line"></div><div class="h-tl-dot" style="background:#7B61FF;"></div><div class="h-tl-line"></div></div>
+        <div class="h-tl-card">
+          <div class="h-tl-bar" style="background:#7B61FF;"></div>
+          <div class="h-tl-content">
+            <div class="h-tl-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">6:30 AM &ndash; 2:00 PM &bull; 7.5h</div></div>
+            <div class="h-tl-countdown" style="color:#B794F6;">5h</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-tab">
+        <div class="t on"><div class="i">&#x2728;</div>Today</div>
+        <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+        <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+      </div>
+    </div>
+    <p class="screen-title">Hybrid Today &mdash; On Shift (Night)</p>
+    <p class="screen-desc">Orange-tinted status pill + shift countdown + contextual warning insight</p>
+  </div>
+
+  <!-- ===== HYBRID NIGHT SKY: ENHANCED ===== -->
+  <div>
+    <div class="phone phone-night">
+      <div class="phone-lbl" style="color:#374151;">Night Sky</div>
+      <div class="sbar"><span>10:15</span><span></span></div>
+      <button class="ns-dismiss">&#x2715;</button>
+
+      <!-- Stars: more of them, varied speeds -->
+      <div class="star" style="top:75px;left:25px;"></div>
+      <div class="star bright" style="top:105px;left:180px;"></div>
+      <div class="star" style="top:90px;left:120px;"></div>
+      <div class="star bright slow" style="top:150px;left:55px;"></div>
+      <div class="star" style="top:130px;left:230px;"></div>
+      <div class="star bright fast" style="top:170px;left:160px;"></div>
+      <div class="star" style="top:200px;left:80px;"></div>
+      <div class="star bright" style="top:220px;left:200px;"></div>
+      <div class="star" style="top:250px;left:140px;"></div>
+      <div class="star bright slow" style="top:300px;left:40px;"></div>
+      <div class="star" style="top:340px;left:210px;"></div>
+      <div class="star bright fast" style="top:370px;left:100px;"></div>
+      <div class="star" style="top:400px;left:180px;"></div>
+      <div class="star bright" style="top:450px;left:60px;"></div>
+      <div class="star" style="top:480px;left:240px;"></div>
+      <div class="star bright slow" style="top:510px;left:130px;"></div>
+
+      <!-- Fireflies: warm gold particles -->
+      <div class="firefly" style="top:200px;left:60px;"></div>
+      <div class="firefly" style="top:300px;left:180px;"></div>
+      <div class="firefly" style="top:400px;left:100px;"></div>
+      <div class="firefly" style="top:150px;left:220px;"></div>
+
+      <div style="position:relative;z-index:1;padding:36px 8px 0;display:flex;flex-direction:column;align-items:center;">
+
+        <div class="lbl" style="font-size:10px;color:#6B7280;letter-spacing:1px;margin-bottom:12px;">Sleep Quality</div>
+
+        <!-- Glowing Recharge Arc -->
+        <div class="h-arc-wrap">
+          <div class="h-arc-glow"></div>
+          <div class="h-arc-ring">
+            <div class="inner">
+              <div class="pct">62<span>%</span></div>
+              <div class="sub">recharging</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ns-info">
+          <div class="alarm">&#x23F0; 6:00 AM</div>
+          <div class="detail">Latest safe wake: 6:30 AM &bull; 5h 45m remaining</div>
+        </div>
+
+        <div class="ns-card">
+          <div class="hdr">Tomorrow</div>
+          <div class="ns-row"><span class="e">&#x1F31E;</span><span class="txt">Light Exposure</span><span class="time">6:00 AM</span></div>
+          <div class="ns-row"><span class="e">&#x2615;</span><span class="txt">Caffeine OK</span><span class="time">7:00 AM</span></div>
+          <div class="ns-row"><span class="e">&#x1F37D;</span><span class="txt">Breakfast</span><span class="time">7:30 AM</span></div>
+          <div class="ns-row"><span class="e">&#x1F3E5;</span><span class="txt">Day Shift</span><span class="time">7:00 AM</span></div>
+        </div>
+
+        <div class="ns-tip">&#x1F4A1; Cool your room to 65&ndash;68&deg;F. Your body temperature drops 2&ndash;3&deg; to initiate deep sleep.</div>
+      </div>
+    </div>
+    <p class="screen-title">Night Sky &mdash; Enhanced</p>
+    <p class="screen-desc">Firefly particles + glowing arc + ambient pulse + twinkling stars at varied speeds</p>
+  </div>
+
+  <!-- ===== WIND-DOWN TRANSITION ===== -->
+  <div>
+    <div class="phone" style="background: linear-gradient(180deg, #080B14 0%, #0D0F22 100%);">
+      <div class="phone-lbl">Wind-down</div>
+      <div class="sbar"><span>9:15</span><span></span></div>
+
+      <div class="h-header">
+        <div class="left">
+          <div class="greeting">Wind-down Time</div>
+          <h2>Bedtime in 45m</h2>
+          <div class="context">Sleep window at 10:00 PM</div>
+        </div>
+        <div class="h-avatar">S</div>
+      </div>
+
+      <div class="h-pill winddown">
+        <div class="h-pill-icon" style="background:rgba(129,140,248,0.2);">&#x1F319;</div>
+        <div>
+          <div class="pri">Wind-down Active</div>
+          <div class="sec">Start your evening routine</div>
+        </div>
+      </div>
+
+      <!-- Large countdown: premium feel -->
+      <div style="text-align:center; padding: 20px 0;">
+        <div style="font-size:56px; font-weight:700; letter-spacing:-3px; color:#818CF8; text-shadow: 0 0 30px rgba(129,140,248,0.2);">0:45</div>
+        <div style="font-size:12px; color:#6B7280; margin-top:4px;">until bedtime</div>
+      </div>
+
+      <div class="h-section-lbl">Wind-down Checklist</div>
+
+      <div style="margin-bottom: 6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">&#x2705;</span>
+        <span style="font-size:13px; text-decoration:line-through; color:#6B7280;">Dim the lights</span>
+      </div>
+      <div style="margin-bottom: 6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">&#x2705;</span>
+        <span style="font-size:13px; text-decoration:line-through; color:#6B7280;">Screens off</span>
+      </div>
+      <div style="margin-bottom: 6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">&#x2B1C;</span>
+        <span style="font-size:13px;">Set alarm for 6:00 AM</span>
+      </div>
+      <div style="margin-bottom: 12px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:16px;">&#x2B1C;</span>
+        <span style="font-size:13px;">Cool room to 65&ndash;68&deg;F</span>
+      </div>
+
+      <div class="h-insight" style="background:rgba(129,140,248,0.06); border-color:rgba(129,140,248,0.12);">
+        <div class="emoji">&#x1F4A1;</div>
+        <div class="text">You got 7.2h last night. Aim for 7.5h tonight to clear remaining sleep debt.</div>
+      </div>
+
+      <div class="h-tab">
+        <div class="t on"><div class="i">&#x2728;</div>Today</div>
+        <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+        <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+      </div>
+    </div>
+    <p class="screen-title">Wind-down &mdash; Pre-bedtime</p>
+    <p class="screen-desc">Large countdown + interactive checklist + gradual background shift</p>
+  </div>
+</div>
+
+<!-- ===== COMPONENT ORIGINS ===== -->
+<div class="annotation-section">
+  <h3>Component Origins &amp; Rationale</h3>
+  <div class="anno-grid">
+    <div class="anno-card">
+      <h4>Header <span class="tag a">A</span><span class="tag b">B</span></h4>
+      <p>Path A's personalized greeting + large date. Path B's gradient avatar. Contextual subtitle adapts to state.</p>
+    </div>
+    <div class="anno-card">
+      <h4>Status Pill <span class="tag b">B</span></h4>
+      <p>Contextual banner that changes color + icon per state: green (recovery), orange (on shift), indigo (wind-down).</p>
+      <div class="anim">Animation: subtle glow pulse every 3s</div>
+    </div>
+    <div class="anno-card">
+      <h4>Recovery Score <span class="tag a">A</span></h4>
+      <p>Larger inline card with ring, trend arrow, and natural language insight. More prominent than B's compact bento version.</p>
+      <div class="anim">Animation: ring glow pulse every 4s</div>
+    </div>
+    <div class="anno-card">
+      <h4>Bento Cards <span class="tag b">B</span></h4>
+      <p>Color-coded gradient cards for key countdowns. Large numbers for glanceability. Subtle press-down scale on tap.</p>
+    </div>
+    <div class="anno-card">
+      <h4>AI Insight <span class="tag b">B</span></h4>
+      <p>Gold-bordered card with contextual, forward-looking sleep advice. Changes based on shift pattern and sleep history.</p>
+      <div class="anim">Animation: fade-in slide-up on appear (0.6s)</div>
+    </div>
+    <div class="anno-card">
+      <h4>Timeline <span class="tag a">A</span><span class="tag b">B</span></h4>
+      <p>Path A's spine with dots (visual progression) + Path B's inline countdown labels (Done/Now/5h 30m). Best of both.</p>
+      <div class="anim">Animation: active dot breathing glow (1.5s loop)</div>
+    </div>
+    <div class="anno-card">
+      <h4>Floating Nav <span class="tag b">B</span></h4>
+      <p>Glassmorphic tab bar with blur backdrop. Renamed: Today / Schedule / Profile. Active icon has gold glow.</p>
+    </div>
+    <div class="anno-card">
+      <h4>Night Sky <span class="tag new">Enhanced</span></h4>
+      <p>Beyond current: firefly particles, glowing arc with ambient pulse, varied star twinkle speeds, structured tomorrow card.</p>
+      <div class="anim">Animation: 4 fireflies + arc glow pulse + 16 stars at 3 speeds + slow arc rotation</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ANIMATION PLAN ===== -->
+<div class="anim-section">
+  <h3>Animation Plan</h3>
+  <div class="anim-list">
+    <div class="anim-item">
+      <div class="name">Breathing Dots</div>
+      <div class="desc">Active/next timeline dots pulse with colored glow shadow. 1.5s loop.</div>
+      <div class="where">Today &rarr; Timeline active event</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Status Pill Glow</div>
+      <div class="desc">Subtle ambient glow on status pill border. Color matches state. 3s loop.</div>
+      <div class="where">Today &rarr; Status pill</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Recovery Ring Pulse</div>
+      <div class="desc">Score ring gets green glow shadow that breathes. 4s loop.</div>
+      <div class="where">Today &rarr; Recovery card</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Card Press Scale</div>
+      <div class="desc">Bento cards, timeline cards, and all interactive elements scale to 0.97 on press. 80ms spring.</div>
+      <div class="where">All interactive cards across app</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Insight Slide-In</div>
+      <div class="desc">AI insight card fades in + slides up 8px when it appears. 600ms ease-out.</div>
+      <div class="where">Today &rarr; Insight card (on load or context change)</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Staggered Load</div>
+      <div class="desc">Screen sections animate in sequentially: header (0ms) &rarr; pill (100ms) &rarr; score (200ms) &rarr; bento (300ms) &rarr; timeline (400ms). Fade + slide.</div>
+      <div class="where">Today &rarr; On screen load / pull-to-refresh</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Firefly Particles</div>
+      <div class="desc">4-6 warm gold particles float upward with varied speeds and fade curves. 7-10s loops, staggered.</div>
+      <div class="where">Night Sky &rarr; Background layer</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Star Twinkle (3 speeds)</div>
+      <div class="desc">16+ stars at 3 animation speeds (2s, 3s, 5s). Opacity + scale variation creates depth.</div>
+      <div class="where">Night Sky &rarr; Background layer</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Arc Glow + Slow Spin</div>
+      <div class="desc">Recharge arc has ambient radial glow (4s pulse) and very slow rotation (60s full turn).</div>
+      <div class="where">Night Sky &rarr; Recharge arc</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Background Gradient Shift</div>
+      <div class="desc">Wind-down state slowly darkens background from #080B14 to #060811 as bedtime approaches.</div>
+      <div class="where">Today &rarr; Wind-down state transition</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Countdown Tick</div>
+      <div class="desc">Large countdown number (wind-down state) has subtle scale bounce every 60s when minute changes.</div>
+      <div class="where">Today &rarr; Wind-down large countdown</div>
+    </div>
+    <div class="anim-item">
+      <div class="name">Tab Glow</div>
+      <div class="desc">Active tab icon gets colored drop-shadow glow. Transition between tabs is 200ms fade.</div>
+      <div class="where">Floating tab bar</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

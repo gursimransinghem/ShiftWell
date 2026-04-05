@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Narrow Timestamps</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B0D16; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; padding: 32px 16px; }
+  h1 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 13px; text-align: center; margin-bottom: 32px; }
+
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .col-label { text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; padding: 4px 12px; border-radius: 6px; display: inline-block; }
+  .col-label.before { color: #9CA3AF; background: rgba(255,255,255,0.04); }
+  .col-label.after { color: #34D399; background: rgba(52,211,153,0.08); }
+
+  .tl-box {
+    background: #0B0D16;
+    border: 2px solid #1F2937;
+    border-radius: 20px;
+    padding: 20px 14px;
+  }
+  .tl-box.highlight { border-color: #34D399; }
+
+  .tl-label { font-size: 10px; color: #4B5563; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Collapsed */
+  .tl-collapsed { display: flex; align-items: center; gap: 0; margin-bottom: 2px; }
+
+  /* Before: 40px time column */
+  .b-event { display: flex; gap: 0; }
+  .b-time { width: 40px; text-align: right; padding-right: 6px; padding-top: 10px; font-size: 11px; color: #6B7280; font-weight: 500; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .b-spine { width: 18px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .b-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 5px; }
+  .b-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .b-dot.glow { width: 10px; height: 10px; box-shadow: 0 0 8px currentColor; animation: dotB 1.5s ease-in-out infinite; }
+  @keyframes dotB { 0%,100% { box-shadow:0 0 4px currentColor; } 50% { box-shadow:0 0 12px currentColor; } }
+  .b-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; flex: 1; display: flex; overflow: hidden; margin-bottom: 4px; }
+  .b-card.active { border-color: rgba(255,107,107,0.3); background: linear-gradient(90deg, rgba(255,107,107,0.06), rgba(255,255,255,0.02) 50%); }
+  .b-card.next { border-color: rgba(129,140,248,0.2); }
+  .b-bar { width: 3px; flex-shrink: 0; border-radius: 3px 0 0 3px; }
+  .b-content { padding: 8px 10px; flex: 1; display: flex; justify-content: space-between; align-items: center; }
+  .b-left .name { font-size: 13px; font-weight: 600; }
+  .b-left .meta { font-size: 10px; color: #6B7280; margin-top: 1px; }
+  .b-cd { font-size: 13px; font-weight: 700; flex-shrink: 0; margin-left: 6px; }
+
+  /* After: 28px time column, 9px font */
+  .a-event { display: flex; gap: 0; }
+  .a-time { width: 28px; text-align: right; padding-right: 4px; padding-top: 11px; font-size: 9px; color: #6B7280; font-weight: 500; flex-shrink: 0; font-variant-numeric: tabular-nums; letter-spacing: -0.3px; }
+  .a-spine { width: 16px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .a-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 5px; }
+  .a-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .a-dot.glow { width: 10px; height: 10px; box-shadow: 0 0 8px currentColor; animation: dotB 1.5s ease-in-out infinite; }
+  .a-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; flex: 1; display: flex; overflow: hidden; margin-bottom: 4px; }
+  .a-card.active { border-color: rgba(255,107,107,0.3); background: linear-gradient(90deg, rgba(255,107,107,0.06), rgba(255,255,255,0.02) 50%); }
+  .a-card.next { border-color: rgba(129,140,248,0.2); }
+  .a-bar { width: 3px; flex-shrink: 0; border-radius: 3px 0 0 3px; }
+  .a-content { padding: 9px 12px; flex: 1; display: flex; justify-content: space-between; align-items: center; }
+  .a-left .name { font-size: 14px; font-weight: 600; }
+  .a-left .meta { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .a-cd { font-size: 14px; font-weight: 700; flex-shrink: 0; margin-left: 8px; }
+
+  /* Collapsed style */
+  .col-tc-b { width: 40px; }
+  .col-tc-a { width: 28px; }
+  .col-sc { width: 18px; display: flex; flex-direction: column; align-items: center; }
+  .col-sc-a { width: 16px; display: flex; flex-direction: column; align-items: center; }
+  .col-ln { width: 1.5px; background: #1F2937; height: 6px; }
+  .col-cc { flex: 1; display: flex; align-items: center; gap: 5px; padding: 5px 0; font-size: 11px; color: #4B5563; }
+  .col-ds { display: flex; gap: 3px; }
+  .col-ds .dd { width: 5px; height: 5px; border-radius: 50%; opacity: 0.4; }
+
+  .measure {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px dashed #1F2937;
+    background: rgba(255,255,255,0.02);
+    font-size: 11px;
+    color: #9CA3AF;
+    line-height: 1.5;
+  }
+  .measure strong { color: #D1D5DB; }
+  .measure .diff { color: #34D399; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Narrow Timestamps &rarr; Bigger Cards</h1>
+<p class="page-sub">Shrink the time column from 40px to 28px. Cards gain 12px of width for larger text.</p>
+
+<div class="comparison">
+
+  <!-- BEFORE: 40px time column -->
+  <div>
+    <div style="text-align:center"><span class="col-label before">Before (40px time column)</span></div>
+    <div class="tl-box">
+      <div class="tl-label">Today's Plan</div>
+      <div class="tl-collapsed" style="margin-bottom:2px;">
+        <div class="col-tc-b"></div>
+        <div class="col-sc"><div class="col-ln"></div></div>
+        <div class="col-cc"><div class="col-ds"><div class="dd" style="background:#FCD34D;"></div><div class="dd" style="background:#34D399;"></div></div><span>2 completed</span><span style="font-size:8px;color:#374151;margin-left:auto;">&#x25BC;</span></div>
+      </div>
+      <div class="b-event">
+        <div class="b-time">2:00p</div>
+        <div class="b-spine"><div class="b-line"></div><div class="b-dot glow" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="b-line"></div></div>
+        <div class="b-card active"><div class="b-bar" style="background:#FF6B6B;"></div><div class="b-content"><div class="b-left"><div class="name">&#x2615; Caffeine Cutoff</div><div class="meta">No caffeine after this</div></div><div class="b-cd" style="color:#FF6B6B;">Now</div></div></div>
+      </div>
+      <div class="b-event">
+        <div class="b-time">9:00p</div>
+        <div class="b-spine"><div class="b-line"></div><div class="b-dot" style="background:#818CF8;"></div><div class="b-line"></div></div>
+        <div class="b-card next"><div class="b-bar" style="background:#818CF8;"></div><div class="b-content"><div class="b-left"><div class="name">&#x1F319; Wind-down</div><div class="meta">9:00 &ndash; 10:00 PM</div></div><div class="b-cd" style="color:#818CF8;">5h 30m</div></div></div>
+      </div>
+      <div class="b-event">
+        <div class="b-time">10:00p</div>
+        <div class="b-spine"><div class="b-line"></div><div class="b-dot" style="background:#7B61FF;"></div><div class="b-line"></div></div>
+        <div class="b-card"><div class="b-bar" style="background:#7B61FF;"></div><div class="b-content"><div class="b-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">10 PM &ndash; 6 AM &bull; 8h</div></div><div class="b-cd" style="color:#B794F6;">6h 45m</div></div></div>
+      </div>
+      <div class="measure"><strong>Time column:</strong> 40px wide, 11px font<br><strong>Card text:</strong> 13px names, 10px meta<br><strong>Countdowns:</strong> 13px</div>
+    </div>
+  </div>
+
+  <!-- AFTER: 28px time column, bigger cards -->
+  <div>
+    <div style="text-align:center"><span class="col-label after">After (28px time &rarr; bigger cards)</span></div>
+    <div class="tl-box highlight">
+      <div class="tl-label">Today's Plan</div>
+      <div class="tl-collapsed" style="margin-bottom:2px;">
+        <div class="col-tc-a"></div>
+        <div class="col-sc-a"><div class="col-ln"></div></div>
+        <div class="col-cc"><div class="col-ds"><div class="dd" style="background:#FCD34D;"></div><div class="dd" style="background:#34D399;"></div></div><span>2 completed</span><span style="font-size:8px;color:#374151;margin-left:auto;">&#x25BC;</span></div>
+      </div>
+      <div class="a-event">
+        <div class="a-time">2:00p</div>
+        <div class="a-spine"><div class="a-line"></div><div class="a-dot glow" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="a-line"></div></div>
+        <div class="a-card active"><div class="a-bar" style="background:#FF6B6B;"></div><div class="a-content"><div class="a-left"><div class="name">&#x2615; Caffeine Cutoff</div><div class="meta">No caffeine after this</div></div><div class="a-cd" style="color:#FF6B6B;">Now</div></div></div>
+      </div>
+      <div class="a-event">
+        <div class="a-time">9:00p</div>
+        <div class="a-spine"><div class="a-line"></div><div class="a-dot" style="background:#818CF8;"></div><div class="a-line"></div></div>
+        <div class="a-card next"><div class="a-bar" style="background:#818CF8;"></div><div class="a-content"><div class="a-left"><div class="name">&#x1F319; Wind-down</div><div class="meta">9:00 &ndash; 10:00 PM</div></div><div class="a-cd" style="color:#818CF8;">5h 30m</div></div></div>
+      </div>
+      <div class="a-event">
+        <div class="a-time">10:00p</div>
+        <div class="a-spine"><div class="a-line"></div><div class="a-dot" style="background:#7B61FF;"></div><div class="a-line"></div></div>
+        <div class="a-card"><div class="a-bar" style="background:#7B61FF;"></div><div class="a-content"><div class="a-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">10 PM &ndash; 6 AM &bull; 8h</div></div><div class="a-cd" style="color:#B794F6;">6h 45m</div></div></div>
+      </div>
+      <div class="measure" style="border-color:rgba(52,211,153,0.2);">
+        <strong>Time column:</strong> 28px wide, 9px font <span class="diff">(saved 12px)</span><br>
+        <strong>Card text:</strong> 14px names, 11px meta <span class="diff">(+1px each)</span><br>
+        <strong>Countdowns:</strong> 14px <span class="diff">(+1px)</span><br>
+        <strong>Card padding:</strong> 9px vert / 12px horiz <span class="diff">(+1px / +2px)</span><br><br>
+        The 12px gained from the narrower time column goes directly into larger card content. Time labels are still readable at 9px because they're short (always "X:XXx" format).
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

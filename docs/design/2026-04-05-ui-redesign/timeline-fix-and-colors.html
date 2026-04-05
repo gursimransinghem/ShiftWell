@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Timeline Fix + Color Palettes</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0B0D16; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; padding: 32px 16px; }
+  h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 40px; max-width: 600px; margin-inline: auto; line-height: 1.5; }
+  .section-hdr { max-width: 1400px; margin: 0 auto 20px; padding-bottom: 12px; border-bottom: 1px solid #1F2937; }
+  .section-hdr h2 { font-size: 20px; display: inline; }
+  .section-hdr .sub { font-size: 13px; color: #6B7280; margin-left: 12px; }
+  .divider { height: 1px; background: linear-gradient(90deg, transparent, #1F2937, transparent); max-width: 1400px; margin: 48px auto; }
+
+  /* ===== TIMELINE FIX ===== */
+  .timeline-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto 16px;
+  }
+
+  .tl-col-label {
+    text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px; padding: 5px 12px;
+    border-radius: 8px; display: inline-block;
+  }
+  .tl-col-label.bad { color: #FF6B6B; background: rgba(255,107,107,0.08); }
+  .tl-col-label.ref { color: #C8A84B; background: rgba(200,168,75,0.08); }
+  .tl-col-label.fix { color: #34D399; background: rgba(52,211,153,0.08); }
+
+  .tl-box {
+    background: #0B0D16;
+    border: 2px solid #1F2937;
+    border-radius: 20px;
+    padding: 20px 14px;
+    min-height: 380px;
+  }
+  .tl-box.highlight { border-color: #34D399; }
+
+  .tl-section-label { font-size: 10px; color: #4B5563; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* Style A: Current gallery (too minimal) */
+  .tla-event { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .tla-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .tla-info { flex: 1; }
+  .tla-info .name { font-size: 13px; font-weight: 600; }
+  .tla-info .time { font-size: 11px; color: #6B7280; margin-top: 1px; }
+  .tla-cd { font-size: 13px; font-weight: 700; }
+  .tla-past { opacity: 0.3; }
+
+  /* Style B: What you circled (Before/hybrid) */
+  .tlb-event { display: flex; gap: 0; margin-bottom: 0; }
+  .tlb-time { width: 46px; text-align: right; padding-right: 8px; padding-top: 12px; font-size: 12px; color: #6B7280; font-weight: 500; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .tlb-spine { width: 22px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .tlb-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 6px; }
+  .tlb-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .tlb-dot.glow { box-shadow: 0 0 8px currentColor; animation: dotB 1.5s ease-in-out infinite; }
+  @keyframes dotB { 0%,100% { box-shadow:0 0 4px currentColor; } 50% { box-shadow:0 0 12px currentColor; } }
+  .tlb-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; flex: 1; display: flex; overflow: hidden; margin-bottom: 6px; }
+  .tlb-card.active { border-color: rgba(255,107,107,0.35); background: linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,255,255,0.03) 50%); }
+  .tlb-card.next { border-color: rgba(129,140,248,0.25); }
+  .tlb-bar { width: 3px; flex-shrink: 0; border-radius: 3px 0 0 3px; }
+  .tlb-content { padding: 10px 12px; flex: 1; display: flex; justify-content: space-between; align-items: center; }
+  .tlb-left .name { font-size: 14px; font-weight: 600; }
+  .tlb-left .meta { font-size: 11px; color: #6B7280; margin-top: 2px; }
+  .tlb-cd { font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .tlb-past { opacity: 0.35; }
+
+  /* Style C: FIXED — hybrid spine but slightly smaller + tighter */
+  .tlc-event { display: flex; gap: 0; margin-bottom: 0; }
+  .tlc-time { width: 40px; text-align: right; padding-right: 6px; padding-top: 10px; font-size: 11px; color: #6B7280; font-weight: 500; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .tlc-spine { width: 18px; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .tlc-line { width: 1.5px; background: #1F2937; flex: 1; min-height: 5px; }
+  .tlc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .tlc-dot.glow { width: 10px; height: 10px; box-shadow: 0 0 8px currentColor; animation: dotB 1.5s ease-in-out infinite; }
+  .tlc-card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; flex: 1; display: flex; overflow: hidden; margin-bottom: 4px; }
+  .tlc-card.active { border-color: rgba(255,107,107,0.3); background: linear-gradient(90deg, rgba(255,107,107,0.06), rgba(255,255,255,0.02) 50%); }
+  .tlc-card.next { border-color: rgba(129,140,248,0.2); }
+  .tlc-bar { width: 3px; flex-shrink: 0; border-radius: 3px 0 0 3px; }
+  .tlc-content { padding: 8px 10px; flex: 1; display: flex; justify-content: space-between; align-items: center; }
+  .tlc-left .name { font-size: 13px; font-weight: 600; }
+  .tlc-left .meta { font-size: 10px; color: #6B7280; margin-top: 1px; }
+  .tlc-cd { font-size: 13px; font-weight: 700; flex-shrink: 0; margin-left: 6px; }
+  .tlc-past { opacity: 0.35; }
+
+  /* Collapsed past for C */
+  .tlc-collapsed { display: flex; align-items: center; gap: 0; margin-bottom: 2px; }
+  .tlc-collapsed .tc { width: 40px; }
+  .tlc-collapsed .sc { width: 18px; display: flex; flex-direction: column; align-items: center; }
+  .tlc-collapsed .ln { width: 1.5px; background: #1F2937; height: 6px; }
+  .tlc-collapsed .cc { flex: 1; display: flex; align-items: center; gap: 5px; padding: 5px 0; font-size: 11px; color: #4B5563; }
+  .tlc-collapsed .ds { display: flex; gap: 3px; }
+  .tlc-collapsed .ds .dd { width: 5px; height: 5px; border-radius: 50%; opacity: 0.4; }
+  .tlc-collapsed .ch { font-size: 8px; color: #374151; margin-left: auto; }
+
+  .note-box { font-size: 11px; color: #9CA3AF; line-height: 1.5; margin-top: 12px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.02); border: 1px dashed #1F2937; }
+  .note-box strong { color: #D1D5DB; }
+
+  /* ===== COLOR PALETTES ===== */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .palette-card {
+    border-radius: 16px;
+    border: 2px solid #1F2937;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .palette-card:hover { border-color: #374151; }
+  .palette-card.selected { border-color: #C8A84B; }
+  .palette-preview {
+    padding: 20px 16px;
+    min-height: 180px;
+  }
+  .palette-preview .p-header { margin-bottom: 10px; }
+  .palette-preview .p-gr { font-size: 12px; font-weight: 400; }
+  .palette-preview .p-h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-top: 2px; }
+  .palette-preview .p-status { display: flex; align-items: center; gap: 6px; margin: 10px 0; font-size: 12px; }
+  .palette-preview .p-ring { width: 48px; height: 48px; border-radius: 50%; border: 3px solid; display: flex; align-items: center; justify-content: center; margin: 12px auto; font-size: 20px; font-weight: 700; }
+  .palette-preview .p-counts { display: flex; gap: 0; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+  .palette-preview .p-ct { flex: 1; padding: 8px 4px; text-align: center; }
+  .palette-preview .p-ct .v { font-size: 16px; font-weight: 700; }
+  .palette-preview .p-ct .l { font-size: 8px; margin-top: 2px; }
+
+  .palette-info { padding: 14px 16px; background: rgba(255,255,255,0.02); }
+  .palette-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .palette-info p { font-size: 11px; color: #9CA3AF; line-height: 1.5; }
+  .palette-colors { display: flex; gap: 4px; margin-top: 8px; }
+  .palette-colors .chip { width: 24px; height: 24px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); }
+  .palette-rec { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 8px; display: inline-block; }
+
+  /* ===== EVOLUTION TRACKER ===== */
+  .evo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .evo-card {
+    border-radius: 14px;
+    border: 1px solid #1F2937;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+  }
+  .evo-preview {
+    padding: 12px 10px;
+    min-height: 200px;
+    font-size: 10px;
+    position: relative;
+  }
+  .evo-preview .mini-header { font-size: 10px; color: #6B7280; margin-bottom: 4px; }
+  .evo-preview .mini-h2 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .evo-mini-pill { padding: 4px 6px; border-radius: 6px; font-size: 8px; margin-bottom: 6px; display: inline-block; }
+  .evo-mini-score { width: 32px; height: 32px; border-radius: 50%; border: 2px solid; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin: 6px auto; }
+  .evo-mini-counts { display: flex; gap: 2px; margin: 6px 0; }
+  .evo-mini-ct { flex: 1; padding: 4px 2px; text-align: center; border-radius: 4px; font-size: 8px; font-weight: 600; }
+  .evo-mini-tl { margin-top: 4px; }
+  .evo-mini-tl-row { display: flex; align-items: center; gap: 4px; padding: 2px 0; font-size: 8px; }
+  .evo-mini-tl-row .d { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; }
+  .evo-mini-tl-row .n { flex: 1; color: #D1D5DB; }
+  .evo-mini-tl-row .c { color: #6B7280; }
+  .evo-mini-tab { display: flex; justify-content: space-around; padding: 4px 0; border-top: 1px solid rgba(255,255,255,0.04); margin-top: 6px; font-size: 7px; color: #4B5563; }
+
+  .evo-info { padding: 10px; border-top: 1px solid #1F2937; }
+  .evo-info h4 { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .evo-info p { font-size: 10px; color: #6B7280; line-height: 1.4; }
+  .evo-info .ver { font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-bottom: 4px; display: inline-block; }
+
+  /* Selection */
+  .options-row { max-width: 800px; margin: 32px auto 0; display: flex; gap: 12px; }
+  .option {
+    flex: 1; background: rgba(255,255,255,0.03); border: 2px solid #1F2937;
+    border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: all 0.2s;
+    text-align: center;
+  }
+  .option:hover { border-color: #374151; }
+  .option.selected { border-color: #C8A84B; background: rgba(200,168,75,0.06); }
+  .option h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .option p { font-size: 11px; color: #9CA3AF; }
+</style>
+<script>
+function selectPalette(el) {
+  document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('selected'));
+  el.classList.toggle('selected');
+}
+function selectOption(el) {
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.toggle('selected');
+}
+</script>
+</head>
+<body>
+
+<h1>Timeline Fix + Color Palettes</h1>
+<p class="page-sub">3 things: fix the timeline blocks, explore color alternatives, and see the full design evolution.</p>
+
+<!-- ============================================
+     1. TIMELINE FIX
+     ============================================ -->
+<div class="section-hdr">
+  <h2>1. Timeline Block Fix</h2>
+  <span class="sub">What you circled vs what got rendered vs the fix</span>
+</div>
+
+<div class="timeline-comparison">
+
+  <!-- What you have now (too flat) -->
+  <div>
+    <div style="text-align:center"><span class="tl-col-label bad">Current Gallery (Too Flat)</span></div>
+    <div class="tl-box">
+      <div class="tl-section-label">Today's Plan</div>
+      <div class="tla-event tla-past"><div class="tla-dot" style="background:#FCD34D;"></div><div class="tla-info"><div class="name">&#x1F31E; Light Exposure</div><div class="time">6:00 &ndash; 6:30 AM</div></div><div class="tla-cd" style="color:#6B7280;">Done</div></div>
+      <div class="tla-event tla-past"><div class="tla-dot" style="background:#34D399;"></div><div class="tla-info"><div class="name">&#x1F37D; Breakfast</div><div class="time">7:00 &ndash; 7:30 AM</div></div><div class="tla-cd" style="color:#6B7280;">Done</div></div>
+      <div class="tla-event"><div class="tla-dot" style="background:#FF6B6B;"></div><div class="tla-info"><div class="name">&#x2615; Caffeine Cutoff</div><div class="time">2:00 PM</div></div><div class="tla-cd" style="color:#FF6B6B;">Now</div></div>
+      <div class="tla-event"><div class="tla-dot" style="background:#818CF8;"></div><div class="tla-info"><div class="name">&#x1F319; Wind-down</div><div class="time">9:00 &ndash; 10:00 PM</div></div><div class="tla-cd" style="color:#818CF8;">5h 30m</div></div>
+      <div class="tla-event"><div class="tla-dot" style="background:#7B61FF;"></div><div class="tla-info"><div class="name">&#x1F634; Sleep Window</div><div class="time">10:00 PM &ndash; 6:00 AM</div></div><div class="tla-cd" style="color:#B794F6;">6h 45m</div></div>
+      <div class="note-box"><strong>Problem:</strong> No time column on left, no spine connecting dots, no accent bar on cards. Looks like a generic list instead of a timeline.</div>
+    </div>
+  </div>
+
+  <!-- What you liked (hybrid Before) -->
+  <div>
+    <div style="text-align:center"><span class="tl-col-label ref">What You Circled (Before)</span></div>
+    <div class="tl-box">
+      <div class="tl-section-label">Today's Plan</div>
+      <div class="tlb-event">
+        <div class="tlb-time">6:00a</div>
+        <div class="tlb-spine"><div class="tlb-line"></div><div class="tlb-dot" style="background:#FCD34D;"></div><div class="tlb-line"></div></div>
+        <div class="tlb-card tlb-past"><div class="tlb-bar" style="background:#FCD34D;"></div><div class="tlb-content"><div class="tlb-left"><div class="name">&#x1F31E; Light Exposure</div><div class="meta">6:00 &ndash; 6:30 AM</div></div><div class="tlb-cd" style="color:#6B7280;">Done</div></div></div>
+      </div>
+      <div class="tlb-event">
+        <div class="tlb-time">7:00a</div>
+        <div class="tlb-spine"><div class="tlb-line"></div><div class="tlb-dot" style="background:#34D399;"></div><div class="tlb-line"></div></div>
+        <div class="tlb-card tlb-past"><div class="tlb-bar" style="background:#34D399;"></div><div class="tlb-content"><div class="tlb-left"><div class="name">&#x1F37D; Breakfast</div><div class="meta">7:00 &ndash; 7:30 AM</div></div><div class="tlb-cd" style="color:#6B7280;">Done</div></div></div>
+      </div>
+      <div class="tlb-event">
+        <div class="tlb-time">2:00p</div>
+        <div class="tlb-spine"><div class="tlb-line"></div><div class="tlb-dot glow" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tlb-line"></div></div>
+        <div class="tlb-card active"><div class="tlb-bar" style="background:#FF6B6B;"></div><div class="tlb-content"><div class="tlb-left"><div class="name">&#x2615; Caffeine Cutoff</div><div class="meta">No caffeine after this</div></div><div class="tlb-cd" style="color:#FF6B6B;">Now</div></div></div>
+      </div>
+      <div class="tlb-event">
+        <div class="tlb-time">9:00p</div>
+        <div class="tlb-spine"><div class="tlb-line"></div><div class="tlb-dot" style="background:#818CF8;"></div><div class="tlb-line"></div></div>
+        <div class="tlb-card next"><div class="tlb-bar" style="background:#818CF8;"></div><div class="tlb-content"><div class="tlb-left"><div class="name">&#x1F319; Wind-down</div><div class="meta">9:00 &ndash; 10:00 PM</div></div><div class="tlb-cd" style="color:#818CF8;">5h 30m</div></div></div>
+      </div>
+      <div class="tlb-event">
+        <div class="tlb-time">10:00p</div>
+        <div class="tlb-spine"><div class="tlb-line"></div><div class="tlb-dot" style="background:#7B61FF;"></div><div class="tlb-line"></div></div>
+        <div class="tlb-card"><div class="tlb-bar" style="background:#7B61FF;"></div><div class="tlb-content"><div class="tlb-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">10 PM &ndash; 6 AM &bull; 8h</div></div><div class="tlb-cd" style="color:#B794F6;">6h 45m</div></div></div>
+      </div>
+      <div class="note-box"><strong>What you liked:</strong> Time column, connecting spine, colored accent bars on left of cards, glowing active dot, gradient on active card.</div>
+    </div>
+  </div>
+
+  <!-- FIXED: Slightly smaller version -->
+  <div>
+    <div style="text-align:center"><span class="tl-col-label fix">Fixed (Slightly Smaller)</span></div>
+    <div class="tl-box highlight">
+      <div class="tl-section-label">Today's Plan</div>
+
+      <!-- Collapsed past -->
+      <div class="tlc-collapsed">
+        <div class="tc" style="width:40px;"></div>
+        <div class="sc" style="width:18px;display:flex;flex-direction:column;align-items:center;"><div class="ln" style="width:1.5px;background:#1F2937;height:6px;"></div></div>
+        <div class="cc" style="flex:1;display:flex;align-items:center;gap:5px;padding:5px 0;font-size:11px;color:#4B5563;">
+          <div class="ds" style="display:flex;gap:3px;"><div class="dd" style="width:5px;height:5px;border-radius:50%;background:#FCD34D;opacity:.4;"></div><div class="dd" style="width:5px;height:5px;border-radius:50%;background:#34D399;opacity:.4;"></div></div>
+          <span>2 completed</span>
+          <span style="font-size:8px;color:#374151;margin-left:auto;">&#x25BC;</span>
+        </div>
+      </div>
+
+      <div class="tlc-event">
+        <div class="tlc-time">2:00p</div>
+        <div class="tlc-spine"><div class="tlc-line"></div><div class="tlc-dot glow" style="background:#FF6B6B;color:#FF6B6B;"></div><div class="tlc-line"></div></div>
+        <div class="tlc-card active"><div class="tlc-bar" style="background:#FF6B6B;"></div><div class="tlc-content"><div class="tlc-left"><div class="name">&#x2615; Caffeine Cutoff</div><div class="meta">No caffeine after this</div></div><div class="tlc-cd" style="color:#FF6B6B;">Now</div></div></div>
+      </div>
+      <div class="tlc-event">
+        <div class="tlc-time">9:00p</div>
+        <div class="tlc-spine"><div class="tlc-line"></div><div class="tlc-dot" style="background:#818CF8;"></div><div class="tlc-line"></div></div>
+        <div class="tlc-card next"><div class="tlc-bar" style="background:#818CF8;"></div><div class="tlc-content"><div class="tlc-left"><div class="name">&#x1F319; Wind-down</div><div class="meta">9:00 &ndash; 10:00 PM</div></div><div class="tlc-cd" style="color:#818CF8;">5h 30m</div></div></div>
+      </div>
+      <div class="tlc-event">
+        <div class="tlc-time">10:00p</div>
+        <div class="tlc-spine"><div class="tlc-line"></div><div class="tlc-dot" style="background:#7B61FF;"></div><div class="tlc-line"></div></div>
+        <div class="tlc-card"><div class="tlc-bar" style="background:#7B61FF;"></div><div class="tlc-content"><div class="tlc-left"><div class="name">&#x1F634; Sleep Window</div><div class="meta">10 PM &ndash; 6 AM &bull; 8h</div></div><div class="tlc-cd" style="color:#B794F6;">6h 45m</div></div></div>
+      </div>
+      <div class="note-box" style="border-color:rgba(52,211,153,0.2);"><strong>Fixed:</strong> Time column + spine + accent bars are back. ~15% smaller than the "Before" version. Past events collapsed. Active dot glows.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================
+     2. COLOR PALETTE OPTIONS
+     ============================================ -->
+<div class="section-hdr">
+  <h2>2. Color Palette Options</h2>
+  <span class="sub">Current palette + 3 alternatives. Click to select.</span>
+</div>
+
+<div class="palette-grid">
+
+  <!-- A: Current (warm navy + gold) -->
+  <div class="palette-card selected" onclick="selectPalette(this)">
+    <div class="palette-preview" style="background:#0B0D16;">
+      <div class="p-header"><div class="p-gr" style="color:#6B7280;">Good morning, Sim</div><div class="p-h2">Saturday, Apr 5</div></div>
+      <div class="p-status"><span style="font-size:12px;">&#x1F33F;</span><span style="font-size:11px;color:#9CA3AF;"><b style="color:#D1D5DB;">Recovery Day</b></span></div>
+      <div class="p-ring" style="border-color:rgba(52,211,153,0.3);"><span>78</span></div>
+      <div class="p-counts" style="border:1px solid rgba(255,255,255,0.05);border-radius:10px;">
+        <div class="p-ct" style="background:rgba(255,107,107,0.06);"><div class="v" style="color:#FF6B6B;">2:14</div><div class="l" style="color:#6B7280;">Caffeine</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#818CF8;">5:30</div><div class="l" style="color:#6B7280;">Wind-down</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#B794F6;">6:45</div><div class="l" style="color:#6B7280;">Sleep</div></div>
+      </div>
+    </div>
+    <div class="palette-info">
+      <h4>A. Current &mdash; Warm Navy + Gold</h4>
+      <p>Dark navy background, warm gold accent, green/purple/red semantic colors. Premium, science-forward.</p>
+      <div class="palette-colors">
+        <div class="chip" style="background:#0B0D16;"></div>
+        <div class="chip" style="background:#151A2A;"></div>
+        <div class="chip" style="background:#C8A84B;"></div>
+        <div class="chip" style="background:#7B61FF;"></div>
+        <div class="chip" style="background:#34D399;"></div>
+        <div class="chip" style="background:#FF6B6B;"></div>
+        <div class="chip" style="background:#818CF8;"></div>
+      </div>
+      <div class="palette-rec" style="background:rgba(200,168,75,0.12);color:#C8A84B;">RECOMMENDED &mdash; KEEP</div>
+    </div>
+  </div>
+
+  <!-- B: Midnight Teal -->
+  <div class="palette-card" onclick="selectPalette(this)">
+    <div class="palette-preview" style="background:#0A1114;">
+      <div class="p-header"><div class="p-gr" style="color:#6B8F8F;">Good morning, Sim</div><div class="p-h2" style="color:#E8F0F0;">Saturday, Apr 5</div></div>
+      <div class="p-status"><span style="font-size:12px;">&#x1F33F;</span><span style="font-size:11px;color:#8FAFAF;"><b style="color:#C8E0E0;">Recovery Day</b></span></div>
+      <div class="p-ring" style="border-color:rgba(45,212,191,0.3);color:#E8F0F0;"><span>78</span></div>
+      <div class="p-counts" style="border:1px solid rgba(255,255,255,0.05);border-radius:10px;">
+        <div class="p-ct" style="background:rgba(248,113,113,0.06);"><div class="v" style="color:#F87171;">2:14</div><div class="l" style="color:#6B8F8F;">Caffeine</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#818CF8;">5:30</div><div class="l" style="color:#6B8F8F;">Wind-down</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#A78BFA;">6:45</div><div class="l" style="color:#6B8F8F;">Sleep</div></div>
+      </div>
+    </div>
+    <div class="palette-info">
+      <h4>B. Midnight Teal</h4>
+      <p>Deep teal-black background, cyan-teal accent. Cooler, more "oceanic calm" feel. Similar to Calm app.</p>
+      <div class="palette-colors">
+        <div class="chip" style="background:#0A1114;"></div>
+        <div class="chip" style="background:#121E22;"></div>
+        <div class="chip" style="background:#2DD4BF;"></div>
+        <div class="chip" style="background:#7B61FF;"></div>
+        <div class="chip" style="background:#34D399;"></div>
+        <div class="chip" style="background:#F87171;"></div>
+        <div class="chip" style="background:#818CF8;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C: Deep Charcoal + Rose Gold -->
+  <div class="palette-card" onclick="selectPalette(this)">
+    <div class="palette-preview" style="background:#111014;">
+      <div class="p-header"><div class="p-gr" style="color:#7F7A87;">Good morning, Sim</div><div class="p-h2" style="color:#F0ECF4;">Saturday, Apr 5</div></div>
+      <div class="p-status"><span style="font-size:12px;">&#x1F33F;</span><span style="font-size:11px;color:#9F97A7;"><b style="color:#D8D0E0;">Recovery Day</b></span></div>
+      <div class="p-ring" style="border-color:rgba(52,211,153,0.3);color:#F0ECF4;"><span>78</span></div>
+      <div class="p-counts" style="border:1px solid rgba(255,255,255,0.05);border-radius:10px;">
+        <div class="p-ct" style="background:rgba(244,162,157,0.06);"><div class="v" style="color:#F4A29D;">2:14</div><div class="l" style="color:#7F7A87;">Caffeine</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#A78BFA;">5:30</div><div class="l" style="color:#7F7A87;">Wind-down</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.02);border-left:1px solid rgba(255,255,255,0.04);"><div class="v" style="color:#C4B5FD;">6:45</div><div class="l" style="color:#7F7A87;">Sleep</div></div>
+      </div>
+    </div>
+    <div class="palette-info">
+      <h4>C. Charcoal + Rose Gold</h4>
+      <p>Warm charcoal-purple background, rose gold accent. Softer, more feminine luxury. Like Apple Watch faces.</p>
+      <div class="palette-colors">
+        <div class="chip" style="background:#111014;"></div>
+        <div class="chip" style="background:#1A171F;"></div>
+        <div class="chip" style="background:#D4A574;"></div>
+        <div class="chip" style="background:#A78BFA;"></div>
+        <div class="chip" style="background:#34D399;"></div>
+        <div class="chip" style="background:#F4A29D;"></div>
+        <div class="chip" style="background:#C4B5FD;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D: True Black + Electric -->
+  <div class="palette-card" onclick="selectPalette(this)">
+    <div class="palette-preview" style="background:#000000;">
+      <div class="p-header"><div class="p-gr" style="color:#666;">Good morning, Sim</div><div class="p-h2" style="color:#fff;">Saturday, Apr 5</div></div>
+      <div class="p-status"><span style="font-size:12px;">&#x1F33F;</span><span style="font-size:11px;color:#888;"><b style="color:#ddd;">Recovery Day</b></span></div>
+      <div class="p-ring" style="border-color:rgba(16,185,129,0.4);color:#fff;"><span>78</span></div>
+      <div class="p-counts" style="border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
+        <div class="p-ct" style="background:rgba(239,68,68,0.08);"><div class="v" style="color:#EF4444;">2:14</div><div class="l" style="color:#666;">Caffeine</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.03);border-left:1px solid rgba(255,255,255,0.06);"><div class="v" style="color:#8B5CF6;">5:30</div><div class="l" style="color:#666;">Wind-down</div></div>
+        <div class="p-ct" style="background:rgba(255,255,255,0.03);border-left:1px solid rgba(255,255,255,0.06);"><div class="v" style="color:#A78BFA;">6:45</div><div class="l" style="color:#666;">Sleep</div></div>
+      </div>
+    </div>
+    <div class="palette-info">
+      <h4>D. True Black + Electric</h4>
+      <p>OLED-true black (#000). Higher contrast, more dramatic. Electric accent colors pop harder. Like Whoop/OURA.</p>
+      <div class="palette-colors">
+        <div class="chip" style="background:#000000;"></div>
+        <div class="chip" style="background:#111111;"></div>
+        <div class="chip" style="background:#10B981;"></div>
+        <div class="chip" style="background:#8B5CF6;"></div>
+        <div class="chip" style="background:#10B981;"></div>
+        <div class="chip" style="background:#EF4444;"></div>
+        <div class="chip" style="background:#818CF8;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================
+     3. DESIGN EVOLUTION
+     ============================================ -->
+<div class="section-hdr">
+  <h2>3. Design Evolution</h2>
+  <span class="sub">Every version side by side &mdash; from original to final</span>
+</div>
+
+<div class="evo-grid">
+  <!-- V1: Original (as-built) -->
+  <div class="evo-card">
+    <div class="evo-preview" style="background:#0A0E1A;">
+      <div class="mini-header" style="color:#9CA3AF;font-size:9px;">Good morning</div>
+      <div class="mini-h2" style="font-size:13px;">Saturday, April 5</div>
+      <div style="font-size:8px;color:#6B7280;letter-spacing:.5px;text-transform:uppercase;margin:6px 0 4px;">COMING UP</div>
+      <div style="display:flex;gap:4px;margin-bottom:6px;">
+        <div style="flex:1;background:#141929;border:1px solid rgba(123,97,255,0.2);border-radius:8px;padding:6px 4px;text-align:center;"><div style="font-size:10px;">&#x2615;</div><div style="font-size:7px;color:#9CA3AF;">Caffeine</div><div style="font-size:12px;font-weight:700;color:#B794F6;">2h 14m</div></div>
+        <div style="flex:1;background:#141929;border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:6px 4px;text-align:center;"><div style="font-size:10px;">&#x1F319;</div><div style="font-size:7px;color:#9CA3AF;">Wind-down</div><div style="font-size:12px;font-weight:700;color:#818CF8;">5h 30m</div></div>
+      </div>
+      <div style="font-size:8px;color:#6B7280;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;">TODAY'S PLAN</div>
+      <div class="evo-mini-tl">
+        <div class="evo-mini-tl-row"><div class="d" style="background:#FCD34D;"></div><span class="n">Light Exposure</span><span class="c">Done</span></div>
+        <div class="evo-mini-tl-row"><div class="d" style="background:#FF6B6B;"></div><span class="n">Caffeine Cutoff</span><span class="c" style="color:#FF6B6B;">Now</span></div>
+        <div class="evo-mini-tl-row"><div class="d" style="background:#818CF8;"></div><span class="n">Wind-down</span><span class="c">5h 30m</span></div>
+      </div>
+      <div class="evo-mini-tab"><span>Today</span><span>Schedule</span><span>Settings</span></div>
+    </div>
+    <div class="evo-info">
+      <div class="ver" style="background:#1F2937;color:#9CA3AF;">V1</div>
+      <h4>Original (As-Built)</h4>
+      <p>Horizontal countdown scroll, spine timeline, 3 tabs with Settings</p>
+    </div>
+  </div>
+
+  <!-- V2: Path A Polish -->
+  <div class="evo-card">
+    <div class="evo-preview" style="background:#0A0E1A;">
+      <div class="mini-header" style="color:#9CA3AF;font-size:9px;">Good morning, Sim</div>
+      <div class="mini-h2" style="font-size:13px;">Saturday, Apr 5</div>
+      <div style="background:linear-gradient(135deg,#141929,#1A1D35);border:1px solid #1F2937;border-radius:8px;padding:6px;display:flex;align-items:center;gap:6px;margin:6px 0;">
+        <div style="width:24px;height:24px;border-radius:50%;border:2px solid #34D399;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">78</div>
+        <div><div style="font-size:7px;color:#6B7280;text-transform:uppercase;">Recovery</div><div style="font-size:8px;color:#D1D5DB;">7.2h of 7.5h</div></div>
+      </div>
+      <div style="display:flex;gap:3px;margin-bottom:5px;">
+        <div style="flex:1;background:#141929;border:1px solid #1F2937;border-radius:6px;padding:4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#FF6B6B;">2:14</div><div style="font-size:7px;color:#6B7280;">Caffeine</div></div>
+        <div style="flex:1;background:#141929;border:1px solid #1F2937;border-radius:6px;padding:4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#818CF8;">5:30</div><div style="font-size:7px;color:#6B7280;">Wind-down</div></div>
+        <div style="flex:1;background:#141929;border:1px solid #1F2937;border-radius:6px;padding:4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#B794F6;">6:45</div><div style="font-size:7px;color:#6B7280;">Sleep</div></div>
+      </div>
+      <div class="evo-mini-tl">
+        <div class="evo-mini-tl-row"><div class="d" style="background:#FF6B6B;"></div><span class="n">Caffeine Cutoff</span><span class="c" style="color:#FF6B6B;">Now</span></div>
+        <div class="evo-mini-tl-row"><div class="d" style="background:#818CF8;"></div><span class="n">Wind-down</span><span class="c">5h 30m</span></div>
+      </div>
+      <div class="evo-mini-tab"><span>Today</span><span>Schedule</span><span>Settings</span></div>
+    </div>
+    <div class="evo-info">
+      <div class="ver" style="background:rgba(200,168,75,0.12);color:#C8A84B;">V2</div>
+      <h4>Path A: Polish</h4>
+      <p>Refined typography, inline score card, tighter spacing. Same structure.</p>
+    </div>
+  </div>
+
+  <!-- V3: Hybrid -->
+  <div class="evo-card">
+    <div class="evo-preview" style="background:#080B14;">
+      <div class="mini-header" style="color:#9CA3AF;font-size:9px;">Good morning, Sim</div>
+      <div class="mini-h2" style="font-size:13px;">Saturday, Apr 5</div>
+      <div class="evo-mini-pill" style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.2);color:#34D399;">&#x1F33F; Recovery Day</div>
+      <div style="background:linear-gradient(135deg,#141929,#1A1D35);border:1px solid #1F2937;border-radius:8px;padding:6px;display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+        <div style="width:24px;height:24px;border-radius:50%;border:2px solid #34D399;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;">78</div>
+        <div><div style="font-size:7px;color:#6B7280;">Recovery Score</div><div style="font-size:8px;color:#34D399;">&#x2191; 6 pts</div></div>
+      </div>
+      <div style="display:flex;gap:3px;margin-bottom:4px;">
+        <div style="flex:1;background:rgba(255,107,107,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#FF6B6B;">2:14</div><div style="font-size:7px;color:#6B7280;">Caffeine</div></div>
+        <div style="flex:1;background:rgba(123,97,255,0.06);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:4px;text-align:center;"><div style="font-size:11px;font-weight:700;color:#B794F6;">6:45</div><div style="font-size:7px;color:#6B7280;">Sleep</div></div>
+      </div>
+      <div style="background:rgba(200,168,75,0.05);border:1px solid rgba(200,168,75,0.1);border-radius:6px;padding:4px;margin-bottom:4px;font-size:8px;color:#D1D5DB;display:flex;gap:4px;"><span>&#x1F4A1;</span><span>Sleep debt clearing...</span></div>
+      <div class="evo-mini-tl">
+        <div class="evo-mini-tl-row"><div class="d" style="background:#FF6B6B;"></div><span class="n">Caffeine Cutoff</span><span class="c" style="color:#FF6B6B;">Now</span></div>
+        <div class="evo-mini-tl-row"><div class="d" style="background:#818CF8;"></div><span class="n">Wind-down</span><span class="c">5h 30m</span></div>
+      </div>
+      <div class="evo-mini-tab" style="background:rgba(8,11,20,0.8);border-radius:10px;border:1px solid rgba(255,255,255,0.04);"><span>Today</span><span>Schedule</span><span>Profile</span></div>
+    </div>
+    <div class="evo-info">
+      <div class="ver" style="background:rgba(123,97,255,0.12);color:#7B61FF;">V3</div>
+      <h4>Hybrid</h4>
+      <p>Status pill, bento cards, insight card, floating nav. Dense but featured.</p>
+    </div>
+  </div>
+
+  <!-- V4: Premium Refined -->
+  <div class="evo-card">
+    <div class="evo-preview" style="background:#0B0D16;">
+      <div class="mini-header" style="color:#6B7280;font-size:9px;">Good morning, Sim</div>
+      <div class="mini-h2" style="font-size:13px;">Saturday, Apr 5</div>
+      <div style="font-size:8px;color:#9CA3AF;margin:3px 0;">&#x1F33F; <b style="color:#D1D5DB;">Recovery Day</b> &bull; Day shift tmrw</div>
+      <div class="evo-mini-score" style="border-color:rgba(52,211,153,0.3);margin:10px auto;">78</div>
+      <div style="font-size:8px;color:#6B7280;text-align:center;">Recovery &bull; 7.2h of 7.5h</div>
+      <div style="font-size:8px;color:#34D399;text-align:center;margin-top:2px;">&#x2191; 6 pts</div>
+      <div style="display:flex;gap:0;margin:8px 0;border:1px solid rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;">
+        <div style="flex:1;padding:4px;text-align:center;background:rgba(255,107,107,0.05);"><div style="font-size:10px;font-weight:700;color:#FF6B6B;">2:14</div><div style="font-size:7px;color:#6B7280;">Caffeine</div></div>
+        <div style="flex:1;padding:4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);"><div style="font-size:10px;font-weight:700;color:#818CF8;">5:30</div><div style="font-size:7px;color:#6B7280;">Wind-down</div></div>
+        <div style="flex:1;padding:4px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);"><div style="font-size:10px;font-weight:700;color:#B794F6;">6:45</div><div style="font-size:7px;color:#6B7280;">Sleep</div></div>
+      </div>
+      <div class="evo-mini-tl">
+        <div class="evo-mini-tl-row"><div class="d" style="background:#FF6B6B;"></div><span class="n">Caffeine Cutoff</span><span class="c" style="color:#FF6B6B;">Now</span></div>
+        <div class="evo-mini-tl-row"><div class="d" style="background:#818CF8;"></div><span class="n">Wind-down</span><span class="c">5h 30m</span></div>
+      </div>
+      <div class="evo-mini-tab" style="background:rgba(11,13,22,0.9);border-radius:10px;border:1px solid rgba(255,255,255,0.04);"><span>Today</span><span>Schedule</span><span>Profile</span></div>
+    </div>
+    <div class="evo-info">
+      <div class="ver" style="background:rgba(52,211,153,0.12);color:#34D399;">V4</div>
+      <h4>Premium Refined</h4>
+      <p>Hero score, status line, unified counts, flat timeline. Clean but too flat.</p>
+    </div>
+  </div>
+
+  <!-- V5: FINAL -->
+  <div class="evo-card" style="border-color:#C8A84B;">
+    <div class="evo-preview" style="background:#0B0D16;">
+      <div class="mini-header" style="color:#6B7280;font-size:9px;">Good morning, Sim</div>
+      <div class="mini-h2" style="font-size:13px;">Saturday, Apr 5</div>
+      <div style="font-size:8px;color:#9CA3AF;margin:3px 0;">&#x1F33F; <b style="color:#D1D5DB;">Recovery Day</b> &bull; Day shift tmrw</div>
+      <div class="evo-mini-score" style="border-color:rgba(52,211,153,0.3);margin:8px auto;">78</div>
+      <div style="font-size:8px;color:#6B7280;text-align:center;">Recovery &bull; &#x2191; 6 pts</div>
+      <div style="display:flex;gap:0;margin:6px 0;border:1px solid rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;">
+        <div style="flex:1;padding:3px;text-align:center;background:rgba(255,107,107,0.05);"><div style="font-size:10px;font-weight:700;color:#FF6B6B;">2:14</div><div style="font-size:6px;color:#6B7280;">Caffeine</div></div>
+        <div style="flex:1;padding:3px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);"><div style="font-size:10px;font-weight:700;color:#818CF8;">5:30</div><div style="font-size:6px;color:#6B7280;">Wind-down</div></div>
+        <div style="flex:1;padding:3px;text-align:center;border-left:1px solid rgba(255,255,255,0.04);"><div style="font-size:10px;font-weight:700;color:#B794F6;">6:45</div><div style="font-size:6px;color:#6B7280;">Sleep</div></div>
+      </div>
+      <div style="background:rgba(200,168,75,0.04);border:1px solid rgba(200,168,75,0.08);border-radius:5px;padding:3px;margin-bottom:4px;font-size:7px;color:#D1D5DB;display:flex;gap:3px;"><span>&#x1F4A1;</span><span>One more solid night...</span></div>
+      <!-- Mini timeline WITH spine -->
+      <div style="display:flex;gap:0;">
+        <div style="width:22px;font-size:7px;color:#6B7280;text-align:right;padding-right:3px;padding-top:3px;">2:00p</div>
+        <div style="width:10px;display:flex;flex-direction:column;align-items:center;"><div style="width:1px;background:#1F2937;flex:1;"></div><div style="width:5px;height:5px;border-radius:50%;background:#FF6B6B;flex-shrink:0;"></div><div style="width:1px;background:#1F2937;flex:1;"></div></div>
+        <div style="flex:1;background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.15);border-radius:4px;padding:3px 4px;margin-bottom:2px;display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:600;">&#x2615; Caffeine</span><span style="font-size:8px;font-weight:700;color:#FF6B6B;">Now</span></div>
+      </div>
+      <div style="display:flex;gap:0;">
+        <div style="width:22px;font-size:7px;color:#6B7280;text-align:right;padding-right:3px;padding-top:3px;">9:00p</div>
+        <div style="width:10px;display:flex;flex-direction:column;align-items:center;"><div style="width:1px;background:#1F2937;flex:1;"></div><div style="width:5px;height:5px;border-radius:50%;background:#818CF8;flex-shrink:0;"></div><div style="width:1px;background:#1F2937;flex:1;"></div></div>
+        <div style="flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:3px 4px;margin-bottom:2px;display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:600;">&#x1F319; Wind-down</span><span style="font-size:8px;font-weight:700;color:#818CF8;">5h 30m</span></div>
+      </div>
+      <div class="evo-mini-tab" style="background:rgba(11,13,22,0.9);border-radius:10px;border:1px solid rgba(255,255,255,0.04);margin-top:4px;"><span>Today</span><span>Schedule</span><span>Profile</span></div>
+    </div>
+    <div class="evo-info">
+      <div class="ver" style="background:rgba(200,168,75,0.15);color:#C8A84B;">V5 FINAL</div>
+      <h4>Final &mdash; Current Target</h4>
+      <p>Premium hero + visible insight + spine timeline with accent bars. The build target.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

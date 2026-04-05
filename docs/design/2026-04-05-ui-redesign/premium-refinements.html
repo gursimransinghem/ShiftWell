@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Premium Refinements</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0F1117; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; padding: 32px 16px; }
+  h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 40px; line-height: 1.5; max-width: 600px; margin-inline: auto; }
+
+  /* Rule cards */
+  .rules {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .rule {
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid #1F2937;
+    background: rgba(255,255,255,0.02);
+  }
+  .rule h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #C8A84B; }
+  .rule p { font-size: 12px; color: #9CA3AF; line-height: 1.5; }
+  .rule .bad { color: #FF6B6B; font-size: 11px; margin-top: 6px; }
+  .rule .good { color: #34D399; font-size: 11px; margin-top: 2px; }
+
+  /* Before/After */
+  .comparison-header {
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+  .comparison-header h2 { font-size: 20px; }
+  .comparison-header p { font-size: 13px; color: #6B7280; margin-top: 4px; }
+
+  .side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto 48px;
+  }
+
+  .col-label {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .col-label.before { color: #FF6B6B; background: rgba(255,107,107,0.08); }
+  .col-label.after { color: #34D399; background: rgba(52,211,153,0.08); }
+
+  /* Phone frame */
+  .phone {
+    background: #080B14;
+    border-radius: 44px;
+    border: 2.5px solid #1F2937;
+    padding: 48px 16px 28px;
+    min-height: 720px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-lbl { position:absolute;top:16px;left:50%;transform:translateX(-50%);font-size:10px;color:#4B5563;font-weight:600;letter-spacing:1.2px;text-transform:uppercase; }
+  .sbar { display:flex;justify-content:space-between;padding:0 4px 8px;font-size:11px;color:#6B7280;font-weight:600; }
+
+  /* ===== BEFORE (current hybrid — too dense) ===== */
+  .b-header { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px; }
+  .b-header h2 { font-size:22px; font-weight:700; }
+  .b-header .greeting { font-size:13px; color:#9CA3AF; }
+  .b-header .ctx { font-size:11px; color:#6B7280; margin-top:2px; }
+  .b-avatar { width:30px;height:30px;border-radius:15px;background:linear-gradient(135deg,#7B61FF,#C8A84B);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700; }
+  .b-pill { border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;background:linear-gradient(135deg,rgba(52,211,153,0.12),rgba(52,211,153,0.04));border:1px solid rgba(52,211,153,0.2); }
+  .b-pill-icon { width:32px;height:32px;border-radius:10px;background:rgba(52,211,153,0.15);display:flex;align-items:center;justify-content:center;font-size:16px; }
+  .b-pill .pri { font-size:13px;font-weight:600; }
+  .b-pill .sec { font-size:11px;color:#9CA3AF;margin-top:1px; }
+  .b-score { background:linear-gradient(135deg,#141929,#1A1D35);border:1px solid #1F2937;border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:10px; }
+  .b-ring { width:56px;height:56px;border-radius:50%;border:3px solid #1F2937;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative; }
+  .b-ring::before { content:'';position:absolute;inset:-3px;border-radius:50%;border:3px solid transparent;border-top-color:#34D399;border-right-color:#34D399;border-bottom-color:#34D399;transform:rotate(-30deg); }
+  .b-ring .n { font-size:18px;font-weight:700; }
+  .b-score-info .lbl { font-size:9px;color:#6B7280;font-weight:700;letter-spacing:0.8px;text-transform:uppercase; }
+  .b-score-info .desc { font-size:12px;color:#D1D5DB;margin-top:3px; }
+  .b-score-info .trend { font-size:11px;color:#34D399;font-weight:600;margin-top:2px; }
+  .b-bento { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px; }
+  .b-bcard { border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,0.06);position:relative; }
+  .b-bcard .ic { position:absolute;top:10px;right:10px;font-size:14px;opacity:0.4; }
+  .b-bcard .cl { font-size:9px;color:#6B7280;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:6px; }
+  .b-bcard .val { font-size:24px;font-weight:700;letter-spacing:-1px; }
+  .b-bcard .sub { font-size:10px;color:#9CA3AF;margin-top:2px; }
+  .b-insight { background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.12);border-radius:12px;padding:10px 12px;display:flex;gap:8px;margin-bottom:10px; }
+  .b-insight .e { font-size:14px; }
+  .b-insight .txt { font-size:12px;color:#D1D5DB;line-height:1.4; }
+  .lbl-s { font-size:9px;color:#6B7280;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px; }
+  .b-tl { display:flex;gap:0;margin-bottom:0; }
+  .b-tl-t { width:40px;text-align:right;padding-right:6px;padding-top:10px;font-size:10px;color:#6B7280;font-weight:500;flex-shrink:0; }
+  .b-tl-s { width:16px;display:flex;flex-direction:column;align-items:center;flex-shrink:0; }
+  .b-tl-l { width:1px;background:#1F2937;flex:1;min-height:4px; }
+  .b-tl-d { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+  .b-tl-c { background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;flex:1;display:flex;overflow:hidden;margin-bottom:4px; }
+  .b-tl-bar { width:2px;flex-shrink:0; }
+  .b-tl-cnt { padding:8px 10px;flex:1;display:flex;justify-content:space-between;align-items:center; }
+  .b-tl-cnt .nm { font-size:12px;font-weight:600; }
+  .b-tl-cnt .mt { font-size:10px;color:#6B7280;margin-top:1px; }
+  .b-tl-cnt .cd { font-size:12px;font-weight:700;flex-shrink:0;margin-left:6px; }
+  .b-tl-past { opacity:0.3; }
+
+  .b-tab { display:flex;justify-content:space-around;padding:6px 0;position:absolute;bottom:10px;left:14px;right:14px;background:rgba(8,11,20,0.88);backdrop-filter:blur(12px);border-radius:18px;border:1px solid rgba(255,255,255,0.06); }
+  .b-tab .t { text-align:center;font-size:9px;color:#6B7280;padding:4px 0;flex:1; }
+  .b-tab .t.on { color:#fff; }
+  .b-tab .t .i { font-size:16px;margin-bottom:1px; }
+
+  /* ===== AFTER (premium refined) ===== */
+
+  /* Noise texture overlay for premium feel */
+  .phone-premium::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    border-radius: 44px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .phone-premium > * { position: relative; z-index: 1; }
+
+  /* Premium header: cleaner, more space */
+  .p-header { margin-bottom: 20px; }
+  .p-header .greeting { font-size: 14px; color: #6B7280; font-weight: 400; letter-spacing: 0.3px; }
+  .p-header h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-top: 2px; }
+
+  /* Hero metric: ONE big thing */
+  .p-hero {
+    text-align: center;
+    padding: 24px 0;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .p-hero-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(52,211,153,0.1), transparent 70%);
+    border-radius: 50%;
+    animation: heroGlow 4s ease-in-out infinite;
+  }
+  @keyframes heroGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .p-hero-ring {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    border: 3px solid rgba(52,211,153,0.15);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+    position: relative;
+  }
+  .p-hero-ring::before {
+    content: '';
+    position: absolute; inset: -3px; border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #34D399; border-right-color: #34D399; border-bottom-color: #34D399;
+    transform: rotate(-30deg);
+    filter: drop-shadow(0 0 6px rgba(52,211,153,0.3));
+  }
+  .p-hero-ring .num { font-size: 36px; font-weight: 700; }
+  .p-hero-label { font-size: 12px; color: #6B7280; margin-top: 8px; letter-spacing: 0.3px; }
+  .p-hero-trend { font-size: 13px; color: #34D399; font-weight: 600; margin-top: 4px; }
+
+  /* Status line: replaces pill — one elegant line */
+  .p-status-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    margin-bottom: 20px;
+  }
+  .p-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #34D399; flex-shrink: 0; animation: statusPulse 2s ease-in-out infinite; }
+  @keyframes statusPulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .p-status-text { font-size: 13px; color: #9CA3AF; }
+  .p-status-text strong { color: #D1D5DB; font-weight: 600; }
+
+  /* Compact countdowns: one row, numbers only */
+  .p-counts {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .p-count {
+    flex: 1;
+    padding: 14px 8px;
+    text-align: center;
+    background: rgba(255,255,255,0.02);
+    position: relative;
+  }
+  .p-count + .p-count { border-left: 1px solid rgba(255,255,255,0.04); }
+  .p-count .emoji { font-size: 16px; margin-bottom: 4px; }
+  .p-count .val { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .p-count .lbl { font-size: 10px; color: #6B7280; margin-top: 2px; font-weight: 500; }
+  .p-count.hl { background: linear-gradient(180deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02)); }
+  .p-count.hl .val { color: #FF6B6B; }
+
+  /* Timeline: cleaner, less visual noise */
+  .p-tl-label { font-size: 10px; color: #4B5563; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+
+  .p-tl-event { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .p-tl-event:last-child { border-bottom: none; }
+  .p-tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .p-tl-dot.glow { box-shadow: 0 0 8px currentColor; animation: dotB 1.5s ease-in-out infinite; }
+  @keyframes dotB { 0%,100% { box-shadow:0 0 4px currentColor; } 50% { box-shadow:0 0 12px currentColor; } }
+  .p-tl-info { flex: 1; }
+  .p-tl-info .name { font-size: 14px; font-weight: 600; }
+  .p-tl-info .time { font-size: 12px; color: #6B7280; margin-top: 1px; }
+  .p-tl-cd { font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .p-tl-past { opacity: 0.3; }
+  .p-tl-past .p-tl-cd { font-weight: 500; }
+
+  /* Collapsed past events */
+  .p-collapsed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+  }
+  .p-collapsed .dots { display: flex; gap: 4px; }
+  .p-collapsed .dots .d { width: 6px; height: 6px; border-radius: 50%; opacity: 0.4; }
+  .p-collapsed .text { font-size: 12px; color: #4B5563; }
+  .p-collapsed .chevron { font-size: 10px; color: #374151; margin-left: auto; }
+
+  /* Floating tab */
+  .p-tab { display:flex;justify-content:space-around;padding:8px 0;position:absolute;bottom:12px;left:14px;right:14px;background:rgba(8,11,20,0.9);backdrop-filter:blur(14px);border-radius:20px;border:1px solid rgba(255,255,255,0.05); }
+  .p-tab .t { text-align:center;font-size:10px;color:#4B5563;padding:4px 0;flex:1;transition:color 0.2s; }
+  .p-tab .t.on { color:#D1D5DB; }
+  .p-tab .t .i { font-size:18px;margin-bottom:2px; }
+
+  /* Annotations */
+  .anno-row {
+    position: absolute;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .anno-row.change { background: rgba(52,211,153,0.15); color: #34D399; }
+
+  /* Changes list */
+  .changes-section {
+    max-width: 900px;
+    margin: 0 auto 48px;
+  }
+  .changes-section h2 { font-size: 18px; text-align: center; margin-bottom: 16px; }
+  .change-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .change-card {
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid #1F2937;
+    background: rgba(255,255,255,0.02);
+  }
+  .change-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .change-card h4 .num { width: 20px; height: 20px; border-radius: 10px; background: rgba(200,168,75,0.15); color: #C8A84B; font-size: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .change-card .before { font-size: 11px; color: #FF6B6B; margin-bottom: 4px; }
+  .change-card .after { font-size: 11px; color: #34D399; margin-bottom: 4px; }
+  .change-card .why { font-size: 11px; color: #6B7280; line-height: 1.4; font-style: italic; }
+
+  /* Premium principles */
+  .principles {
+    max-width: 900px;
+    margin: 0 auto 48px;
+    padding: 24px;
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 16px;
+    background: rgba(200,168,75,0.03);
+  }
+  .principles h3 { font-size: 16px; text-align: center; margin-bottom: 16px; color: #C8A84B; }
+  .principle {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(200,168,75,0.08);
+  }
+  .principle:last-child { border-bottom: none; }
+  .principle .num { font-size: 18px; font-weight: 700; color: #C8A84B; opacity: 0.4; flex-shrink: 0; width: 28px; }
+  .principle .content h4 { font-size: 13px; font-weight: 600; }
+  .principle .content p { font-size: 12px; color: #9CA3AF; line-height: 1.5; margin-top: 3px; }
+  .principle .content .example { font-size: 11px; color: #6B7280; margin-top: 4px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<h1>Premium Refinements</h1>
+<p class="page-sub">Same hybrid skeleton. 7 targeted changes that increase premium feel while reducing visual noise. Less is more.</p>
+
+<!-- Premium Principles -->
+<div class="principles">
+  <h3>The 5 Rules of Premium App Design</h3>
+  <div class="principle">
+    <div class="num">01</div>
+    <div class="content">
+      <h4>One Hero Per Screen</h4>
+      <p>Premium apps have ONE clear focal point. Everything else is supporting cast. If everything is big, nothing is big.</p>
+      <div class="example">Apple Health: one large ring. Oura: one readiness score. Whoop: one recovery percentage.</div>
+    </div>
+  </div>
+  <div class="principle">
+    <div class="num">02</div>
+    <div class="content">
+      <h4>Whitespace = Luxury</h4>
+      <p>Cheap apps cram. Premium apps breathe. Extra padding between sections signals confidence and quality.</p>
+      <div class="example">Compare Instagram (generous spacing) vs a budget social app (wall of content).</div>
+    </div>
+  </div>
+  <div class="principle">
+    <div class="num">03</div>
+    <div class="content">
+      <h4>Progressive Disclosure</h4>
+      <p>Show only what matters NOW. Past events collapse. Details expand on tap. The screen serves the current moment.</p>
+      <div class="example">Dark Sky: shows "Rain in 12 min" not the full hourly forecast. Tap for detail.</div>
+    </div>
+  </div>
+  <div class="principle">
+    <div class="num">04</div>
+    <div class="content">
+      <h4>Color Restraint</h4>
+      <p>Use 2 accent colors max on any screen. Gold for actions, one semantic color for the current context. Everything else is gray.</p>
+      <div class="example">Calm app: one blue accent + lots of charcoal. Never 5 competing colors.</div>
+    </div>
+  </div>
+  <div class="principle">
+    <div class="num">05</div>
+    <div class="content">
+      <h4>Typography Does The Work</h4>
+      <p>Premium hierarchy comes from type size contrast, not borders and backgrounds. A 36px number next to 10px label creates focus without any card.</p>
+      <div class="example">Whoop: "78" in 48px with "Recovery" in 10px uppercase. Zero decorative chrome.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Before / After -->
+<div class="comparison-header">
+  <h2>Before &amp; After</h2>
+  <p>Same information, premium execution. Left = current hybrid. Right = refined.</p>
+</div>
+
+<div class="side-by-side">
+
+  <!-- BEFORE: Current hybrid (dense) -->
+  <div>
+    <div style="text-align:center"><span class="col-label before">Current Hybrid (Dense)</span></div>
+    <div class="phone">
+      <div class="phone-lbl">Before</div>
+      <div class="sbar"><span>9:41</span><span>100%</span></div>
+
+      <div class="b-header">
+        <div>
+          <div class="greeting">Good morning, Sim</div>
+          <h2 style="font-size:22px;">Saturday, Apr 5</h2>
+          <div class="ctx">Day shift tomorrow &bull; 12h recovery window</div>
+        </div>
+        <div class="b-avatar">S</div>
+      </div>
+
+      <div class="b-pill">
+        <div class="b-pill-icon">&#x1F33F;</div>
+        <div><div class="pri">Recovery Day</div><div class="sec">Clear schedule &bull; prioritize rest</div></div>
+      </div>
+
+      <div class="b-score">
+        <div class="b-ring"><div class="n">78</div></div>
+        <div class="b-score-info">
+          <div class="lbl">Recovery Score</div>
+          <div class="desc">You slept 7.2h of planned 7.5h</div>
+          <div class="trend">&#x2191; 6 pts from yesterday</div>
+        </div>
+      </div>
+
+      <div class="b-bento">
+        <div class="b-bcard" style="background:rgba(255,107,107,0.08);"><div class="ic">&#x2615;</div><div class="cl">Caffeine cutoff</div><div class="val" style="color:#FF6B6B;">2:14</div><div class="sub">hours left</div></div>
+        <div class="b-bcard" style="background:rgba(123,97,255,0.08);"><div class="ic">&#x1F634;</div><div class="cl">Sleep window</div><div class="val" style="color:#B794F6;">6:45</div><div class="sub">hours away</div></div>
+      </div>
+
+      <div class="b-insight"><span class="e">&#x1F4A1;</span><span class="txt">Your sleep debt is clearing. One more solid night and you'll be fully recovered for your night block starting Thursday.</span></div>
+
+      <div class="lbl-s">Today's Plan</div>
+      <div class="b-tl">
+        <div class="b-tl-t">6:00a</div>
+        <div class="b-tl-s"><div class="b-tl-l"></div><div class="b-tl-d" style="background:#FCD34D;"></div><div class="b-tl-l"></div></div>
+        <div class="b-tl-c b-tl-past"><div class="b-tl-bar" style="background:#FCD34D;"></div><div class="b-tl-cnt"><div><div class="nm">&#x1F31E; Light Exposure</div><div class="mt">6:00-6:30 AM</div></div><div class="cd" style="color:#6B7280;">Done</div></div></div>
+      </div>
+      <div class="b-tl">
+        <div class="b-tl-t">7:00a</div>
+        <div class="b-tl-s"><div class="b-tl-l"></div><div class="b-tl-d" style="background:#34D399;"></div><div class="b-tl-l"></div></div>
+        <div class="b-tl-c b-tl-past"><div class="b-tl-bar" style="background:#34D399;"></div><div class="b-tl-cnt"><div><div class="nm">&#x1F37D; Breakfast</div><div class="mt">7:00-7:30 AM</div></div><div class="cd" style="color:#6B7280;">Done</div></div></div>
+      </div>
+      <div class="b-tl">
+        <div class="b-tl-t">2:00p</div>
+        <div class="b-tl-s"><div class="b-tl-l"></div><div class="b-tl-d" style="background:#FF6B6B;"></div><div class="b-tl-l"></div></div>
+        <div class="b-tl-c" style="border-color:rgba(255,107,107,0.3);"><div class="b-tl-bar" style="background:#FF6B6B;"></div><div class="b-tl-cnt"><div><div class="nm">&#x2615; Caffeine Cutoff</div><div class="mt">2:00 PM</div></div><div class="cd" style="color:#FF6B6B;">Now</div></div></div>
+      </div>
+      <div class="b-tl">
+        <div class="b-tl-t">9:00p</div>
+        <div class="b-tl-s"><div class="b-tl-l"></div><div class="b-tl-d" style="background:#818CF8;"></div><div class="b-tl-l"></div></div>
+        <div class="b-tl-c"><div class="b-tl-bar" style="background:#818CF8;"></div><div class="b-tl-cnt"><div><div class="nm">&#x1F319; Wind-down</div><div class="mt">9:00-10:00 PM</div></div><div class="cd" style="color:#818CF8;">5h 30m</div></div></div>
+      </div>
+      <div class="b-tl">
+        <div class="b-tl-t">10:00p</div>
+        <div class="b-tl-s"><div class="b-tl-l"></div><div class="b-tl-d" style="background:#7B61FF;"></div><div class="b-tl-l"></div></div>
+        <div class="b-tl-c"><div class="b-tl-bar" style="background:#7B61FF;"></div><div class="b-tl-cnt"><div><div class="nm">&#x1F634; Sleep Window</div><div class="mt">10:00 PM-6:00 AM</div></div><div class="cd" style="color:#B794F6;">6h 45m</div></div></div>
+      </div>
+
+      <div class="b-tab">
+        <div class="t on"><div class="i">&#x2728;</div>Today</div>
+        <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+        <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AFTER: Premium refined -->
+  <div>
+    <div style="text-align:center"><span class="col-label after">Premium Refined</span></div>
+    <div class="phone phone-premium">
+      <div class="phone-lbl">After</div>
+      <div class="sbar"><span>9:41</span><span>100%</span></div>
+
+      <!-- 1. Cleaner header: no avatar, no subtitle — let the score be the hero -->
+      <div class="p-header">
+        <div class="greeting">Good morning, Sim</div>
+        <h2>Saturday, Apr 5</h2>
+      </div>
+
+      <!-- 2. Status as a single elegant line, not a card -->
+      <div class="p-status-line">
+        <div class="p-status-dot"></div>
+        <div class="p-status-text"><strong>Recovery Day</strong> &bull; Day shift tomorrow</div>
+      </div>
+
+      <!-- 3. Hero metric: big score ring, centered, breathing -->
+      <div class="p-hero">
+        <div class="p-hero-glow"></div>
+        <div class="p-hero-ring">
+          <div class="num">78</div>
+        </div>
+        <div class="p-hero-label">Recovery Score &bull; 7.2h of 7.5h</div>
+        <div class="p-hero-trend">&#x2191; 6 pts from yesterday</div>
+      </div>
+
+      <!-- 4. Unified countdown row (not separate bento cards) -->
+      <div class="p-counts">
+        <div class="p-count hl">
+          <div class="emoji">&#x2615;</div>
+          <div class="val" style="color:#FF6B6B;">2:14</div>
+          <div class="lbl">Caffeine</div>
+        </div>
+        <div class="p-count">
+          <div class="emoji">&#x1F319;</div>
+          <div class="val" style="color:#818CF8;">5:30</div>
+          <div class="lbl">Wind-down</div>
+        </div>
+        <div class="p-count">
+          <div class="emoji">&#x1F634;</div>
+          <div class="val" style="color:#B794F6;">6:45</div>
+          <div class="lbl">Sleep</div>
+        </div>
+      </div>
+
+      <!-- 5. Timeline: collapsed past, clean list -->
+      <div class="p-tl-label">Today's Plan</div>
+
+      <div class="p-collapsed">
+        <div class="dots">
+          <div class="d" style="background:#FCD34D;"></div>
+          <div class="d" style="background:#34D399;"></div>
+        </div>
+        <div class="text">2 completed</div>
+        <div class="chevron">&#x25BC;</div>
+      </div>
+
+      <div class="p-tl-event">
+        <div class="p-tl-dot glow" style="background:#FF6B6B; color:#FF6B6B;"></div>
+        <div class="p-tl-info">
+          <div class="name">&#x2615; Caffeine Cutoff</div>
+          <div class="time">2:00 PM &bull; No caffeine after this</div>
+        </div>
+        <div class="p-tl-cd" style="color:#FF6B6B;">Now</div>
+      </div>
+
+      <div class="p-tl-event">
+        <div class="p-tl-dot" style="background:#818CF8;"></div>
+        <div class="p-tl-info">
+          <div class="name">&#x1F319; Wind-down</div>
+          <div class="time">9:00 &ndash; 10:00 PM</div>
+        </div>
+        <div class="p-tl-cd" style="color:#818CF8;">5h 30m</div>
+      </div>
+
+      <div class="p-tl-event">
+        <div class="p-tl-dot" style="background:#7B61FF;"></div>
+        <div class="p-tl-info">
+          <div class="name">&#x1F634; Sleep Window</div>
+          <div class="time">10:00 PM &ndash; 6:00 AM</div>
+        </div>
+        <div class="p-tl-cd" style="color:#B794F6;">6h 45m</div>
+      </div>
+
+      <!-- 6. Insight: peek-style, not full card -->
+      <div style="margin-top:16px; padding: 12px 4px; border-top: 1px solid rgba(255,255,255,0.04);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:14px;">&#x1F4A1;</span>
+          <span style="font-size:12px; color:#9CA3AF; line-height:1.4;">Sleep debt clearing &mdash; one more solid night before your Thursday night block.</span>
+        </div>
+      </div>
+
+      <div class="p-tab">
+        <div class="t on"><div class="i">&#x2728;</div>Today</div>
+        <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+        <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Changes Detail -->
+<div class="changes-section">
+  <h2>7 Premium Refinements</h2>
+  <div class="change-grid">
+    <div class="change-card">
+      <h4><span class="num">1</span>Hero Score (Centered)</h4>
+      <div class="before">Before: Score crammed in a row card with 4 text elements</div>
+      <div class="after">After: Large centered ring with ambient glow. ONE focal point.</div>
+      <div class="why">Premium apps (Oura, Whoop, Apple Fitness) all center their hero metric. It's the first thing your eye hits.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">2</span>Status Line (Not Pill)</h4>
+      <div class="before">Before: Full card with icon + 2 lines of text</div>
+      <div class="after">After: Single line with pulsing dot. Same info, 80% less visual weight.</div>
+      <div class="why">The pill competed with the score card for attention. A status line is informational, not a feature.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">3</span>Unified Countdown Row</h4>
+      <div class="before">Before: 2 separate bento cards with labels + sub-labels</div>
+      <div class="after">After: 3 countdowns in one unified row. Emoji + number + one word. Scannable in &lt;1 second.</div>
+      <div class="why">Bento cards are trendy but add visual noise here. A unified row groups related data and reduces card count.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">4</span>Collapsed Past Events</h4>
+      <div class="before">Before: Past events shown at 30% opacity (still visible, still cluttering)</div>
+      <div class="after">After: Collapsed to "2 completed" with colored dots. Tap to expand.</div>
+      <div class="why">Users don't need to see what already happened. Progressive disclosure: show current + future only.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">5</span>Flat Timeline (No Spine)</h4>
+      <div class="before">Before: Spine + dots + time column + cards with accent bars</div>
+      <div class="after">After: Clean list with small dots + inline countdowns. Less visual structure, more breathing room.</div>
+      <div class="why">The spine adds visual complexity without adding information. The dots alone provide the colored type indicators.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">6</span>Condensed Insight</h4>
+      <div class="before">Before: Full bordered card with 2 lines of text</div>
+      <div class="after">After: Subtle inline line at bottom. Same info, half the words, no border.</div>
+      <div class="why">Insights are secondary. They shouldn't compete with the timeline. Keep them discoverable but quiet.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">7</span>Header: Remove Avatar</h4>
+      <div class="before">Before: Greeting + date + subtitle + avatar (4 elements)</div>
+      <div class="after">After: Greeting + date only (2 elements). Avatar moves to Profile tab.</div>
+      <div class="why">The avatar is decorative on the Today screen. It belongs on Profile. Removing it reduces header weight.</div>
+    </div>
+    <div class="change-card">
+      <h4><span class="num">+</span>Noise Texture Overlay</h4>
+      <div class="before">Before: Flat dark background</div>
+      <div class="after">After: Subtle grain/noise texture at 3% opacity over the background.</div>
+      <div class="why">Noise texture is a hallmark of premium apps (Linear, Raycast, Arc). It adds depth without adding elements.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

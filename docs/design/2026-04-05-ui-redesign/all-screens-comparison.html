@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — All Screens: Path A vs Path B</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0F1117; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; padding: 32px 16px; }
+
+  h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 6px; }
+  .page-sub { color: #9CA3AF; font-size: 14px; text-align: center; margin-bottom: 32px; }
+
+  .path-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    position: sticky;
+    top: 12px;
+    z-index: 100;
+  }
+  .toggle-btn {
+    padding: 10px 24px;
+    border-radius: 12px;
+    border: 2px solid #1F2937;
+    background: rgba(15,17,23,0.9);
+    backdrop-filter: blur(10px);
+    color: #9CA3AF;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .toggle-btn:hover { border-color: #374151; }
+  .toggle-btn.active-a { border-color: #C8A84B; color: #C8A84B; background: rgba(200,168,75,0.08); }
+  .toggle-btn.active-b { border-color: #7B61FF; color: #7B61FF; background: rgba(123,97,255,0.08); }
+
+  .screen-section {
+    max-width: 1300px;
+    margin: 0 auto 56px;
+  }
+  .screen-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1F2937;
+  }
+  .screen-section-header h2 { font-size: 20px; }
+  .screen-section-header .desc { font-size: 13px; color: #6B7280; }
+
+  .side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .col-label {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding: 6px 16px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .col-label.a { color: #C8A84B; background: rgba(200,168,75,0.08); }
+  .col-label.b { color: #7B61FF; background: rgba(123,97,255,0.08); }
+
+  /* ===== PHONE FRAME ===== */
+  .phone {
+    border-radius: 40px;
+    border: 2.5px solid #1F2937;
+    padding: 44px 14px 24px;
+    min-height: 640px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone.a-bg { background: #0A0E1A; }
+  .phone.b-bg { background: #080B14; }
+  .phone-lbl {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #4B5563;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .sbar { display: flex; justify-content: space-between; padding: 0 4px 8px; font-size: 11px; color: #6B7280; font-weight: 600; }
+
+  /* ===== SHARED MICRO STYLES ===== */
+  .lbl { font-size: 10px; color: #6B7280; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .card-s { background: #141929; border: 1px solid #1F2937; border-radius: 14px; }
+  .card-b { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; }
+  .divider { height: 1px; background: #171D2E; margin: 0 14px; }
+
+  /* ===== TAB BARS ===== */
+  .tab-a {
+    display: flex; justify-content: space-around; padding: 8px 0 0; border-top: 1px solid #1F2937;
+    position: absolute; bottom: 10px; left: 14px; right: 14px;
+  }
+  .tab-a .t { text-align: center; font-size: 9px; color: #6B7280; }
+  .tab-a .t.on { color: #C8A84B; }
+  .tab-a .t .i { font-size: 16px; margin-bottom: 1px; }
+
+  .tab-b {
+    display: flex; justify-content: space-around; padding: 6px 0;
+    position: absolute; bottom: 10px; left: 14px; right: 14px;
+    background: rgba(8,11,20,0.85); backdrop-filter: blur(10px);
+    border-radius: 18px; border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tab-b .t { text-align: center; font-size: 9px; color: #6B7280; padding: 4px 0; flex: 1; }
+  .tab-b .t.on { color: #fff; }
+  .tab-b .t .i { font-size: 16px; margin-bottom: 1px; }
+
+  /* ===== SETTINGS ROWS ===== */
+  .s-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; min-height: 42px; }
+  .s-row + .s-row { border-top: 1px solid #171D2E; }
+  .s-row .k { font-size: 14px; }
+  .s-row .v { font-size: 14px; color: #9CA3AF; }
+  .tog { width: 40px; height: 24px; border-radius: 12px; background: #374151; position: relative; }
+  .tog.on { background: #8B6914; }
+  .tog::after { content: ''; width: 18px; height: 18px; border-radius: 9px; background: #6B7280; position: absolute; top: 3px; left: 3px; transition: 0.2s; }
+  .tog.on::after { transform: translateX(16px); background: #C8A84B; }
+  .badge-s { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px; background: #374151; color: #9CA3AF; }
+
+  /* ===== CALENDAR ===== */
+  .cal-g { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; text-align: center; margin-bottom: 12px; }
+  .cal-h { font-size: 10px; color: #6B7280; padding: 3px 0; }
+  .cal-d { font-size: 12px; color: #6B7280; padding: 6px 0; border-radius: 8px; position: relative; }
+  .cal-d.today { background: #C8A84B; color: #fff; font-weight: 700; }
+  .cal-d.has-d::after { content:''; width:4px; height:4px; border-radius:50%; background:#4A90D9; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); }
+  .cal-d.has-n::after { content:''; width:4px; height:4px; border-radius:50%; background:#FF9F43; position:absolute; bottom:2px; left:50%; transform:translateX(-50%); }
+  .shift-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+  .shift-row + .shift-row { border-top: 1px solid #171D2E; }
+  .sd { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .shift-row .n { font-size: 14px; font-weight: 600; }
+  .shift-row .tm { font-size: 12px; color: #9CA3AF; margin-top: 1px; }
+  .fab-a { position:absolute; bottom:48px; right:22px; width:50px; height:50px; background:#C8A84B; border-radius:25px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; box-shadow:0 3px 8px rgba(0,0,0,0.3); }
+
+  /* Path B calendar: timeline-style */
+  .b-cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .b-cal-header h3 { font-size: 18px; font-weight: 700; }
+  .b-cal-header .arrows { color: #6B7280; font-size: 14px; display: flex; gap: 16px; }
+  .b-week-strip { display: flex; gap: 6px; margin-bottom: 16px; }
+  .b-wd { flex: 1; text-align: center; padding: 8px 0; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); }
+  .b-wd .day { font-size: 10px; color: #6B7280; font-weight: 500; }
+  .b-wd .num { font-size: 16px; font-weight: 600; margin-top: 2px; color: #9CA3AF; }
+  .b-wd.today { border-color: #C8A84B; background: rgba(200,168,75,0.08); }
+  .b-wd.today .num { color: #C8A84B; }
+  .b-wd .dot-row { display: flex; justify-content: center; gap: 3px; margin-top: 4px; }
+  .b-wd .dot-row .md { width: 4px; height: 4px; border-radius: 50%; }
+
+  .b-shift-card { padding: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; }
+  .b-shift-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .b-shift-info .n { font-size: 14px; font-weight: 600; }
+  .b-shift-info .tm { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+  .b-shift-dur { margin-left: auto; font-size: 13px; color: #6B7280; font-weight: 500; }
+
+  .b-fab { position:absolute; bottom:52px; right:22px; width:50px; height:50px; background:linear-gradient(135deg,#7B61FF,#C8A84B); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#fff; box-shadow:0 4px 12px rgba(123,97,255,0.3); }
+
+  /* ===== ONBOARDING ===== */
+  .ob-hero { text-align: center; padding: 24px 0 16px; }
+  .ob-hero h2 { font-size: 32px; font-weight: 700; }
+  .ob-hero p { color: #9CA3AF; font-size: 14px; margin-top: 10px; max-width: 240px; margin-inline: auto; line-height: 1.4; }
+  .ob-card { background: #141929; border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .ob-card .e { font-size: 22px; }
+  .ob-card .t { font-size: 14px; font-weight: 600; }
+  .ob-disc { background: #141929; border: 1px solid #171D2E; border-radius: 12px; padding: 10px 14px; text-align: center; font-size: 10px; color: #6B7280; line-height: 1.4; margin: 12px 0; }
+  .btn-g { background: #C8A84B; color: #fff; border: none; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 600; width: 100%; cursor: pointer; }
+  .prog-a { height: 3px; background: #1F2937; border-radius: 2px; margin-bottom: 4px; }
+  .prog-a .fill { height: 100%; background: #C8A84B; border-radius: 2px; width: 12%; }
+
+  /* Path B onboarding */
+  .b-ob-hero { text-align: center; padding: 40px 0 24px; }
+  .b-ob-hero .logo { font-size: 48px; margin-bottom: 16px; }
+  .b-ob-hero h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, #fff 30%, #C8A84B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .b-ob-hero p { color: #9CA3AF; font-size: 14px; margin-top: 12px; max-width: 260px; margin-inline: auto; line-height: 1.5; }
+  .b-ob-feature { display: flex; align-items: center; gap: 14px; padding: 16px; margin-bottom: 8px; }
+  .b-ob-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .b-ob-text .title { font-size: 14px; font-weight: 600; }
+  .b-ob-text .desc { font-size: 12px; color: #9CA3AF; margin-top: 2px; }
+  .btn-b-primary { background: linear-gradient(135deg, #7B61FF, #C8A84B); color: #fff; border: none; border-radius: 14px; padding: 16px; font-size: 16px; font-weight: 600; width: 100%; cursor: pointer; }
+  .b-ob-legal { text-align: center; font-size: 10px; color: #4B5563; margin-top: 10px; line-height: 1.4; }
+  .b-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; }
+  .b-dots .d { width: 8px; height: 8px; border-radius: 50%; background: #1F2937; }
+  .b-dots .d.on { background: #7B61FF; width: 24px; border-radius: 4px; }
+
+  /* ===== NIGHT SKY ===== */
+  .ns-bg { background: radial-gradient(ellipse at 50% 20%, #0F1429, #0A0E1A); position: relative; }
+  .star { position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; opacity:0.3; }
+  .star.b { width:3px; height:3px; opacity:0.6; }
+  .ns-dismiss { position: absolute; top: 44px; right: 14px; font-size: 14px; color: #6B7280; background: none; border: none; }
+  .ns-center { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 16px 0; position: relative; z-index: 1; }
+  .arc { width: 160px; height: 160px; border-radius: 50%; border: 5px solid #1F2937; display: flex; align-items: center; justify-content: center; position: relative; }
+  .arc::before { content:''; position:absolute; inset:-5px; border-radius:50%; border:5px solid transparent; border-top-color:#7B61FF; border-right-color:#7B61FF; transform:rotate(-45deg); }
+  .arc .pct { font-size: 38px; font-weight: 700; }
+  .arc .sub { font-size: 10px; color: #6B7280; letter-spacing: 1px; text-transform: uppercase; }
+  .ns-info { text-align: center; margin-top: 20px; }
+  .ns-info .alarm { font-size: 20px; font-weight: 700; }
+  .ns-info .wake { font-size: 13px; color: #9CA3AF; margin-top: 4px; }
+  .ns-tomorrow { margin-top: 20px; width: 100%; padding: 0 8px; }
+  .ns-tomorrow .tl { font-size: 10px; color: #C8A84B; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .ns-tomorrow .item { font-size: 13px; color: #9CA3AF; padding: 2px 0; }
+
+  /* Path B night sky */
+  .b-ns-bg { background: radial-gradient(ellipse at 50% 30%, #0D0F22, #060811); position: relative; }
+  .b-ns-center { display: flex; flex-direction: column; align-items: center; padding: 48px 16px 0; position: relative; z-index: 1; }
+  .b-arc-wrap { position: relative; margin-bottom: 24px; }
+  .b-arc { width: 180px; height: 180px; border-radius: 50%; border: 4px solid rgba(123,97,255,0.15); display: flex; align-items: center; justify-content: center; position: relative; }
+  .b-arc::before { content:''; position:absolute; inset:-4px; border-radius:50%; border:4px solid transparent; border-top-color:#7B61FF; border-right-color:#7B61FF; transform:rotate(-45deg); filter: drop-shadow(0 0 8px rgba(123,97,255,0.4)); }
+  .b-arc .inner { text-align: center; }
+  .b-arc .pct { font-size: 44px; font-weight: 700; letter-spacing: -1px; }
+  .b-arc .sub { font-size: 11px; color: #6B7280; letter-spacing: 0.5px; }
+  .b-ns-status { text-align: center; margin-bottom: 20px; }
+  .b-ns-status .alarm { font-size: 18px; font-weight: 600; }
+  .b-ns-status .detail { font-size: 12px; color: #6B7280; margin-top: 4px; }
+  .b-ns-card { width: 100%; padding: 16px; margin-bottom: 10px; }
+  .b-ns-card .hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .b-ns-card .hdr .title { font-size: 12px; font-weight: 700; color: #6B7280; letter-spacing: 0.8px; text-transform: uppercase; }
+  .b-ns-card .hdr .more { font-size: 11px; color: #4B5563; }
+  .b-ns-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
+  .b-ns-row .e { font-size: 16px; }
+  .b-ns-row .txt { font-size: 13px; color: #D1D5DB; }
+  .b-ns-row .time { font-size: 12px; color: #6B7280; margin-left: auto; }
+
+  .changes-note {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    border: 1px solid #1F2937;
+    background: rgba(255,255,255,0.02);
+  }
+  .changes-note h3 { font-size: 15px; margin-bottom: 10px; }
+  .changes-note ul { padding-left: 20px; }
+  .changes-note li { font-size: 13px; color: #D1D5DB; padding: 3px 0; line-height: 1.5; }
+  .changes-note li strong { color: #fff; }
+
+  .section-divider {
+    max-width: 1300px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #1F2937, transparent);
+    margin-bottom: 40px;
+  }
+</style>
+</head>
+<body>
+
+<h1>All Screens &mdash; Path A vs Path B</h1>
+<p class="page-sub">Side-by-side comparison of every major screen in both design directions</p>
+
+<!-- ============================================
+     1. ONBOARDING / WELCOME
+     ============================================ -->
+<div class="screen-section">
+  <div class="screen-section-header">
+    <h2>1. Welcome / Onboarding</h2>
+    <span class="desc">First screen new users see</span>
+  </div>
+  <div class="side-by-side">
+
+    <!-- A: Welcome -->
+    <div>
+      <div style="text-align:center"><span class="col-label a">Path A: Polish</span></div>
+      <div class="phone a-bg">
+        <div class="phone-lbl">Welcome</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+        <div class="prog-a"><div class="fill"></div></div>
+        <div class="ob-hero">
+          <h2>ShiftWell</h2>
+          <p>Sleep on autopilot for everyone who works against the clock</p>
+        </div>
+        <div class="ob-card"><span class="e">&#x1F4A4;</span><span class="t">Personalized sleep plans</span></div>
+        <div class="ob-card"><span class="e">&#x1F4C5;</span><span class="t">Syncs with your calendar</span></div>
+        <div class="ob-card"><span class="e">&#x2728;</span><span class="t">Science-backed optimization</span></div>
+        <div class="ob-disc">This app provides sleep education based on published research. It is not a medical device.</div>
+        <button class="btn-g">Get Started</button>
+      </div>
+    </div>
+
+    <!-- B: Welcome -->
+    <div>
+      <div style="text-align:center"><span class="col-label b">Path B: Rethink</span></div>
+      <div class="phone b-bg">
+        <div class="phone-lbl">Welcome</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+        <div class="b-dots"><div class="d on"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>
+        <div class="b-ob-hero">
+          <div class="logo">&#x1F319;</div>
+          <h2>Sleep on Autopilot</h2>
+          <p>ShiftWell reads your schedule and builds a complete sleep plan &mdash; so you never have to think about it.</p>
+        </div>
+        <div class="card-b b-ob-feature">
+          <div class="b-ob-icon" style="background:rgba(123,97,255,0.15);">&#x1F9E0;</div>
+          <div class="b-ob-text">
+            <div class="title">AI-Powered Plans</div>
+            <div class="desc">Personalized to your chronotype and schedule</div>
+          </div>
+        </div>
+        <div class="card-b b-ob-feature">
+          <div class="b-ob-icon" style="background:rgba(52,211,153,0.15);">&#x1F4C5;</div>
+          <div class="b-ob-text">
+            <div class="title">Calendar Sync</div>
+            <div class="desc">Reads shifts, writes sleep blocks automatically</div>
+          </div>
+        </div>
+        <div class="card-b b-ob-feature">
+          <div class="b-ob-icon" style="background:rgba(200,168,75,0.15);">&#x1F4CA;</div>
+          <div class="b-ob-text">
+            <div class="title">Recovery Tracking</div>
+            <div class="desc">See how your sleep quality improves over time</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px;">
+          <button class="btn-b-primary">Get Started</button>
+          <div class="b-ob-legal">Not a medical device. Based on peer-reviewed research.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="changes-note" style="margin-top: 20px;">
+    <h3>Key Differences</h3>
+    <ul>
+      <li><strong>A:</strong> Progress bar, centered hero, simple emoji cards, disclaimer box. Clean and functional.</li>
+      <li><strong>B:</strong> Dot navigation (swipeable), gradient headline, icon cards with descriptions, gradient CTA, inline legal. More premium feel.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================
+     2. SCHEDULE / CALENDAR
+     ============================================ -->
+<div class="screen-section">
+  <div class="screen-section-header">
+    <h2>2. Schedule</h2>
+    <span class="desc">Calendar view with shifts and sleep blocks</span>
+  </div>
+  <div class="side-by-side">
+
+    <!-- A: Schedule -->
+    <div>
+      <div style="text-align:center"><span class="col-label a">Path A: Polish</span></div>
+      <div class="phone a-bg" style="padding-bottom: 56px;">
+        <div class="phone-lbl">Schedule</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+
+        <h2 style="font-size:22px; margin-bottom:14px;">Schedule</h2>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="color:#6B7280;font-size:13px;">&#9664;</span>
+          <span style="font-size:16px; font-weight:600;">April 2026</span>
+          <span style="color:#6B7280;font-size:13px;">&#9654;</span>
+        </div>
+
+        <div class="cal-g">
+          <div class="cal-h">S</div><div class="cal-h">M</div><div class="cal-h">T</div><div class="cal-h">W</div><div class="cal-h">T</div><div class="cal-h">F</div><div class="cal-h">S</div>
+          <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d has-d">1</div><div class="cal-d has-n">2</div><div class="cal-d has-n">3</div><div class="cal-d">4</div>
+          <div class="cal-d today">5</div><div class="cal-d has-d">6</div><div class="cal-d has-d">7</div><div class="cal-d">8</div><div class="cal-d has-n">9</div><div class="cal-d has-n">10</div><div class="cal-d has-n">11</div>
+          <div class="cal-d">12</div><div class="cal-d has-d">13</div><div class="cal-d has-d">14</div><div class="cal-d has-d">15</div><div class="cal-d">16</div><div class="cal-d">17</div><div class="cal-d">18</div>
+          <div class="cal-d">19</div><div class="cal-d has-n">20</div><div class="cal-d has-n">21</div><div class="cal-d has-n">22</div><div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div>
+        </div>
+
+        <div class="lbl">Saturday, April 5</div>
+        <div class="card-s" style="overflow:hidden;">
+          <div class="shift-row">
+            <div class="sd" style="background:#4A90D9;"></div>
+            <div><div class="n">Day Shift</div><div class="tm">7:00 AM &ndash; 7:00 PM</div></div>
+          </div>
+          <div class="shift-row">
+            <div class="sd" style="background:#7B61FF;"></div>
+            <div><div class="n">Sleep Window</div><div class="tm">10:00 PM &ndash; 6:00 AM</div></div>
+          </div>
+          <div class="shift-row">
+            <div class="sd" style="background:#FF6B6B;"></div>
+            <div><div class="n">Caffeine Cutoff</div><div class="tm">2:00 PM</div></div>
+          </div>
+        </div>
+
+        <div class="fab-a">+</div>
+        <div class="tab-a">
+          <div class="t"><div class="i">&#x1F3E0;</div>Today</div>
+          <div class="t on"><div class="i">&#x1F4C5;</div>Schedule</div>
+          <div class="t"><div class="i">&#x2699;&#xFE0F;</div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: Schedule -->
+    <div>
+      <div style="text-align:center"><span class="col-label b">Path B: Rethink</span></div>
+      <div class="phone b-bg" style="padding-bottom: 56px;">
+        <div class="phone-lbl">Schedule</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+
+        <div class="b-cal-header">
+          <h3>April 2026</h3>
+          <div class="arrows"><span>&#9664;</span><span>&#9654;</span></div>
+        </div>
+
+        <div class="b-week-strip">
+          <div class="b-wd"><div class="day">SUN</div><div class="num">3</div></div>
+          <div class="b-wd"><div class="day">MON</div><div class="num">4</div></div>
+          <div class="b-wd today"><div class="day">TUE</div><div class="num">5</div><div class="dot-row"><div class="md" style="background:#4A90D9;"></div><div class="md" style="background:#7B61FF;"></div></div></div>
+          <div class="b-wd"><div class="day">WED</div><div class="num">6</div><div class="dot-row"><div class="md" style="background:#4A90D9;"></div></div></div>
+          <div class="b-wd"><div class="day">THU</div><div class="num">7</div><div class="dot-row"><div class="md" style="background:#4A90D9;"></div></div></div>
+          <div class="b-wd"><div class="day">FRI</div><div class="num">8</div></div>
+          <div class="b-wd"><div class="day">SAT</div><div class="num">9</div><div class="dot-row"><div class="md" style="background:#FF9F43;"></div></div></div>
+        </div>
+
+        <div class="lbl">Saturday, April 5</div>
+
+        <div class="card-b b-shift-card">
+          <div class="b-shift-icon" style="background:rgba(74,144,217,0.15);">&#x1F3E5;</div>
+          <div class="b-shift-info"><div class="n">Day Shift</div><div class="tm">7:00 AM &ndash; 7:00 PM</div></div>
+          <div class="b-shift-dur">12h</div>
+        </div>
+
+        <div class="card-b b-shift-card">
+          <div class="b-shift-icon" style="background:rgba(123,97,255,0.15);">&#x1F634;</div>
+          <div class="b-shift-info"><div class="n">Sleep Window</div><div class="tm">10:00 PM &ndash; 6:00 AM</div></div>
+          <div class="b-shift-dur">8h</div>
+        </div>
+
+        <div class="card-b b-shift-card">
+          <div class="b-shift-icon" style="background:rgba(255,107,107,0.15);">&#x2615;</div>
+          <div class="b-shift-info"><div class="n">Caffeine Cutoff</div><div class="tm">2:00 PM</div></div>
+          <div class="b-shift-dur"></div>
+        </div>
+
+        <div class="card-b b-shift-card">
+          <div class="b-shift-icon" style="background:rgba(129,140,248,0.15);">&#x1F319;</div>
+          <div class="b-shift-info"><div class="n">Wind-down</div><div class="tm">9:00 &ndash; 10:00 PM</div></div>
+          <div class="b-shift-dur">1h</div>
+        </div>
+
+        <div class="b-fab">+</div>
+        <div class="tab-b">
+          <div class="t"><div class="i">&#x2728;</div>Today</div>
+          <div class="t on"><div class="i">&#x1F4C5;</div>Schedule</div>
+          <div class="t"><div class="i">&#x1F464;</div>Profile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="changes-note" style="margin-top: 20px;">
+    <h3>Key Differences</h3>
+    <ul>
+      <li><strong>A:</strong> Traditional month grid + day detail list. Same layout, refined borders and shift indicators.</li>
+      <li><strong>B:</strong> Horizontal week strip (swipeable) replaces full month grid. Icon-rich shift cards with duration. More visual, less data-dense.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================
+     3. SETTINGS
+     ============================================ -->
+<div class="screen-section">
+  <div class="screen-section-header">
+    <h2>3. Settings</h2>
+    <span class="desc">Account, sync, notifications, profile</span>
+  </div>
+  <div class="side-by-side">
+
+    <!-- A: Settings -->
+    <div>
+      <div style="text-align:center"><span class="col-label a">Path A: Polish</span></div>
+      <div class="phone a-bg" style="padding-bottom: 56px;">
+        <div class="phone-lbl">Settings</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+
+        <h2 style="font-size:22px; margin-bottom:16px;">Settings</h2>
+
+        <div style="margin-bottom:16px;">
+          <div class="lbl">Account</div>
+          <div class="card-s">
+            <div class="s-row"><span class="k">Email</span><span class="v">sim@mail.com</span></div>
+            <div class="s-row"><span class="k">Plan</span><span class="badge-s">FREE</span></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="lbl">Sync</div>
+          <div class="card-s">
+            <div class="s-row"><span class="k">Last synced</span><span class="v">2m ago</span></div>
+            <div class="s-row"><span class="k">Auto-sync</span><div class="tog on"></div></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="lbl">Notifications</div>
+          <div class="card-s">
+            <div class="s-row"><span class="k">Wind-down</span><div class="tog on"></div></div>
+            <div class="s-row"><span class="k">Caffeine cutoff</span><div class="tog on"></div></div>
+            <div class="s-row"><span class="k">Morning brief</span><div class="tog on"></div></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="lbl">Profile</div>
+          <div class="card-s">
+            <div class="s-row"><span class="k">Chronotype</span><span class="v">Bear</span></div>
+            <div class="s-row"><span class="k">Sleep need</span><span class="v">7.5h</span></div>
+            <div class="s-row"><span class="k">Nap preference</span><span class="v">20 min</span></div>
+          </div>
+        </div>
+
+        <div class="tab-a">
+          <div class="t"><div class="i">&#x1F3E0;</div>Today</div>
+          <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+          <div class="t on"><div class="i">&#x2699;&#xFE0F;</div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: Settings (Profile) -->
+    <div>
+      <div style="text-align:center"><span class="col-label b">Path B: Rethink</span></div>
+      <div class="phone b-bg" style="padding-bottom: 56px;">
+        <div class="phone-lbl">Profile</div>
+        <div class="sbar"><span>9:41</span><span></span></div>
+
+        <!-- Profile header -->
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="width:64px; height:64px; border-radius:32px; background:linear-gradient(135deg,#7B61FF,#C8A84B); margin:0 auto 10px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700;">S</div>
+          <div style="font-size:18px; font-weight:700;">Sim</div>
+          <div style="font-size:12px; color:#6B7280; margin-top:2px;">Bear Chronotype &bull; 7.5h sleep need</div>
+          <div style="margin-top:8px;">
+            <span style="font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; padding:4px 12px; border-radius:8px; background:rgba(200,168,75,0.15); color:#C8A84B;">Free Plan</span>
+          </div>
+        </div>
+
+        <!-- Quick stats bento -->
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px;">
+          <div class="card-b" style="padding:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:700; color:#34D399;">78</div>
+            <div style="font-size:10px; color:#6B7280;">Avg Score</div>
+          </div>
+          <div class="card-b" style="padding:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:700;">14</div>
+            <div style="font-size:10px; color:#6B7280;">Day Streak</div>
+          </div>
+          <div class="card-b" style="padding:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:700; color:#B794F6;">7.2h</div>
+            <div style="font-size:10px; color:#6B7280;">Avg Sleep</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div class="lbl">Preferences</div>
+          <div class="card-b" style="overflow:hidden;">
+            <div class="s-row"><span class="k" style="font-size:13px;">Auto-sync</span><div class="tog on"></div></div>
+            <div class="s-row" style="border-top:1px solid rgba(255,255,255,0.04);"><span class="k" style="font-size:13px;">Notifications</span><span class="v" style="font-size:13px;">3 active</span></div>
+            <div class="s-row" style="border-top:1px solid rgba(255,255,255,0.04);"><span class="k" style="font-size:13px;">Nap preference</span><span class="v" style="font-size:13px;">20 min</span></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div class="lbl">Data</div>
+          <div class="card-b" style="overflow:hidden;">
+            <div class="s-row"><span class="k" style="font-size:13px;">Export schedule</span><span class="v" style="font-size:13px;">&#x2192;</span></div>
+            <div class="s-row" style="border-top:1px solid rgba(255,255,255,0.04);"><span class="k" style="font-size:13px;">Import shifts</span><span class="v" style="font-size:13px;">&#x2192;</span></div>
+            <div class="s-row" style="border-top:1px solid rgba(255,255,255,0.04);"><span class="k" style="font-size:13px;">HealthKit</span><span class="v" style="font-size:13px; color:#34D399;">Connected</span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="lbl">Account</div>
+          <div class="card-b" style="overflow:hidden;">
+            <div class="s-row"><span class="k" style="font-size:13px;">Upgrade to Premium</span><span style="font-size:13px; color:#C8A84B; font-weight:600;">&#x2192;</span></div>
+            <div class="s-row" style="border-top:1px solid rgba(255,255,255,0.04);"><span class="k" style="font-size:13px; color:#FF6B6B;">Sign Out</span></div>
+          </div>
+        </div>
+
+        <div class="tab-b">
+          <div class="t"><div class="i">&#x2728;</div>Today</div>
+          <div class="t"><div class="i">&#x1F4C5;</div>Schedule</div>
+          <div class="t on"><div class="i">&#x1F464;</div>Profile</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="changes-note" style="margin-top: 20px;">
+    <h3>Key Differences</h3>
+    <ul>
+      <li><strong>A:</strong> Traditional settings list. Grouped cards with section headers. Straightforward and familiar.</li>
+      <li><strong>B:</strong> Renamed to "Profile" &mdash; avatar + stats summary at top, condensed preferences, data actions. More personal, less utilitarian.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- ============================================
+     4. NIGHT SKY MODE
+     ============================================ -->
+<div class="screen-section">
+  <div class="screen-section-header">
+    <h2>4. Night Sky Mode</h2>
+    <span class="desc">Full-screen bedtime overlay with recharge arc</span>
+  </div>
+  <div class="side-by-side">
+
+    <!-- A: Night Sky -->
+    <div>
+      <div style="text-align:center"><span class="col-label a">Path A: Polish</span></div>
+      <div class="phone ns-bg">
+        <div class="phone-lbl" style="color:#4B5563;">Night Sky</div>
+        <div class="sbar"><span>10:15</span><span></span></div>
+        <button class="ns-dismiss">Done</button>
+        <div class="star" style="top:80px;left:30px;"></div>
+        <div class="star b" style="top:110px;left:180px;"></div>
+        <div class="star" style="top:95px;left:130px;"></div>
+        <div class="star b" style="top:155px;left:55px;"></div>
+        <div class="star" style="top:135px;left:220px;"></div>
+        <div class="star b" style="top:350px;left:45px;"></div>
+        <div class="star" style="top:400px;left:200px;"></div>
+        <div class="ns-center">
+          <div class="lbl" style="color:#6B7280;">Sleep Quality</div>
+          <div class="arc">
+            <div style="text-align:center;">
+              <div class="pct">62%</div>
+              <div class="sub">Recharging</div>
+            </div>
+          </div>
+          <div class="ns-info">
+            <div class="alarm">&#x23F0; Alarm at 6:00 AM</div>
+            <div class="wake">Latest wake: 6:30 AM</div>
+          </div>
+          <div class="ns-tomorrow">
+            <div class="tl">Tomorrow</div>
+            <div class="item">&#x2615; Caffeine OK after 7:00 AM</div>
+            <div class="item">&#x1F31E; Light exposure 6:00 - 6:30 AM</div>
+            <div class="item">&#x1F37D; Breakfast by 7:30 AM</div>
+            <div class="item">&#x1F3E5; Day Shift 7:00 AM - 7:00 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B: Night Sky -->
+    <div>
+      <div style="text-align:center"><span class="col-label b">Path B: Rethink</span></div>
+      <div class="phone b-ns-bg">
+        <div class="phone-lbl" style="color:#4B5563;">Night Sky</div>
+        <div class="sbar"><span>10:15</span><span></span></div>
+        <button class="ns-dismiss" style="color:#4B5563;">&#x2715;</button>
+        <div class="star" style="top:80px;left:30px;"></div>
+        <div class="star b" style="top:120px;left:200px;"></div>
+        <div class="star" style="top:95px;left:140px;"></div>
+        <div class="star b" style="top:160px;left:60px;"></div>
+        <div class="star" style="top:140px;left:240px;"></div>
+        <div class="star b" style="top:380px;left:50px;"></div>
+        <div class="star" style="top:430px;left:180px;"></div>
+        <div class="star" style="top:500px;left:100px;"></div>
+        <div class="b-ns-center">
+          <div class="b-arc-wrap">
+            <div class="b-arc">
+              <div class="inner">
+                <div class="pct">62<span style="font-size:20px;color:#6B7280;">%</span></div>
+                <div class="sub">recharging</div>
+              </div>
+            </div>
+          </div>
+          <div class="b-ns-status">
+            <div class="alarm">&#x23F0; 6:00 AM</div>
+            <div class="detail">Latest safe wake: 6:30 AM &bull; 5h 45m remaining</div>
+          </div>
+
+          <div class="card-b b-ns-card" style="width:100%;">
+            <div class="hdr">
+              <div class="title">Tomorrow</div>
+            </div>
+            <div class="b-ns-row"><span class="e">&#x1F31E;</span><span class="txt">Light Exposure</span><span class="time">6:00 AM</span></div>
+            <div class="b-ns-row"><span class="e">&#x2615;</span><span class="txt">Caffeine OK</span><span class="time">7:00 AM</span></div>
+            <div class="b-ns-row"><span class="e">&#x1F37D;</span><span class="txt">Breakfast</span><span class="time">7:30 AM</span></div>
+            <div class="b-ns-row"><span class="e">&#x1F3E5;</span><span class="txt">Day Shift</span><span class="time">7:00 AM</span></div>
+          </div>
+
+          <div class="card-b" style="width:100%; padding:14px; text-align:center;">
+            <div style="font-size:14px; color:#D1D5DB; line-height:1.5;">&#x1F4A1; Cool your room to 65-68&deg;F. Your body temperature needs to drop 2-3&deg; to initiate deep sleep.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="changes-note" style="margin-top: 20px;">
+    <h3>Key Differences</h3>
+    <ul>
+      <li><strong>A:</strong> Same Night Sky with subtle refinements &mdash; smoother arc, refined star density, cleaner typography.</li>
+      <li><strong>B:</strong> Larger glowing arc with drop-shadow, structured card for tomorrow's schedule (with time column), dedicated bedtime tip card, remaining-time countdown, &times; dismiss instead of text.</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
