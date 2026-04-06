@@ -106,6 +106,12 @@ const FEATURES = [
     description: 'Plans that adapt to your life',
   },
   {
+    emoji: '\u{1F37D}\u{FE0F}',
+    bgColor: 'rgba(52,211,153,0.12)',
+    title: 'Eat with your clock',
+    description: 'Timed meals shown to cut cardiovascular risk in shift workers',
+  },
+  {
     emoji: '\u{1FA7A}',
     bgColor: 'rgba(239,68,68,0.12)',
     title: 'Developed by an ER Physician',
@@ -121,7 +127,7 @@ function DotIndicators() {
   return (
     <View style={styles.dotsRow}>
       <View style={styles.dotActive} />
-      {[1, 2, 3, 4].map((i) => (
+      {[1, 2, 3, 4, 5].map((i) => (
         <View key={i} style={styles.dotInactive} />
       ))}
     </View>
@@ -159,6 +165,24 @@ export default function WelcomeScreen() {
             <Text style={styles.tagline}>
               For everyone who works against the clock
             </Text>
+          </View>
+        </AnimatedTransition>
+
+        {/* Stat hook — research finding */}
+        <AnimatedTransition delay={300} duration={250}>
+          <View style={styles.statBlock}>
+            <View style={styles.statLeft}>
+              <Text style={styles.statNumber}>3%</Text>
+              <Text style={styles.statDivider}></Text>
+            </View>
+            <View style={styles.statRight}>
+              <Text style={styles.statHeadline}>
+                of night shift workers ever fully adapt circadianly.
+              </Text>
+              <Text style={styles.statBody}>
+                Most apps chase that 3%. ShiftWell was built for the other 97% — optimizing recovery within your real schedule, not some impossible ideal.
+              </Text>
+            </View>
           </View>
         </AnimatedTransition>
 
@@ -282,6 +306,53 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 280,
     lineHeight: 20,
+  },
+
+  /* Stat block */
+  statBlock: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(200,168,75,0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(200,168,75,0.18)',
+    borderRadius: 16,
+    padding: SPACING.lg,
+    marginBottom: SPACING['2xl'],
+    gap: SPACING.lg,
+    alignItems: 'flex-start',
+  },
+  statLeft: {
+    alignItems: 'center',
+    paddingTop: 2,
+  },
+  statNumber: {
+    fontSize: 36,
+    fontWeight: '800',
+    color: '#C8A84B',
+    letterSpacing: -1,
+    lineHeight: 40,
+  },
+  statDivider: {
+    width: 2,
+    flex: 1,
+    backgroundColor: 'rgba(200,168,75,0.25)',
+    marginTop: 6,
+    borderRadius: 1,
+    minHeight: 20,
+  },
+  statRight: {
+    flex: 1,
+    gap: 6,
+  },
+  statHeadline: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#C8A84B',
+    lineHeight: 18,
+  },
+  statBody: {
+    fontSize: 11,
+    color: COLORS.text.secondary,
+    lineHeight: 16,
   },
 
   /* Feature cards */

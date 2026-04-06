@@ -120,6 +120,34 @@ const TRUST = [
 ];
 
 // ---------------------------------------------------------------------------
+// Data — Science findings (key research hooks)
+// ---------------------------------------------------------------------------
+
+const SCIENCE = [
+  {
+    stat: '3%',
+    color: '#A78BFA',
+    finding: 'of night shift workers ever fully adapt circadianly.',
+    insight: 'Most apps optimize for full adaptation. ShiftWell optimizes for minimal disruption and maximal recovery within your real rotation — a fundamentally different goal.',
+    citation: 'Circadian Biology Research',
+  },
+  {
+    stat: '2×',
+    color: '#FF6B6B',
+    finding: 'the cognitive impairment of two sleepless nights',
+    insight: 'Just 6 hours/night for 14 days creates that deficit — and people don\'t feel as impaired as they are. ShiftWell tracks cumulative debt objectively.',
+    citation: 'Van Dongen et al., 2003 · Walter Reed Army Institute',
+  },
+  {
+    stat: '↓CVD',
+    color: '#34D399',
+    finding: 'Daytime-only eating reduces cardiovascular risk in night workers.',
+    insight: 'ShiftWell\'s meal timing engine is built directly on this finding. Your eating windows auto-adjust with every shift change.',
+    citation: 'Chellappa et al., 2021',
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
@@ -150,6 +178,19 @@ function FeatureRow({ icon, label, free }: typeof FEATURES[0]) {
       ) : (
         <Ionicons name="checkmark" size={15} color={COLORS.accent.primary} />
       )}
+    </View>
+  );
+}
+
+function ScienceStatCard({ item }: { item: typeof SCIENCE[0] }) {
+  return (
+    <View style={[styles.scienceCard, { borderLeftColor: item.color }]}>
+      <View style={styles.scienceTop}>
+        <Text style={[styles.scienceStat, { color: item.color }]}>{item.stat}</Text>
+        <Text style={styles.scienceFinding}>{item.finding}</Text>
+      </View>
+      <Text style={styles.scienceInsight}>{item.insight}</Text>
+      <Text style={styles.scienceCitation}>— {item.citation}</Text>
     </View>
   );
 }
@@ -274,6 +315,14 @@ export default function PaywallScreen() {
               <Text style={styles.trustLabel}>{t.label}</Text>
               {i < TRUST.length - 1 && <View style={styles.trustDot} />}
             </View>
+          ))}
+        </View>
+
+        {/* ── Research findings ────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>THE RESEARCH</Text>
+        <View style={styles.scienceList}>
+          {SCIENCE.map((item) => (
+            <ScienceStatCard key={item.stat} item={item} />
           ))}
         </View>
 
@@ -495,6 +544,50 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     backgroundColor: COLORS.text.muted,
     marginLeft: 8,
+  },
+
+  // ── Science research cards
+  scienceList: {
+    gap: 10,
+    marginBottom: 28,
+  },
+  scienceCard: {
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.07)',
+    borderLeftWidth: 3,
+    borderRadius: 14,
+    padding: 16,
+    gap: 8,
+  },
+  scienceTop: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 10,
+  },
+  scienceStat: {
+    fontSize: 28,
+    fontWeight: '800',
+    letterSpacing: -1,
+    lineHeight: 30,
+    minWidth: 52,
+  },
+  scienceFinding: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.text.primary,
+    lineHeight: 18,
+  },
+  scienceInsight: {
+    fontSize: 12,
+    color: COLORS.text.secondary,
+    lineHeight: 18,
+  },
+  scienceCitation: {
+    fontSize: 10,
+    color: COLORS.text.muted,
+    fontStyle: 'italic',
   },
 
   // ── Plan cards
