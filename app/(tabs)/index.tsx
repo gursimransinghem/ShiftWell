@@ -73,13 +73,22 @@ function getTodayState(
 // Helpers
 // ---------------------------------------------------------------------------
 
+/** Format as H:MM for < 24h, e.g. "2:14" or "14:16". Matches V6 mockup style. */
 function formatCountdownValue(targetTime: Date): string {
   const now = new Date();
   const mins = differenceInMinutes(targetTime, now);
-  if (mins < 60) return `${mins}m`;
+  if (mins <= 0) return '0:00';
+  if (mins < 60) return `0:${mins.toString().padStart(2, '0')}`;
   const h = Math.floor(mins / 60);
   const m = mins % 60;
-  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  return `${h}:${m.toString().padStart(2, '0')}`;
+}
+
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
 }
 
 // ---------------------------------------------------------------------------
@@ -226,16 +235,15 @@ export default function TodayScreen() {
     const cells = [
       {
         emoji: '\u{23F1}',
-        value: shiftEndMins > 60 ? `${Math.floor(shiftEndMins / 60)}h ${shiftEndMins % 60}m` : `${shiftEndMins}m`,
+        value: formatCountdownValue(currentShift.end),
         label: 'Shift ends',
         color: '#FF9F43',
       },
     ];
     if (sleepBlock) {
-      const sleepMins = differenceInMinutes(sleepBlock.start, now);
       cells.push({
         emoji: '\u{1F634}',
-        value: sleepMins > 60 ? `${Math.floor(sleepMins / 60)}h ${sleepMins % 60}m` : `${sleepMins}m`,
+        value: formatCountdownValue(sleepBlock.start),
         label: 'Sleep window',
         color: BLOCK_COLORS.sleep,
       });
@@ -248,6 +256,49 @@ export default function TodayScreen() {
     });
     return cells.slice(0, 3);
   }, [currentShift, now, todayBlocks, profile.sleepNeed]);
+
+  // -- Kitchen closes: end of last upcoming meal-window block (circadian TRE) --
+  const kitchenClosesCell = useMemo(() => {
+    const nowMs = Date.now();
+    // Prefer last meal-window block end (algorithm-computed TRE cutoff)
+    const mealBlock = [...futureBlocks]
+      .reverse()
+      .find((b) => b.type === 'meal-window' && b.end.getTime() > nowMs);
+    if (mealBlock) {
+      return {
+        emoji: '\u{1F37D}\u{FE0F}', // 🍽️
+        value: formatCountdownValue(mealBlock.end),
+        label: 'Kitchen closes',
+        color: '#F59E0B',
+      };
+    }
+    // Fallback: 3h before main sleep (circadian TRE standard — Manoogian et al. 2022)
+    const sleepBlock = futureBlocks.find((b) => b.type === 'main-sleep');
+    if (!sleepBlock) return null;
+    const kitchenClose = new Date(sleepBlock.start.getTime() - 3 * 60 * 60 * 1000);
+    if (kitchenClose.getTime() <= nowMs) return null; // window already closed
+    return {
+      emoji: '\u{1F37D}\u{FE0F}', // 🍽️
+      value: formatCountdownValue(kitchenClose),
+      label: 'Kitchen closes',
+      color: '#F59E0B',
+    };
+  }, [futureBlocks]);
+
+  // -- Recovery countdown cells: Caffeine + Wind-down + Sleep + Kitchen Closes --
+  const recoveryCells = useMemo(() => {
+    const base = countdowns.map((c) => ({
+      emoji: c.emoji,
+      value: formatCountdownValue(c.targetTime),
+      label: c.label,
+      color: c.color,
+    }));
+    if (kitchenClosesCell) {
+      // Insert Kitchen Closes as first cell (most actionable during daytime)
+      return [kitchenClosesCell, ...base].slice(0, 4);
+    }
+    return base;
+  }, [countdowns, kitchenClosesCell]);
 
   // -- Recovery score for HeroScore --
   const heroScoreData = useMemo(() => {
@@ -328,6 +379,16 @@ export default function TodayScreen() {
             )}
 
             {/* ============================================================ */}
+            {/* HEADER: Greeting + Date (all states except empty)           */}
+            {/* ============================================================ */}
+            {todayState !== 'empty' && todayState !== 'night-sky' && (
+              <View style={styles.header}>
+                <Text style={styles.greeting}>{getGreeting()}</Text>
+                <Text style={styles.dateHeadline}>{format(now, 'EEEE, MMMM d')}</Text>
+              </View>
+            )}
+
+            {/* ============================================================ */}
             {/* STATE: Empty                                                  */}
             {/* ============================================================ */}
             {todayState === 'empty' && (
@@ -365,15 +426,16 @@ export default function TodayScreen() {
                 )}
 
                 {/* Countdown Row */}
-                {countdownCells.length > 0 && (
+                {recoveryCells.length > 0 && (
                   <View style={styles.section}>
-                    <CountdownRow cells={countdownCells} />
+                    <CountdownRow cells={recoveryCells} />
                   </View>
                 )}
 
                 {/* Timeline */}
                 {todayBlocks.length > 0 && (
                   <View style={styles.section}>
+                    <Text style={styles.sectionLabel}>TODAY'S PLAN</Text>
                     {/* Collapsed past */}
                     {pastBlocks.length > 0 && (
                       <CollapsedPast
@@ -535,6 +597,14 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: SPACING['2xl'],
   },
+  sectionLabel: {
+    fontSize: 11,
+    color: COLORS.text.muted,
+    fontWeight: '600',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+    marginBottom: 12,
+  },
 
   /* Empty state */
   emptyContainer: {
@@ -577,5 +647,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: TEXT_COLORS.muted,
     textDecorationLine: 'underline',
+  },
+  header: {
+    marginBottom: SPACING.lg,
+  },
+  greeting: {
+    fontSize: 15,
+    color: COLORS.text.tertiary,
+    fontWeight: '400',
+    letterSpacing: 0.3,
+  },
+  dateHeadline: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+    letterSpacing: -0.5,
+    marginTop: 3,
   },
 });

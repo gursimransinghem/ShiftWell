@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Alert,
   View,
   Text,
   TouchableOpacity,
@@ -8,166 +7,222 @@ import {
   StyleSheet,
 } from 'react-native';
 import { router } from 'expo-router';
-import { COLORS as THEME } from '@/src/theme';
+import { Ionicons } from '@expo/vector-icons';
+import { usePremiumStore } from '@/src/store/premium-store';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
 
-const C = {
-  background: THEME.background.primary,
-  card: THEME.background.surface,
-  accent: THEME.accent.primary,
-  text: THEME.text.primary,
-  secondaryText: THEME.text.secondary,
-  success: THEME.semantic.success,
-  locked: THEME.text.secondary,
-  divider: THEME.border.default,
-  gold: THEME.accent.primary,
-};
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
-interface FeatureRow {
+type PlanKey = 'monthly' | 'annual' | 'lifetime';
+
+interface Plan {
+  key: PlanKey;
   label: string;
-  free: boolean;
-  premium: boolean;
+  price: string;
+  period: string;
+  badge?: string;
+  highlight: boolean;
 }
 
-const FEATURES: FeatureRow[] = [
-  { label: 'Sleep plan generation', free: true, premium: true },
-  { label: 'Shift calendar import', free: true, premium: true },
-  { label: 'Basic circadian tracking', free: true, premium: true },
-  { label: 'Cloud sync across devices', free: false, premium: true },
-  { label: 'Advanced sleep analytics', free: false, premium: true },
-  { label: 'Caffeine optimization', free: false, premium: true },
-  { label: 'Nap scheduling', free: false, premium: true },
-  { label: 'Light exposure guidance', free: false, premium: true },
-  { label: 'Priority support', free: false, premium: true },
+// ---------------------------------------------------------------------------
+// Data
+// ---------------------------------------------------------------------------
+
+const PLANS: Plan[] = [
+  {
+    key: 'monthly',
+    label: 'Monthly',
+    price: '$6.99',
+    period: '/mo',
+    highlight: false,
+  },
+  {
+    key: 'annual',
+    label: 'Annual',
+    price: '$49.99',
+    period: '/yr',
+    badge: 'BEST VALUE · SAVE 40%',
+    highlight: true,
+  },
+  {
+    key: 'lifetime',
+    label: 'Lifetime',
+    price: '$149.99',
+    period: 'one-time',
+    highlight: false,
+  },
 ];
 
+interface FeatureItem {
+  icon: string;
+  label: string;
+  free: boolean;
+}
+
+const FEATURES: FeatureItem[] = [
+  { icon: 'calendar-outline', label: 'Shift calendar import', free: true },
+  { icon: 'moon-outline', label: 'Basic sleep plan', free: true },
+  { icon: 'today-outline', label: 'Today view', free: true },
+  { icon: 'analytics-outline', label: 'Recovery Score + trends', free: false },
+  { icon: 'cafe-outline', label: 'Caffeine + meal timing', free: false },
+  { icon: 'bed-outline', label: 'Strategic nap scheduling', free: false },
+  { icon: 'sunny-outline', label: 'Light exposure protocols', free: false },
+  { icon: 'notifications-outline', label: 'Smart reminders', free: false },
+  { icon: 'star-outline', label: 'Night Sky Mode', free: false },
+];
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
 export default function PaywallScreen() {
-  const handleStartTrial = () => {
-    Alert.alert(
-      'Coming Soon',
-      'ShiftWell is currently 100% free. Premium features will be available in a future update. Thank you for your support!',
-      [{ text: 'OK', onPress: () => router.back() }],
-    );
+  const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
+  const { purchase, restore, isLoading } = usePremiumStore();
+
+  const handleStartTrial = async () => {
+    const plan = PLANS.find((p) => p.key === selectedPlan);
+    await purchase(plan);
+    router.back();
   };
 
-  const handleRestorePurchases = () => {
-    Alert.alert(
-      'No Purchases to Restore',
-      'ShiftWell is currently 100% free — no purchase required.',
-      [{ text: 'OK' }],
-    );
-  };
-
-  const handleClose = () => {
+  const handleRestore = async () => {
+    await restore();
     router.back();
   };
 
   return (
     <View style={styles.container}>
       {/* Close button */}
-      <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
-        <Text style={styles.closeButtonText}>✕</Text>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={() => router.back()}
+        hitSlop={12}
+        accessibilityLabel="Close"
+        accessibilityRole="button"
+      >
+        <Ionicons name="close" size={20} color={COLORS.text.secondary} />
       </TouchableOpacity>
 
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View style={styles.headerContainer}>
-          <Text style={styles.premiumBadge}>★ PREMIUM</Text>
-          <Text style={styles.headerTitle}>Unlock ShiftWell Pro</Text>
-          <Text style={styles.headerSubtitle}>
-            Get the full toolkit for healthier shift work
+        <View style={styles.header}>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>★ SHIFTWELL PRO</Text>
+          </View>
+          <Text style={styles.title}>Sleep smarter,{'\n'}every shift.</Text>
+          <Text style={styles.subtitle}>
+            Science-backed tools for everyone who works against the clock.
           </Text>
         </View>
 
-        {/* Feature Comparison */}
-        <View style={styles.comparisonCard}>
-          {/* Column Headers */}
-          <View style={styles.comparisonHeader}>
-            <Text style={[styles.columnLabel, styles.featureColumn]}>Feature</Text>
-            <Text style={styles.columnLabel}>Free</Text>
-            <Text style={[styles.columnLabel, styles.proLabel]}>Pro</Text>
-          </View>
-
-          {/* Feature Rows */}
-          {FEATURES.map((feature, index) => (
-            <View
-              key={feature.label}
-              style={[
-                styles.featureRow,
-                index < FEATURES.length - 1 && styles.featureRowBorder,
-              ]}
-            >
-              <Text style={[styles.featureLabel, styles.featureColumn]}>
-                {feature.label}
+        {/* Feature list */}
+        <View style={styles.featureList}>
+          {FEATURES.map((f) => (
+            <View key={f.label} style={styles.featureRow}>
+              <Ionicons
+                name={f.icon as any}
+                size={18}
+                color={f.free ? COLORS.text.tertiary : COLORS.accent.primary}
+                style={styles.featureIcon}
+              />
+              <Text style={[styles.featureLabel, f.free && styles.featureLabelFree]}>
+                {f.label}
               </Text>
-              <Text style={styles.featureIcon}>
-                {feature.free ? (
-                  <Text style={styles.checkIcon}>✓</Text>
-                ) : (
-                  <Text style={styles.lockIcon}>🔒</Text>
-                )}
-              </Text>
-              <Text style={styles.featureIcon}>
-                <Text style={styles.checkIcon}>✓</Text>
-              </Text>
+              {f.free ? (
+                <Text style={styles.featureFreeTag}>Free</Text>
+              ) : (
+                <Ionicons name="checkmark" size={16} color={COLORS.accent.primary} />
+              )}
             </View>
           ))}
         </View>
 
-        {/* Pricing */}
-        <View style={styles.pricingContainer}>
-          {/* Monthly */}
-          <TouchableOpacity style={styles.priceCard} activeOpacity={0.8}>
-            <Text style={styles.priceLabel}>Monthly</Text>
-            <Text style={styles.priceAmount}>$4.99</Text>
-            <Text style={styles.pricePeriod}>per month</Text>
-          </TouchableOpacity>
-
-          {/* Yearly */}
-          <TouchableOpacity
-            style={[styles.priceCard, styles.priceCardHighlighted]}
-            activeOpacity={0.8}
-          >
-            <View style={styles.saveBadge}>
-              <Text style={styles.saveBadgeText}>SAVE 33%</Text>
-            </View>
-            <Text style={styles.priceLabel}>Yearly</Text>
-            <Text style={styles.priceAmount}>$39.99</Text>
-            <Text style={styles.pricePeriod}>per year</Text>
-          </TouchableOpacity>
+        {/* Plan selector */}
+        <View style={styles.planRow}>
+          {PLANS.map((plan) => (
+            <TouchableOpacity
+              key={plan.key}
+              style={[
+                styles.planCard,
+                plan.highlight && styles.planCardHighlight,
+                selectedPlan === plan.key && styles.planCardSelected,
+                selectedPlan === plan.key && plan.highlight && styles.planCardSelectedHighlight,
+              ]}
+              onPress={() => setSelectedPlan(plan.key)}
+              activeOpacity={0.8}
+            >
+              {plan.badge && (
+                <View style={styles.planBadge}>
+                  <Text style={styles.planBadgeText}>{plan.badge}</Text>
+                </View>
+              )}
+              <Text style={[
+                styles.planLabel,
+                selectedPlan === plan.key && styles.planLabelSelected,
+              ]}>
+                {plan.label}
+              </Text>
+              <Text style={[
+                styles.planPrice,
+                selectedPlan === plan.key && styles.planPriceSelected,
+              ]}>
+                {plan.price}
+              </Text>
+              <Text style={styles.planPeriod}>{plan.period}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        {/* Start Trial Button */}
+        {/* CTA */}
         <TouchableOpacity
-          style={styles.trialButton}
+          style={[styles.cta, isLoading && styles.ctaLoading]}
           onPress={handleStartTrial}
-          activeOpacity={0.8}
+          activeOpacity={0.85}
+          disabled={isLoading}
         >
-          <Text style={styles.trialButtonText}>Start Free Trial</Text>
+          <Text style={styles.ctaText}>
+            {isLoading ? 'Processing…' : 'Start 14-Day Free Trial'}
+          </Text>
         </TouchableOpacity>
 
-        <Text style={styles.trialDisclaimer}>
-          7-day free trial, then billed automatically. Cancel anytime.
+        <Text style={styles.disclaimer}>
+          14-day free trial, then {PLANS.find((p) => p.key === selectedPlan)?.price}{' '}
+          {selectedPlan === 'lifetime' ? 'one-time' : selectedPlan === 'annual' ? '/year' : '/month'}.
+          Cancel anytime before trial ends — no charge.
         </Text>
 
-        {/* Restore Purchases */}
-        <TouchableOpacity
-          style={styles.restoreContainer}
-          onPress={handleRestorePurchases}
-        >
-          <Text style={styles.restoreText}>Restore Purchases</Text>
-        </TouchableOpacity>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <TouchableOpacity onPress={handleRestore}>
+            <Text style={styles.footerLink}>Restore Purchases</Text>
+          </TouchableOpacity>
+          <Text style={styles.footerDot}>·</Text>
+          <TouchableOpacity>
+            <Text style={styles.footerLink}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <Text style={styles.footerDot}>·</Text>
+          <TouchableOpacity>
+            <Text style={styles.footerLink}>Terms</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
 }
 
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: C.background,
+    backgroundColor: COLORS.background.primary,
   },
   closeButton: {
     position: 'absolute',
@@ -177,168 +232,178 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: C.card,
+    backgroundColor: COLORS.background.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  closeButtonText: {
-    color: C.secondaryText,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  scrollContent: {
+  scroll: {
     paddingHorizontal: 24,
-    paddingTop: 80,
+    paddingTop: 72,
     paddingBottom: 48,
   },
-  headerContainer: {
+
+  // Header
+  header: {
     alignItems: 'center',
     marginBottom: 32,
   },
-  premiumBadge: {
-    fontSize: 14,
+  badge: {
+    backgroundColor: `${COLORS.accent.primary}22`,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 14,
+    paddingVertical: 5,
+    marginBottom: 16,
+  },
+  badgeText: {
+    ...TYPOGRAPHY.caption,
     fontWeight: '700',
-    color: C.gold,
-    letterSpacing: 2,
+    color: COLORS.accent.primary,
+    letterSpacing: 1.5,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+    textAlign: 'center',
+    lineHeight: 36,
     marginBottom: 12,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: C.text,
-    marginBottom: 8,
+  subtitle: {
+    fontSize: 15,
+    color: COLORS.text.secondary,
     textAlign: 'center',
+    lineHeight: 22,
   },
-  headerSubtitle: {
-    fontSize: 16,
-    color: C.secondaryText,
-    textAlign: 'center',
-  },
-  comparisonCard: {
-    backgroundColor: C.card,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 32,
-  },
-  comparisonHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: C.divider,
-    marginBottom: 4,
-  },
-  columnLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: C.secondaryText,
-    textAlign: 'center',
-    width: 48,
-  },
-  featureColumn: {
-    flex: 1,
-    textAlign: 'left',
-  },
-  proLabel: {
-    color: C.accent,
+
+  // Features
+  featureList: {
+    backgroundColor: COLORS.background.surface,
+    borderRadius: RADIUS.lg,
+    paddingVertical: 4,
+    marginBottom: 24,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-  },
-  featureRowBorder: {
-    borderBottomWidth: 1,
-    borderBottomColor: C.divider,
-  },
-  featureLabel: {
-    fontSize: 14,
-    color: C.text,
+    paddingHorizontal: 16,
   },
   featureIcon: {
-    width: 48,
-    textAlign: 'center',
-    fontSize: 16,
+    width: 28,
   },
-  checkIcon: {
-    color: C.success,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  lockIcon: {
-    fontSize: 14,
-  },
-  pricingContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 24,
-  },
-  priceCard: {
+  featureLabel: {
     flex: 1,
-    backgroundColor: C.card,
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: C.divider,
-  },
-  priceCardHighlighted: {
-    borderColor: C.accent,
-  },
-  saveBadge: {
-    position: 'absolute',
-    top: -12,
-    backgroundColor: C.accent,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  saveBadgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: C.text,
-    letterSpacing: 0.5,
-  },
-  priceLabel: {
     fontSize: 14,
-    color: C.secondaryText,
-    marginBottom: 8,
+    color: COLORS.text.primary,
   },
-  priceAmount: {
-    fontSize: 28,
+  featureLabelFree: {
+    color: COLORS.text.tertiary,
+  },
+  featureFreeTag: {
+    fontSize: 12,
+    color: COLORS.text.tertiary,
+  },
+
+  // Plan cards
+  planRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+  planCard: {
+    flex: 1,
+    backgroundColor: COLORS.background.surface,
+    borderRadius: RADIUS.lg,
+    padding: 14,
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: COLORS.border.default,
+  },
+  planCardHighlight: {
+    borderColor: `${COLORS.accent.primary}44`,
+    backgroundColor: `${COLORS.accent.primary}0A`,
+  },
+  planCardSelected: {
+    borderColor: COLORS.accent.primary,
+  },
+  planCardSelectedHighlight: {
+    backgroundColor: `${COLORS.accent.primary}15`,
+  },
+  planBadge: {
+    position: 'absolute',
+    top: -10,
+    backgroundColor: COLORS.accent.primary,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  planBadgeText: {
+    fontSize: 8,
     fontWeight: '700',
-    color: C.text,
+    color: '#0B0D16',
+    letterSpacing: 0.3,
   },
-  pricePeriod: {
-    fontSize: 13,
-    color: C.secondaryText,
-    marginTop: 4,
+  planLabel: {
+    fontSize: 12,
+    color: COLORS.text.muted,
+    marginBottom: 4,
+    marginTop: 6,
   },
-  trialButton: {
-    backgroundColor: C.accent,
-    borderRadius: 12,
+  planLabelSelected: {
+    color: COLORS.accent.primary,
+  },
+  planPrice: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+  },
+  planPriceSelected: {
+    color: COLORS.accent.primary,
+  },
+  planPeriod: {
+    fontSize: 11,
+    color: COLORS.text.muted,
+    marginTop: 2,
+  },
+
+  // CTA
+  cta: {
+    backgroundColor: COLORS.accent.primary,
+    borderRadius: RADIUS.lg,
     paddingVertical: 18,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 12,
   },
-  trialButtonText: {
-    fontSize: 18,
+  ctaLoading: {
+    opacity: 0.6,
+  },
+  ctaText: {
+    fontSize: 17,
     fontWeight: '700',
-    color: C.text,
+    color: '#0B0D16',
   },
-  trialDisclaimer: {
+  disclaimer: {
     fontSize: 12,
-    color: C.secondaryText,
+    color: COLORS.text.muted,
     textAlign: 'center',
-    marginTop: 12,
+    lineHeight: 18,
+    marginBottom: 28,
   },
-  restoreContainer: {
+
+  // Footer
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
+    gap: 8,
   },
-  restoreText: {
-    fontSize: 14,
-    color: C.secondaryText,
+  footerLink: {
+    fontSize: 12,
+    color: COLORS.text.muted,
     textDecorationLine: 'underline',
+  },
+  footerDot: {
+    fontSize: 12,
+    color: COLORS.text.muted,
   },
 });

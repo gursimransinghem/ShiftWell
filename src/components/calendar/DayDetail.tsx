@@ -167,7 +167,7 @@ export default function DayDetail({
                     </Text>
                   </View>
                   <Text style={styles.eventTime}>
-                    {format(event.start, 'HH:mm')} - {format(event.end, 'HH:mm')}
+                    {format(event.start, 'h:mma')} - {format(event.end, 'h:mma')}
                   </Text>
                 </View>
 

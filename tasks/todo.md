@@ -1,25 +1,33 @@
 # Active Tasks
 
-## P0: Visual QA — V6 UI NOT YET VERIFIED (NEXT SESSION)
-- [ ] V6 code exists (29 tasks, 15 new components, 299 tests pass) but NEVER visually verified against mockups
-- [ ] Get Today screen rendering in Recovery Day state (bypass Night Sky, seed shifts)
-- [ ] Screenshot each screen, compare against `docs/design/2026-04-05-ui-redesign/final-definitive-v6.html`
-- [ ] Fix every visual discrepancy — spacing, colors, sizes, component layout, animations
-- [ ] Verify FloatingTabBar renders with blur + gold glow
-- [ ] Verify GradientMeshBackground animates (3 orbs drifting)
-- [ ] Verify all 5 Today states: Empty, Recovery, On Shift, Wind-down, Night Sky
-- [ ] Verify Schedule (week strip + icon cards), Profile (avatar + stats), Onboarding (dots + gradient CTA)
+## P0: Visual QA — V6 UI (VERIFIED 2026-04-06)
+- [x] Recovery Day state: seed mock data (yesterday shift), clear stale AsyncStorage
+- [x] Hero Score ring (78, sparkline, trend) — fixed premium gate + seeded score store
+- [x] Header "Good morning / Monday, April 6" — added getGreeting() + dateHeadline to Today screen
+- [x] FloatingTabBar: 3 tabs only (Today/Schedule/Profile), gold active icon — fixed route filter
+- [x] AsyncStorage mock (in-memory) — zero error toasts
+- [x] RevenueCat mock (no-op) — no error toast
+- [x] Schedule screen: week strip + calendar + FAB ✅
+- [x] Profile screen: avatar + 78 avg score + stats + preferences ✅
+- [x] Kitchen Closes cell — H:MM countdown (amber #F59E0B), TRE fallback (sleep−3h), 4-cell row ✅
+- [x] Timeline cards: countdown-to-start on right, H:MM format, TODAY'S PLAN label ✅
+- [x] Empty state — rocket CTA, 3-tab bar ✅
+- [x] Onboarding screens — welcome screen verified (gold title, 3 features, CTA, disclaimer) ✅
+- [ ] GradientMeshBackground animation (3 orbs) — needs live device
+- [ ] Wind-down state — time-dependent, needs live device at ~9pm
+- [ ] Night Sky state — verified in prior session
 
-## P1: Runtime Fixes
-- [ ] AsyncStorage "Native module is null" errors in Expo Go — add to metro mocks
-- [ ] RevenueCat placeholder API key error toast — suppress or use test key
+## P1: Runtime Fixes (DONE)
+- [x] AsyncStorage "Native module is null" — in-memory mock in `metro.config.js`
+- [x] RevenueCat error toast — no-op mock in `metro.config.js`
 - [ ] Revert `app/index.tsx` onboarding bypass + mock data before production
 
 ## P2: Phase 6 (Original Roadmap)
-- [ ] Premium trial flow (PREM-01–06)
-- [ ] Paywall redesign
-- [ ] Settings polish (SET-01–03)
-- [ ] Score store wiring (SCORE-01/02/03)
+- [x] Paywall redesign — $6.99/mo, $49.99/yr, $149.99 lifetime, 14-day trial CTA, feature list ✅
+- [x] Premium trial flow — 14-day trial tracking in store (install date → countdown), canAccess checks trial ✅
+- [x] Settings screen — sleep need, caffeine half-life, nap, commute steppers + referral + subscription ✅
+- [ ] SET-03: DND/Sleep Focus mode — needs entitlements + live device
+- [ ] Score store wiring — HealthKit → real scores (needs TestFlight/live device)
 
 ## P3: Polish
 - [ ] Sound design — source/synthesize 3 audio files for stubs

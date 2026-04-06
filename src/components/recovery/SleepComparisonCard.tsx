@@ -32,7 +32,7 @@ function deviationColor(absMinutes: number): string {
 // ---------------------------------------------------------------------------
 
 function formatTime(date: Date): string {
-  return format(date, 'HH:mm');
+  return format(date, 'h:mma');
 }
 
 function formatDuration(minutes: number): string {

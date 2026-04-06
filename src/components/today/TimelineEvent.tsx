@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import { useUserStore } from '@/src/store/user-store';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -65,10 +66,10 @@ function blockColor(type: SleepBlockType): string {
 // Contextual notes for certain block types
 // ---------------------------------------------------------------------------
 
-function contextualNote(type: SleepBlockType): string | null {
+function contextualNote(type: SleepBlockType, caffeineHalfLife: number): string | null {
   switch (type) {
     case 'caffeine-cutoff':
-      return 'No more caffeine after this time';
+      return `Any caffeine beyond this point takes ${caffeineHalfLife}h from your sleep`;
     case 'wind-down':
       return 'Dim lights, avoid screens';
     case 'light-seek':
@@ -106,8 +107,9 @@ export default function TimelineEvent({
   isNext,
   isPast,
 }: TimelineEventProps) {
+  const caffeineHalfLife = useUserStore((s) => s.profile.caffeineHalfLife ?? 5);
   const color = blockColor(block.type);
-  const note = contextualNote(block.type);
+  const note = contextualNote(block.type, caffeineHalfLife);
 
   // Pulsing border opacity for active event (reanimated)
   const borderGlow = useSharedValue(1);
@@ -151,6 +153,16 @@ export default function TimelineEvent({
   const animatedDotStyle = useAnimatedStyle(() => ({
     opacity: dotBreathing.value,
   }));
+
+  // Countdown to start for non-active future events
+  const minsUntilStart = differenceInMinutes(block.start, new Date());
+  const countdownToStart = (() => {
+    if (isActive || minsUntilStart <= 0) return null;
+    if (minsUntilStart < 60) return `${minsUntilStart}m`;
+    const h = Math.floor(minsUntilStart / 60);
+    const m = minsUntilStart % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  })();
 
   const containerOpacity: ViewStyle = isPast && !isActive ? { opacity: 0.35 } : {};
   const cardBorderActive: ViewStyle = isActive
@@ -216,7 +228,7 @@ export default function TimelineEvent({
 
                 <View style={styles.metaRow}>
                   <Text style={styles.timeRange}>
-                    {format(block.start, 'HH:mm')} – {format(block.end, 'HH:mm')}
+                    {format(block.start, 'h:mma')} – {format(block.end, 'h:mma')}
                   </Text>
                   <Text style={styles.duration}>
                     {formatDuration(block.start, block.end)}
@@ -246,11 +258,17 @@ export default function TimelineEvent({
 
               <View style={styles.metaRow}>
                 <Text style={styles.timeRange}>
-                  {format(block.start, 'HH:mm')} – {format(block.end, 'HH:mm')}
+                  {format(block.start, 'h:mma')} – {format(block.end, 'h:mma')}
                 </Text>
-                <Text style={styles.duration}>
-                  {formatDuration(block.start, block.end)}
-                </Text>
+                {countdownToStart ? (
+                  <Text style={[styles.duration, { color, fontWeight: '600' }]}>
+                    {countdownToStart}
+                  </Text>
+                ) : (
+                  <Text style={styles.duration}>
+                    {formatDuration(block.start, block.end)}
+                  </Text>
+                )}
               </View>
 
               {note && <Text style={styles.note}>{note}</Text>}

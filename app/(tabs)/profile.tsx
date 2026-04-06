@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
@@ -145,6 +146,17 @@ export default function ProfileScreen() {
   return (
     <GradientMeshBackground>
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        {/* Settings gear */}
+        <TouchableOpacity
+          style={styles.settingsBtn}
+          onPress={() => router.push('/(tabs)/settings')}
+          hitSlop={12}
+          accessibilityLabel="Settings"
+          accessibilityRole="button"
+        >
+          <Ionicons name="settings-outline" size={22} color={COLORS.text.muted} />
+        </TouchableOpacity>
+
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -259,6 +271,16 @@ export default function ProfileScreen() {
 // ---------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
+  settingsBtn: {
+    position: 'absolute',
+    top: 56,
+    right: 20,
+    zIndex: 10,
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   scrollContent: {
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING['4xl'] + 80,

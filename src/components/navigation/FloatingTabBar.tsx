@@ -52,13 +52,15 @@ export function FloatingTabBar({
           {state.routes.map((route, index) => {
             const isFocused = state.index === index;
             const { options } = descriptors[route.key];
+            // Skip routes marked hidden (href: null in Expo Router)
+            if (!(route.name in ROUTE_LABELS)) return null;
             const label =
               ROUTE_LABELS[route.name] ??
               (typeof options.title === 'string' ? options.title : route.name);
             const [inactiveIcon, activeIcon] =
               ROUTE_ICONS[route.name] ?? FALLBACK_ICONS;
             const iconName = isFocused ? activeIcon : inactiveIcon;
-            const color = isFocused ? '#D1D5DB' : '#4B5563';
+            const color = isFocused ? '#C8A84B' : '#4B5563';
 
             const onPress = () => {
               const event = navigation.emit({
@@ -153,8 +155,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   activeIconShadow: {
-    textShadowColor: '#C8A84B',
-    textShadowRadius: 6,
+    textShadowColor: 'rgba(200,168,75,0.6)',
+    textShadowRadius: 10,
     textShadowOffset: { width: 0, height: 0 },
   },
 });

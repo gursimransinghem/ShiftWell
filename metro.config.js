@@ -8,6 +8,8 @@ const nativeMocks = {
   '@react-native-google-signin/google-signin': path.resolve(__dirname, '__mocks__/google-signin.js'),
   '@kingstinct/react-native-healthkit': path.resolve(__dirname, '__mocks__/healthkit.js'),
   'react-native-nitro-modules': path.resolve(__dirname, '__mocks__/nitro-modules.js'),
+  '@react-native-async-storage/async-storage': path.resolve(__dirname, '__mocks__/async-storage.js'),
+  'react-native-purchases': path.resolve(__dirname, '__mocks__/revenue-cat.js'),
 };
 
 const originalResolveRequest = config.resolver.resolveRequest;
