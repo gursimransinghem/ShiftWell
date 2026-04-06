@@ -54,7 +54,6 @@
       ["expo-location", {
         "locationWhenInUsePermission": "ShiftWell uses your location to calculate your commute time."
       }],
-      "react-native-purchases",
       [
         "@kingstinct/react-native-healthkit",
         {
