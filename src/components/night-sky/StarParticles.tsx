@@ -19,6 +19,16 @@ function pseudoRandom(seed: number, salt: number): number {
 }
 
 // ---------------------------------------------------------------------------
+// Speed tiers — 3 distinct twinkle durations per spec (5.2)
+// ---------------------------------------------------------------------------
+function getSpeedDuration(index: number): number {
+  const tier = index % 3;
+  if (tier === 0) return 2000; // fast
+  if (tier === 1) return 3000; // medium (original)
+  return 5000;                 // slow
+}
+
+// ---------------------------------------------------------------------------
 // Single animated star particle
 // ---------------------------------------------------------------------------
 interface ParticleData {
@@ -36,14 +46,15 @@ interface StarParticleProps {
 function StarParticle({ particle }: StarParticleProps) {
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(0);
+  const duration = getSpeedDuration(particle.id);
 
   useEffect(() => {
     opacity.value = withDelay(
       particle.delay,
       withRepeat(
         withSequence(
-          withTiming(0.8, { duration: 2000 }),
-          withTiming(0.1, { duration: 2000 }),
+          withTiming(0.8, { duration }),
+          withTiming(0.1, { duration }),
         ),
         -1,
         true,
@@ -51,7 +62,7 @@ function StarParticle({ particle }: StarParticleProps) {
     );
     translateY.value = withDelay(
       particle.delay,
-      withRepeat(withTiming(-8, { duration: 4000 }), -1, true),
+      withRepeat(withTiming(-8, { duration: duration * 2 }), -1, true),
     );
 
     return () => {
@@ -59,7 +70,7 @@ function StarParticle({ particle }: StarParticleProps) {
       cancelAnimation(translateY);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [particle.delay]);
+  }, [particle.delay, duration]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,

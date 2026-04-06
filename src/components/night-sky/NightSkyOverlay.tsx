@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { format } from 'date-fns';
-import { BACKGROUND, TEXT, ACCENT } from '@/src/theme';
+import { BACKGROUND, TEXT } from '@/src/theme';
 import { StarParticles } from './StarParticles';
+import { FireflyParticle } from './FireflyParticle';
 import { RechargeArc } from './RechargeArc';
 import { BedtimeTipCycler } from './BedtimeTipCycler';
 
@@ -40,14 +41,25 @@ export function NightSkyOverlay({
 
   return (
     <View style={styles.root}>
+      {/* Deep night background overlay — lighter center at top */}
+      <View style={styles.backgroundBase} />
+      <View style={styles.backgroundTopOverlay} />
+
       {/* Star field — absolute background layer */}
       <StarParticles />
 
+      {/* Firefly particles — warm gold floaters */}
+      <FireflyParticle count={4} />
+
       <SafeAreaView style={styles.safeArea}>
-        {/* Dismiss button — top-right, per D-02 minimal UI */}
+        {/* Dismiss button — circular X, top-right */}
         {onDismiss ? (
-          <TouchableOpacity style={styles.dismissButton} onPress={onDismiss} accessibilityLabel="Dismiss Night Sky overlay">
-            <Text style={styles.dismissLabel}>Done</Text>
+          <TouchableOpacity
+            style={styles.dismissButton}
+            onPress={onDismiss}
+            accessibilityLabel="Dismiss Night Sky overlay"
+          >
+            <Text style={styles.dismissLabel}>✕</Text>
           </TouchableOpacity>
         ) : null}
 
@@ -58,27 +70,32 @@ export function NightSkyOverlay({
           {/* Hero arc section */}
           <Text style={styles.arcLabel}>Sleep Quality</Text>
           <RechargeArc fillFraction={fillFraction} />
+          <Text style={styles.rechargingLabel}>recharging</Text>
 
           {/* Alarm confirmation */}
           <View style={styles.infoBlock}>
-            <Text style={styles.alarmText}>⏰ Alarm set for {alarmLabel}</Text>
-            <Text style={styles.secondaryText}>Latest wake: {latestWakeLabel}</Text>
+            <Text style={styles.alarmText}>⏰ {alarmLabel}</Text>
+            <Text style={styles.secondaryText}>
+              Latest wake: {latestWakeLabel}
+            </Text>
           </View>
 
-          {/* Tomorrow schedule preview */}
+          {/* Tomorrow schedule preview — glass card */}
           {scheduleItems.length > 0 ? (
-            <View style={styles.tomorrowBlock}>
-              <Text style={styles.tomorrowHeader}>Tomorrow</Text>
+            <View style={styles.tomorrowCard}>
+              <Text style={styles.tomorrowHeader}>TOMORROW</Text>
               {scheduleItems.map((label, i) => (
-                <Text key={i} style={styles.tomorrowItem}>
-                  {label}
-                </Text>
+                <View key={i} style={styles.tomorrowRow}>
+                  <Text style={styles.tomorrowItemName}>{label}</Text>
+                </View>
               ))}
             </View>
           ) : null}
 
-          {/* Bedtime tip cycler */}
-          <BedtimeTipCycler />
+          {/* Bedtime tip cycler — gold-bordered card */}
+          <View style={styles.tipCard}>
+            <BedtimeTipCycler />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -86,7 +103,7 @@ export function NightSkyOverlay({
 }
 
 // ---------------------------------------------------------------------------
-// Styles — all colors use theme tokens
+// Styles
 // ---------------------------------------------------------------------------
 const styles = StyleSheet.create({
   root: {
@@ -95,8 +112,20 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: BACKGROUND.primary,
+    backgroundColor: '#060811',
     zIndex: 100,
+  },
+  backgroundBase: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#060811',
+  },
+  backgroundTopOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '40%',
+    backgroundColor: 'rgba(13,16,37,0.5)',
   },
   safeArea: {
     flex: 1,
@@ -106,11 +135,18 @@ const styles = StyleSheet.create({
     top: 8,
     right: 16,
     zIndex: 10,
-    padding: 8,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   dismissLabel: {
     color: TEXT.secondary,
-    fontSize: 15,
+    fontSize: 13,
+    lineHeight: 16,
   },
   scrollContent: {
     alignItems: 'center',
@@ -125,36 +161,63 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
+  rechargingLabel: {
+    color: TEXT.muted,
+    fontSize: 12,
+    letterSpacing: 0.5,
+    marginTop: 8,
+    textTransform: 'lowercase',
+  },
   infoBlock: {
     marginTop: 24,
     alignItems: 'center',
   },
   alarmText: {
     color: TEXT.primary,
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '600',
     marginBottom: 6,
   },
   secondaryText: {
-    color: TEXT.secondary,
-    fontSize: 14,
+    color: TEXT.muted,
+    fontSize: 12,
   },
-  tomorrowBlock: {
+  // Tomorrow card — glass card
+  tomorrowCard: {
     marginTop: 24,
     width: '100%',
-    paddingHorizontal: 8,
+    backgroundColor: BACKGROUND.surface,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 14,
+    padding: 14,
   },
   tomorrowHeader: {
-    color: ACCENT.primary,
-    fontSize: 12,
-    fontWeight: '600',
+    color: '#C8A84B',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  tomorrowItem: {
-    color: TEXT.secondary,
-    fontSize: 14,
-    paddingVertical: 3,
+  tomorrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  tomorrowItemName: {
+    color: TEXT.secondaryBright,
+    fontSize: 13,
+    flex: 1,
+  },
+  // Bedtime tip card — gold-bordered
+  tipCard: {
+    marginTop: 16,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(200,168,75,0.08)',
+    backgroundColor: 'rgba(200,168,75,0.04)',
+    borderRadius: 12,
+    padding: 12,
   },
 });
