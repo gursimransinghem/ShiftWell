@@ -9,6 +9,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Notifications from 'expo-notifications';
 
 import { useColorScheme } from '@/components/useColorScheme';
+import { AdaptiveColorProvider } from '@/src/components/providers/AdaptiveColorProvider';
 import { useAuthStore } from '@/src/store/auth-store';
 import { usePremiumStore } from '@/src/store/premium-store';
 import { useCalendarStore } from '@/src/lib/calendar/calendar-store';
@@ -104,33 +105,35 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(onboarding)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="paywall"
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="add-shift"
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="import"
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        />
-      </Stack>
+      <AdaptiveColorProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(onboarding)" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="paywall"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="add-shift"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="import"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </AdaptiveColorProvider>
     </ThemeProvider>
   );
 }
