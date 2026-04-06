@@ -21,6 +21,7 @@ import { useShiftsStore } from '@/src/store/shifts-store';
 import { usePremiumStore } from '@/src/store/premium-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
 import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
+import { useAdaptivePlan } from '@/src/hooks/useAdaptivePlan';
 import { useNotificationStore } from '@/src/store/notification-store';
 import {
   StatusPill,
@@ -35,6 +36,7 @@ import {
   ScienceInsightCard,
   NapCalculatorModal,
   PatternAlertCard,
+  AdaptiveInsightCard,
 } from '@/src/components/today';
 import { GradientMeshBackground } from '@/src/components/ui';
 import { useUserStore } from '@/src/store/user-store';
@@ -138,6 +140,11 @@ export default function TodayScreen() {
   const profile = useUserStore((s) => s.profile);
   const canAccess = usePremiumStore((s) => s.canAccess);
   const windDownLeadMinutes = useNotificationStore((s) => s.windDownLeadMinutes);
+
+  // Adaptive Brain — assembles HealthKit context on mount, triggers plan adjustment
+  const { context: adaptiveContext, changes: adaptiveChanges } = useAdaptivePlan();
+  const undoPlan = usePlanStore((s) => s.undoPlan);
+  const dismissChanges = usePlanStore((s) => s.dismissChanges);
 
   // Recovery score data
   const recovery = useRecoveryScore();
@@ -449,6 +456,18 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
+                {/* Adaptive Insight Card — shows when plan was auto-adjusted */}
+                {adaptiveContext && adaptiveChanges.length > 0 && (
+                  <View style={styles.section}>
+                    <AdaptiveInsightCard
+                      changes={adaptiveChanges}
+                      context={adaptiveContext}
+                      onUndo={undoPlan}
+                      onDismiss={dismissChanges}
+                    />
+                  </View>
+                )}
+
                 {/* Pattern Alerts (Feature 6) */}
                 <View style={styles.section}>
                   <PatternAlertCard />
@@ -553,6 +572,18 @@ export default function TodayScreen() {
                 <View style={styles.section}>
                   <StatusPill {...statusPillProps} />
                 </View>
+
+                {/* Adaptive Insight Card — shows when plan was auto-adjusted */}
+                {adaptiveContext && adaptiveChanges.length > 0 && (
+                  <View style={styles.section}>
+                    <AdaptiveInsightCard
+                      changes={adaptiveChanges}
+                      context={adaptiveContext}
+                      onUndo={undoPlan}
+                      onDismiss={dismissChanges}
+                    />
+                  </View>
+                )}
 
                 {/* Pattern Alerts (Feature 6) */}
                 <View style={styles.section}>

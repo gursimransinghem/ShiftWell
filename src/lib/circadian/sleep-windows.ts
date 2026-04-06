@@ -457,28 +457,49 @@ function computeExtendedShiftSleep(
 
 /**
  * Main entry point: compute sleep blocks for a single classified day.
+ *
+ * @param options.bedtimeOffsetMinutes - Cumulative shift from chronotype baseline.
+ *   Positive = later bedtime (Day→Night protocol), negative = earlier.
+ *   Applied by shifting the computed sleepOnset and wakeTime together.
+ *   Used by the Adaptive Brain circadian protocol engine.
  */
 export function computeSleepBlocks(
   day: ClassifiedDay,
   profile: UserProfile = DEFAULT_PROFILE,
+  options?: { bedtimeOffsetMinutes?: number },
 ): PlanBlock[] {
-  switch (day.dayType) {
-    case 'work-day':
-      return computeDayShiftSleep(day, profile);
-    case 'work-evening':
-      return computeEveningShiftSleep(day, profile);
-    case 'work-night':
-      return computeNightShiftSleep(day, profile);
-    case 'work-extended':
-      return computeExtendedShiftSleep(day, profile);
-    case 'transition-to-nights':
-      return computeTransitionToNightsSleep(day, profile);
-    case 'transition-to-days':
-    case 'recovery':
-      return computeRecoverySleep(day, profile);
-    case 'off':
-      return computeOffDaySleep(day, profile);
-    default:
-      return computeOffDaySleep(day, profile);
-  }
+  const offset = options?.bedtimeOffsetMinutes ?? 0;
+  const blocks = (() => {
+    switch (day.dayType) {
+      case 'work-day':
+        return computeDayShiftSleep(day, profile);
+      case 'work-evening':
+        return computeEveningShiftSleep(day, profile);
+      case 'work-night':
+        return computeNightShiftSleep(day, profile);
+      case 'work-extended':
+        return computeExtendedShiftSleep(day, profile);
+      case 'transition-to-nights':
+        return computeTransitionToNightsSleep(day, profile);
+      case 'transition-to-days':
+      case 'recovery':
+        return computeRecoverySleep(day, profile);
+      case 'off':
+        return computeOffDaySleep(day, profile);
+      default:
+        return computeOffDaySleep(day, profile);
+    }
+  })();
+
+  // Apply adaptive bedtime offset (circadian protocol engine)
+  if (offset === 0) return blocks;
+
+  return blocks.map((block) => {
+    if (block.type !== 'main-sleep' && block.type !== 'wind-down') return block;
+    return {
+      ...block,
+      start: addMinutes(block.start, offset),
+      end: addMinutes(block.end, offset),
+    };
+  });
 }

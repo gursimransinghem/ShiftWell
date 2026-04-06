@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { addDays } from 'date-fns';
+import { addDays, differenceInHours } from 'date-fns';
 import type { SleepPlan } from '../lib/circadian/types';
 import { generateSleepPlan } from '../lib/circadian';
 import { schedulePlanNotifications } from '../lib/notifications/notification-service';
@@ -7,6 +7,7 @@ import { writeChangedBlocks } from '../lib/calendar/plan-write-service';
 import { useCalendarStore } from '../lib/calendar/calendar-store';
 import { useShiftsStore } from './shifts-store';
 import { useUserStore } from './user-store';
+import type { AdaptiveContext, AdaptiveChange } from '../lib/adaptive/types';
 
 export interface PlanState {
   plan: SleepPlan | null;
@@ -16,9 +17,28 @@ export interface PlanState {
   lastGeneratedAt: Date | null;
   /** Set when Circadian Reset (recalculationNeeded) triggered regeneration */
   lastResetAt: Date | null;
+
+  // ── Adaptive Brain ────────────────────────────────────────────────────────
+  /** The adaptive context assembled from HealthKit this session */
+  adaptiveContext: AdaptiveContext | null;
+  /** Snapshot of the plan before the last adaptive regeneration (for undo) */
+  planSnapshot: SleepPlan | null;
+  /** Timestamp of the last adaptive regeneration (24h undo window) */
+  snapshotTimestamp: Date | null;
+  /** Changes produced by the last adaptive regeneration */
+  pendingChanges: AdaptiveChange[];
+  /** Days until the next shift transition (exposed for FloatingTabBar conditional) */
+  daysUntilTransition: number;
+
   regeneratePlan: (opts?: { isCircadianReset?: boolean }) => Promise<void>;
   clearError: () => void;
   setDateRange: (start: Date, end: Date) => void;
+  /** Called by useAdaptivePlan hook after HealthKit context is assembled */
+  setAdaptiveContext: (context: AdaptiveContext, changes: AdaptiveChange[]) => void;
+  /** Restore the pre-adaptive plan snapshot. Only works within 24h. */
+  undoPlan: () => void;
+  /** Dismiss pending changes without undoing (user accepted the new plan) */
+  dismissChanges: () => void;
 }
 
 function getDefaultDateRange(): { start: Date; end: Date } {
@@ -37,10 +57,17 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
   lastGeneratedAt: null,
   lastResetAt: null,
 
+  // Adaptive Brain initial state
+  adaptiveContext: null,
+  planSnapshot: null,
+  snapshotTimestamp: null,
+  pendingChanges: [],
+  daysUntilTransition: 999,
+
   clearError: () => set({ error: null }),
 
   regeneratePlan: async (opts) => {
-    const { dateRange } = get();
+    const { dateRange, adaptiveContext, plan: existingPlan } = get();
     const { shifts, personalEvents } = useShiftsStore.getState();
     const { profile } = useUserStore.getState();
 
@@ -53,10 +80,16 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
         shifts,
         personalEvents,
         profile,
+        adaptiveContext ?? undefined,
       );
 
       const oldPlan = get().plan;
       const calStore = useCalendarStore.getState();
+
+      // Save snapshot of previous plan before overwriting (for undo)
+      const snapshotUpdate = existingPlan
+        ? { planSnapshot: existingPlan, snapshotTimestamp: new Date() }
+        : {};
 
       set({
         plan,
@@ -64,6 +97,7 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
         lastGeneratedAt: new Date(),
         lastResetAt: opts?.isCircadianReset ? new Date() : get().lastResetAt,
         error: null,
+        ...snapshotUpdate,
       });
 
       // Write calendar changes (non-blocking — errors logged, don't fail the plan)
@@ -79,6 +113,38 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
       const message = e instanceof Error ? e.message : 'Failed to generate sleep plan';
       set({ isGenerating: false, error: message });
     }
+  },
+
+  setAdaptiveContext: (context, changes) => {
+    const daysUntil = context.schedule.daysUntilTransition ?? 999;
+    set({
+      adaptiveContext: context,
+      pendingChanges: changes,
+      daysUntilTransition: daysUntil,
+    });
+    // Regenerate with the new context
+    get().regeneratePlan();
+  },
+
+  undoPlan: () => {
+    const { planSnapshot, snapshotTimestamp } = get();
+    if (!planSnapshot || !snapshotTimestamp) return;
+
+    // 24-hour undo window
+    const hoursElapsed = differenceInHours(new Date(), snapshotTimestamp);
+    if (hoursElapsed > 24) return;
+
+    set({
+      plan: planSnapshot,
+      planSnapshot: null,
+      snapshotTimestamp: null,
+      pendingChanges: [],
+      adaptiveContext: null,
+    });
+  },
+
+  dismissChanges: () => {
+    set({ pendingChanges: [] });
   },
 
   setDateRange: (start, end) => {

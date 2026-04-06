@@ -35,6 +35,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="brief"
+        options={{
+          title: 'Brief',
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           href: null,

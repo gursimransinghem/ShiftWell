@@ -14,3 +14,4 @@ export { ScoreBreakdownCard } from './ScoreBreakdownCard';
 export { ScienceInsightCard } from './ScienceInsightCard';
 export { NapCalculatorModal } from './NapCalculatorModal';
 export { PatternAlertCard } from './PatternAlertCard';
+export { AdaptiveInsightCard } from './AdaptiveInsightCard';

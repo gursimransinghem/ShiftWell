@@ -12,6 +12,7 @@ import { useScoreStore } from '@/src/store/score-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { useUserStore } from '@/src/store/user-store';
 import { usePlanStore } from '@/src/store/plan-store';
+import { LightProtocolArc } from '@/src/components/circadian/LightProtocolArc';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -199,7 +200,20 @@ export default function CircadianScreen() {
   const { dailyHistory } = useScoreStore();
   const { shifts } = useShiftsStore();
   const { profile } = useUserStore();
-  const { plans } = usePlanStore();
+  const plan = usePlanStore((s) => s.plan);
+
+  // Extract today's light blocks from the plan
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const lightBlocks = useMemo(() => {
+    if (!plan) return [];
+    return plan.blocks.filter(
+      (b) =>
+        (b.type === 'light-seek' || b.type === 'light-avoid') &&
+        b.start.toISOString().slice(0, 10) === todayStr,
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plan, todayStr]);
 
   // ── Compute alignment score (avg of last 7 scored days) ──────────────────
   const recentScores = useMemo(() => {
@@ -266,6 +280,14 @@ export default function CircadianScreen() {
           <Text style={styles.title}>Circadian Health</Text>
           <Text style={styles.subtitle}>{format(new Date(), 'EEEE, MMMM d')}</Text>
         </View>
+
+        {/* ── Light Protocol Arc ───────────────────────────────────── */}
+        {lightBlocks.length > 0 && (
+          <View style={styles.lightArcSection}>
+            <Text style={styles.lightArcLabel}>Today's Light Protocol</Text>
+            <LightProtocolArc lightBlocks={lightBlocks} />
+          </View>
+        )}
 
         {/* ── Alignment Score ─────────────────────────────────────── */}
         <Card style={styles.scoreCard}>
@@ -421,6 +443,17 @@ const styles = StyleSheet.create({
   header: {
     marginTop: SPACING.xl,
     marginBottom: SPACING.xl,
+  },
+  lightArcSection: {
+    marginBottom: SPACING.xl,
+  },
+  lightArcLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.text.secondary,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+    marginBottom: SPACING.sm,
   },
   title: {
     fontSize: 28,

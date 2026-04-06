@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { tapLight } from '@/src/lib/haptics/haptic-service';
+import { usePlanStore } from '@/src/store/plan-store';
 
 // ---------------------------------------------------------------------------
 // Icon map — route name → [inactive icon, active icon]
@@ -17,6 +18,7 @@ const ROUTE_ICONS: Record<string, [IoniconsName, IoniconsName]> = {
   schedule: ['calendar-outline', 'calendar'],
   circadian: ['pulse-outline', 'pulse'],
   profile: ['person-outline', 'person'],
+  brief: ['briefcase-outline', 'briefcase'],
 };
 
 // Fallback icon pair for unrecognised route names
@@ -29,6 +31,7 @@ const ROUTE_LABELS: Record<string, string> = {
   schedule: 'Schedule',
   circadian: 'Circadian',
   profile: 'Profile',
+  brief: 'Brief',
 };
 
 // ---------------------------------------------------------------------------
@@ -56,6 +59,11 @@ export function FloatingTabBar({
             const { options } = descriptors[route.key];
             // Skip routes marked hidden (href: null in Expo Router)
             if (!(route.name in ROUTE_LABELS)) return null;
+            // Brief tab: only show when transition is approaching (≤7 days)
+            if (route.name === 'brief') {
+              const daysUntilTransition = usePlanStore.getState().daysUntilTransition;
+              if (daysUntilTransition > 7) return null;
+            }
             const label =
               ROUTE_LABELS[route.name] ??
               (typeof options.title === 'string' ? options.title : route.name);

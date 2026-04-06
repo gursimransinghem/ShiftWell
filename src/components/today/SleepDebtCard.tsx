@@ -10,6 +10,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useScoreStore } from '@/src/store/score-store';
 import { useUserStore } from '@/src/store/user-store';
+import { usePlanStore } from '@/src/store/plan-store';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -36,62 +37,94 @@ function debtColor(debt: number): string {
 export function SleepDebtCard() {
   const dailyHistory = useScoreStore((s) => s.dailyHistory);
   const profile = useUserStore((s) => s.profile);
+  const adaptiveContext = usePlanStore((s) => s.adaptiveContext);
 
   const sleepNeed = profile.sleepNeed ?? 7.5;
 
-  // Last 7 entries with a real score
-  const recentScores = dailyHistory
-    .filter((d) => d.score !== null)
-    .slice(-7) as { dateISO: string; score: number }[];
-
-  let totalDebt: number;
-  if (recentScores.length === 0) {
-    totalDebt = 2.0;
-  } else {
-    const raw = recentScores.reduce(
-      (sum, d) => sum + deficitForScore(d.score),
-      0,
-    );
-    totalDebt = Math.min(raw, 10);
-  }
+  // Use precise adaptive debt/bank when available; fall back to score-based estimate
+  const { totalDebt, bankHours } = (() => {
+    if (adaptiveContext) {
+      const debt = Math.max(0, adaptiveContext.debt.rollingHours);
+      const bank = adaptiveContext.debt.bankHours;
+      return { totalDebt: debt, bankHours: bank };
+    }
+    // Fallback: score-based estimation
+    const recentScores = dailyHistory
+      .filter((d) => d.score !== null)
+      .slice(-7) as { dateISO: string; score: number }[];
+    const raw = recentScores.length === 0
+      ? 2.0
+      : recentScores.reduce((sum, d) => sum + deficitForScore(d.score), 0);
+    return { totalDebt: Math.min(raw, 10), bankHours: 0 };
+  })();
 
   const debtFraction = totalDebt / 10;
+  const bankFraction = bankHours / 2; // bank capped at 2h display
   const paybackNights = Math.ceil(totalDebt / 0.5);
   const color = debtColor(totalDebt);
   const debtLabel = totalDebt === 0 ? '0h' : `${totalDebt % 1 === 0 ? totalDebt : totalDebt.toFixed(1)}h`;
+  const bankLabel = bankHours > 0 ? `+${bankHours % 1 === 0 ? bankHours : bankHours.toFixed(1)}h banked` : null;
 
   return (
     <View style={styles.card}>
       {/* Title row */}
       <View style={styles.titleRow}>
         <Text style={styles.titleText}>💤 Sleep Debt</Text>
-        <Text style={[styles.debtValue, { color }]}>
-          {debtLabel} {totalDebt > 0 ? '▼' : ''}
-        </Text>
+        <View style={styles.valueRow}>
+          {bankLabel && (
+            <Text style={styles.bankValue}>{bankLabel}</Text>
+          )}
+          <Text style={[styles.debtValue, { color }]}>
+            {totalDebt > 0 ? `−${debtLabel}` : debtLabel}
+          </Text>
+        </View>
       </View>
 
       {/* Divider */}
       <View style={styles.divider} />
 
       {/* Debt bar */}
-      <View style={styles.barTrack}>
-        <View
-          style={[
-            styles.barFill,
-            {
-              width: `${Math.max(debtFraction * 100, totalDebt > 0 ? 2 : 0)}%`,
-              backgroundColor: color,
-            },
-          ]}
-        />
-      </View>
+      {totalDebt > 0 && (
+        <>
+          <View style={styles.barTrack}>
+            <View
+              style={[
+                styles.barFill,
+                {
+                  width: `${Math.max(debtFraction * 100, 2)}%`,
+                  backgroundColor: color,
+                },
+              ]}
+            />
+          </View>
+          <Text style={styles.barLabel}>
+            {adaptiveContext ? 'Deficit from last 14 nights' : 'Estimated deficit over last 7 nights'}
+          </Text>
+        </>
+      )}
 
-      <Text style={styles.barLabel}>
-        Estimated deficit over last 7 nights
-      </Text>
+      {/* Bank bar (shown when there's a surplus) */}
+      {bankHours > 0 && (
+        <>
+          <View style={[styles.barTrack, totalDebt > 0 && styles.bankTrackMargin]}>
+            <View
+              style={[
+                styles.barFill,
+                {
+                  width: `${Math.max(bankFraction * 100, 2)}%`,
+                  backgroundColor: '#34D399',
+                },
+              ]}
+            />
+          </View>
+          <Text style={[styles.barLabel, styles.bankBarLabel]}>
+            Sleep bank · Protects vigilance for ~3 days of moderate restriction
+          </Text>
+        </>
+      )}
 
-      {/* Zero debt state */}
-      {totalDebt === 0 && (
+      {/* Zero debt, zero bank */}
+      {totalDebt === 0 && bankHours === 0 && (
         <Text style={styles.onTrack}>
           No debt detected — you're on track!
         </Text>
@@ -134,9 +167,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.text.primary,
   },
+  valueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+  },
   debtValue: {
     fontSize: 15,
     fontWeight: '700',
+  },
+  bankValue: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#34D399',
   },
   divider: {
     height: StyleSheet.hairlineWidth,
@@ -157,6 +200,12 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.bodySmall,
     color: COLORS.text.secondary,
     marginTop: SPACING.sm,
+  },
+  bankTrackMargin: {
+    marginTop: SPACING.md,
+  },
+  bankBarLabel: {
+    color: '#34D399',
   },
   onTrack: {
     ...TYPOGRAPHY.bodySmall,

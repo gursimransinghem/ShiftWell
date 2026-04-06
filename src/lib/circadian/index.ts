@@ -17,7 +17,7 @@
  * The entire algorithm runs locally — no network calls, no LLM, no API costs.
  */
 
-import { differenceInHours } from 'date-fns';
+import { differenceInHours, format } from 'date-fns';
 import { classifyDays, detectPatterns } from './classify-shifts';
 import { computeSleepBlocks } from './sleep-windows';
 import { generateNaps } from './nap-engine';
@@ -33,6 +33,7 @@ import type {
   PlanStats,
 } from './types';
 import { DEFAULT_PROFILE } from './types';
+import type { AdaptiveContext } from '../adaptive/types';
 
 export type {
   ShiftEvent,
@@ -89,6 +90,9 @@ export type {
  * @param shifts - Shift events from calendar import or manual entry
  * @param personalEvents - Non-shift calendar events (optional)
  * @param profile - User profile from onboarding (optional, uses defaults)
+ * @param adaptiveContext - Optional adaptive brain context assembled from HealthKit.
+ *   When provided, the circadian protocol's bedtime targets override the base windows.
+ *   The recovery score is wired into the energy model. All other factors are additive.
  * @returns Complete SleepPlan with all blocks and stats
  */
 export function generateSleepPlan(
@@ -97,16 +101,29 @@ export function generateSleepPlan(
   shifts: ShiftEvent[],
   personalEvents: PersonalEvent[] = [],
   profile: UserProfile = DEFAULT_PROFILE,
+  adaptiveContext?: AdaptiveContext,
 ): SleepPlan {
   // Step 1: Classify each day
   const classifiedDays = classifyDays(startDate, endDate, shifts, personalEvents);
+
+  // Build a lookup for adaptive protocol targets by date string (YYYY-MM-DD)
+  const protocolTargets = new Map<string, number>();
+  if (adaptiveContext?.circadian.protocol?.dailyTargets) {
+    for (const target of adaptiveContext.circadian.protocol.dailyTargets) {
+      protocolTargets.set(format(target.date, 'yyyy-MM-dd'), target.bedtimeAdjustMinutes);
+    }
+  }
 
   // Step 2-6: Generate all blocks for each day
   const allBlocks: PlanBlock[] = [];
 
   for (const day of classifiedDays) {
-    // Step 2: Main sleep windows
-    const sleepBlocks = computeSleepBlocks(day, profile);
+    // Look up adaptive bedtime offset for this day (0 if not in protocol)
+    const dayKey = format(day.date, 'yyyy-MM-dd');
+    const bedtimeOffsetMinutes = protocolTargets.get(dayKey) ?? 0;
+
+    // Step 2: Main sleep windows (with adaptive offset if applicable)
+    const sleepBlocks = computeSleepBlocks(day, profile, { bedtimeOffsetMinutes });
     allBlocks.push(...sleepBlocks);
 
     // Step 3: Strategic naps
