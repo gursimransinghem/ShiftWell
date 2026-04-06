@@ -108,7 +108,7 @@ export function LightProtocolStrip({
   // Cell 2 — next transition
   let cell2Label = 'Next';
   let cell2Value = '—';
-  let cell2Color = COLORS.text.secondary;
+  let cell2Color: string = COLORS.text.secondary;
 
   if (nextBlock) {
     cell2Label =
@@ -120,7 +120,7 @@ export function LightProtocolStrip({
   // Cell 3 — after that
   let cell3Label = 'After that';
   let cell3Value = '—';
-  let cell3Color = COLORS.text.secondary;
+  let cell3Color: string = COLORS.text.secondary;
 
   if (afterNextBlock) {
     cell3Label =

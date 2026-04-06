@@ -39,6 +39,7 @@ import {
   AdaptiveInsightCard,
 } from '@/src/components/today';
 import { GradientMeshBackground } from '@/src/components/ui';
+import { LightProtocolStrip } from '@/src/components/circadian/LightProtocolStrip';
 import { useUserStore } from '@/src/store/user-store';
 import { getTipOfTheDay } from '@/src/lib/tips/sleep-tips';
 import {
@@ -168,6 +169,24 @@ export default function TodayScreen() {
   const todayDayType = plan?.classifiedDays?.find(
     (d) => d.date.toDateString() === now.toDateString()
   )?.dayType ?? 'off';
+
+  // Light protocol blocks for LightProtocolStrip
+  const lightBlocks = useMemo(
+    () => todayBlocks.filter((b) => b.type === 'light-seek' || b.type === 'light-avoid'),
+    [todayBlocks],
+  );
+
+  const isTransitionDay = useMemo(
+    () =>
+      todayDayType === 'transition-to-nights' ||
+      todayDayType === 'transition-to-days' ||
+      todayDayType === 'recovery',
+    [todayDayType],
+  );
+
+  const goToCircadian = useCallback(() => {
+    router.push('/(tabs)/circadian');
+  }, [router]);
 
   // Past/future block split
   const [pastExpanded, setPastExpanded] = useState(false);
@@ -473,6 +492,16 @@ export default function TodayScreen() {
                   <PatternAlertCard />
                 </View>
 
+                {/* Light Protocol Strip — transition days only */}
+                {isTransitionDay && lightBlocks.length > 0 && (
+                  <View style={styles.section}>
+                    <LightProtocolStrip
+                      lightBlocks={lightBlocks}
+                      onNavigateToFull={goToCircadian}
+                    />
+                  </View>
+                )}
+
                 {/* Hero Score */}
                 {showRecovery && (
                   <View style={styles.section}>
@@ -589,6 +618,16 @@ export default function TodayScreen() {
                 <View style={styles.section}>
                   <PatternAlertCard />
                 </View>
+
+                {/* Light Protocol Strip — transition days only */}
+                {isTransitionDay && lightBlocks.length > 0 && (
+                  <View style={styles.section}>
+                    <LightProtocolStrip
+                      lightBlocks={lightBlocks}
+                      onNavigateToFull={goToCircadian}
+                    />
+                  </View>
+                )}
 
                 {/* Countdown Row (Feature 4: now includes nap window + caffeine) */}
                 {onShiftCells.length > 0 && (
