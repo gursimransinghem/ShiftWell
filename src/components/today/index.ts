@@ -9,3 +9,8 @@ export { CountdownRow } from './CountdownRow';
 export { CollapsedPast } from './CollapsedPast';
 export { InsightLine } from './InsightLine';
 export { WindDownView } from './WindDownView';
+export { SleepDebtCard } from './SleepDebtCard';
+export { ScoreBreakdownCard } from './ScoreBreakdownCard';
+export { ScienceInsightCard } from './ScienceInsightCard';
+export { NapCalculatorModal } from './NapCalculatorModal';
+export { PatternAlertCard } from './PatternAlertCard';

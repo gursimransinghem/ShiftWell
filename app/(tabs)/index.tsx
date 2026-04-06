@@ -30,6 +30,11 @@ import {
   InsightLine,
   WindDownView,
   TimelineEvent,
+  SleepDebtCard,
+  ScoreBreakdownCard,
+  ScienceInsightCard,
+  NapCalculatorModal,
+  PatternAlertCard,
 } from '@/src/components/today';
 import { GradientMeshBackground } from '@/src/components/ui';
 import { useUserStore } from '@/src/store/user-store';
@@ -168,6 +173,9 @@ export default function TodayScreen() {
     [todayBlocks, now, activeBlock],
   );
 
+  // Nap Calculator modal state
+  const [showNapCalc, setShowNapCalc] = useState(false);
+
   // Wind-down checklist state
   const [windDownChecklist, setWindDownChecklist] = useState(DEFAULT_WIND_DOWN_CHECKLIST);
   const handleToggleCheckItem = useCallback((id: string) => {
@@ -227,12 +235,14 @@ export default function TodayScreen() {
     }));
   }, [countdowns]);
 
-  // -- On-shift countdown cells --
+  // -- On-shift countdown cells (Feature 4 polish) --
   const onShiftCells = useMemo(() => {
     if (!currentShift) return [];
-    const shiftEndMins = differenceInMinutes(currentShift.end, now);
+    const shiftDurationMs = currentShift.end.getTime() - currentShift.start.getTime();
     const sleepBlock = todayBlocks.find((b) => b.type === 'main-sleep' && b.start > now);
-    const cells = [
+
+    // Shift end cell (always first)
+    const cells: Array<{ emoji: string; value: string; label: string; color: string }> = [
       {
         emoji: '\u{23F1}',
         value: formatCountdownValue(currentShift.end),
@@ -240,7 +250,33 @@ export default function TodayScreen() {
         color: '#FF9F43',
       },
     ];
-    if (sleepBlock) {
+
+    // Mid-shift nap window: optimal at 40% into shift (avoids post-shift lag)
+    const napWindowStart = new Date(currentShift.start.getTime() + shiftDurationMs * 0.4);
+    const napWindowEnd = new Date(napWindowStart.getTime() + 20 * 60 * 1000);
+    if (napWindowEnd > now && napWindowStart < currentShift.end) {
+      if (napWindowStart <= now && now <= napWindowEnd) {
+        cells.push({ emoji: '\u{1F4A4}', value: 'NOW', label: 'Nap window', color: '#34D399' });
+      } else if (napWindowStart > now) {
+        cells.push({
+          emoji: '\u{1F4A4}',
+          value: formatCountdownValue(napWindowStart),
+          label: 'Nap window',
+          color: '#A78BFA',
+        });
+      }
+    }
+
+    // Caffeine cutoff: halfway into shift = last effective caffeine time
+    const caffeineEnd = new Date(currentShift.start.getTime() + shiftDurationMs / 2);
+    if (caffeineEnd > now && caffeineEnd < currentShift.end) {
+      cells.push({
+        emoji: '\u2615',
+        value: formatCountdownValue(caffeineEnd),
+        label: 'Last caffeine',
+        color: '#FB923C',
+      });
+    } else if (sleepBlock) {
       cells.push({
         emoji: '\u{1F634}',
         value: formatCountdownValue(sleepBlock.start),
@@ -248,12 +284,7 @@ export default function TodayScreen() {
         color: BLOCK_COLORS.sleep,
       });
     }
-    cells.push({
-      emoji: '\u{1F3AF}',
-      value: `${profile.sleepNeed ?? 7.5}h`,
-      label: 'Target sleep',
-      color: '#34D399',
-    });
+
     return cells.slice(0, 3);
   }, [currentShift, now, todayBlocks, profile.sleepNeed]);
 
@@ -336,7 +367,7 @@ export default function TodayScreen() {
       return recovery.weeklyAccuracy.insight;
     }
     const tip = getTipOfTheDay(todayDayType, profile);
-    return tip?.text ?? 'Stay consistent with your sleep schedule for best results.';
+    return tip?.body ?? 'Stay consistent with your sleep schedule for best results.';
   }, [todayState, recovery.weeklyAccuracy?.insight, todayDayType, profile]);
 
   // ---------------------------------------------------------------------------
@@ -418,6 +449,11 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
+                {/* Pattern Alerts (Feature 6) */}
+                <View style={styles.section}>
+                  <PatternAlertCard />
+                </View>
+
                 {/* Hero Score */}
                 {showRecovery && (
                   <View style={styles.section}>
@@ -425,12 +461,39 @@ export default function TodayScreen() {
                   </View>
                 )}
 
+                {/* Score Breakdown (Feature 5) */}
+                {showRecovery && heroScoreData.score > 0 && (
+                  <View style={styles.section}>
+                    <ScoreBreakdownCard score={heroScoreData.score} />
+                  </View>
+                )}
+
+                {/* Sleep Debt Tracker (Feature 1) */}
+                <View style={styles.section}>
+                  <SleepDebtCard />
+                </View>
+
                 {/* Countdown Row */}
                 {recoveryCells.length > 0 && (
                   <View style={styles.section}>
                     <CountdownRow cells={recoveryCells} />
                   </View>
                 )}
+
+                {/* Nap Calculator button (Feature 2) */}
+                <View style={styles.section}>
+                  <Pressable
+                    onPress={() => setShowNapCalc(true)}
+                    style={styles.napCalcButton}
+                  >
+                    <Text style={styles.napCalcEmoji}>{'\u{1F4A4}'}</Text>
+                    <View style={styles.napCalcText}>
+                      <Text style={styles.napCalcTitle}>Nap Calculator</Text>
+                      <Text style={styles.napCalcSub}>Find your optimal nap duration</Text>
+                    </View>
+                    <Text style={styles.napCalcChevron}>›</Text>
+                  </Pressable>
+                </View>
 
                 {/* Timeline */}
                 {todayBlocks.length > 0 && (
@@ -474,8 +537,10 @@ export default function TodayScreen() {
                   </View>
                 )}
 
-                {/* Insight Line */}
-                <InsightLine text={insightText} />
+                {/* Science Insight Card (Feature 3) */}
+                <View style={styles.section}>
+                  <ScienceInsightCard dayType={todayDayType} />
+                </View>
               </View>
             )}
 
@@ -489,12 +554,32 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
-                {/* Countdown Row */}
+                {/* Pattern Alerts (Feature 6) */}
+                <View style={styles.section}>
+                  <PatternAlertCard />
+                </View>
+
+                {/* Countdown Row (Feature 4: now includes nap window + caffeine) */}
                 {onShiftCells.length > 0 && (
                   <View style={styles.section}>
                     <CountdownRow cells={onShiftCells} />
                   </View>
                 )}
+
+                {/* Nap Calculator button (Feature 2) */}
+                <View style={styles.section}>
+                  <Pressable
+                    onPress={() => setShowNapCalc(true)}
+                    style={styles.napCalcButton}
+                  >
+                    <Text style={styles.napCalcEmoji}>{'\u{1F4A4}'}</Text>
+                    <View style={styles.napCalcText}>
+                      <Text style={styles.napCalcTitle}>Nap Calculator</Text>
+                      <Text style={styles.napCalcSub}>Find your optimal nap duration</Text>
+                    </View>
+                    <Text style={styles.napCalcChevron}>›</Text>
+                  </Pressable>
+                </View>
 
                 {/* Warning Insight */}
                 <View style={styles.section}>
@@ -519,6 +604,11 @@ export default function TodayScreen() {
                     })}
                   </View>
                 )}
+
+                {/* Science Insight Card (Feature 3) */}
+                <View style={styles.section}>
+                  <ScienceInsightCard dayType="work-day" />
+                </View>
               </View>
             )}
 
@@ -559,6 +649,12 @@ export default function TodayScreen() {
             onDismiss={() => {}}
           />
         )}
+
+        {/* Nap Calculator Modal (Feature 2) */}
+        <NapCalculatorModal
+          visible={showNapCalc}
+          onClose={() => setShowNapCalc(false)}
+        />
       </View>
     </GradientMeshBackground>
   );
@@ -647,6 +743,39 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: TEXT_COLORS.muted,
     textDecorationLine: 'underline',
+  },
+
+  /* Nap Calculator button */
+  napCalcButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.background.surface,
+    borderRadius: RADIUS.lg,
+    padding: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255,255,255,0.07)',
+    gap: 12,
+  },
+  napCalcEmoji: {
+    fontSize: 24,
+  },
+  napCalcText: {
+    flex: 1,
+  },
+  napCalcTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.text.primary,
+  },
+  napCalcSub: {
+    fontSize: 12,
+    color: COLORS.text.secondary,
+    marginTop: 2,
+  },
+  napCalcChevron: {
+    fontSize: 20,
+    color: COLORS.text.muted,
+    fontWeight: '300',
   },
   header: {
     marginBottom: SPACING.lg,
