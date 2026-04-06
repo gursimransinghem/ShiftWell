@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-04-02 — Session 10: Post-Phase-3 Research & Decision Gates
+
+### Completed
+- **Naming research deep dive** — 25+ candidates across 4 rounds, trademark checks, risk assessment
+- **Competitor analysis report** — 38 products benchmarked: pricing models, features, conversion rates, trial lengths, positioning
+- **Business model research** — 10 direct competitors analyzed for pricing strategy, trial mechanics, free-to-premium conversion
+- **ShiftWell trademark conflict confirmed** — Deep WHOOP analysis shows ShiftWell could conflict
+- **Competitive edge log created** — Living document tracking positioning vs 38 competitors
+- **Vision alignment session** — Full product vision clarified through deep questioning
+- **Project dashboard built** — Interactive HTML 8-section command center for strategic overview
+- **Claude recommendations compiled** — 13 high-impact ideas with rationale (referral, pricing, partnerships, grants, etc.)
+
+### Key Decisions
+- $6.99/mo or $49.99/yr pricing approved (market sweet spot)
+- $149.99 lifetime option added (captures anti-subscription segment)
+- 14-day trial approved (balances conversion vs free-user cost)
+- Shift Crew viral loop approved for v1.2
+- Pre-adaptation alerts approved for v1.0 algorithm
+- Nurse-first positioning pending Sim approval
+- Hospital partnership beta testing pending Sim approval
+- App name still TBD (Sim deciding between Circawell, Circadio, or new direction)
+
+### Status
+- **Blockers:** App name decision (gates branding, logo design, legal setup)
+- **Next gates:** Plan approval → GSD artifacts (.planning/) → brand rollout
+
+---
+
 ## 2026-03-16 — Session 9: Phase 3 — Wire Infrastructure + Recovery Dashboard
 
 ### Completed
@@ -229,7 +257,7 @@
 - **.ics import flow:** 3-step (file picker → review detected shifts with checkboxes → confirm import)
 - **.ics export:** useExport hook with configurable options, generates ICS → temp file → share sheet
 - **Settings screen:** Import/export controls, profile display, about section, science refs, reset/clear data
-- **Animations:** AnimatedTransition component, welcome stagger, chronotype transitions, countdown pulse, timeline active states, month transitions, button/card press scale
+- **Animations:** AnimatedTransition component, welcome stagger, chronotype transitions, countdown pulse, timeline active states, month transitions
 - **Comprehensive test suite:** 83 tests all passing (edge cases, naps, caffeine, meals, ICS parser)
 - **EAS config:** eas.json (dev/preview/production), app.json production-ready
 - **App Store metadata:** Full listing draft (description, keywords, category)
@@ -359,4 +387,42 @@
 
 ---
 
-*Log entries below this line are from previous sessions.*
+## Business Document Completion Tracking
+
+From TASK_LOG.md — tracked completion of major deliverables and strategic work:
+
+| Deliverable | Completed | Session | Notes |
+|---|---|---|---|
+| Core circadian algorithm engine | 2026-03 (Week 1) | S1 | 11 modules, 20+ tests |
+| ICS parser + generator + shift detector | 2026-03 (Week 1) | S1 | Calendar import/export pipeline |
+| Theme & design system | 2026-03 (Week 2) | S3 | Dark mode, design tokens |
+| Zustand stores (user, shifts, plan) | 2026-03 (Week 2) | S3 | AsyncStorage persisted |
+| Onboarding flow (6 files) | 2026-03 (Week 2) | S3 | Quiz, household, preferences |
+| Calendar & shift entry UI | 2026-03 (Week 2) | S3 | MonthView, DayDetail |
+| Today screen | 2026-03 (Week 3) | S4 | Timeline, countdowns, insights |
+| Import/export flow | 2026-03 (Week 3) | S4 | 3-step .ics import, share sheet export |
+| Sleep tips engine (25+ tips) | 2026-03 (Week 3) | S4 | Evidence-based, contextual |
+| Animations | 2026-03 (Week 4) | S4 | Staggered, transitions, pulse, press |
+| Test suite (83 tests) | 2026-03 (Week 4) | S4 | Edge cases, full coverage |
+| EAS/ship configuration | 2026-03 (Week 4) | S4 | eas.json, app.json, metadata |
+| Business plan v1 | 2026-03 (Week 4) | S5 | LLC, monetization, go-to-market |
+| Phase 2 infrastructure | 2026-03 | S8 | Supabase, auth, HealthKit, premium, notifications, sync |
+| Phase 3 UI wiring | 2026-03 | S9 | Auth routes, recovery score dashboard |
+| Borbely two-process energy model | 2026-03-31 | — | Ported from ULOS |
+| Landing page redesign | 2026-03 | — | Editorial aesthetic |
+| Committee top-10 issues fix | 2026-03 | — | All critical + high priority |
+| ICS parser crash safety fix | 2026-03 | — | Plus hasPets algorithm, paywall CTA |
+| Project dashboard (HTML) | 2026-04-01 | S10 | Interactive 8-section command center |
+| Deep questioning / vision session | 2026-04-01 | S10 | Full product vision aligned |
+| Business model research (10 competitors) | 2026-04-01 | S10 | Pricing, trials, conversion data |
+| Naming research (25+ candidates) | 2026-04-01/02 | S10 | Trademark checks, risk ratings |
+| Competitor analysis (38 products) | 2026-04-02 | S10 | Definitive market intelligence |
+| ShiftWell BCEHS deep dive | 2026-04-02 | S10 | Trademark conflict confirmed |
+| Competitor log + competitive edge log | 2026-04-02 | S10 | Living tracking docs |
+
+---
+
+Created: 2026-04-05
+Last Reviewed: 2026-04-05
+Last Edited: 2026-04-05
+Review Notes: Consolidated from ACTIVITY_LOG.md and TASK_LOG.md. Organized chronologically newest first, eliminated duplicates, integrated business document completion tracking from TASK_LOG.

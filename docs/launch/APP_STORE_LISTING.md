@@ -218,3 +218,10 @@ _(Required for App Store submission. Since ShiftWell stores all data on-device w
 - [ ] App icon uploaded (1024x1024 PNG, no transparency)
 - [ ] Screenshots uploaded (minimum 3, recommended 5-10)
 - [ ] App Preview video uploaded (optional, recommended)
+
+---
+
+Created: 2026-04-05
+Last Reviewed: 2026-04-05
+Last Edited: 2026-04-05
+Review Notes: Consolidated from APP_STORE_LISTING.md and app-store-metadata.md. Archive version merged; duplicate metadata eliminated. Single authoritative source ready for App Store Connect.
