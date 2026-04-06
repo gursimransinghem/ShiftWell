@@ -10,9 +10,21 @@ v1.0 core is built. 354 tests passing. 28K LOC. Awaiting LLC formation → Apple
 
 **Sleep on autopilot.** Set it up once, never think about when to sleep again. The calendar is the interface — the app is the brain.
 
+## Current Milestone: v1.1 TestFlight Launch & Adaptive Brain
+
+**Goal:** Fix critical pre-launch bugs, get the app to TestFlight (and your phone), and formalize Adaptive Brain Phase 1.
+
+**Target features:**
+- Critical bug fixes: trial start broken, score never real, downgrade screen, TypeScript errors
+- Adaptive Brain Phase 1 — wire partial implementation to Today screen
+- TestFlight prep — app icon, splash, EAS build config, provisioning profiles
+- ActivityKit real integration — Dynamic Island stubs → native module
+- App Store prep — screenshots, listing, privacy policy, age rating
+- Backlog polish — referral share link, routine editing nav, morning Dynamic Island score
+
 ## Shipped: v1.0 TestFlight
 
-**Shipped:** 2026-04-06 (pre-TestFlight — code complete, legal blocking distribution)  
+**Shipped:** 2026-04-06 (code complete — LLC blocking TestFlight distribution)  
 **Phases:** 6 | **Plans:** 18/22 complete | **Tests:** 354 passing
 
 ## Requirements

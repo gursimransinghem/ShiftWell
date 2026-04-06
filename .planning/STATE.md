@@ -1,13 +1,13 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0-launch
+milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
-status: planning
-stopped_at: v1.0 archived — ready to start Milestone 2 phases
-last_updated: "2026-04-06T18:20:00.000Z"
+status: defining_requirements
+stopped_at: Milestone initialized — defining requirements
+last_updated: "2026-04-06T18:30:00.000Z"
 last_activity: 2026-04-06
 progress:
-  total_phases: 5
+  total_phases: 0
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Milestone 2 — v1.0 Launch & Adaptive Brain. Start with /gsd:new-milestone.
+**Current focus:** v1.1 — Defining requirements
 
 ## Current Position
 
-Phase: —
+Phase: Not started (defining requirements)
 Plan: —
-Status: v1.0 archived. Milestone 2 not yet started.
-Last activity: 2026-04-06
+Status: Defining requirements
+Last activity: 2026-04-06 — Milestone v1.1 started
 
-Progress: [░░░░░░░░░░] 0% (Milestone 2 planned, not yet executed)
+Progress: [░░░░░░░░░░] 0% (requirements in progress)
 
 ## Performance Metrics
 
