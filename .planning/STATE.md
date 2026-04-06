@@ -2,16 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: TestFlight
-status: verifying
-stopped_at: Completed 05-live-activities-recovery-score 05-02-PLAN.md
-last_updated: "2026-04-02T14:24:55.521Z"
-last_activity: 2026-04-02
+status: audited_gaps_found
+stopped_at: Audit complete — gaps identified, ready for milestone complete
+last_updated: "2026-04-06T18:14:00.000Z"
+last_activity: 2026-04-06
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 18
   completed_plans: 18
-  percent: 0
+  percent: 83
+notes: "Phase 6 partially shipped outside GSD framework. Critical gaps (PREM-01, SCORE-01/02/03, PREM-02, SET-03) documented in v1.0-MILESTONE-AUDIT.md and move to Milestone 2 backlog."
 ---
 
 # ShiftWell — Project State
@@ -21,13 +22,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 05 — live-activities-recovery-score
+**Current focus:** Milestone 1 closing — ready to run /gsd:complete-milestone
 
 ## Current Position
 
-Phase: 6
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: Milestone audit complete
+Plan: —
+Status: Gaps found, accepted, moving to Milestone 2
 Last activity: 2026-04-02
 
 Progress: [░░░░░░░░░░] 0% (planned, not yet executed)

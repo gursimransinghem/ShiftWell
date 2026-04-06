@@ -16,12 +16,12 @@ Six phases that deliver the core autopilot promise for TestFlight. The work star
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Onboarding** - Design system refresh + complete routine builder onboarding
-- [ ] **Phase 2: Calendar Sync** - Apple + Google read/write with auto-detection and dynamic updates
+- [x] **Phase 1: Foundation & Onboarding** - Design system refresh + complete routine builder onboarding (completed 2026-04-02, human visual gate pending)
+- [x] **Phase 2: Calendar Sync** - Apple + Google read/write with auto-detection and dynamic updates (completed 2026-04-02, device test gate pending)
 - [x] **Phase 3: Sleep Plan Generation** - Algorithm-to-calendar pipeline with dynamic rescheduling (completed 2026-04-02)
-- [x] **Phase 4: Night Sky Mode & Notifications** - Bedtime UI + warm push notification cadence (completed 2026-04-02)
-- [ ] **Phase 5: Live Activities & Recovery Score** - Dynamic Island pipeline + plan adherence score
-- [ ] **Phase 6: Premium, Settings & Polish** - Trial flow, free tier, referral, and final quality pass
+- [x] **Phase 4: Night Sky Mode & Notifications** - Bedtime UI + warm push notification cadence (completed 2026-04-02, visual gate pending)
+- [x] **Phase 5: Live Activities & Recovery Score** - Dynamic Island pipeline + plan adherence score (completed 2026-04-02, ActivityKit stub — pending Apple Dev enrollment)
+- [ ] **Phase 6: Premium, Settings & Polish** - Partially shipped outside GSD; critical gaps (PREM-01, SCORE-01/02/03, PREM-02) move to Milestone 2
 
 ## Phase Details
 
@@ -41,7 +41,7 @@ Plans:
 - [x] 01-01-PLAN.md — Design system gold tokens + UI component color audit + data model extension
 - [x] 01-02-PLAN.md — AM/PM routine builder screens + preferences cleanup
 - [x] 01-03-PLAN.md — Address entry screen + commute estimation utility + expo-location config
-- [ ] 01-04-PLAN.md — Layout wiring + existing screen polish + user store tests + visual checkpoint
+- [x] 01-04-PLAN.md — Layout wiring + existing screen polish + user store tests + visual checkpoint
 
 **UI hint**: yes
 
@@ -148,9 +148,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Onboarding | 3/4 | In Progress|  |
-| 2. Calendar Sync | 0/4 | Planned | - |
-| 3. Sleep Plan Generation | 3/3 | Complete   | 2026-04-02 |
-| 4. Night Sky Mode & Notifications | 4/4 | Complete   | 2026-04-02 |
-| 5. Live Activities & Recovery Score | 2/3 | In Progress|  |
-| 6. Premium, Settings & Polish | 0/4 | Not started | - |
+| 1. Foundation & Onboarding | 4/4 | Complete | 2026-04-02 |
+| 2. Calendar Sync | 4/4 | Complete | 2026-04-02 |
+| 3. Sleep Plan Generation | 3/3 | Complete | 2026-04-02 |
+| 4. Night Sky Mode & Notifications | 4/4 | Complete | 2026-04-02 |
+| 5. Live Activities & Recovery Score | 3/3 | Complete | 2026-04-02 |
+| 6. Premium, Settings & Polish | 0/4 | Partial (code shipped outside GSD; gaps tracked in v1.0-MILESTONE-AUDIT.md) | - |
