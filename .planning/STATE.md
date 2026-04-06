@@ -1,37 +1,36 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: TestFlight
-status: audited_gaps_found
-stopped_at: Audit complete — gaps identified, ready for milestone complete
-last_updated: "2026-04-06T18:14:00.000Z"
+milestone: v1.0-launch
+milestone_name: TestFlight Launch & Adaptive Brain
+status: planning
+stopped_at: v1.0 archived — ready to start Milestone 2 phases
+last_updated: "2026-04-06T18:20:00.000Z"
 last_activity: 2026-04-06
 progress:
-  total_phases: 6
-  completed_phases: 5
-  total_plans: 18
-  completed_plans: 18
-  percent: 83
-notes: "Phase 6 partially shipped outside GSD framework. Critical gaps (PREM-01, SCORE-01/02/03, PREM-02, SET-03) documented in v1.0-MILESTONE-AUDIT.md and move to Milestone 2 backlog."
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # ShiftWell — Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-02)
+See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Milestone 1 closing — ready to run /gsd:complete-milestone
+**Current focus:** Milestone 2 — v1.0 Launch & Adaptive Brain. Start with /gsd:new-milestone.
 
 ## Current Position
 
-Phase: Milestone audit complete
+Phase: —
 Plan: —
-Status: Gaps found, accepted, moving to Milestone 2
-Last activity: 2026-04-02
+Status: v1.0 archived. Milestone 2 not yet started.
+Last activity: 2026-04-06
 
-Progress: [░░░░░░░░░░] 0% (planned, not yet executed)
+Progress: [░░░░░░░░░░] 0% (Milestone 2 planned, not yet executed)
 
 ## Performance Metrics
 
