@@ -511,5 +511,28 @@ All algorithm decisions trace to published research:
 
 ---
 
-*Research database: `docs/science/SLEEP-SCIENCE-DATABASE.md`*  
-*Recovery algorithm science: `.planning/research/RECOVERY_ALGORITHM_SCIENCE.md`*
+---
+
+## Research Pipeline
+
+All research generated during development is auto-filed to one of two folders:
+
+| Folder | Contents |
+|--------|----------|
+| `docs/science/` | Curated sleep science database — published studies, clinical thresholds, wearable accuracy data |
+| `docs/research/` | Algorithm research, competitor analysis, product/business research, protocol research |
+
+A PostToolUse Claude Code hook (`.claude/hooks/auto-file-research.sh`) fires after every `Write` call. If the written file is a `.md` with a research-indicating filename (RESEARCH, SCIENCE, ANALYSIS, ALGORITHM, DATABASE, STUDY, PROTOCOL, FINDINGS, etc.) and is not already inside a research folder, it is automatically copied to the appropriate destination.
+
+**Current research inventory:**
+
+*`docs/science/`*
+- `SLEEP-SCIENCE-DATABASE.md` — 45+ citations, 12 topic areas, master reference for all algorithm decisions
+
+*`docs/research/`*
+- `RECOVERY_ALGORITHM_SCIENCE.md` — WHOOP/Oura methodology, composite formula evidence, shift-worker baselines
+- `BUSINESS_MODEL_RESEARCH.md` — Pricing benchmarks, monetization analysis
+- `COMPETITOR_ANALYSIS.md` — Rise, Calm, Sleep Cycle, SleepWatch feature matrix
+- `RISE_CALM_DEEP_DIVE.md` — Deep competitive analysis on top two competitors
+- `NAMING_RESEARCH.md`, `TRADEMARK_CHECK_ROUND2.md`, `TRADEMARK_CHECK_ROUND3.md` — Brand/legal research
+- `SHIFTWELL_BCEHS_ANALYSIS.md` — Market positioning analysis
