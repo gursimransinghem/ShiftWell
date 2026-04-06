@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
+  interpolate,
   useSharedValue,
   useAnimatedProps,
   useAnimatedStyle,
@@ -8,9 +9,12 @@ import Animated, {
   withSequence,
   withTiming,
   Easing,
+  Extrapolation,
+  SharedValue,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
 import { TEXT, heroNumber } from '@/src/theme';
+import { scoreViewHaptic, scoreHighHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -33,6 +37,7 @@ export interface HeroScoreProps {
   targetHours: number;
   weeklyScores: number[];
   trend: number;
+  scrollOffset?: SharedValue<number>;
 }
 
 // ---------------------------------------------------------------------------
@@ -45,7 +50,16 @@ export function HeroScore({
   targetHours,
   weeklyScores,
   trend,
+  scrollOffset,
 }: HeroScoreProps) {
+  // Haptics on mount
+  useEffect(() => {
+    scoreViewHaptic();
+    if (score >= 90) {
+      scoreHighHaptic();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Ring fill animation
   const strokeOffset = useSharedValue(CIRCUMFERENCE);
 
@@ -79,6 +93,17 @@ export function HeroScore({
     opacity: glowOpacity.value,
   }));
 
+  const heroStyle = useAnimatedStyle(() => {
+    if (!scrollOffset) return {};
+    return {
+      transform: [
+        { translateY: scrollOffset.value * -0.4 },
+        { scale: interpolate(scrollOffset.value, [0, 200], [1, 0.4], Extrapolation.CLAMP) },
+      ],
+      opacity: interpolate(scrollOffset.value, [0, 200], [1, 0], Extrapolation.CLAMP),
+    };
+  });
+
   // Sparkline bar heights (normalize to max 22px)
   const maxScore = Math.max(...weeklyScores, 1);
   const barHeights = weeklyScores.map((s) => Math.max(4, (s / maxScore) * 22));
@@ -88,7 +113,7 @@ export function HeroScore({
   const trendArrow = trend >= 0 ? '↑' : '↓';
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, heroStyle]}>
       {/* Ring + glow */}
       <View style={styles.ringWrapper}>
         {/* Breathing glow behind ring */}
@@ -156,7 +181,7 @@ export function HeroScore({
       <Text style={[styles.trend, { color: trendColor }]}>
         {trendArrow} {Math.abs(trend)} pts from yesterday
       </Text>
-    </View>
+    </Animated.View>
   );
 }
 

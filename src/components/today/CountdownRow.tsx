@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TEXT, V6_RADIUS, countdownValue } from '@/src/theme';
+import { countdownZeroHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -23,6 +24,15 @@ export interface CountdownRowProps {
 // ---------------------------------------------------------------------------
 
 export function CountdownRow({ cells }: CountdownRowProps) {
+  useEffect(() => {
+    const hasZero = cells.some(
+      (cell) => cell.value === '0m' || cell.value === '0h' || cell.value === '0:00',
+    );
+    if (hasZero) {
+      countdownZeroHaptic();
+    }
+  }, [cells]);
+
   return (
     <View style={styles.container}>
       {cells.map((cell, index) => (

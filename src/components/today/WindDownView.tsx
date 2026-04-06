@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { BACKGROUND, TEXT, BORDER, sectionLabel } from '@/src/theme';
 import { InsightLine } from './InsightLine';
 import { tapSuccess } from '@/src/lib/haptics/haptic-service';
+import { playChecklistDone } from '@/src/lib/audio/sound-service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -44,8 +45,12 @@ export function WindDownView({
   insight,
 }: WindDownViewProps) {
   const handleToggle = async (id: string) => {
+    const item = checklist.find((c) => c.id === id);
     onToggleItem(id);
     await tapSuccess();
+    if (item && !item.completed) {
+      playChecklistDone();
+    }
   };
 
   return (

@@ -2,11 +2,14 @@ import React, { useCallback, useRef, useState, useMemo } from 'react';
 import {
   Pressable,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNightSkyMode } from '@/src/hooks/useNightSkyMode';
 import { NightSkyOverlay } from '@/src/components/night-sky';
@@ -96,7 +99,11 @@ const DEFAULT_WIND_DOWN_CHECKLIST = [
 
 export default function TodayScreen() {
   const router = useRouter();
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<Animated.ScrollView>(null);
+  const scrollY = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
 
   const regeneratePlan = usePlanStore((s) => s.regeneratePlan);
   const isGenerating = usePlanStore((s) => s.isGenerating);
@@ -289,10 +296,12 @@ export default function TodayScreen() {
     <GradientMeshBackground>
       <View style={{ flex: 1 }}>
         <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-          <ScrollView
+          <Animated.ScrollView
             ref={scrollRef}
             style={styles.screen}
             contentContainerStyle={styles.content}
+            onScroll={onScroll}
+            scrollEventThrottle={16}
             refreshControl={
               <RefreshControl
                 refreshing={isGenerating}
@@ -351,7 +360,7 @@ export default function TodayScreen() {
                 {/* Hero Score */}
                 {showRecovery && (
                   <View style={styles.section}>
-                    <HeroScore {...heroScoreData} />
+                    <HeroScore {...heroScoreData} scrollOffset={scrollY} />
                   </View>
                 )}
 
@@ -475,7 +484,7 @@ export default function TodayScreen() {
                 />
               </View>
             )}
-          </ScrollView>
+          </Animated.ScrollView>
         </SafeAreaView>
 
         {/* Night Sky Mode overlay */}

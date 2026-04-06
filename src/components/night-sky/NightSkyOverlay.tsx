@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { format } from 'date-fns';
@@ -7,6 +7,7 @@ import { StarParticles } from './StarParticles';
 import { FireflyParticle } from './FireflyParticle';
 import { RechargeArc } from './RechargeArc';
 import { BedtimeTipCycler } from './BedtimeTipCycler';
+import { playNightSkyEnter } from '@/src/lib/audio/sound-service';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -34,6 +35,10 @@ export function NightSkyOverlay({
   fillFraction,
   onDismiss,
 }: NightSkyOverlayProps) {
+  useEffect(() => {
+    playNightSkyEnter();
+  }, []);
+
   const alarmLabel = format(alarmTime, 'h:mm a');
   const latestWakeLabel = format(latestWakeTime, 'h:mm a');
   // Cap tomorrow items at 3 per spec

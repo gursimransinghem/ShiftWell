@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { TEXT, V6_RADIUS } from '@/src/theme';
+import { windDownStartHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -35,6 +36,14 @@ const STATE_CONFIG = {
 
 export function StatusPill({ state, primaryText, secondaryText }: StatusPillProps) {
   const { color, emoji } = STATE_CONFIG[state];
+  const prevState = useRef<typeof state>(state);
+
+  useEffect(() => {
+    if (state === 'wind-down' && prevState.current !== 'wind-down') {
+      windDownStartHaptic();
+    }
+    prevState.current = state;
+  }, [state]);
 
   const glowOpacity = useSharedValue(0.06);
 
