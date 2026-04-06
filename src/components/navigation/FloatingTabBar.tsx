@@ -15,6 +15,7 @@ const ROUTE_ICONS: Record<string, [IoniconsName, IoniconsName]> = {
   index: ['sparkles-outline', 'sparkles'],
   today: ['sparkles-outline', 'sparkles'],
   schedule: ['calendar-outline', 'calendar'],
+  circadian: ['pulse-outline', 'pulse'],
   profile: ['person-outline', 'person'],
 };
 
@@ -26,6 +27,7 @@ const ROUTE_LABELS: Record<string, string> = {
   index: 'Today',
   today: 'Today',
   schedule: 'Schedule',
+  circadian: 'Circadian',
   profile: 'Profile',
 };
 

@@ -9,7 +9,7 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremiumStore } from '@/src/store/premium-store';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
+import { COLORS, SPACING, RADIUS } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -22,12 +22,12 @@ interface Plan {
   label: string;
   price: string;
   period: string;
+  perMonth?: string;
   badge?: string;
-  highlight: boolean;
 }
 
 // ---------------------------------------------------------------------------
-// Data
+// Data — Plans
 // ---------------------------------------------------------------------------
 
 const PLANS: Plan[] = [
@@ -36,67 +36,192 @@ const PLANS: Plan[] = [
     label: 'Monthly',
     price: '$6.99',
     period: '/mo',
-    highlight: false,
   },
   {
     key: 'annual',
     label: 'Annual',
     price: '$49.99',
     period: '/yr',
+    perMonth: '$4.17/mo',
     badge: 'BEST VALUE · SAVE 40%',
-    highlight: true,
   },
   {
     key: 'lifetime',
     label: 'Lifetime',
     price: '$149.99',
-    period: 'one-time',
-    highlight: false,
+    period: 'once',
   },
 ];
 
-interface FeatureItem {
-  icon: string;
-  label: string;
-  free: boolean;
-}
+// ---------------------------------------------------------------------------
+// Data — Flagship differentiator cards (2×2 grid)
+// ---------------------------------------------------------------------------
 
-const FEATURES: FeatureItem[] = [
-  { icon: 'calendar-outline', label: 'Shift calendar import', free: true },
-  { icon: 'moon-outline', label: 'Basic sleep plan', free: true },
-  { icon: 'today-outline', label: 'Today view', free: true },
-  { icon: 'analytics-outline', label: 'Recovery Score + trends', free: false },
-  { icon: 'cafe-outline', label: 'Caffeine + meal timing', free: false },
-  { icon: 'bed-outline', label: 'Strategic nap scheduling', free: false },
-  { icon: 'sunny-outline', label: 'Light exposure protocols', free: false },
-  { icon: 'notifications-outline', label: 'Smart reminders', free: false },
-  { icon: 'star-outline', label: 'Night Sky Mode', free: false },
+const FLAGSHIP = [
+  {
+    icon: 'calendar-sharp' as const,
+    title: 'Smart Scheduling',
+    desc: 'Optimal sleep windows calculated around every shift — automatically.',
+    gradient: ['#1E3A5F', '#0D2137'] as const,
+    accent: '#60A5FA',
+  },
+  {
+    icon: 'calendar-outline' as const,
+    title: 'Calendar Export',
+    desc: 'Push your sleep plan to Apple Calendar or Google Calendar in one tap.',
+    gradient: ['#1A3D2F', '#0D2118'] as const,
+    accent: '#34D399',
+  },
+  {
+    icon: 'fitness-outline' as const,
+    title: 'Activity Guide',
+    desc: 'Meal timing, exercise windows, and light exposure — timed to your body clock.',
+    gradient: ['#3D2A10', '#211506'] as const,
+    accent: '#FB923C',
+  },
+  {
+    icon: 'analytics-outline' as const,
+    title: 'Sleep Insights',
+    desc: '7-day trends, recovery patterns, and tips personalized to your chronotype.',
+    gradient: ['#2D1B4E', '#180D2B'] as const,
+    accent: '#A78BFA',
+  },
 ];
 
 // ---------------------------------------------------------------------------
-// Component
+// Data — Full feature list
+// ---------------------------------------------------------------------------
+
+const FEATURES = [
+  { icon: 'moon-outline' as const,           label: 'Circadian sleep plan',            free: true },
+  { icon: 'add-circle-outline' as const,     label: 'Manual shift entry',              free: true },
+  { icon: 'today-outline' as const,          label: 'Today view',                      free: true },
+  { icon: 'calendar-sharp' as const,         label: 'Smart shift scheduling',          free: false },
+  { icon: 'calendar-outline' as const,       label: 'Native calendar export',          free: false },
+  { icon: 'fitness-outline' as const,        label: 'Circadian activity guide',        free: false },
+  { icon: 'analytics-outline' as const,      label: 'Personal sleep insights',         free: false },
+  { icon: 'restaurant-outline' as const,     label: 'Meal & caffeine timing',          free: false },
+  { icon: 'bed-outline' as const,            label: 'Strategic nap placement',         free: false },
+  { icon: 'sunny-outline' as const,          label: 'Light exposure protocol',         free: false },
+  { icon: 'trophy-outline' as const,         label: 'Daily recovery score',            free: false },
+  { icon: 'notifications-outline' as const,  label: 'Smart shift reminders',           free: false },
+  { icon: 'star-outline' as const,           label: 'Night Sky Mode',                  free: false },
+  { icon: 'phone-portrait-outline' as const, label: 'Live Activities (lock screen)',   free: false },
+];
+
+// ---------------------------------------------------------------------------
+// Data — Trust signals
+// ---------------------------------------------------------------------------
+
+const TRUST = [
+  { icon: 'flask-outline' as const, label: '10+ peer-reviewed papers' },
+  { icon: 'medical-outline' as const, label: 'Built by an ER physician' },
+  { icon: 'people-outline' as const, label: '700M shift workers worldwide' },
+];
+
+// ---------------------------------------------------------------------------
+// Sub-components
+// ---------------------------------------------------------------------------
+
+function FlagshipCard({ item }: { item: typeof FLAGSHIP[0] }) {
+  return (
+    <View style={[styles.flagshipCard, { backgroundColor: item.gradient[1] }]}>
+      <View style={[styles.flagshipIconWrap, { backgroundColor: `${item.accent}22` }]}>
+        <Ionicons name={item.icon} size={22} color={item.accent} />
+      </View>
+      <Text style={[styles.flagshipTitle, { color: item.accent }]}>{item.title}</Text>
+      <Text style={styles.flagshipDesc}>{item.desc}</Text>
+    </View>
+  );
+}
+
+function FeatureRow({ icon, label, free }: typeof FEATURES[0]) {
+  return (
+    <View style={styles.featureRow}>
+      <Ionicons
+        name={icon}
+        size={17}
+        color={free ? COLORS.text.muted : COLORS.accent.primary}
+        style={styles.featureIcon}
+      />
+      <Text style={[styles.featureLabel, free && styles.featureLabelFree]}>{label}</Text>
+      {free ? (
+        <Text style={styles.freeTag}>Free</Text>
+      ) : (
+        <Ionicons name="checkmark" size={15} color={COLORS.accent.primary} />
+      )}
+    </View>
+  );
+}
+
+function PlanCard({
+  plan,
+  selected,
+  onSelect,
+}: {
+  plan: Plan;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <TouchableOpacity
+      style={[styles.planCard, selected && styles.planCardSelected]}
+      onPress={onSelect}
+      activeOpacity={0.8}
+    >
+      {plan.badge && (
+        <View style={styles.planBadge}>
+          <Text style={styles.planBadgeText}>{plan.badge}</Text>
+        </View>
+      )}
+      <Text style={[styles.planLabel, selected && styles.planLabelSelected]}>
+        {plan.label}
+      </Text>
+      <Text style={[styles.planPrice, selected && styles.planPriceSelected]}>
+        {plan.price}
+      </Text>
+      <Text style={styles.planPeriod}>{plan.period}</Text>
+      {plan.perMonth && (
+        <Text style={[styles.planPerMonth, selected && { color: COLORS.accent.primary }]}>
+          {plan.perMonth}
+        </Text>
+      )}
+    </TouchableOpacity>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Screen
 // ---------------------------------------------------------------------------
 
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
   const { purchase, restore, isLoading } = usePremiumStore();
 
-  const handleStartTrial = async () => {
-    const plan = PLANS.find((p) => p.key === selectedPlan);
-    await purchase(plan);
-    router.back();
-  };
+  const currentPlan = PLANS.find((p) => p.key === selectedPlan)!;
 
-  const handleRestore = async () => {
+  async function handleStartTrial() {
+    await purchase(currentPlan);
+    router.back();
+  }
+
+  async function handleRestore() {
     await restore();
     router.back();
-  };
+  }
+
+  const disclaimerPeriod =
+    selectedPlan === 'lifetime'
+      ? 'one-time payment'
+      : selectedPlan === 'annual'
+      ? 'per year after trial'
+      : 'per month after trial';
 
   return (
     <View style={styles.container}>
-      {/* Close button */}
+      {/* Close */}
       <TouchableOpacity
-        style={styles.closeButton}
+        style={styles.closeBtn}
         onPress={() => router.back()}
         hitSlop={12}
         accessibilityLabel="Close"
@@ -109,78 +234,65 @@ export default function PaywallScreen() {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>★ SHIFTWELL PRO</Text>
+        {/* ── Hero ─────────────────────────────────────────────────── */}
+        <View style={styles.hero}>
+          <View style={styles.heroBadge}>
+            <Ionicons name="star" size={11} color={COLORS.accent.primary} />
+            <Text style={styles.heroBadgeText}>SHIFTWELL PRO</Text>
           </View>
-          <Text style={styles.title}>Sleep smarter,{'\n'}every shift.</Text>
-          <Text style={styles.subtitle}>
-            Science-backed tools for everyone who works against the clock.
+          <Text style={styles.heroTitle}>Work any shift.{'\n'}Sleep like a champion.</Text>
+          <Text style={styles.heroSub}>
+            The only sleep app built by an ER physician, for the 700 million people
+            who work against the clock.
           </Text>
         </View>
 
-        {/* Feature list */}
-        <View style={styles.featureList}>
-          {FEATURES.map((f) => (
-            <View key={f.label} style={styles.featureRow}>
-              <Ionicons
-                name={f.icon as any}
-                size={18}
-                color={f.free ? COLORS.text.tertiary : COLORS.accent.primary}
-                style={styles.featureIcon}
-              />
-              <Text style={[styles.featureLabel, f.free && styles.featureLabelFree]}>
-                {f.label}
-              </Text>
-              {f.free ? (
-                <Text style={styles.featureFreeTag}>Free</Text>
-              ) : (
-                <Ionicons name="checkmark" size={16} color={COLORS.accent.primary} />
-              )}
+        {/* ── Flagship 2×2 grid ────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>WHAT SETS US APART</Text>
+        <View style={styles.flagshipGrid}>
+          {FLAGSHIP.map((item) => (
+            <FlagshipCard key={item.title} item={item} />
+          ))}
+        </View>
+
+        {/* ── Full feature list ─────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>EVERYTHING IN PRO</Text>
+        <View style={styles.featureCard}>
+          {FEATURES.map((f, i) => (
+            <View key={f.label}>
+              <FeatureRow {...f} />
+              {i < FEATURES.length - 1 && <View style={styles.featureDivider} />}
             </View>
           ))}
         </View>
 
-        {/* Plan selector */}
-        <View style={styles.planRow}>
-          {PLANS.map((plan) => (
-            <TouchableOpacity
-              key={plan.key}
-              style={[
-                styles.planCard,
-                plan.highlight && styles.planCardHighlight,
-                selectedPlan === plan.key && styles.planCardSelected,
-                selectedPlan === plan.key && plan.highlight && styles.planCardSelectedHighlight,
-              ]}
-              onPress={() => setSelectedPlan(plan.key)}
-              activeOpacity={0.8}
-            >
-              {plan.badge && (
-                <View style={styles.planBadge}>
-                  <Text style={styles.planBadgeText}>{plan.badge}</Text>
-                </View>
-              )}
-              <Text style={[
-                styles.planLabel,
-                selectedPlan === plan.key && styles.planLabelSelected,
-              ]}>
-                {plan.label}
-              </Text>
-              <Text style={[
-                styles.planPrice,
-                selectedPlan === plan.key && styles.planPriceSelected,
-              ]}>
-                {plan.price}
-              </Text>
-              <Text style={styles.planPeriod}>{plan.period}</Text>
-            </TouchableOpacity>
+        {/* ── Trust bar ────────────────────────────────────────────── */}
+        <View style={styles.trustBar}>
+          {TRUST.map((t, i) => (
+            <View key={t.label} style={styles.trustItem}>
+              <Ionicons name={t.icon} size={14} color={COLORS.accent.primary} />
+              <Text style={styles.trustLabel}>{t.label}</Text>
+              {i < TRUST.length - 1 && <View style={styles.trustDot} />}
+            </View>
           ))}
         </View>
 
-        {/* CTA */}
+        {/* ── Pricing ──────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
+        <View style={styles.planRow}>
+          {PLANS.map((plan) => (
+            <PlanCard
+              key={plan.key}
+              plan={plan}
+              selected={selectedPlan === plan.key}
+              onSelect={() => setSelectedPlan(plan.key)}
+            />
+          ))}
+        </View>
+
+        {/* ── CTA ──────────────────────────────────────────────────── */}
         <TouchableOpacity
-          style={[styles.cta, isLoading && styles.ctaLoading]}
+          style={[styles.cta, isLoading && styles.ctaDisabled]}
           onPress={handleStartTrial}
           activeOpacity={0.85}
           disabled={isLoading}
@@ -188,25 +300,22 @@ export default function PaywallScreen() {
           <Text style={styles.ctaText}>
             {isLoading ? 'Processing…' : 'Start 14-Day Free Trial'}
           </Text>
+          <Text style={styles.ctaSubText}>
+            Then {currentPlan.price} {disclaimerPeriod} · Cancel anytime
+          </Text>
         </TouchableOpacity>
 
-        <Text style={styles.disclaimer}>
-          14-day free trial, then {PLANS.find((p) => p.key === selectedPlan)?.price}{' '}
-          {selectedPlan === 'lifetime' ? 'one-time' : selectedPlan === 'annual' ? '/year' : '/month'}.
-          Cancel anytime before trial ends — no charge.
-        </Text>
-
-        {/* Footer */}
+        {/* ── Footer ───────────────────────────────────────────────── */}
         <View style={styles.footer}>
-          <TouchableOpacity onPress={handleRestore}>
+          <TouchableOpacity onPress={handleRestore} hitSlop={8}>
             <Text style={styles.footerLink}>Restore Purchases</Text>
           </TouchableOpacity>
-          <Text style={styles.footerDot}>·</Text>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>Privacy Policy</Text>
+          <Text style={styles.footerSep}>·</Text>
+          <TouchableOpacity hitSlop={8}>
+            <Text style={styles.footerLink}>Privacy</Text>
           </TouchableOpacity>
-          <Text style={styles.footerDot}>·</Text>
-          <TouchableOpacity>
+          <Text style={styles.footerSep}>·</Text>
+          <TouchableOpacity hitSlop={8}>
             <Text style={styles.footerLink}>Terms</Text>
           </TouchableOpacity>
         </View>
@@ -219,12 +328,15 @@ export default function PaywallScreen() {
 // Styles
 // ---------------------------------------------------------------------------
 
+const GOLD = COLORS.accent.primary; // #C8A84B
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background.primary,
   },
-  closeButton: {
+
+  closeBtn: {
     position: 'absolute',
     top: 56,
     right: 20,
@@ -236,60 +348,109 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   scroll: {
-    paddingHorizontal: 24,
-    paddingTop: 72,
+    paddingTop: 64,
+    paddingHorizontal: 20,
     paddingBottom: 48,
   },
 
-  // Header
-  header: {
+  // ── Hero
+  hero: {
     alignItems: 'center',
     marginBottom: 32,
   },
-  badge: {
-    backgroundColor: `${COLORS.accent.primary}22`,
+  heroBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: `${GOLD}1A`,
     borderRadius: RADIUS.full,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
     paddingVertical: 5,
-    marginBottom: 16,
+    marginBottom: 18,
   },
-  badgeText: {
-    ...TYPOGRAPHY.caption,
+  heroBadgeText: {
+    fontSize: 11,
     fontWeight: '700',
-    color: COLORS.accent.primary,
+    color: GOLD,
     letterSpacing: 1.5,
   },
-  title: {
-    fontSize: 30,
-    fontWeight: '700',
+  heroTitle: {
+    fontSize: 32,
+    fontWeight: '800',
     color: COLORS.text.primary,
     textAlign: 'center',
-    lineHeight: 36,
-    marginBottom: 12,
+    lineHeight: 38,
+    letterSpacing: -0.5,
+    marginBottom: 14,
   },
-  subtitle: {
-    fontSize: 15,
+  heroSub: {
+    fontSize: 14,
     color: COLORS.text.secondary,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 21,
+    maxWidth: 300,
   },
 
-  // Features
-  featureList: {
+  // ── Section label
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: COLORS.text.muted,
+    letterSpacing: 1.2,
+    marginBottom: 12,
+  },
+
+  // ── Flagship grid
+  flagshipGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 28,
+  },
+  flagshipCard: {
+    width: '48%',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+  },
+  flagshipIconWrap: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  flagshipTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 6,
+  },
+  flagshipDesc: {
+    fontSize: 11,
+    color: COLORS.text.secondary,
+    lineHeight: 16,
+  },
+
+  // ── Feature list
+  featureCard: {
     backgroundColor: COLORS.background.surface,
     borderRadius: RADIUS.lg,
-    paddingVertical: 4,
-    marginBottom: 24,
+    overflow: 'hidden',
+    marginBottom: 20,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 11,
     paddingHorizontal: 16,
   },
   featureIcon: {
-    width: 28,
+    width: 26,
+    marginRight: 4,
   },
   featureLabel: {
     flex: 1,
@@ -297,14 +458,46 @@ const styles = StyleSheet.create({
     color: COLORS.text.primary,
   },
   featureLabelFree: {
-    color: COLORS.text.tertiary,
+    color: COLORS.text.muted,
   },
-  featureFreeTag: {
+  freeTag: {
     fontSize: 12,
-    color: COLORS.text.tertiary,
+    color: COLORS.text.muted,
+  },
+  featureDivider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: COLORS.border.default,
+    marginLeft: 46,
   },
 
-  // Plan cards
+  // ── Trust bar
+  trustBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 28,
+    paddingHorizontal: 8,
+  },
+  trustItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  trustLabel: {
+    fontSize: 12,
+    color: COLORS.text.secondary,
+  },
+  trustDot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: COLORS.text.muted,
+    marginLeft: 8,
+  },
+
+  // ── Plan cards
   planRow: {
     flexDirection: 'row',
     gap: 10,
@@ -318,39 +511,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1.5,
     borderColor: COLORS.border.default,
-  },
-  planCardHighlight: {
-    borderColor: `${COLORS.accent.primary}44`,
-    backgroundColor: `${COLORS.accent.primary}0A`,
+    minHeight: 100,
+    justifyContent: 'center',
   },
   planCardSelected: {
-    borderColor: COLORS.accent.primary,
-  },
-  planCardSelectedHighlight: {
-    backgroundColor: `${COLORS.accent.primary}15`,
+    borderColor: GOLD,
+    backgroundColor: `${GOLD}0D`,
   },
   planBadge: {
     position: 'absolute',
     top: -10,
-    backgroundColor: COLORS.accent.primary,
+    backgroundColor: GOLD,
     borderRadius: RADIUS.full,
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     paddingVertical: 3,
+    alignSelf: 'center',
   },
   planBadgeText: {
-    fontSize: 8,
-    fontWeight: '700',
+    fontSize: 7.5,
+    fontWeight: '800',
     color: '#0B0D16',
     letterSpacing: 0.3,
   },
   planLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: COLORS.text.muted,
     marginBottom: 4,
     marginTop: 6,
   },
   planLabelSelected: {
-    color: COLORS.accent.primary,
+    color: GOLD,
   },
   planPrice: {
     fontSize: 20,
@@ -358,43 +548,53 @@ const styles = StyleSheet.create({
     color: COLORS.text.primary,
   },
   planPriceSelected: {
-    color: COLORS.accent.primary,
+    color: GOLD,
   },
   planPeriod: {
     fontSize: 11,
     color: COLORS.text.muted,
     marginTop: 2,
   },
+  planPerMonth: {
+    fontSize: 10,
+    color: COLORS.text.muted,
+    marginTop: 3,
+  },
 
-  // CTA
+  // ── CTA
   cta: {
-    backgroundColor: COLORS.accent.primary,
     borderRadius: RADIUS.lg,
+    backgroundColor: GOLD,
     paddingVertical: 18,
     alignItems: 'center',
-    marginBottom: 12,
+    gap: 4,
+    marginBottom: 16,
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  ctaLoading: {
+  ctaDisabled: {
     opacity: 0.6,
   },
   ctaText: {
     fontSize: 17,
-    fontWeight: '700',
+    fontWeight: '800',
     color: '#0B0D16',
+    letterSpacing: -0.2,
   },
-  disclaimer: {
-    fontSize: 12,
-    color: COLORS.text.muted,
-    textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 28,
+  ctaSubText: {
+    fontSize: 11,
+    color: 'rgba(11,13,22,0.65)',
   },
 
-  // Footer
+  // ── Footer
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: 8,
   },
   footerLink: {
@@ -402,7 +602,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.muted,
     textDecorationLine: 'underline',
   },
-  footerDot: {
+  footerSep: {
     fontSize: 12,
     color: COLORS.text.muted,
   },
