@@ -15,9 +15,9 @@ Three integration pipes are broken in production. These must be fixed before any
 - [ ] **BUG-01**: Trial starts automatically on first launch — `startTrial()` moved into `initializePremium()`, removed from dev-only `seedMockData()`
 - [ ] **BUG-02**: Recovery Score accumulates real data — `score-store.finalizeDay()` called from `AppState` background→active handler in `_layout.tsx`
 - [ ] **BUG-03**: Expired trial has a graceful path — `app/downgrade.tsx` exists with re-subscribe CTA and feature summary
-- [ ] **BUG-04**: EAS build succeeds — all 13 TypeScript errors fixed (circadian.tsx, profile.tsx, settings.tsx, index.tsx, ExternalLink.tsx)
-- [ ] **BUG-05**: AdaptiveInsightCard shows real plan changes — `computeDelta` receives distinct pre/post plan snapshots (not identical `currentPlan` for both args)
-- [ ] **BUG-06**: Morning Dynamic Island transition includes recovery score — `startSleepActivity()` receives `todayScore()` from score-store
+- [x] **BUG-04**: EAS build succeeds — all 13 TypeScript errors fixed (circadian.tsx, profile.tsx, settings.tsx, index.tsx, ExternalLink.tsx)
+- [x] **BUG-05**: AdaptiveInsightCard shows real plan changes — `computeDelta` receives distinct pre/post plan snapshots (not identical `currentPlan` for both args)
+- [x] **BUG-06**: Morning Dynamic Island transition includes recovery score — `startSleepActivity()` receives `todayScore()` from score-store
 
 ### Adaptive Brain Core
 
@@ -106,9 +106,9 @@ Populated during roadmap creation.
 | BUG-01 | Phase 7 | Pending |
 | BUG-02 | Phase 7 | Pending |
 | BUG-03 | Phase 7 | Pending |
-| BUG-04 | Phase 7 | Pending |
-| BUG-05 | Phase 7 | Pending |
-| BUG-06 | Phase 7 | Pending |
+| BUG-04 | Phase 7 | Complete |
+| BUG-05 | Phase 7 | Complete |
+| BUG-06 | Phase 7 | Complete |
 | BRAIN-01 | Phase 8 | Pending |
 | BRAIN-02 | Phase 8 | Pending |
 | BRAIN-03 | Phase 9 | Pending |
