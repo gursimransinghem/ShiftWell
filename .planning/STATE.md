@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 32-01-PLAN.md
-last_updated: "2026-04-07T19:43:23.392Z"
+stopped_at: "Checkpoint: 34-01-PLAN.md Tasks 1-2 complete, awaiting human verify"
+last_updated: "2026-04-07T19:53:39.183Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 22
-  total_plans: 56
-  completed_plans: 39
+  completed_phases: 23
+  total_plans: 57
+  completed_plans: 40
   percent: 64
 ---
 
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 30
+Phase: 33
 Plan: Not started
 Status: Plan 01 complete — 29-01-SUMMARY.md created
 Last activity: 2026-04-07
@@ -81,6 +81,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 30-enterprise-sales-kit P01 | 8min | 2 tasks | 2 files |
 | Phase 31-app-store-optimization P01 | 4min | 2 tasks | 6 files |
 | Phase 32-hrv-wearable-research P01 | 6min | 2 tasks | 3 files |
+| Phase 34 P01 | 7min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -189,6 +190,10 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 32-hrv-wearable-research]: Use SDNN from HealthKit (not RMSSD) — Apple Watch background HRV is SDNN-based; % deviation algorithm is metric-agnostic so SDNN works identically
 - [Phase 32-hrv-wearable-research]: Personal 30-day rolling baseline over population norms — shift workers have systematically 8-15% lower HRV; population thresholds would incorrectly penalize them
 - [Phase 32-hrv-wearable-research]: HRV weight capped at 25% — meaningful signal but imperfect PPG sensor (MAE 3-8ms overnight); redistribute to 40/30/25/5 when available vs 55/40/5 baseline
+- [Phase 34]: Dual gate for eligibility: 30 days AND 20 score records — both required
+- [Phase 34]: Separate autopilot-store from plan-store — richer schema for transparency log screen vs plan-store lightweight state
+- [Phase 34]: isWithinBounds validates bedtime AND wake shift independently, each capped at 30 min
+- [Phase 34]: TransparencyLogScreen at app/autopilot-log.tsx as root Stack modal matching existing add-shift pattern
 
 ### Pending Todos
 
@@ -203,6 +208,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:43:16.678Z
-Stopped at: Completed 32-01-PLAN.md
+Last session: 2026-04-07T19:53:39.176Z
+Stopped at: Checkpoint: 34-01-PLAN.md Tasks 1-2 complete, awaiting human verify
 Resume file: None

@@ -206,8 +206,8 @@
 
 ### Autopilot (Phase 34)
 
-- [ ] **BRAIN-09**: 30-day autopilot — autonomous changes after baseline
-- [ ] **AUTO-01**: Transparency log for all autonomous decisions
+- [x] **BRAIN-09**: 30-day autopilot — autonomous changes after baseline
+- [x] **AUTO-01**: Transparency log for all autonomous decisions
 
 ### Research: Validation Study (Phase 35)
 

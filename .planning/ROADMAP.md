@@ -501,7 +501,7 @@ Plans:
   4. 60%+ of eligible users opt in to autopilot within first week of eligibility
 **Plans**: 1 plan
 Plans:
-- [ ] 34-01-PLAN.md — Autopilot eligibility, bounds logic, activation card, transparency log screen
+- [x] 34-01-PLAN.md — Autopilot eligibility, bounds logic, activation card, transparency log screen
 **Rationale**: Autopilot is the "sleep on autopilot" promise fulfilled. The transparency log builds trust.
 
 ### Phase 35: Validation Study Design
@@ -597,11 +597,11 @@ Plans:
 | 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 28. Employer Dashboard | v1.4 | 0/1 | Deferred (separate repo) | - |
 | 29. API Layer | v1.4 | 1/1 | Complete    | 2026-04-07 |
-| 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete   | 2026-04-07 |
-| 31. App Store Optimization | v1.4 | 1/1 | Complete   | 2026-04-07 |
-| 32. HRV + Wearable Research | v2.0 | 1/1 | Complete   | 2026-04-07 |
+| 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete    | 2026-04-07 |
+| 31. App Store Optimization | v1.4 | 1/1 | Complete    | 2026-04-07 |
+| 32. HRV + Wearable Research | v2.0 | 1/1 | Complete    | 2026-04-07 |
 | 33. Apple Watch Integration | v2.0 | 1/1 | Complete | 2026-04-07 |
-| 34. 30-Day Autopilot | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 34. 30-Day Autopilot | v2.0 | 1/1 | Complete   | 2026-04-07 |
 | 35. Validation Study Design | v2.0 | 1/1 | Complete | 2026-04-07 |
 | 36. Validation Study Execution | v2.0 | 0/1 | Blocked (100+ users) | - |
 | 37. Android Launch | v2.0 | 0/1 | Blocked (iOS rev first) | - |
