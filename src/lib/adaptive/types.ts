@@ -121,6 +121,38 @@ export interface AdaptiveContext {
     daysTracked: number;
     lastUpdated: Date;
   };
+  /** Feedback engine result from the last adaptive run (null before first run) */
+  feedbackResult: FeedbackResult | null;
+}
+
+// ─── Feedback Engine ──────────────────────────────────────────────────────────
+
+export type ConvergenceStatus = 'converging' | 'converged' | 'stalled' | 'insufficient_data';
+
+/**
+ * HRV context passed to computeFeedbackOffset.
+ * When currentRMSSD < p20RMSSD, feedback dead zone expands to 30 min
+ * (noisy sleep data on poor-recovery nights — Phillips et al. 2017).
+ */
+export interface HRVFeedbackContext {
+  currentRMSSD: number;
+  p20RMSSD: number;
+  percentile: number;
+}
+
+/**
+ * Result of computeFeedbackOffset — the adjustments to apply to the sleep plan.
+ * feedbackActive=false means the plan is frozen at current offsets.
+ */
+export interface FeedbackResult {
+  adjustedBedtimeOffsetMinutes: number;
+  adjustedWakeOffsetMinutes: number;
+  feedbackActive: boolean;
+  feedbackReason: string;
+  smoothedBedtimeDeviation: number;
+  convergenceStatus: ConvergenceStatus;
+  /** Active dead zone in minutes — 20 normally, 30 on low-HRV nights (HK-11) */
+  activeDeadZoneMinutes: number;
 }
 
 // ─── Change Log ────────────────────────────────────────────────────────────────
