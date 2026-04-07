@@ -15,7 +15,7 @@ v1.0 core is built. 354 tests passing. 28K LOC. Awaiting LLC formation → Apple
 **Goal:** Fix critical pre-launch bugs, get the app to TestFlight (and your phone), and formalize Adaptive Brain Phase 1.
 
 **Target features:**
-- Critical bug fixes: trial start broken, score never real, downgrade screen, TypeScript errors
+- ~~Critical bug fixes: trial start broken, score never real, downgrade screen, TypeScript errors~~ ✓ Phase 7 complete (2026-04-07)
 - Adaptive Brain Phase 1 — wire partial implementation to Today screen
 - TestFlight prep — app icon, splash, EAS build config, provisioning profiles
 - ActivityKit real integration — Dynamic Island stubs → native module
