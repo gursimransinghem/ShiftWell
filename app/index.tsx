@@ -3,7 +3,6 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/user-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
-import { usePremiumStore } from '@/src/store/premium-store';
 import { useScoreStore } from '@/src/store/score-store';
 import { format, subDays } from 'date-fns';
 import { COLORS } from '@/src/theme';
@@ -12,9 +11,6 @@ function seedMockData() {
   // DEV: Seed data so Today screen shows full V6 layout
   const { profile, setProfile, completeOnboarding } = useUserStore.getState();
   const { shifts, addShift } = useShiftsStore.getState();
-
-  // Start trial on first launch (no-op if already started)
-  usePremiumStore.getState().startTrial();
 
   // Seed score history so HeroScore ring renders (no HealthKit in simulator)
   const { dailyHistory } = useScoreStore.getState();
@@ -37,8 +33,8 @@ function seedMockData() {
     setProfile({
       sleepNeed: 7.5,
       caffeineHalfLife: 5,
-      napPreference: 20,
-      commuteMinutes: 15,
+      napPreference: true,
+      commuteDuration: 15,
     });
   }
 

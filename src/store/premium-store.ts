@@ -86,6 +86,11 @@ export const usePremiumStore = create<PremiumState>()(
         const inTrial = computeIsInTrial(trialStartedAt);
         set({ trialDaysLeft: daysLeft, isInTrial: inTrial });
 
+        // Auto-start trial on first launch (BUG-01)
+        if (!trialStartedAt) {
+          get().startTrial();
+        }
+
         try {
           await initialize();
           const status = await checkPremiumStatus();

@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
+import { format } from 'date-fns';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
@@ -12,6 +13,8 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { AdaptiveColorProvider } from '@/src/components/providers/AdaptiveColorProvider';
 import { useAuthStore } from '@/src/store/auth-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useScoreStore } from '@/src/store/score-store';
+import { usePlanStore } from '@/src/store/plan-store';
 import { useCalendarStore } from '@/src/lib/calendar/calendar-store';
 import { registerCalendarBackgroundSync } from '@/src/lib/calendar/background-sync';
 import { runCalendarSync } from '@/src/lib/calendar/calendar-service';
@@ -67,6 +70,9 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const checkSession = useAuthStore((s) => s.checkSession);
   const initializePremium = usePremiumStore((s) => s.initializePremium);
+  const trialStartedAt = usePremiumStore((s) => s.trialStartedAt);
+  const isInTrial = usePremiumStore((s) => s.isInTrial);
+  const isPremium = usePremiumStore((s) => s.isPremium);
 
   useEffect(() => {
     // Restore auth session and initialize premium status on cold launch
@@ -97,11 +103,26 @@ function RootLayoutNav() {
         if (s.appleConnected || s.googleConnected) {
           runCalendarSync().catch(() => {});
         }
+        // Finalize yesterday's score on app foreground (BUG-02)
+        const today = format(new Date(), 'yyyy-MM-dd');
+        const scoreState = useScoreStore.getState();
+        const planState = usePlanStore.getState();
+        const hasSleepBlock = planState.plan?.blocks?.some(
+          (b) => b.type === 'main-sleep'
+        ) ?? false;
+        scoreState.finalizeDay(today, hasSleepBlock);
       }
       lastState = next;
     });
     return () => sub.remove();
   }, []);
+
+  useEffect(() => {
+    // Route to downgrade screen when trial has expired and user is not premium (BUG-03)
+    if (trialStartedAt && !isInTrial && !isPremium) {
+      router.replace('/downgrade');
+    }
+  }, [trialStartedAt, isInTrial, isPremium]);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -132,6 +153,7 @@ function RootLayoutNav() {
               headerShown: false,
             }}
           />
+          <Stack.Screen name="downgrade" options={{ headerShown: false }} />
         </Stack>
       </AdaptiveColorProvider>
     </ThemeProvider>
