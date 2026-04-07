@@ -29,8 +29,8 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 - [x] **Phase 7: Critical Bug Fixes** — 3 broken integration pipes + TypeScript errors blocking all real-user testing (completed 2026-04-07)
 - [x] **Phase 8: Adaptive Brain Core** — Morning trigger, sleep debt engine, AdaptiveInsightCard, change logger (completed 2026-04-07)
-- [ ] **Phase 9: Circadian Protocols** — 5 transition types + SleepDebtCard visualization
-- [ ] **Phase 10: TestFlight Prep** — Privacy manifest, entitlements, app icon, EAS config, installedAt timestamp
+- [x] **Phase 9: Circadian Protocols** — 5 transition types + SleepDebtCard visualization (verified complete 2026-04-07, implemented during Adaptive Brain build)
+- [x] **Phase 10: TestFlight Prep** — Privacy manifest, entitlements, app icon, EAS config, installedAt timestamp (completed 2026-04-07)
 - [ ] **Phase 11: App Store Prep** — Account deletion, medical disclaimer, screenshots, privacy labels, review notes
 - [ ] **Phase 12: ActivityKit Integration** — Real Dynamic Island transitions (gated on Apple Developer enrollment)
 
