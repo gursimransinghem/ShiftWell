@@ -47,7 +47,10 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
   4. EAS build completes with zero TypeScript errors
   5. AdaptiveInsightCard shows distinct before/after plan snapshots when a change occurs
   6. Morning Dynamic Island transition includes today's recovery score
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 07-01-PLAN.md — App lifecycle fixes: trial auto-start, score finalization, downgrade screen
+- [ ] 07-02-PLAN.md — TypeScript errors, adaptive delta fix, Dynamic Island morning score
 **Rationale**: Broken pipes in trial start, score finalization, and downgrade flow poison all real-user testing. Must be resolved before any feature work is verifiable.
 
 ### Phase 8: Adaptive Brain Core
@@ -129,7 +132,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 | 4. Night Sky Mode & Notifications | v1.0 | 4/4 | Complete | 2026-04-02 |
 | 5. Live Activities & Recovery Score | v1.0 | 3/3 | Complete | 2026-04-02 |
 | 6. Premium, Settings & Polish | v1.0 | 0/4 (partial, outside GSD) | Gaps to v1.1 | - |
-| 7. Critical Bug Fixes | v1.1 | TBD | Not started | - |
+| 7. Critical Bug Fixes | v1.1 | 0/2 | Planned | - |
 | 8. Adaptive Brain Core | v1.1 | TBD | Not started | - |
 | 9. Circadian Protocols | v1.1 | TBD | Not started | - |
 | 10. TestFlight Prep | v1.1 | TBD | Not started | - |
