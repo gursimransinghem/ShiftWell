@@ -88,6 +88,8 @@ const MOCK_CONTEXT = {
   protocol: null,
 };
 
+const mockSetFeedbackAdjustment = jest.fn();
+
 function buildDeps() {
   return {
     shifts: [],
@@ -96,6 +98,8 @@ function buildDeps() {
     currentPlan: null,
     planSnapshot: null,
     setAdaptiveContext: mockSetAdaptiveContext,
+    feedbackHistory: [],
+    setFeedbackAdjustment: mockSetFeedbackAdjustment,
   };
 }
 
