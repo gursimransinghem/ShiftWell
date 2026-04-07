@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: verifying
-stopped_at: Completed 14-01-PLAN.md
-last_updated: "2026-04-07T17:30:18.308Z"
+stopped_at: Completed 17-01-PLAN.md
+last_updated: "2026-04-07T17:59:08.968Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 56
-  completed_plans: 24
+  completed_plans: 25
   percent: 0
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 14 — healthkit-data-foundation
+**Current focus:** Phase 15 — algorithm-feedback-engine
 
 ## Current Position
 
-Phase: 15
-Plan: Not started
+Phase: 15 (algorithm-feedback-engine) — EXECUTING
+Plan: 1 of 1
 Status: Phase complete — ready for verification
 Last activity: 2026-04-07
 
@@ -68,6 +68,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 08-adaptive-brain-core P02 | 20 | 2 tasks | 3 files |
 | Phase 13-sleep-feedback-research P01 | 11min | 2 tasks | 4 files |
 | Phase 14-healthkit-sleep-ingestion P01 | 8min | 4 tasks | 9 files |
+| Phase 17-growth-engine P01 | 8 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -130,6 +131,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 14]: asleepStart used (not inBedStart) for feedback timing — removes pre-sleep latency from deviation signal
 - [Phase 14]: discrepancyHistory added to zustand persist partialize — survives app restart for Phase 15 feedback engine
 - [Phase 14]: detectDeviceTier uses opportunistic data presence check — HRV samples = Watch present, temperature samples = Series 8+
+- [Phase 17-growth-engine]: Referral URL is /r/{userId} (userId is the code in v1, Supabase resolves attribution server-side)
+- [Phase 17-growth-engine]: A/B framework uses djb2 deterministic hash — no external SDK, supports 2 or 3 variants via variantCount param
+- [Phase 17-growth-engine]: Paywall experiment affects display price only — RevenueCat purchase uses actual offering to avoid App Store issues
 
 ### Pending Todos
 
@@ -144,6 +148,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T17:26:38.537Z
-Stopped at: Completed 14-01-PLAN.md
+Last session: 2026-04-07T17:59:08.959Z
+Stopped at: Completed 17-01-PLAN.md
 Resume file: None

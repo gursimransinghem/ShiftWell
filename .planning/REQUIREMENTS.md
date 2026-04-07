@@ -88,10 +88,10 @@
 
 ### Growth Engine (Phase 17)
 
-- [ ] **GRO-01**: Referral deep link with credit tracking
-- [ ] **GRO-02**: Onboarding A/B framework with conversion tracking
-- [ ] **GRO-03**: Push notification re-engagement sequence (D1, D3, D7)
-- [ ] **GRO-04**: Paywall pricing experiment framework
+- [x] **GRO-01**: Referral deep link with credit tracking
+- [x] **GRO-02**: Onboarding A/B framework with conversion tracking
+- [x] **GRO-03**: Push notification re-engagement sequence (D1, D3, D7)
+- [x] **GRO-04**: Paywall pricing experiment framework
 
 ### Premium Gating (Phase 18)
 

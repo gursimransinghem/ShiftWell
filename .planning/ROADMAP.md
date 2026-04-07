@@ -237,7 +237,7 @@ Plans:
   4. Paywall pricing experiment framework supports 2+ price points with revenue tracking
 **Plans**: 1 plan
 Plans:
-- [ ] 17-01-PLAN.md — referral service, A/B framework, re-engagement notifications, paywall experiment
+- [x] 17-01-PLAN.md — referral service, A/B framework, re-engagement notifications, paywall experiment
 **Rationale**: Growth infrastructure needed before revenue gating. User base must be growing for feedback validation and enterprise data.
 
 ### Phase 18: RevenueCat Hard Gating
@@ -584,7 +584,7 @@ Plans:
 | 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
-| 17. Growth Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 17. Growth Engine | v1.2 | 1/1 | Complete   | 2026-04-07 |
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 19. AI Coaching Research | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
