@@ -1,8 +1,12 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+<<<<<<< HEAD
   setupFiles: ['<rootDir>/jest.setup.ts'],
   roots: ['<rootDir>/__tests__', '<rootDir>/src'],
+=======
+  roots: ['<rootDir>/__tests__', '<rootDir>/src/lib/enterprise/__tests__'],
+>>>>>>> worktree-agent-a8e6a3d4
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^@react-native-async-storage/async-storage$':
