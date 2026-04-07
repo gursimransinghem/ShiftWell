@@ -63,7 +63,10 @@ Plans:
   3. When the plan changes, AdaptiveInsightCard appears on the Today screen showing what changed and which factor drove it
   4. Plan change card includes an undo action that reverts to the previous plan
   5. A human-readable log entry is written for every plan change (e.g., "Bedtime moved earlier because next shift starts at 6am and debt is high")
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 08-01-PLAN.md — Plan-store persistence layer, changeLog, AdaptiveInsightCard dismiss fix
+- [ ] 08-02-PLAN.md — Daily debounce gate for useAdaptivePlan, SleepDebtCard conditional render
 **Rationale**: Core Adaptive Brain wiring must be established before adding the complexity of 5 circadian transition protocols in Phase 9. Phase 7's score fix (BUG-02) is a direct prerequisite for the debt engine.
 **UI hint**: yes
 
@@ -133,7 +136,7 @@ Plans:
 | 5. Live Activities & Recovery Score | v1.0 | 3/3 | Complete | 2026-04-02 |
 | 6. Premium, Settings & Polish | v1.0 | 0/4 (partial, outside GSD) | Gaps to v1.1 | - |
 | 7. Critical Bug Fixes | v1.1 | 2/2 | Complete   | 2026-04-07 |
-| 8. Adaptive Brain Core | v1.1 | TBD | Not started | - |
+| 8. Adaptive Brain Core | v1.1 | 0/2 | Planned | - |
 | 9. Circadian Protocols | v1.1 | TBD | Not started | - |
 | 10. TestFlight Prep | v1.1 | TBD | Not started | - |
 | 11. App Store Prep | v1.1 | TBD | Not started | - |
