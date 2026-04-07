@@ -99,7 +99,7 @@ function LinkRow({ label, value, onPress, destructive }: {
 
 export default function SettingsScreen() {
   const { profile, setProfile } = useUserStore();
-  const { isPremium, isInTrial, trialDaysLeft, plan } = usePremiumStore();
+  const { isPremium, isInTrial, isGrandfathered, trialDaysLeft, plan } = usePremiumStore();
   const deleteAccount = useAuthStore((s) => s.deleteAccount);
   const { enabled: briefEnabled, toggleEnabled: toggleBrief } = useBriefStore();
   const { autopilot, transparencyLog, setAutopilotEnabled } = usePlanStore();
@@ -158,6 +158,49 @@ export default function SettingsScreen() {
             onPress={() => router.push('/paywall')}
           />
         </View>
+
+        {/* Free Plan — show what's included vs locked for free/post-trial users */}
+        {!isPremium && !isInTrial && !isGrandfathered && (
+          <>
+            <SectionHeader title="YOUR FREE PLAN INCLUDES" />
+            <View style={styles.card}>
+              {[
+                'Sleep windows based on your shifts',
+                'Calendar sync (import + export)',
+                'Push notifications',
+                'Nap placement',
+                'Meal timing windows',
+                'Light protocols',
+              ].map((item) => (
+                <View key={item} style={styles.row}>
+                  <Text style={styles.freePlanCheck}>{'\u2713'}</Text>
+                  <Text style={styles.rowLabel}>{item}</Text>
+                </View>
+              ))}
+            </View>
+            <SectionHeader title="UNLOCK WITH PREMIUM" />
+            <View style={styles.card}>
+              {[
+                'Adaptive Brain — auto-adjusting sleep plans',
+                'AI Coaching — personalized weekly insights',
+                'Pattern Recognition — long-term sleep trends',
+                'Predictive Scheduling — plan weeks ahead',
+              ].map((item) => (
+                <View key={item} style={styles.row}>
+                  <Text style={styles.premiumLock}>{'\u{1F512}'}</Text>
+                  <Text style={[styles.rowLabel, styles.rowLabelMuted]}>{item}</Text>
+                </View>
+              ))}
+            </View>
+            <TouchableOpacity
+              style={styles.upgradeBanner}
+              onPress={() => router.push('/paywall')}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.upgradeText}>Upgrade to Premium</Text>
+            </TouchableOpacity>
+          </>
+        )}
 
         {/* Sleep preferences */}
         <SectionHeader title="SLEEP PREFERENCES" />
@@ -501,5 +544,32 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginTop: SPACING.xl,
     paddingHorizontal: SPACING.lg,
+  },
+
+  // Free plan / upgrade section
+  freePlanCheck: {
+    fontSize: 14,
+    color: '#34D399',
+    marginRight: 8,
+    fontWeight: '700',
+  },
+  premiumLock: {
+    fontSize: 14,
+    marginRight: 8,
+  },
+  rowLabelMuted: {
+    color: COLORS.text.muted,
+  },
+  upgradeBanner: {
+    backgroundColor: COLORS.accent.primary,
+    borderRadius: RADIUS.lg,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginBottom: SPACING['2xl'],
+  },
+  upgradeText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#0A0A0F',
   },
 });

@@ -11,6 +11,7 @@ import {
 } from '../lib/premium/premium-service';
 import type { Feature } from '../lib/premium/entitlements';
 import { isFeatureAvailable } from '../lib/premium/entitlements';
+import { computeIsGrandfathered } from '../lib/premium/feature-gate';
 
 const TRIAL_DAYS = 14;
 
@@ -45,6 +46,9 @@ export interface PremiumState {
   trialDaysLeft: number;
   isInTrial: boolean;
 
+  // Grandfathering (Phase 18)
+  isGrandfathered: boolean;
+
   // Actions
   initializePremium: () => Promise<void>;
   startTrial: () => void;
@@ -53,6 +57,8 @@ export interface PremiumState {
   restore: () => Promise<void>;
   loadOfferings: () => Promise<void>;
   canAccess: (feature: Feature) => boolean;
+  /** Resolve and store the grandfathered status from AsyncStorage */
+  resolveGrandfathered: () => Promise<void>;
 }
 
 export const usePremiumStore = create<PremiumState>()(
@@ -66,6 +72,7 @@ export const usePremiumStore = create<PremiumState>()(
       trialStartedAt: null,
       trialDaysLeft: 0,
       isInTrial: false,
+      isGrandfathered: false,
 
       startTrial: () => {
         const { trialStartedAt } = get();
@@ -173,10 +180,15 @@ export const usePremiumStore = create<PremiumState>()(
         }
       },
 
-      // Access = paid premium OR active trial
+      resolveGrandfathered: async () => {
+        const isGrandfathered = await computeIsGrandfathered();
+        set({ isGrandfathered });
+      },
+
+      // Access = paid premium OR active trial OR grandfathered (installed before PAYWALL_LAUNCH_DATE)
       canAccess: (feature: Feature) => {
-        const { isPremium, isInTrial } = get();
-        return isFeatureAvailable(feature, isPremium || isInTrial);
+        const { isPremium, isInTrial, isGrandfathered } = get();
+        return isFeatureAvailable(feature, { isPremium, isInTrial, isGrandfathered });
       },
     }),
     {

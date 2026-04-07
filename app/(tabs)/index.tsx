@@ -22,6 +22,7 @@ import { usePremiumStore } from '@/src/store/premium-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
 import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
 import { useAdaptivePlan } from '@/src/hooks/useAdaptivePlan';
+import { useSleepFeedback } from '@/src/hooks/useSleepFeedback';
 import { useNotificationStore } from '@/src/store/notification-store';
 import {
   StatusPill,
@@ -37,7 +38,10 @@ import {
   NapCalculatorModal,
   PatternAlertCard,
   AdaptiveInsightCard,
+  WeeklyBriefCard,
 } from '@/src/components/today';
+import { useBriefStore } from '@/src/store/brief-store';
+import { useWeeklyBrief } from '@/src/hooks/useWeeklyBrief';
 import { GradientMeshBackground } from '@/src/components/ui';
 import { LightProtocolStrip } from '@/src/components/circadian/LightProtocolStrip';
 import { useUserStore } from '@/src/store/user-store';
@@ -111,6 +115,73 @@ const DEFAULT_WIND_DOWN_CHECKLIST = [
 ];
 
 // ---------------------------------------------------------------------------
+// PremiumFeatureGate — locked card shown when adaptive_brain is not accessible
+// ---------------------------------------------------------------------------
+
+interface PremiumFeatureGateProps {
+  title: string;
+  description: string;
+  onUpgrade: () => void;
+}
+
+function PremiumFeatureGate({ title, description, onUpgrade }: PremiumFeatureGateProps) {
+  return (
+    <Pressable onPress={onUpgrade} style={gateStyles.card}>
+      <View style={gateStyles.lockRow}>
+        <Text style={gateStyles.lockIcon}>{'\u{1F512}'}</Text>
+        <Text style={gateStyles.title}>{title}</Text>
+      </View>
+      <Text style={gateStyles.description}>{description}</Text>
+      <View style={gateStyles.cta}>
+        <Text style={gateStyles.ctaText}>Unlock Premium</Text>
+      </View>
+    </Pressable>
+  );
+}
+
+const gateStyles = StyleSheet.create({
+  card: {
+    backgroundColor: 'rgba(200, 168, 75, 0.06)',
+    borderRadius: RADIUS.lg,
+    padding: SPACING.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(200, 168, 75, 0.3)',
+  },
+  lockRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: SPACING.sm,
+  },
+  lockIcon: {
+    fontSize: 18,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: COLORS.text.primary,
+  },
+  description: {
+    fontSize: 13,
+    color: COLORS.text.secondary,
+    lineHeight: 19,
+    marginBottom: SPACING.md,
+  },
+  cta: {
+    alignSelf: 'flex-start',
+    backgroundColor: COLORS.accent.primary,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: RADIUS.md,
+  },
+  ctaText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#0A0A0F',
+  },
+});
+
+// ---------------------------------------------------------------------------
 // Screen
 // ---------------------------------------------------------------------------
 
@@ -140,10 +211,21 @@ export default function TodayScreen() {
   const clearError = usePlanStore((s) => s.clearError);
   const profile = useUserStore((s) => s.profile);
   const canAccess = usePremiumStore((s) => s.canAccess);
+  const canUseAdaptiveBrain = canAccess('adaptive_brain');
   const windDownLeadMinutes = useNotificationStore((s) => s.windDownLeadMinutes);
 
   // Adaptive Brain — assembles HealthKit context on mount, triggers plan adjustment
   const { context: adaptiveContext, changes: adaptiveChanges } = useAdaptivePlan();
+
+  // Sleep Feedback — runs after adaptive brain, records plan-vs-actual discrepancy
+  useSleepFeedback();
+
+  // Weekly Brief — checks if today is Monday and triggers Claude API if needed
+  useWeeklyBrief();
+  const currentBrief = useBriefStore((s) => s.currentBrief);
+  const briefEnabled = useBriefStore((s) => s.enabled);
+  const dismissBrief = useBriefStore((s) => s.dismissCurrentBrief);
+  const showBriefCard = briefEnabled && currentBrief !== null;
   const undoPlan = usePlanStore((s) => s.undoPlan);
   const dismissChanges = usePlanStore((s) => s.dismissChanges);
   const debtContext = usePlanStore((s) => s.adaptiveContext?.debt);
@@ -481,14 +563,34 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
-                {/* Adaptive Insight Card — shows when plan was auto-adjusted */}
-                {adaptiveContext && adaptiveChanges.length > 0 && (
+                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain ? (
+                  adaptiveContext && adaptiveChanges.length > 0 && (
+                    <View style={styles.section}>
+                      <AdaptiveInsightCard
+                        changes={adaptiveChanges}
+                        context={adaptiveContext}
+                        onUndo={undoPlan}
+                        onDismiss={dismissChanges}
+                      />
+                    </View>
+                  )
+                ) : (
                   <View style={styles.section}>
-                    <AdaptiveInsightCard
-                      changes={adaptiveChanges}
-                      context={adaptiveContext}
-                      onUndo={undoPlan}
-                      onDismiss={dismissChanges}
+                    <PremiumFeatureGate
+                      title="Adaptive Brain"
+                      description="Your plan adapts automatically to your sleep debt and circadian phase."
+                      onUpgrade={() => router.push('/paywall')}
+                    />
+                  </View>
+                )}
+
+                {/* Weekly Sleep Brief (Phase 20) — Mondays only, until dismissed */}
+                {showBriefCard && currentBrief && (
+                  <View style={styles.section}>
+                    <WeeklyBriefCard
+                      brief={currentBrief}
+                      onDismiss={dismissBrief}
                     />
                   </View>
                 )}
@@ -522,8 +624,8 @@ export default function TodayScreen() {
                   </View>
                 )}
 
-                {/* Sleep Debt Tracker (Feature 1) */}
-                {showDebtCard && (
+                {/* Sleep Debt Tracker (Feature 1) — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain && showDebtCard && (
                   <View style={styles.section}>
                     <SleepDebtCard />
                   </View>
@@ -610,8 +712,8 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
-                {/* Adaptive Insight Card — shows when plan was auto-adjusted */}
-                {adaptiveContext && adaptiveChanges.length > 0 && (
+                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain && adaptiveContext && adaptiveChanges.length > 0 && (
                   <View style={styles.section}>
                     <AdaptiveInsightCard
                       changes={adaptiveChanges}
