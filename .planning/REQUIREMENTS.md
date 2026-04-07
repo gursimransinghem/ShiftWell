@@ -63,10 +63,23 @@
 - [ ] **HK-02**: Plan-vs-reality comparison produces nightly discrepancy record
 - [ ] **HK-03**: Discrepancy history persisted and queryable for last 30 nights
 
+### Biometric Data Foundation (Phase 14)
+
+- [ ] **HK-06**: Overnight HRV (SDNN) read from HealthKit — recovery score upgrade from timing-only to physiological recovery
+- [ ] **HK-07**: Resting Heart Rate read from HealthKit — 5-7 day lagging fatigue signal, pairs with HRV
+- [ ] **HK-08**: Sleeping Wrist Temperature read from HealthKit (optional, Series 8+) — circadian phase verification, illness detection, menstrual cycle detection
+- [ ] **HK-09**: Step Count read from HealthKit (iPhone-only, no Watch required) — activity zeitgeber verification
+- [ ] **HK-10**: Device-tier detection (iPhone-only / Watch S1-7 / Watch S8+) for graceful feature gating
+
 ### Algorithm Feedback (Phase 15)
 
 - [ ] **HK-04**: Algorithm reads discrepancy history and adjusts sleep window timing
 - [ ] **HK-05**: Convergence target: average discrepancy < 15 min within 7 nights
+- [ ] **HK-11**: HRV-calibrated dead zone — when overnight HRV below user's 20th percentile, feedback dead zone expands from 20 to 30 min
+
+### Energy Prediction (Phase 15)
+
+- [ ] **ENERGY-01**: Two-Process Model (Borbely) energy prediction ported from ULOS/Grafana — hourly alertness curve (0-100) with zone labels and caffeine half-life model
 
 ### Research: Feedback Validation (Phase 16)
 
@@ -110,11 +123,22 @@
 - [ ] **PRED-02**: Pre-adaptation protocol generated 3-5 days before high-stress transitions
 - [ ] **PRED-03**: Circadian Forecast card on Today screen
 
+### Behavioral Prescriptions (Phase 22)
+
+- [ ] **BEH-01**: Pre-shift nap protocol — 90-min nap reminder 5h before shift with melatonin timing (0.5-1mg, 30 min before)
+- [ ] **BEH-02**: Caffeine cutoff UI — auto-calculated cutoff time based on planned sleep time + half-life model
+- [ ] **BEH-03**: Light exposure recommendations — bright light timing based on shift type and sunrise/sunset times
+
 ### Pattern Recognition (Phase 23)
 
 - [ ] **AI-02**: Pattern recognition alerts — multi-week trend detection with natural language
 - [ ] **PAT-01**: Consecutive night shift impact detection and quantification
 - [ ] **PAT-02**: Recovery debt trend analysis over rolling 4-week window
+
+### Wellness Prescriptions (Phase 23)
+
+- [ ] **BEH-04**: Fitness rules by shift type — workout restrictions/suggestions contextualized to shift pattern and recovery state
+- [ ] **BEH-05**: Meal timing prescriptions — pre-shift meal timing, midnight carb restrictions, meal prep reminders 4-5 days before night blocks
 
 ### Research: Intelligence Validation (Phase 24)
 
@@ -177,6 +201,8 @@
 - [ ] **BRAIN-08**: Apple Watch HRV integration — HRV data into recovery score
 - [ ] **WATCH-01**: Watch complication for shift countdown
 - [ ] **WATCH-02**: Background delivery for overnight data collection
+- [ ] **WATCH-03**: Sleep Apnea Events read from HealthKit (iOS 18, Watch S9+) — suppress sleep quality from algorithm input, surface screening flag
+- [ ] **WATCH-04**: Breathing Disturbances rate read from HealthKit — continuous trending signal, suppress sleep quality scores when >10/hour
 
 ### Autopilot (Phase 34)
 
@@ -254,8 +280,15 @@
 | HK-01 | 14 | v1.2 | Pending |
 | HK-02 | 14 | v1.2 | Pending |
 | HK-03 | 14 | v1.2 | Pending |
+| HK-06 | 14 | v1.2 | Pending |
+| HK-07 | 14 | v1.2 | Pending |
+| HK-08 | 14 | v1.2 | Pending |
+| HK-09 | 14 | v1.2 | Pending |
+| HK-10 | 14 | v1.2 | Pending |
 | HK-04 | 15 | v1.2 | Pending |
 | HK-05 | 15 | v1.2 | Pending |
+| HK-11 | 15 | v1.2 | Pending |
+| ENERGY-01 | 15 | v1.2 | Pending |
 | RES-04 | 16 | v1.2 | Pending |
 | RES-05 | 16 | v1.2 | Pending |
 | GRO-01 | 17 | v1.2 | Pending |
@@ -273,9 +306,14 @@
 | PRED-01 | 22 | v1.3 | Pending |
 | PRED-02 | 22 | v1.3 | Pending |
 | PRED-03 | 22 | v1.3 | Pending |
+| BEH-01 | 22 | v1.3 | Pending |
+| BEH-02 | 22 | v1.3 | Pending |
+| BEH-03 | 22 | v1.3 | Pending |
 | AI-02 | 23 | v1.3 | Pending |
 | PAT-01 | 23 | v1.3 | Pending |
 | PAT-02 | 23 | v1.3 | Pending |
+| BEH-04 | 23 | v1.3 | Pending |
+| BEH-05 | 23 | v1.3 | Pending |
 | RES-11 | 24 | v1.3 | Pending |
 | RES-12 | 24 | v1.3 | Pending |
 | INT-01 | 25 | v1.3 | Pending |
@@ -300,6 +338,8 @@
 | BRAIN-08 | 33 | v2.0 | Pending |
 | WATCH-01 | 33 | v2.0 | Pending |
 | WATCH-02 | 33 | v2.0 | Pending |
+| WATCH-03 | 33 | v2.0 | Pending |
+| WATCH-04 | 33 | v2.0 | Pending |
 | BRAIN-09 | 34 | v2.0 | Pending |
 | AUTO-01 | 34 | v2.0 | Pending |
 | RES-19 | 35 | v2.0 | Pending |
@@ -315,11 +355,11 @@
 
 **Coverage:**
 - v1.1 requirements: 24 total (19 complete, 5 pending external gates)
-- v1.2 requirements: 14 total (0 complete)
-- v1.3 requirements: 14 total (0 complete)
+- v1.2 requirements: 21 total (0 complete)
+- v1.3 requirements: 19 total (0 complete)
 - v1.4 requirements: 13 total (0 complete)
-- v2.0 requirements: 16 total (0 complete)
-- **Grand total: 81 requirements across 38 phases and 5 milestones**
+- v2.0 requirements: 18 total (0 complete)
+- **Grand total: 95 requirements across 38 phases and 5 milestones**
 
 ---
 *Requirements defined: 2026-04-06 (v1.1)*

@@ -43,7 +43,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 **Goal:** The algorithm stops guessing and starts learning from the user's actual sleep. HealthKit data feeds back into plan generation, creating a closed-loop system that converges on optimal sleep windows within 7 nights.
 
 - [x] **Phase 13: Sleep Feedback Research** — Literature review: HealthKit accuracy, wearable validation, feedback loop architectures (completed 2026-04-07)
-- [x] **Phase 14: HealthKit Sleep Ingestion** — Read actual sleep/wake from HealthKit, compare plan vs reality, store discrepancy history (completed 2026-04-07)
+- [x] **Phase 14: HealthKit Data Foundation** — Read actual sleep/wake from HealthKit, compare plan vs reality, store discrepancy history (completed 2026-04-07)
 - [x] **Phase 15: Algorithm Feedback Engine** — Feed discrepancies back into algorithm, auto-adjust sleep windows based on real behavior (completed 2026-04-07)
 - [ ] **Phase 16: Feedback Validation Sprint** — BLOCKED: needs 30 days of real user data from 20+ users
 - [x] **Phase 17: Growth Engine** — Referral deep links, onboarding A/B, paywall optimization, re-engagement (completed 2026-04-07)
@@ -174,29 +174,36 @@ Plans:
 **Rationale**: Deep research sprint before building the feedback engine. Wearable accuracy varies — literature review prevents building on flawed assumptions.
 **Science anchor**: Chinoy et al. 2021, de Zambotti et al. 2019, Menghini et al. 2021
 
-### Phase 14: HealthKit Sleep Ingestion
-**Goal**: Real sleep/wake data from HealthKit is ingested nightly, compared against the planned sleep window, and stored as discrepancy history for the feedback engine.
+### Phase 14: HealthKit Data Foundation
+**Goal**: Real sleep/wake data and biometric signals (HRV, resting HR, temperature, steps) from HealthKit are ingested, compared against planned sleep windows, and stored for the feedback engine and recovery score.
 **Depends on**: Phase 13 (research informs ingestion approach)
-**Requirements**: HK-01, HK-02, HK-03
+**Requirements**: HK-01, HK-02, HK-03, HK-06, HK-07, HK-08, HK-09, HK-10
 **Success Criteria** (what must be TRUE):
   1. HealthKit sleep samples are read for each night where Apple Watch was worn
   2. Plan-vs-reality comparison produces a nightly discrepancy record (planned vs actual start/end/duration)
   3. Discrepancy history is persisted and queryable for the last 30 nights
   4. Graceful fallback when HealthKit data is unavailable (no watch, permissions denied)
+  5. Overnight HRV (SDNN) read from HealthKit and stored for recovery score input
+  6. Resting Heart Rate read and stored as 5-7 day lagging fatigue signal
+  7. Step Count read from iPhone (no Watch required) for activity zeitgeber verification
+  8. Device-tier detection gates optional features; Sleeping Wrist Temperature read only on Series 8+
 **Plans**: 1 plan
 Plans:
 - [ ] 14-01-PLAN.md — HealthKit reader, discrepancy calculator, history persistence
 **Rationale**: BRAIN-07 requirement. Foundation for the feedback engine.
 
 ### Phase 15: Algorithm Feedback Engine
-**Goal**: Sleep plan generation incorporates real sleep behavior. If a user consistently falls asleep 30 min later than planned, the algorithm adjusts their sleep window. Target: <15 min discrepancy within 7 nights.
+**Goal**: Sleep plan generation incorporates real sleep behavior. If a user consistently falls asleep 30 min later than planned, the algorithm adjusts their sleep window. Target: <15 min discrepancy within 7 nights. Energy prediction curve shows hourly alertness with caffeine modeling.
 **Depends on**: Phase 14 (discrepancy data needed)
-**Requirements**: HK-04, HK-05
+**Requirements**: HK-04, HK-05, HK-11, ENERGY-01
 **Success Criteria** (what must be TRUE):
   1. Algorithm reads discrepancy history and adjusts sleep window timing
   2. Convergence target: average discrepancy < 15 min within 7 nights of feedback
   3. Feedback adjustments are bounded (max 30 min shift per cycle, never violates minimum sleep need)
   4. Feedback disabled during circadian transitions (Phase 9 protocols take priority)
+  5. HRV-calibrated dead zone: feedback dead zone expands from 20 to 30 min when overnight HRV below 20th percentile
+  6. Hourly energy prediction curve (0-100) with zone labels ported from Two-Process Model
+  7. Caffeine half-life model with auto-cutoff calculation
 **Plans**: 1 plan
 Plans:
 - [ ] 15-01-PLAN.md — feedback-engine.ts EMA algorithm, plan-store wiring, context-builder integration
@@ -297,12 +304,15 @@ Plans:
 ### Phase 22: Predictive Calendar Engine
 **Goal**: Scan next 14 days of calendar, identify circadian transition stress points, and generate pre-adaptation protocols before shift changes happen.
 **Depends on**: Phase 21 (prediction model), Phase 9 (circadian protocols)
-**Requirements**: PRED-01, PRED-02, PRED-03
+**Requirements**: PRED-01, PRED-02, PRED-03, BEH-01, BEH-02, BEH-03
 **Success Criteria** (what must be TRUE):
   1. Calendar lookahead scans 14 days of upcoming shifts
   2. Transition stress points identified with severity score (low/medium/high/critical)
   3. Pre-adaptation protocol generated 3-5 days before high-stress transitions
   4. "Circadian Forecast" card appears on Today screen showing upcoming transitions
+  5. Pre-shift nap protocol reminder 5h before shift with melatonin timing
+  6. Caffeine cutoff time auto-calculated and displayed
+  7. Light exposure recommendations based on shift type linked to sunrise/sunset
 **Plans**: 1 plan
 Plans:
 - [ ] 22-01-PLAN.md — Prediction engine (14-day scanner), prediction store, CircadianForecastCard
@@ -313,13 +323,15 @@ Plans:
 ### Phase 23: Pattern Recognition Engine
 **Goal**: Detect multi-week sleep patterns and surface natural language alerts when concerning trends emerge.
 **Depends on**: Phase 15 (feedback data history needed), Phase 19 (AI safety framework)
-**Requirements**: AI-02, PAT-01, PAT-02
+**Requirements**: AI-02, PAT-01, PAT-02, BEH-04, BEH-05
 **Success Criteria** (what must be TRUE):
   1. Consecutive night shift impact detected and quantified
   2. Recovery debt trend analysis over rolling 4-week window
   3. Weekend compensation pattern detection
   4. Natural language alerts generated (e.g., "Your recovery drops every time you work 3+ consecutive nights")
   5. Alerts pass safety guardrail tests
+  6. Fitness rules by shift type contextualized to recovery state
+  7. Meal timing prescriptions with pre-shift meals, midnight carb rules, meal prep reminders
 **Plans**: 1 plan
 Plans:
 - [ ] 23-01-PLAN.md — Pattern detector (3 algorithms), NL alert generator, PatternAlertCard
@@ -464,12 +476,14 @@ Plans:
 ### Phase 33: Apple Watch Integration
 **Goal**: HRV data from Apple Watch refines the recovery score. Real-time sleep stage monitoring. Watch complication for shift countdown.
 **Depends on**: Phase 32 (HRV algorithm spec), Apple Developer enrollment
-**Requirements**: BRAIN-08, WATCH-01, WATCH-02
+**Requirements**: BRAIN-08, WATCH-01, WATCH-02, WATCH-03, WATCH-04
 **Success Criteria** (what must be TRUE):
   1. HRV data read from HealthKit and incorporated into recovery score
   2. Recovery score accuracy improves 20%+ vs phone-only baseline
   3. Watch complication shows shift countdown and current sleep status
   4. Background delivery enabled for overnight data collection
+  5. Sleep Apnea Events detected suppress sleep quality from algorithm; screening flag surfaced
+  6. Breathing Disturbance rate trended; scores suppressed when >10/hour
 **Plans**: 2 plans
 Plans:
 - [ ] 33-01-PLAN.md — HRV reader, processor modules, score-store update
@@ -567,7 +581,7 @@ Plans:
 | 11. App Store Prep | v1.1 | - | Complete | 2026-04-07 |
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
 | 13. Sleep Feedback Research | v1.2 | 1/1 | Complete | 2026-04-07 |
-| 14. HealthKit Sleep Ingestion | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
 | 17. Growth Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
