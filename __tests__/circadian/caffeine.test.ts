@@ -5,7 +5,7 @@
  * based on user sensitivity (half-life) and sleep/nap timing.
  */
 
-import { computeCaffeineCutoff, computeCaffeineWindow } from '../../src/lib/circadian/caffeine';
+import { computeCaffeineCutoff, computeCaffeineWindow, computeCutoffHours } from '../../src/lib/circadian/caffeine';
 import { computeSleepBlocks } from '../../src/lib/circadian/sleep-windows';
 import { generateNaps } from '../../src/lib/circadian/nap-engine';
 import type { ClassifiedDay, UserProfile, PlanBlock } from '../../src/lib/circadian/types';
@@ -146,6 +146,110 @@ describe('Caffeine Cutoff', () => {
       // Pass empty blocks array
       const cutoff = computeCaffeineCutoff(day, DEFAULT_PROFILE, []);
       expect(cutoff).toBeNull();
+    });
+  });
+
+  describe('dose-aware cutoff (computeCutoffHours)', () => {
+    // Formula: halfLife * log2(doseMg / 25mg threshold)
+    // At 5h half-life:
+    //   100mg: log2(100/25) = log2(4) = 2.0 × 5h = 10.0h
+    //   200mg: log2(200/25) = log2(8) = 3.0 × 5h = 15.0h
+    //   300mg: log2(300/25) ≈ 3.585 × 5h ≈ 17.9h
+
+    it('100mg at 5h half-life requires ~10.0h cutoff', () => {
+      const hours = computeCutoffHours(100, 5);
+      expect(hours).toBeCloseTo(10.0, 1);
+    });
+
+    it('200mg (double dose) at 5h half-life requires ~15.0h cutoff', () => {
+      const hours = computeCutoffHours(200, 5);
+      expect(hours).toBeCloseTo(15.0, 1);
+    });
+
+    it('300mg (triple dose / energy drink) at 5h half-life requires ~17.9h cutoff', () => {
+      const hours = computeCutoffHours(300, 5);
+      expect(hours).toBeCloseTo(17.9, 0);
+    });
+
+    it('higher dose always requires a longer cutoff', () => {
+      expect(computeCutoffHours(200, 5)).toBeGreaterThan(computeCutoffHours(100, 5));
+      expect(computeCutoffHours(300, 5)).toBeGreaterThan(computeCutoffHours(200, 5));
+    });
+
+    it('longer half-life always requires a longer cutoff for same dose', () => {
+      expect(computeCutoffHours(100, 7)).toBeGreaterThan(computeCutoffHours(100, 5));
+    });
+  });
+
+  describe('dose-aware computeCaffeineCutoff', () => {
+    const normalProfile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 5 };
+
+    it('with 100mg dose, cutoff is ~10.0h before first sleep (vs legacy ~8.35h)', () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const blocks = getSleepAndNapBlocks(day, normalProfile);
+      const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 100);
+
+      expect(cutoff).not.toBeNull();
+
+      const earliestSleep = blocks
+        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
+        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+
+      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeCloseTo(10.0, 0);
+    });
+
+    it('with 200mg dose, cutoff is ~15.0h before first sleep', () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const blocks = getSleepAndNapBlocks(day, normalProfile);
+      const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 200);
+
+      expect(cutoff).not.toBeNull();
+
+      const earliestSleep = blocks
+        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
+        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+
+      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeCloseTo(15.0, 0);
+    });
+
+    it('dose-aware cutoff is earlier in the day than legacy cutoff (more conservative)', () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const blocks = getSleepAndNapBlocks(day, normalProfile);
+      const legacyCutoff = computeCaffeineCutoff(day, normalProfile, blocks);
+      const doseCutoff = computeCaffeineCutoff(day, normalProfile, blocks, 100);
+
+      expect(legacyCutoff).not.toBeNull();
+      expect(doseCutoff).not.toBeNull();
+      // Dose-aware (10h) should be earlier than legacy (8.35h)
+      expect(doseCutoff!.start.getTime()).toBeLessThan(legacyCutoff!.start.getTime());
+    });
+
+    it('no dose parameter uses legacy formula (backward compatible)', () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const blocks = getSleepAndNapBlocks(day, normalProfile);
+      const cutoff = computeCaffeineCutoff(day, normalProfile, blocks);
+
+      expect(cutoff).not.toBeNull();
+
+      const earliestSleep = blocks
+        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
+        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+
+      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
+      // Legacy: 5h * 1.67 = 8.35h
+      expect(hoursBefore).toBeCloseTo(8.35, 0);
+    });
+
+    it('dose-aware description mentions dose and 25mg threshold', () => {
+      const day = makeDayShiftDay('2026-03-15');
+      const blocks = getSleepAndNapBlocks(day, normalProfile);
+      const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 150);
+
+      expect(cutoff).not.toBeNull();
+      expect(cutoff!.description).toContain('150mg');
+      expect(cutoff!.description).toContain('25mg');
     });
   });
 

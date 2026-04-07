@@ -15,7 +15,7 @@ import {
   getHours,
 } from 'date-fns';
 import type { ShiftEvent, PlanBlock } from '@/src/lib/circadian/types';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER } from '@/src/theme';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, PURPLE } from '@/src/theme';
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -321,8 +321,8 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   dayCellSelected: {
-    borderColor: ACCENT.primary,
-    backgroundColor: 'rgba(74, 144, 217, 0.08)',
+    borderColor: PURPLE,
+    backgroundColor: 'rgba(123,97,255,0.1)',
   },
   dayNumberContainer: {
     width: 28,

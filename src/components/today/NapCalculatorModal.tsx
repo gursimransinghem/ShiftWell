@@ -277,15 +277,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background.surface,
   },
   optionCardSelected: {
-    borderColor: '#C8A84B',
+    borderColor: '#7B61FF',
     borderWidth: 1.5,
+    backgroundColor: 'rgba(123,97,255,0.08)',
   },
   optionCardUnselected: {
     borderColor: 'rgba(255,255,255,0.07)',
     borderWidth: 1,
   },
   badgeContainer: {
-    backgroundColor: '#C8A84B1A',
+    backgroundColor: 'rgba(123,97,255,0.15)',
     borderRadius: RADIUS.full,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#C8A84B',
+    color: '#7B61FF',
     letterSpacing: 0.5,
   },
   badgeSpacer: {
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   ctaButton: {
-    backgroundColor: '#C8A84B',
+    backgroundColor: '#7B61FF',
     borderRadius: RADIUS.md,
     paddingVertical: SPACING.md,
     alignItems: 'center',
@@ -371,6 +372,6 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#0B0D16',
+    color: '#FFFFFF',
   },
 });

@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-04-06 — Session: Adaptive Brain + Phase 6 Features
+
+### Completed
+- **Features 1–6 (Today screen):** SleepDebtCard, NapCalculatorModal, ScienceInsightCard, On-shift polish (nap window + caffeine cutoff), ScoreBreakdownCard, PatternAlertCard
+- **Marketing additions:** "3%" stat block + daytime eating card on welcome screen; "THE RESEARCH" section on paywall
+- **Adaptive Brain spec** — full brainstorming session → approved design spec at `docs/superpowers/specs/2026-04-06-adaptive-brain-design.md`
+- **Adaptive Brain implementation** — 25 files, 4165 insertions, 354 tests passing (55 new):
+  - 4-factor engine: circadian (50%), debt/bank (20%), lookahead (20%), recovery (10%)
+  - 5 circadian transition protocols (Day→Night, Night→Day, Evening→Night, Day→Evening, Isolated Night)
+  - Apple Watch recovery composite score with −43min deep sleep correction
+  - useAdaptivePlan hook (HealthKit 14-night history fetch on app open)
+  - AdaptiveInsightCard (learning phase propose/accept + autopilot undo)
+  - LightProtocolArc (animated 24h timeline, Circadian tab)
+  - Pre-Shift Brief coaching tab (5-part, conditionally visible)
+- **Research pipeline** — `docs/research/` consolidated, PostToolUse hook auto-files research docs
+
+### Key Decisions
+- Circadian weight at 50% (primary factor) — justified by Eastman & Burgess 2009, NIOSH protocols
+- Day→Night protocol: cumulative shifts (+90/+180/+270 min from baseline), not incremental
+- Recovery formula: sleep-stages only (v1) — no HRV auth yet; honest fallback to null for iPhone
+- AdaptiveInsightCard: learning mode (days 1–30 propose), autopilot after day 31
+- Brief tab conditionally shows in FloatingTabBar only when transition ≤7 days away
+- Research docs consolidated to `docs/research/` (from `.planning/research/`)
+
+### Tests
+- Start: 299 | End: 354 | New: 55 | Regressions: 0
+
+### Next Session
+1. Wire LightProtocolStrip into Today screen for transition days
+2. Revert `app/index.tsx` onboarding bypass
+3. Live device QA (HealthKit real data, GradientMesh, Wind-down state)
+
+---
+
 ## 2026-04-02 — Session 10: Post-Phase-3 Research & Decision Gates
 
 ### Completed

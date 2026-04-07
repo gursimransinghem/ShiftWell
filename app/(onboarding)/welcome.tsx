@@ -219,13 +219,18 @@ export default function WelcomeScreen() {
           </View>
         </AnimatedTransition>
 
-        {/* Legal */}
+        {/* Medical disclaimer */}
         <AnimatedTransition delay={700} duration={200}>
-          <Text style={styles.legal}>
-            ShiftWell provides general wellness information based on circadian
-            science research. It is not medical advice. Always consult your
-            doctor about sleep concerns.
-          </Text>
+          <View style={styles.disclaimerContainer}>
+            <Text style={styles.disclaimerLabel}>Medical Disclaimer</Text>
+            <Text style={styles.legal}>
+              Not a substitute for medical advice. ShiftWell provides general
+              wellness information based on circadian science research.
+              Consult your physician before changing your sleep, diet, or work
+              schedule — especially if you have a health condition or take
+              medications.
+            </Text>
+          </View>
         </AnimatedTransition>
       </ScrollView>
     </SafeAreaView>
@@ -411,12 +416,28 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  /* Medical disclaimer */
+  disclaimerContainer: {
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255,255,255,0.06)',
+    paddingTop: SPACING.lg,
+    paddingHorizontal: SPACING.lg,
+  },
+  disclaimerLabel: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: COLORS.text.muted,
+    textAlign: 'center',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+
   /* Legal */
   legal: {
     fontSize: 9,
     color: COLORS.text.dim,
     textAlign: 'center',
     lineHeight: 14,
-    paddingHorizontal: SPACING.lg,
   },
 });

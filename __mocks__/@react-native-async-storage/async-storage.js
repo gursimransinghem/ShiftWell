@@ -25,4 +25,10 @@ module.exports = {
     });
     return Promise.resolve();
   }),
+  multiRemove: jest.fn((keys) => {
+    keys.forEach((key) => {
+      delete storage[key];
+    });
+    return Promise.resolve();
+  }),
 };

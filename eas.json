@@ -17,7 +17,11 @@
       }
     },
     "production": {
-      "autoIncrement": true
+      "distribution": "store",
+      "autoIncrement": true,
+      "ios": {
+        "bundleIdentifier": "com.shiftwell.app"
+      }
     }
   },
   "submit": {

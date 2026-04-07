@@ -5,7 +5,7 @@
  * conflict avoidance, and user preference handling.
  */
 
-import { generateNaps } from '../../src/lib/circadian/nap-engine';
+import { generateNaps, NAP_DURATIONS } from '../../src/lib/circadian/nap-engine';
 import { computeSleepBlocks } from '../../src/lib/circadian/sleep-windows';
 import type { ClassifiedDay, UserProfile, PlanBlock } from '../../src/lib/circadian/types';
 import { DEFAULT_PROFILE } from '../../src/lib/circadian/types';
@@ -183,6 +183,79 @@ describe('Nap Engine', () => {
           expect(hasOverlap(nap, sleep)).toBe(false);
         }
       }
+    });
+  });
+
+  describe('flexible nap durations', () => {
+    it("napPreference='power' produces a 20-min nap for night shifts", () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const powerProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'power' as unknown as boolean };
+      const sleepBlocks = computeSleepBlocks(day, powerProfile);
+      const naps = generateNaps(day, powerProfile, sleepBlocks);
+
+      const preShiftNap = naps.find((n) => n.label === 'Pre-Shift Nap');
+      expect(preShiftNap).toBeDefined();
+
+      const duration = differenceInMinutes(preShiftNap!.end, preShiftNap!.start);
+      expect(duration).toBe(NAP_DURATIONS.power);
+    });
+
+    it("napPreference='short' produces a 30-min nap for night shifts", () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const shortProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'short' as unknown as boolean };
+      const sleepBlocks = computeSleepBlocks(day, shortProfile);
+      const naps = generateNaps(day, shortProfile, sleepBlocks);
+
+      const preShiftNap = naps.find((n) => n.label === 'Pre-Shift Nap');
+      expect(preShiftNap).toBeDefined();
+
+      const duration = differenceInMinutes(preShiftNap!.end, preShiftNap!.start);
+      expect(duration).toBe(NAP_DURATIONS.short);
+    });
+
+    it("napPreference='full' produces a 90-min nap for night shifts", () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const fullProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'full' as unknown as boolean };
+      const sleepBlocks = computeSleepBlocks(day, fullProfile);
+      const naps = generateNaps(day, fullProfile, sleepBlocks);
+
+      const preShiftNap = naps.find((n) => n.label === 'Pre-Shift Nap');
+      expect(preShiftNap).toBeDefined();
+
+      const duration = differenceInMinutes(preShiftNap!.end, preShiftNap!.start);
+      expect(duration).toBe(NAP_DURATIONS.full);
+    });
+
+    it("napPreference='full' produces a 90-min transition nap", () => {
+      const day = makeTransitionDay('2026-03-15');
+      const fullProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'full' as unknown as boolean };
+      const sleepBlocks = computeSleepBlocks(day, fullProfile);
+      const naps = generateNaps(day, fullProfile, sleepBlocks);
+
+      const transitionNap = naps.find((n) => n.label === 'Transition Nap');
+      expect(transitionNap).toBeDefined();
+
+      const duration = differenceInMinutes(transitionNap!.end, transitionNap!.start);
+      expect(duration).toBe(NAP_DURATIONS.full);
+    });
+
+    it("napPreference='power' produces a 20-min transition nap", () => {
+      const day = makeTransitionDay('2026-03-15');
+      const powerProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'power' as unknown as boolean };
+      const sleepBlocks = computeSleepBlocks(day, powerProfile);
+      const naps = generateNaps(day, powerProfile, sleepBlocks);
+
+      const transitionNap = naps.find((n) => n.label === 'Transition Nap');
+      expect(transitionNap).toBeDefined();
+
+      const duration = differenceInMinutes(transitionNap!.end, transitionNap!.start);
+      expect(duration).toBe(NAP_DURATIONS.power);
+    });
+
+    it('NAP_DURATIONS constants have correct values (power=20, short=30, full=90)', () => {
+      expect(NAP_DURATIONS.power).toBe(20);
+      expect(NAP_DURATIONS.short).toBe(30);
+      expect(NAP_DURATIONS.full).toBe(90);
     });
   });
 

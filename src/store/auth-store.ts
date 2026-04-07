@@ -8,6 +8,7 @@ import {
   signOut as supabaseSignOut,
   getCurrentSession,
 } from '../lib/supabase/auth';
+import { supabase } from '../lib/supabase/client';
 import { migrateLocalDataToCloud } from '../lib/sync/data-migration';
 
 const SESSION_KEY = 'nightshift-session';
@@ -25,6 +26,7 @@ interface AuthState {
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
   checkSession: () => Promise<void>;
   clearError: () => void;
 }
@@ -165,6 +167,59 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Sign-out failed';
       set({ isLoading: false, error: message });
+    }
+  },
+
+  deleteAccount: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      // Attempt Supabase user deletion (requires auth.admin or RLS policy on server)
+      // Falls back to sign-out if deleteUser is unavailable
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: deleteError } = await (supabase as any).rpc('delete_user');
+      if (deleteError) {
+        // deleteUser via RPC not available — sign out only
+        await supabaseSignOut();
+      }
+
+      // Clear all persisted local data
+      const ALL_STORE_KEYS = [
+        'nightshift-user',
+        'nightshift-shifts',
+        'nightshift-plan',
+        'adaptive-plan-store',
+        'premium-store',
+        'score-history',
+        'notification-prefs',
+      ];
+      // multiRemove is part of the AsyncStorage API but missing from some type definitions
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (AsyncStorage as any).multiRemove(ALL_STORE_KEYS);
+      await clearPersistedSession();
+
+      set({
+        userId: null,
+        email: null,
+        displayName: null,
+        isAuthenticated: false,
+        isLoading: false,
+      });
+    } catch (err) {
+      // Even if deletion fails remotely, clear local data and sign out
+      try {
+        await supabaseSignOut();
+      } catch {
+        // ignore secondary error
+      }
+      await clearPersistedSession();
+      set({
+        userId: null,
+        email: null,
+        displayName: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      });
     }
   },
 

@@ -14,7 +14,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ACCENT, BACKGROUND, BORDER, RADIUS, SPACING, TEXT } from '@/src/theme';
+import { ACCENT, BACKGROUND, BORDER, RADIUS, SPACING, TEXT, PURPLE } from '@/src/theme';
 import type { CalendarMeta } from '@/src/lib/calendar/calendar-types';
 
 interface CalendarToggleListProps {
@@ -70,7 +70,7 @@ export function CalendarToggleList({
           <Switch
             value={calendar.enabled}
             onValueChange={() => onToggle(calendar.id)}
-            trackColor={{ false: BORDER.subtle, true: ACCENT.primary }}
+            trackColor={{ false: BORDER.subtle, true: 'rgba(123,97,255,0.6)' }}
             thumbColor={TEXT.primary}
           />
         </View>

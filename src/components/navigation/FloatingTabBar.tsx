@@ -70,7 +70,7 @@ export function FloatingTabBar({
             const [inactiveIcon, activeIcon] =
               ROUTE_ICONS[route.name] ?? FALLBACK_ICONS;
             const iconName = isFocused ? activeIcon : inactiveIcon;
-            const color = isFocused ? '#C8A84B' : '#4B5563';
+            const color = isFocused ? '#7B61FF' : '#4B5563';
 
             const onPress = () => {
               const event = navigation.emit({
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.05)',
-    backgroundColor: 'rgba(11,13,22,0.92)',
+    borderColor: 'rgba(123,97,255,0.08)',
+    backgroundColor: 'rgba(8,11,20,0.94)',
   },
   innerContainer: {
     flexDirection: 'row',
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   activeIconShadow: {
-    textShadowColor: 'rgba(200,168,75,0.6)',
-    textShadowRadius: 10,
+    textShadowColor: 'rgba(123,97,255,0.7)',
+    textShadowRadius: 12,
     textShadowOffset: { width: 0, height: 0 },
   },
 });

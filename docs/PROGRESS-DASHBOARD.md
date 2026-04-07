@@ -34,7 +34,7 @@
 `[█████████████████░░░] 5/6 (83%)`
 
 - [x] Phase 13: Sleep Feedback Research — 2026-04-07
-- [x] Phase 14: HealthKit Sleep Ingestion — 2026-04-07
+- [x] Phase 14: HealthKit Data Foundation — 2026-04-07
 - [x] Phase 15: Algorithm Feedback Engine — 2026-04-07
 - [ ] Phase 16: Feedback Validation Sprint
 - [x] Phase 17: Growth Engine — 2026-04-07
@@ -92,7 +92,7 @@
 | 10 | TestFlight Prep | v1.1 | ✅ Complete | 2026-04-07 |
 | 11 | App Store Prep | v1.1 | ✅ Complete | 2026-04-07 |
 | 13 | Sleep Feedback Research | v1.2 | ✅ Complete | 2026-04-07 |
-| 14 | HealthKit Sleep Ingestion | v1.2 | ✅ Complete | 2026-04-07 |
+| 14 | HealthKit Data Foundation | v1.2 | ✅ Complete | 2026-04-07 |
 | 15 | Algorithm Feedback Engine | v1.2 | ✅ Complete | 2026-04-07 |
 | 17 | Growth Engine | v1.2 | ✅ Complete | 2026-04-07 |
 | 18 | RevenueCat Hard Gating | v1.2 | ✅ Complete | 2026-04-07 |
@@ -120,12 +120,14 @@
 | Category | Complete | Total | Progress |
 |----------|----------|-------|----------|
 | **v1.1** | 19 | 26 | `[███████████░░░░] 19/26 (73%)` |
-| **v1.2** | 0 | 11 | `[░░░░░░░░░░░░░░░] 0/11 (0%)` |
+| **v1.2** | 0 | 17 | `[░░░░░░░░░░░░░░░] 0/17 (0%)` |
 | **v1.3** | 0 | 9 | `[░░░░░░░░░░░░░░░] 0/9 (0%)` |
 | **v1.4** | 0 | 14 | `[░░░░░░░░░░░░░░░] 0/14 (0%)` |
-| **v2.0** | 0 | 8 | `[░░░░░░░░░░░░░░░] 0/8 (0%)` |
+| **v2.0** | 0 | 10 | `[░░░░░░░░░░░░░░░] 0/10 (0%)` |
 | **Research** | 3 | 20 | `[██░░░░░░░░░░░░░] 3/20 (15%)` |
-| **TOTAL** | **22** | **88** | `[████░░░░░░░░░░░] 22/88 (25%)` |
+| ENERGY | 0 | 1 | `[░░░░░░░░░░░░░░░] 0/1 (0%)` |
+| BEH | 0 | 5 | `[░░░░░░░░░░░░░░░] 0/5 (0%)` |
+| **TOTAL** | **22** | **102** | `[███░░░░░░░░░░░░] 22/102 (22%)` |
 
 ---
 

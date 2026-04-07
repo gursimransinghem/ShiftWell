@@ -34,8 +34,8 @@ interface OrbConfig {
 
 const ORBS: OrbConfig[] = [
   {
-    // Purple — top-left region
-    color: 'rgba(123,97,255,0.06)',
+    // Purple — top-left region (Path B primary ambient)
+    color: 'rgba(123,97,255,0.09)',
     initialX: -60,
     initialY: -80,
     driftX: 40,
@@ -43,7 +43,7 @@ const ORBS: OrbConfig[] = [
     duration: 20000,
   },
   {
-    // Gold — bottom-right region
+    // Gold — bottom-right region (warm brand anchor)
     color: 'rgba(200,168,75,0.04)',
     initialX: 80,
     initialY: 120,
@@ -52,8 +52,8 @@ const ORBS: OrbConfig[] = [
     duration: 24000,
   },
   {
-    // Green — center region
-    color: 'rgba(52,211,153,0.03)',
+    // Deep purple — center region (replaces green for Path B coherence)
+    color: 'rgba(100,70,240,0.04)',
     initialX: 20,
     initialY: 40,
     driftX: 30,

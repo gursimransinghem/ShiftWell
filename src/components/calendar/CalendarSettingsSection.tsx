@@ -43,6 +43,7 @@ import {
   SEMANTIC,
   SPACING,
   TEXT,
+  PURPLE,
   body,
   bodySmall,
   caption,
@@ -322,8 +323,8 @@ export function CalendarSettingsSection() {
             <Switch
               value={writeToNativeCalendar}
               onValueChange={setWriteToNativeCalendar}
-              trackColor={{ false: BORDER.strong, true: ACCENT.primaryMuted }}
-              thumbColor={writeToNativeCalendar ? ACCENT.primary : TEXT.tertiary}
+              trackColor={{ false: BORDER.strong, true: 'rgba(123,97,255,0.5)' }}
+              thumbColor={writeToNativeCalendar ? PURPLE : TEXT.tertiary}
             />
           </View>
 
@@ -504,8 +505,8 @@ const styles = StyleSheet.create({
     backgroundColor: BACKGROUND.surface,
   },
   notifPillActive: {
-    backgroundColor: ACCENT.primaryMuted,
-    borderColor: ACCENT.primary,
+    backgroundColor: 'rgba(123,97,255,0.15)',
+    borderColor: PURPLE,
   },
   notifPillText: {
     ...caption,
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   notifPillTextActive: {
-    color: ACCENT.primary,
+    color: PURPLE,
   },
 
   // Disconnect section
@@ -571,8 +572,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.sm,
   },
   calendarOptionSelected: {
-    borderColor: ACCENT.primary,
-    backgroundColor: BACKGROUND.elevated,
+    borderColor: PURPLE,
+    backgroundColor: 'rgba(123,97,255,0.08)',
   },
   calOptionDot: {
     width: 12,
@@ -586,7 +587,7 @@ const styles = StyleSheet.create({
   },
   calOptionCheck: {
     fontSize: 16,
-    color: ACCENT.primary,
+    color: PURPLE,
     fontWeight: '600',
   },
   modalCancelButton: {

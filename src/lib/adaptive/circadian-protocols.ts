@@ -9,6 +9,7 @@
  * - Czeisler et al. (1990) — bright light phase shifting
  * - Boivin & Boudreau (2014) — shift work interventions
  * - Milner & Cote (2009) — napping for shift workers
+ * - Crowley et al. (2003) — chronotype modulates circadian shift rate
  * - NIOSH CDC anchor sleep protocol
  */
 
@@ -19,6 +20,61 @@ import type {
   CircadianProtocol,
   ProtocolDayTarget,
 } from './types';
+
+// ─── Chronotype modifiers ──────────────────────────────────────────────────────
+
+/**
+ * Apply a chronotype modifier to a bedtime adjustment in minutes.
+ *
+ * Phase delay (shifting sleep later, positive adjustments) is ~1.5x easier
+ * for late chronotypes and harder for early chronotypes, because early
+ * chronotypes have a stronger homeostatic pull back to their natural phase.
+ * Conversely, phase advance (shifting earlier, negative adjustments) is
+ * easier for early types.
+ *
+ * References:
+ * - Eastman & Burgess (2009) — phase delay vs advance asymmetry
+ * - Crowley et al. (2003) — chronotype modulates shift rate
+ *
+ * Modifier: ±15% (early/late), 0% (intermediate).
+ * Result is rounded to nearest 15 min for practical usability.
+ */
+function applyChronotypeMod(
+  adjustMinutes: number,
+  chronotype: Chronotype,
+): number {
+  if (chronotype === 'intermediate') return adjustMinutes;
+
+  const isDelay = adjustMinutes > 0;
+
+  let factor: number;
+  if (chronotype === 'early') {
+    // Early types fight delays (harder), assist advances (easier)
+    factor = isDelay ? 1.15 : 0.85;
+  } else {
+    // Late types assist delays (easier), fight advances (harder)
+    factor = isDelay ? 0.85 : 1.15;
+  }
+
+  const raw = adjustMinutes * factor;
+  // Round to nearest 15 minutes
+  return Math.round(raw / 15) * 15;
+}
+
+/**
+ * Build chronotype-specific light guidance addendum.
+ * Returns an empty string for intermediate (no change to base text).
+ */
+function chronotypeLightNote(chronotype: Chronotype, isDelay: boolean): string {
+  if (chronotype === 'intermediate') return '';
+  if (chronotype === 'early' && isDelay) {
+    return ' Your early chronotype makes night shifts harder. Extra discipline on light avoidance after 8 PM.';
+  }
+  if (chronotype === 'late' && isDelay) {
+    return ' Your late chronotype gives you a natural advantage for night shifts.';
+  }
+  return '';
+}
 
 // ─── detectTransition ──────────────────────────────────────────────────────────
 
@@ -120,15 +176,18 @@ export function detectTransition(
  * Build a CircadianProtocol with daily bedtime targets and guidance
  * for the given transition type.
  *
- * Dates are computed as offsets from today. The chronotype parameter
- * is accepted for future personalization; the current protocol targets
- * are derived from the scientific literature without per-chronotype
- * deviation (the shift direction is the same regardless of chronotype).
+ * Dates are computed as offsets from today. Chronotype adjusts the
+ * magnitude of bedtime shifts: early chronotypes fight delays harder
+ * (±15%), late chronotypes shift more easily in the delay direction.
+ *
+ * References:
+ * - Eastman & Burgess (2009) — phase delay vs advance asymmetry
+ * - Crowley et al. (2003) — chronotype modulates shift rate
  */
 export function buildProtocol(
   transition: { type: TransitionType; daysUntil: number },
   today: Date,
-  _chronotype: Chronotype,
+  chronotype: Chronotype,
 ): CircadianProtocol {
   const { type, daysUntil } = transition;
   const dailyTargets: ProtocolDayTarget[] = [];
@@ -140,24 +199,25 @@ export function buildProtocol(
         // daysUntil is how many days until the night shift starts.
         // Day -3 relative to transition = today + (daysUntil - 3)
         const base = daysUntil;
+        const delayNote = chronotypeLightNote(chronotype, true);
 
         dailyTargets.push({
           date: addDays(today, base - 3),
-          bedtimeAdjustMinutes: 90,
+          bedtimeAdjustMinutes: applyChronotypeMod(90, chronotype),
           lightGuidance:
-            'Avoid bright light before noon. Dim lights after 9 PM.',
+            `Avoid bright light before noon. Dim lights after 9 PM.${delayNote}`,
         });
         dailyTargets.push({
           date: addDays(today, base - 2),
-          bedtimeAdjustMinutes: 180,
+          bedtimeAdjustMinutes: applyChronotypeMod(180, chronotype),
           lightGuidance:
-            'Blue-blockers after 8 PM. No screens after 10 PM.',
+            `Blue-blockers after 8 PM. No screens after 10 PM.${delayNote}`,
         });
         dailyTargets.push({
           date: addDays(today, base - 1),
-          bedtimeAdjustMinutes: 270,
+          bedtimeAdjustMinutes: applyChronotypeMod(270, chronotype),
           lightGuidance:
-            'Melatonin 0.5mg at new target bedtime. Blackout curtains.',
+            `Melatonin 0.5mg at new target bedtime. Blackout curtains.${delayNote}`,
           napGuidance:
             '90-min prophylactic nap ending 30+ min before shift',
         });
@@ -167,23 +227,26 @@ export function buildProtocol(
 
     case 'night-to-day': {
       // Targets start the morning after the last night shift (day +1 from transition)
+      // Night-to-day is a phase advance (negative adjustment)
+      const advanceNote = chronotypeLightNote(chronotype, false);
+
       dailyTargets.push({
         date: addDays(today, daysUntil + 1),
-        bedtimeAdjustMinutes: -120,
+        bedtimeAdjustMinutes: applyChronotypeMod(-120, chronotype),
         lightGuidance:
-          'Seek outdoor bright light immediately on waking.',
+          `Seek outdoor bright light immediately on waking.${advanceNote}`,
         napGuidance:
           '4h anchor recovery nap (not full sleep \u2014 preserves next-night drive)',
       });
       dailyTargets.push({
         date: addDays(today, daysUntil + 2),
-        bedtimeAdjustMinutes: -240,
+        bedtimeAdjustMinutes: applyChronotypeMod(-240, chronotype),
         lightGuidance:
-          'Seek outdoor bright light immediately on waking. Avoid naps after 3 PM.',
+          `Seek outdoor bright light immediately on waking. Avoid naps after 3 PM.${advanceNote}`,
       });
       dailyTargets.push({
         date: addDays(today, daysUntil + 3),
-        bedtimeAdjustMinutes: -360,
+        bedtimeAdjustMinutes: applyChronotypeMod(-360, chronotype),
         lightGuidance:
           'Normal window \u00b1 30 min. Full re-entrainment begins.',
       });
@@ -191,15 +254,17 @@ export function buildProtocol(
     }
 
     case 'evening-to-night': {
+      const delayNote = chronotypeLightNote(chronotype, true);
+
       dailyTargets.push({
         date: addDays(today, daysUntil - 2),
-        bedtimeAdjustMinutes: 90,
-        lightGuidance: 'Dim home lights after 9 PM.',
+        bedtimeAdjustMinutes: applyChronotypeMod(90, chronotype),
+        lightGuidance: `Dim home lights after 9 PM.${delayNote}`,
       });
       dailyTargets.push({
         date: addDays(today, daysUntil - 1),
-        bedtimeAdjustMinutes: 180,
-        lightGuidance: 'No bright light after 8 PM.',
+        bedtimeAdjustMinutes: applyChronotypeMod(180, chronotype),
+        lightGuidance: `No bright light after 8 PM.${delayNote}`,
         napGuidance:
           'Prophylactic nap recommended \u2014 20-90 min in early evening',
       });
@@ -209,7 +274,7 @@ export function buildProtocol(
     case 'day-to-evening': {
       dailyTargets.push({
         date: addDays(today, daysUntil - 1),
-        bedtimeAdjustMinutes: 60,
+        bedtimeAdjustMinutes: applyChronotypeMod(60, chronotype),
         lightGuidance:
           'Light exposure later in afternoon. Normal morning routine.',
       });

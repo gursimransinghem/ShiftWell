@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShiftWell — Business Plan v2.0</title>
+<style>
+  /* ============================================================
+     RESET & BASE
+  ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #0A0E1A;
+    --bg-card:     #111827;
+    --bg-card-alt: #0D1321;
+    --border:      #1E2A3A;
+    --border-glow: #C8A84B30;
+    --gold:        #C8A84B;
+    --gold-light:  #E4C97A;
+    --gold-dim:    #8A7232;
+    --text:        #E8E8E8;
+    --text-dim:    #9CA3AF;
+    --text-muted:  #4B5563;
+    --success:     #34D399;
+    --warning:     #FB923C;
+    --danger:      #FF6B6B;
+    --info:        #60A5FA;
+    --nav-width:   240px;
+    --content-max: 900px;
+    --radius:      8px;
+    --radius-lg:   14px;
+    font-size: 15px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* ============================================================
+     SIDEBAR NAV
+  ============================================================ */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--nav-width);
+    height: 100vh;
+    background: var(--bg-card-alt);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 24px;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-brand {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+
+  .sidebar-brand .brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .brand-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-brand .wordmark {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .sidebar-brand .tagline {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 8px;
+    background: #C8A84B15;
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .nav-section-label {
+    padding: 14px 20px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 20px;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
+    line-height: 1.3;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+    background: #FFFFFF08;
+    border-left-color: var(--gold-dim);
+  }
+
+  .nav-link.active {
+    color: var(--gold);
+    border-left-color: var(--gold);
+    background: #C8A84B0A;
+  }
+
+  .nav-link .nav-num {
+    font-size: 10px;
+    color: var(--text-muted);
+    min-width: 16px;
+    font-weight: 600;
+  }
+
+  /* ============================================================
+     MAIN CONTENT
+  ============================================================ */
+  .main {
+    margin-left: var(--nav-width);
+    min-height: 100vh;
+  }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, #C8A84B18 0%, transparent 60%),
+      linear-gradient(180deg, #0D1421 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 72px 60px 56px;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .eyebrow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: #C8A84B15;
+    border: 1px solid #C8A84B40;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse-gold 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #E8E8E8 40%, var(--gold-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-tagline {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+  }
+
+  .hero-tagline strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .hero-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+
+  .meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: #FFFFFF08;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .meta-chip .chip-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chip-dot.green { background: var(--success); }
+  .chip-dot.gold  { background: var(--gold); }
+  .chip-dot.blue  { background: var(--info); }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .stat-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+  .stat-card:hover::before { opacity: 1; }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* ============================================================
+     SECTIONS
+  ============================================================ */
+  .section {
+    padding: 64px 60px;
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background: #C8A84B12;
+    border: 1px solid #C8A84B30;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 3px;
+  }
+
+  .section-title-block {}
+
+  .section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .section-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  /* Sub-sections */
+  .subsection {
+    margin-bottom: 40px;
+  }
+
+  .subsection:last-child { margin-bottom: 0; }
+
+  .subsection h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+    letter-spacing: -0.2px;
+  }
+
+  .subsection h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    letter-spacing: -0.1px;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    line-height: 1.7;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+
+  li {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    line-height: 1.6;
+  }
+
+  li strong { color: var(--text); }
+
+  /* ============================================================
+     TABLES
+  ============================================================ */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead tr {
+    background: #0F1825;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #FFFFFF04; }
+  tbody tr:hover { background: #C8A84B08; }
+
+  td {
+    padding: 10px 16px;
+    color: var(--text-dim);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  td strong { color: var(--text); }
+
+  .td-gold { color: var(--gold); font-weight: 700; }
+  .td-success { color: var(--success); font-weight: 600; }
+  .td-warning { color: var(--warning); }
+  .td-danger { color: var(--danger); }
+
+  /* ============================================================
+     CARDS + CALLOUTS
+  ============================================================ */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .card-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+
+  .card:hover { border-color: var(--gold-dim); transform: translateY(-1px); }
+
+  .card-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.2px;
+  }
+
+  .card p {
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .callout.success { border-left-color: var(--success); }
+  .callout.warning { border-left-color: var(--warning); }
+  .callout.danger  { border-left-color: var(--danger);  }
+  .callout.info    { border-left-color: var(--info);    }
+
+  .callout-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .callout.success .callout-label { color: var(--success); }
+  .callout.warning .callout-label { color: var(--warning); }
+  .callout.danger  .callout-label { color: var(--danger);  }
+  .callout.info    .callout-label { color: var(--info);    }
+
+  .callout p {
+    font-size: 13.5px;
+    margin-bottom: 0;
+  }
+
+  /* ============================================================
+     DATA VISUALIZATIONS
+  ============================================================ */
+
+  /* --- Revenue Bar Chart --- */
+  .chart-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 28px 20px;
+    margin: 20px 0;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .chart-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    width: 56px;
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: #FFFFFF06;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 0;
+  }
+
+  .bar-fill.bar-conservative { background: linear-gradient(90deg, #374151, #4B5563); }
+  .bar-fill.bar-moderate     { background: linear-gradient(90deg, #8A7232, var(--gold-dim)); }
+  .bar-fill.bar-aggressive   { background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
+
+  .bar-group-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 14px 0 6px 68px;
+  }
+
+  /* Bar chart legend */
+  .chart-legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11.5px;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* --- Market Ring Chart --- */
+  .ring-chart-wrap {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .ring-svg { width: 200px; height: 200px; }
+
+  .ring-labels { display: flex; flex-direction: column; gap: 12px; }
+
+  .ring-label-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ring-label-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ring-label-name {
+    font-size: 13px;
+    color: var(--text-dim);
+    flex: 1;
+  }
+
+  .ring-label-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* --- Competitive Matrix --- */
+  .matrix-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  .matrix-table th {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    background: #0F1825;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .matrix-table th:first-child { text-align: left; }
+  .matrix-table th:last-child  { border-right: none; }
+
+  .matrix-table td {
+    padding: 10px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .matrix-table td:first-child { text-align: left; font-weight: 600; color: var(--text); }
+  .matrix-table td:last-child  { border-right: none; }
+  .matrix-table tr:last-child td { border-bottom: none; }
+  .matrix-table tr:nth-child(even) { background: #FFFFFF04; }
+
+  .matrix-table tr.shiftwell-row td {
+    background: #C8A84B0C;
+    font-weight: 700;
+  }
+
+  .matrix-table tr.shiftwell-row td:first-child {
+    color: var(--gold);
+  }
+
+  .check  { color: var(--success); font-size: 14px; }
+  .cross  { color: var(--danger);  font-size: 14px; }
+  .partial{ color: var(--warning); font-size: 12px; font-weight: 600; }
+
+  /* --- Timeline --- */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 8px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--gold), var(--gold-dim) 60%, transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 24px 24px;
+  }
+
+  .timeline-item:last-child { padding-bottom: 0; }
+
+  .timeline-dot {
+    position: absolute;
+    left: -20px; top: 4px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--gold-dim);
+  }
+
+  .timeline-dot.future {
+    background: var(--border);
+    box-shadow: 0 0 0 2px var(--text-muted);
+  }
+
+  .timeline-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .timeline-version {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: -0.2px;
+  }
+
+  .timeline-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* --- Milestone Timeline --- */
+  .milestone-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin: 8px 0 20px;
+  }
+
+  .milestone-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .milestone-dot-wrap {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .milestone-circle {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--gold-dim);
+    flex-shrink: 0;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .milestone-circle.future {
+    background: #FFFFFF15;
+    box-shadow: 0 0 0 2px var(--border);
+  }
+
+  .milestone-connector {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 10px);
+    right: -50%;
+    height: 1px;
+    background: var(--border);
+    transform: translateY(-50%);
+  }
+
+  .milestone-item:last-child .milestone-connector { display: none; }
+
+  .milestone-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.3;
+    max-width: 90px;
+  }
+
+  .milestone-month {
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  /* --- Funding Ladder --- */
+  .funding-ladder {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .funding-stage {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .funding-stage:hover { border-color: var(--gold-dim); }
+
+  .funding-stage.current {
+    border-color: var(--gold-dim);
+    background: #C8A84B08;
+  }
+
+  .funding-stage-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .stage-badge {
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .stage-badge.current-badge { background: #C8A84B20; color: var(--gold); }
+  .stage-badge.future-badge  { background: #FFFFFF10; color: var(--text-muted); }
+
+  .stage-amount {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .stage-trigger {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  /* --- Risk Matrix --- */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .risk-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.15s;
+  }
+
+  .risk-item:hover { border-color: var(--text-muted); }
+
+  .risk-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.1px;
+  }
+
+  .risk-badges {
+    display: flex;
+    gap: 6px;
+  }
+
+  .risk-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+  }
+
+  .risk-badge.high-likelihood  { background: #FF6B6B20; color: var(--danger); }
+  .risk-badge.med-likelihood   { background: #FB923C20; color: var(--warning); }
+  .risk-badge.low-likelihood   { background: #34D39920; color: var(--success); }
+  .risk-badge.high-impact  { background: #FF6B6B20; color: var(--danger); }
+  .risk-badge.med-impact   { background: #FB923C20; color: var(--warning); }
+
+  .risk-mitigation {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  /* --- Unit Economics Callout Boxes --- */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .metric-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    text-align: center;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+
+  .metric-box:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+
+  .metric-box-val {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gold-light);
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .metric-box-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* --- GTM Phase cards --- */
+  .gtm-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .gtm-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+
+  .gtm-card:hover { border-color: var(--gold-dim); transform: translateY(-2px); }
+
+  .gtm-phase-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: #C8A84B12;
+    border: 1px solid #C8A84B25;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .gtm-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0;
+    letter-spacing: -0.2px;
+  }
+
+  .gtm-period {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .gtm-card ul {
+    padding-left: 16px;
+    margin: 0;
+  }
+
+  .gtm-card li {
+    font-size: 12.5px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  /* --- Team card --- */
+  .team-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .team-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--bg);
+    flex-shrink: 0;
+    letter-spacing: -1px;
+  }
+
+  .team-info h4 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    margin-bottom: 3px;
+  }
+
+  .team-info .team-title {
+    font-size: 12.5px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .team-info p {
+    font-size: 13.5px;
+    margin-bottom: 6px;
+  }
+
+  /* --- Science table accent --- */
+  .science-td-source {
+    font-size: 12px;
+    color: var(--info);
+    font-style: italic;
+  }
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  .doc-footer {
+    padding: 40px 60px;
+    text-align: center;
+    background: var(--bg-card-alt);
+    border-top: 1px solid var(--border);
+  }
+
+  .doc-footer p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .doc-footer .footer-brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.3px;
+    margin-bottom: 8px;
+  }
+
+  /* ============================================================
+     PRINT
+  ============================================================ */
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .section { opacity: 1; transform: none; break-inside: avoid; }
+    .hero { padding: 40px 40px 32px; }
+    .section { padding: 40px; }
+    body { font-size: 13px; }
+    .stat-grid { grid-template-columns: repeat(4, 1fr); }
+    .bar-fill { width: var(--target-width) !important; }
+  }
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width: 1100px) {
+    :root { --nav-width: 220px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .gtm-grid { grid-template-columns: 1fr; }
+    .ring-chart-wrap { grid-template-columns: 1fr; }
+    .risk-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .hero { padding: 40px 24px 32px; }
+    .section { padding: 40px 24px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .card-grid.cols-2, .card-grid.cols-3 { grid-template-columns: 1fr; }
+    .team-card { flex-direction: column; gap: 16px; }
+    .doc-footer { padding: 32px 24px; }
+    .menu-btn { display: flex; }
+  }
+
+  /* Mobile menu button */
+  .menu-btn {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 48px; height: 48px;
+    background: var(--gold);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 16px rgba(200, 168, 75, 0.4);
+  }
+
+  /* ============================================================
+     HELPERS
+  ============================================================ */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .gold { color: var(--gold); }
+  .success { color: var(--success); }
+  .warning { color: var(--warning); }
+  .danger  { color: var(--danger); }
+  .info    { color: var(--info); }
+  .muted   { color: var(--text-muted); }
+
+  .text-sm { font-size: 12.5px; }
+
+  .mt-0 { margin-top: 0; }
+  .mb-0 { margin-bottom: 0; }
+  .mb-16 { margin-bottom: 16px; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SIDEBAR
+============================================================ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">
+      <div class="brand-icon">&#9790;</div>
+      <span class="wordmark">ShiftWell</span>
+    </div>
+    <div class="tagline">Business Plan v2.0</div>
+    <div class="sidebar-badge">April 2026</div>
+  </div>
+
+  <div class="nav-section-label">Document</div>
+  <a href="#hero"         class="nav-link active"><span class="nav-num">&#8212;</span> Overview</a>
+
+  <div class="nav-section-label">Sections</div>
+  <a href="#exec-summary" class="nav-link"><span class="nav-num">01</span> Executive Summary</a>
+  <a href="#problem"      class="nav-link"><span class="nav-num">02</span> The Problem</a>
+  <a href="#solution"     class="nav-link"><span class="nav-num">03</span> The Solution</a>
+  <a href="#market"       class="nav-link"><span class="nav-num">04</span> Market Analysis</a>
+  <a href="#product"      class="nav-link"><span class="nav-num">05</span> Product</a>
+  <a href="#moat"         class="nav-link"><span class="nav-num">06</span> Competitive Moat</a>
+  <a href="#revenue"      class="nav-link"><span class="nav-num">07</span> Revenue Model</a>
+  <a href="#gtm"          class="nav-link"><span class="nav-num">08</span> Go-to-Market</a>
+  <a href="#financials"   class="nav-link"><span class="nav-num">09</span> Financials</a>
+  <a href="#team"         class="nav-link"><span class="nav-num">10</span> Team &amp; Advisory</a>
+  <a href="#funding"      class="nav-link"><span class="nav-num">11</span> Funding Roadmap</a>
+  <a href="#risks"        class="nav-link"><span class="nav-num">12</span> Key Risks</a>
+  <a href="#milestones"   class="nav-link"><span class="nav-num">13</span> Milestones &amp; KPIs</a>
+</nav>
+
+<!-- Mobile menu toggle -->
+<button class="menu-btn" id="menuBtn" onclick="document.getElementById('sidebar').classList.toggle('open')">&#9776;</button>
+
+<!-- ============================================================
+     MAIN
+============================================================ -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-pill"><span class="eyebrow-dot"></span>Pre-Launch</span>
+      <span class="meta-chip"><span class="chip-dot green"></span>MVP Feature-Complete</span>
+      <span class="meta-chip"><span class="chip-dot gold"></span>TestFlight Pending</span>
+    </div>
+
+    <h1>ShiftWell</h1>
+    <p class="hero-tagline">Sleep on Autopilot. <strong>Science-backed circadian optimization</strong> for the 700 million shift workers the wellness industry forgot.</p>
+
+    <div class="hero-meta-row">
+      <span class="meta-chip"><span class="chip-dot gold"></span>Dr. Gursimran Singh, DO — Founder &amp; CEO</span>
+      <span class="meta-chip"><span class="chip-dot blue"></span>Emergency Medicine Physician, HCA Healthcare</span>
+      <span class="meta-chip"><span class="chip-dot green"></span>React Native / TypeScript / iOS</span>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">700M</div>
+        <div class="stat-label">Shift workers globally — the world's largest occupational health crisis</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">618+</div>
+        <div class="stat-label">Automated tests passing — production-grade, not prototype-grade</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15+</div>
+        <div class="stat-label">Peer-reviewed publications underpinning the algorithm</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">$51.5M</div>
+        <div class="stat-label">US SAM — addressable ARR at 7.8% conversion of iPhone shift workers</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       01 EXECUTIVE SUMMARY
+  ============================================================ -->
+  <section class="section" id="exec-summary">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <div class="section-title-block">
+        <h2>Executive Summary</h2>
+        <p class="section-sub">The problem, the product, and the opportunity in one page.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">The Problem</div>
+      <p>700 million shift workers globally experience chronic circadian misalignment. In the US, 32% of healthcare workers report short sleep, shift workers have 50% higher absenteeism, and nurse fatigue is a root cause in 23% of sentinel events. The annual employer cost: <strong>$136.4 billion</strong> in fatigue-related productivity loss.</p>
+    </div>
+
+    <div class="callout success" style="margin-top: 12px;">
+      <div class="callout-label">The Solution</div>
+      <p>ShiftWell is an iOS app that imports a shift worker's schedule from their calendar, generates a science-backed circadian optimization plan — sleep windows, strategic naps, caffeine cutoffs, meal timing, and light protocols — and exports that plan directly back to the user's calendar. Deterministic science. Not LLM guesswork. Personalized to each worker's schedule and chronotype.</p>
+    </div>
+
+    <div class="callout info" style="margin-top: 12px;">
+      <div class="callout-label">Traction</div>
+      <p>Feature-complete MVP with <strong>618+ automated tests passing</strong>. Built by an ED physician who lives the problem daily. 28K+ lines of production code. Pre-TestFlight stage with App Store submission in preparation.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card-grid cols-2">
+      <div class="card">
+        <span class="card-icon">&#128200;</span>
+        <h4>Market</h4>
+        <p>Global mHealth: $82.45B (2025), 22.3% CAGR. US shift workers: 22M. Global: 700M. Healthcare AI VC investment: $11.1B (2024). SAM at 7.8% conversion: <strong>$51.5M ARR</strong>.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon">&#128181;</span>
+        <h4>Revenue Model</h4>
+        <p>B2C: $6.99/mo, $49.99/yr, $149.99 lifetime (14-day premium trial). B2B: $5–$15/seat/month for enterprise licensing. Break-even at <strong>2 premium subscribers</strong>.</p>
+      </div>
+    </div>
+
+    <div class="callout warning" style="margin-top: 16px;">
+      <div class="callout-label">The Ask</div>
+      <p>Pre-seed funding of <strong>$300K–$500K</strong> to fund enterprise pilot programs, regulatory compliance (SOC2 Type II), and 12 months of product and distribution build-out. Alternative: bootstrap through B2C revenue to first B2B pilot, then raise on enterprise traction. Operating cost at launch: <strong>$12/month</strong>.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       02 THE PROBLEM
+  ============================================================ -->
+  <section class="section" id="problem">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <div class="section-title-block">
+        <h2>The Problem</h2>
+        <p class="section-sub">Scale, health consequences, employer cost, and the technology gap that remains unfilled.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>2.1 Scale of the Problem</h3>
+      <p>Shift work is not a niche. It is the largest occupational health crisis in the developed world that nobody talks about:</p>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-box-val">700M</div>
+          <div class="metric-box-label">Shift workers globally (ILO)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">22M</div>
+          <div class="metric-box-label">US shift workers (BLS)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">32%</div>
+          <div class="metric-box-label">US healthcare workers with short sleep (NIOSH)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">38%</div>
+          <div class="metric-box-label">Max night shift workers developing SWSD (Drake 2004)</div>
+        </div>
+      </div>
+      <p>The biological mechanism is well understood. Human circadian clocks evolved over millennia for a solar day — sleep at night, wake at dawn. Night shift work forces the body to function in direct opposition to this evolved rhythm. Unlike jet lag (a temporary disruption), shift work is chronic and recurring. Most shift workers never fully adapt. They exist in a permanent state of circadian misalignment.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>2.2 Health Consequences</h3>
+      <p>Peer-reviewed evidence links chronic shift work to severe health outcomes:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Health Outcome</th><th>Relative Risk</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Type 2 Diabetes</strong></td><td class="td-warning">RR 1.09–1.40</td><td class="science-td-source">Kecklund &amp; Axelsson (BMJ 2016)</td></tr>
+            <tr><td><strong>Coronary Heart Disease</strong></td><td class="td-warning">RR 1.23</td><td class="science-td-source">Kecklund &amp; Axelsson (BMJ 2016)</td></tr>
+            <tr><td><strong>Stroke</strong></td><td class="td-warning">RR 1.05</td><td class="science-td-source">Kecklund &amp; Axelsson (BMJ 2016)</td></tr>
+            <tr><td><strong>Cancer</strong></td><td class="td-danger">RR 1.01–1.32</td><td class="science-td-source">Kecklund &amp; Axelsson (BMJ 2016)</td></tr>
+            <tr><td><strong>Cardiovascular Events</strong></td><td class="td-danger">Elevated</td><td class="science-td-source">AHA Scientific Statement (2025)</td></tr>
+            <tr><td><strong>Fatigue-Related Work Errors</strong></td><td class="td-danger">30% higher on nights</td><td class="science-td-source">OSHA</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">The American Heart Association's 2025 Scientific Statement on Circadian Health explicitly endorses circadian-aligned interventions — timed sleep, light protocols, meal timing — as countermeasures to cardiometabolic risk. ShiftWell's algorithm implements every intervention the AHA recommends.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>2.3 The Employer Cost</h3>
+      <p>Poor shift worker sleep is a quantified financial liability for employers:</p>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <div class="stat-value" style="font-size: 20px; margin-bottom: 6px;">$136.4B</div>
+          <div class="stat-label">Annual fatigue-related productivity loss (Rosekind et al. 2010)</div>
+        </div>
+        <div class="card">
+          <div class="stat-value" style="font-size: 20px; margin-bottom: 6px;">$4,080</div>
+          <div class="stat-label">Per employee per year in unplanned absence costs (Sedgwick/CDC)</div>
+        </div>
+        <div class="card">
+          <div class="stat-value" style="font-size: 20px; margin-bottom: 6px;">$100–150K</div>
+          <div class="stat-label">Cost to replace one nurse (recruitment + onboarding + training)</div>
+        </div>
+        <div class="card">
+          <div class="stat-value" style="font-size: 20px; margin-bottom: 6px;">27.65%</div>
+          <div class="stat-label">Annual nurse turnover rate nationally (PMC 2023)</div>
+        </div>
+      </div>
+      <div class="callout danger" style="margin-top: 16px;">
+        <div class="callout-label">Financial Model</div>
+        <p>A 500-nurse hospital losing 27.65% annually = <strong>138 nurse departures</strong>. At $100K–$150K each = <strong>$13.8M–$20.7M in replacement costs annually</strong>. Sleep quality is the most prominent mediator between shift work and burnout (PMC7345885) — and burnout is the leading driver of voluntary departure.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>2.4 The Technology Gap</h3>
+      <p>Despite the problem's scale and the evidence base for solutions, no existing product delivers what shift workers actually need:</p>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <span class="card-icon">&#128197;</span>
+          <h4>Calendar Integration is Missing</h4>
+          <p>No app reads your actual work calendar and builds your sleep plan around real upcoming shifts.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128161;</span>
+          <h4>Personal Schedule Awareness is Missing</h4>
+          <p>No app knows you have a 7 AM dentist appointment after a night shift and adjusts your sleep window accordingly.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#129516;</span>
+          <h4>Science-Backed Personalization is Missing</h4>
+          <p>Existing apps offer generic sleep hygiene tips, not personalized circadian protocols based on chronotype and shift pattern.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128196;</span>
+          <h4>Calendar Export is Missing</h4>
+          <p>No competitor puts your sleep plan directly into your calendar as real, schedulable events.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       03 THE SOLUTION
+  ============================================================ -->
+  <section class="section" id="solution">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <div class="section-title-block">
+        <h2>The Solution</h2>
+        <p class="section-sub">The closed-loop calendar system and the science that powers it.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>3.1 What ShiftWell Does</h3>
+      <p>ShiftWell connects your work calendar to your body clock. The app:</p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">1. Import</span>
+          </div>
+          <p class="timeline-desc">Imports your shift schedule from Apple Calendar, Google Calendar, or QGenda.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">2. Read</span>
+          </div>
+          <p class="timeline-desc">Reads your personal calendar for upcoming obligations that affect sleep timing.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">3. Analyze</span>
+          </div>
+          <p class="timeline-desc">Analyzes your chronotype, shift pattern, and schedule context.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">4. Generate</span>
+          </div>
+          <p class="timeline-desc">Generates a complete circadian optimization plan: sleep windows, strategic naps, caffeine cutoffs, meal timing, and light exposure recommendations.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">5. Export</span>
+          </div>
+          <p class="timeline-desc">Exports the plan to your calendar as real, color-coded events.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-header">
+            <span class="timeline-version">6. Adapt</span>
+          </div>
+          <p class="timeline-desc">Adapts when your schedule changes — the loop is continuous, not one-time.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>3.2 The Core Innovation — Closed-Loop Calendar System</h3>
+
+      <div class="chart-container" style="padding: 24px 28px;">
+        <div class="chart-title">The Calendar Loop</div>
+        <div class="chart-sub">What no competitor does — read real schedules, write real plans back</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; padding: 8px 0;">
+          <div style="background: #C8A84B15; border: 1px solid #C8A84B40; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--gold);">Calendar Input</div>
+          <div style="font-size: 18px; color: var(--gold-dim); padding: 0 12px;">&rarr;</div>
+          <div style="background: #1E2A3A; border: 1px solid var(--border); border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--text);">Circadian Algorithm</div>
+          <div style="font-size: 18px; color: var(--gold-dim); padding: 0 12px;">&rarr;</div>
+          <div style="background: #34D39915; border: 1px solid #34D39940; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--success);">Sleep Plan</div>
+          <div style="font-size: 18px; color: var(--gold-dim); padding: 0 12px;">&rarr;</div>
+          <div style="background: #C8A84B15; border: 1px solid #C8A84B40; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--gold);">Calendar Output</div>
+          <div style="font-size: 18px; color: var(--gold-dim); padding: 0 12px;">&rarr;</div>
+          <div style="background: #60A5FA15; border: 1px solid #60A5FA40; border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--info);">Feedback</div>
+        </div>
+        <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin: 12px 0 0;">Timeshifter requires manual entry. Rise doesn't export. Sleep Cycle tracks but doesn't plan. ShiftWell is the only closed loop.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>3.3 Scientific Foundation</h3>
+      <p>The algorithm is not built on LLM inference or wellness opinions. Every recommendation traces to peer-reviewed publications:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Recommendation</th><th>Scientific Basis</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Sleep window timing</strong></td><td class="science-td-source">Two-Process Model (Borbely 1982), NIOSH anchor sleep protocol</td></tr>
+            <tr><td><strong>Nap placement</strong></td><td class="science-td-source">Milner &amp; Cote (2009), Ruggiero &amp; Redeker (2014)</td></tr>
+            <tr><td><strong>Caffeine cutoff</strong></td><td class="science-td-source">Drake et al. (2013) — 6-hour pharmacokinetic effect</td></tr>
+            <tr><td><strong>Meal timing</strong></td><td class="science-td-source">Manoogian et al. (2022), Chellappa et al. (2021)</td></tr>
+            <tr><td><strong>Light protocols</strong></td><td class="science-td-source">Czeisler et al. (1990), Eastman &amp; Burgess (2009)</td></tr>
+            <tr><td><strong>Sleep debt calculation</strong></td><td class="science-td-source">St. Hilaire et al. (2017) mathematical model</td></tr>
+            <tr><td><strong>Circadian adaptation</strong></td><td class="science-td-source">Boivin &amp; Boudreau (2014, 2022)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">15+ peer-reviewed studies underpin the algorithm. The AHA's 2025 Scientific Statement independently validates ShiftWell's core approach.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       04 MARKET ANALYSIS
+  ============================================================ -->
+  <section class="section" id="market">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <div class="section-title-block">
+        <h2>Market Analysis</h2>
+        <p class="section-sub">TAM, SAM, SOM — market dynamics and target personas.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>4.1 Total Addressable Market</h3>
+
+      <div class="chart-container">
+        <div class="ring-chart-wrap">
+          <svg class="ring-svg" viewBox="0 0 200 200">
+            <!-- TAM: outer ring -->
+            <circle cx="100" cy="100" r="85" fill="none" stroke="#1E2A3A" stroke-width="18"/>
+            <circle cx="100" cy="100" r="85" fill="none" stroke="#C8A84B" stroke-width="18"
+              stroke-dasharray="534" stroke-dashoffset="0"
+              stroke-linecap="round" transform="rotate(-90, 100, 100)" opacity="0.9"/>
+            <!-- SAM: middle ring -->
+            <circle cx="100" cy="100" r="62" fill="none" stroke="#1E2A3A" stroke-width="14"/>
+            <circle cx="100" cy="100" r="62" fill="none" stroke="#8A7232" stroke-width="14"
+              stroke-dasharray="389" stroke-dashoffset="0"
+              stroke-linecap="round" transform="rotate(-90, 100, 100)" opacity="0.8"/>
+            <!-- SOM: inner ring -->
+            <circle cx="100" cy="100" r="44" fill="none" stroke="#1E2A3A" stroke-width="12"/>
+            <circle cx="100" cy="100" r="44" fill="none" stroke="#374151" stroke-width="12"
+              stroke-dasharray="276" stroke-dashoffset="0"
+              stroke-linecap="round" transform="rotate(-90, 100, 100)" opacity="1"/>
+            <text x="100" y="95" text-anchor="middle" fill="#E8E8E8" font-size="11" font-weight="800">Market</text>
+            <text x="100" y="110" text-anchor="middle" fill="#9CA3AF" font-size="9">Opportunity</text>
+          </svg>
+          <div class="ring-labels">
+            <div class="ring-label-row">
+              <div class="ring-label-dot" style="background: var(--gold);"></div>
+              <span class="ring-label-name">TAM — Global mHealth</span>
+              <span class="ring-label-val">$82.45B</span>
+            </div>
+            <div class="ring-label-row">
+              <div class="ring-label-dot" style="background: var(--gold-dim);"></div>
+              <span class="ring-label-name">SAM — US Shift Worker iOS</span>
+              <span class="ring-label-val">$51.5M ARR</span>
+            </div>
+            <div class="ring-label-row">
+              <div class="ring-label-dot" style="background: #374151;"></div>
+              <span class="ring-label-name">SOM — Year 5 Conservative</span>
+              <span class="ring-label-val">$2.5M ARR</span>
+            </div>
+            <div class="divider" style="margin: 8px 0;"></div>
+            <p class="text-sm muted mb-0" style="font-size: 12px; line-height: 1.5;">22M US shift workers × 60% iPhone penetration = 13.2M potential iOS users. At 7.8% conversion (Flo Health benchmark) = 1.03M potential subscribers. At $49.99/year = $51.5M ARR potential.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>4.2 Market Dynamics — Why Now</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <span class="card-icon">&#129516;</span>
+          <h4>AHA 2025 Scientific Statement</h4>
+          <p>Elevates circadian health to mainstream awareness. ShiftWell's entire algorithm aligns with the AHA's endorsed interventions.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128200;</span>
+          <h4>Post-COVID Burnout Crisis</h4>
+          <p>Healthcare worker burnout creates acute demand for fatigue solutions. Retention is a top-3 hospital executive priority.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128241;</span>
+          <h4>iOS Calendar API Maturity</h4>
+          <p>Apple's EventKit API now enables seamless bidirectional calendar sync — ShiftWell's core technical innovation.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128176;</span>
+          <h4>mHealth Investment High</h4>
+          <p>Healthcare AI VC: $11.1B (2024, CB Insights). Institutional buyers actively seeking fatigue management solutions.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>4.3 Target Personas</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Persona</th><th>Description</th><th>US Size</th><th>Willingness to Pay</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>ICU/ED Nurse</strong> &#9733;</td>
+              <td>3-shift rotation, high income, iPhone-primary</td>
+              <td>4M</td>
+              <td class="td-success">High ($6.99/mo = 1 coffee)</td>
+            </tr>
+            <tr>
+              <td><strong>Paramedic/EMT</strong></td>
+              <td>24-on/48-off patterns, physically demanding</td>
+              <td>280K</td>
+              <td class="td-success">Medium-High</td>
+            </tr>
+            <tr>
+              <td><strong>Firefighter</strong></td>
+              <td>24-hour shifts, union benefits, dept-sponsored</td>
+              <td>370K</td>
+              <td class="td-warning">Medium (dept-paid)</td>
+            </tr>
+            <tr>
+              <td><strong>Hospital Physician</strong></td>
+              <td>Residents especially, irregular rotations</td>
+              <td>1M</td>
+              <td class="td-success">High</td>
+            </tr>
+            <tr>
+              <td><strong>Airline Crew</strong></td>
+              <td>FAA fatigue rules, highly motivated to comply</td>
+              <td>99K pilots / 94K FAs</td>
+              <td class="td-success">High</td>
+            </tr>
+            <tr>
+              <td><strong>Factory/Manufacturing</strong></td>
+              <td>Rotating day/night, lower income, volume play</td>
+              <td>6M</td>
+              <td class="td-warning">Low-Medium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">&#9733; Beachhead market: ICU and ED nurses. iPhone-dominant, highest income among shift workers, tight professional communities (viral coefficient), and the most acutely familiar with the consequences of fatigue.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       05 PRODUCT
+  ============================================================ -->
+  <section class="section" id="product">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <div class="section-title-block">
+        <h2>Product</h2>
+        <p class="section-sub">Features, pricing tiers, roadmap, and technical architecture.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.1 Core Features — v1.0 Launch</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Schedule Import</strong></td><td>iCal/ICS file import, QGenda sync, manual entry</td></tr>
+            <tr><td><strong>Calendar Awareness</strong></td><td>Reads personal calendar events to protect sleep windows</td></tr>
+            <tr><td><strong>Sleep Plan Generation</strong></td><td>Primary sleep windows, anchor sleep protocol</td></tr>
+            <tr><td><strong>Nap Planning</strong></td><td>Strategic nap placement based on shift timing and sleep pressure</td></tr>
+            <tr><td><strong>Caffeine Protocol</strong></td><td>Personalized cutoff times based on chronotype and shift</td></tr>
+            <tr><td><strong>Meal Timing</strong></td><td>Time-restricted eating guidance for circadian alignment</td></tr>
+            <tr><td><strong>Light Protocol</strong></td><td>Morning/evening light exposure recommendations</td></tr>
+            <tr><td><strong>Calendar Export</strong></td><td>One-tap export of full plan to Apple/Google Calendar as events</td></tr>
+            <tr><td><strong>Today Screen</strong></td><td>At-a-glance countdown to next sleep, caffeine cutoff, shift</td></tr>
+            <tr><td><strong>Sleep Tips Library</strong></td><td>25+ science-backed tips organized by protocol</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.2 Premium Pricing Tiers</h3>
+      <div class="card-grid cols-3">
+        <div class="card" style="text-align: center;">
+          <h4>Free</h4>
+          <div class="stat-value" style="font-size: 22px; margin: 8px 0;">$0</div>
+          <p class="text-sm">Manual shift entry<br>Basic sleep windows<br>14-day premium trial</p>
+        </div>
+        <div class="card" style="text-align: center; border-color: var(--gold-dim);">
+          <h4 style="color: var(--gold);">Annual — Best Value</h4>
+          <div class="stat-value" style="font-size: 22px; margin: 8px 0;">$49.99/yr</div>
+          <p class="text-sm">Full features<br>~40% discount ($4.16/mo effective)<br>Calendar export + HealthKit</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <h4>Monthly</h4>
+          <div class="stat-value" style="font-size: 22px; margin: 8px 0;">$6.99/mo</div>
+          <p class="text-sm">Full features<br>Cancel anytime<br>Premium for healthcare pros</p>
+        </div>
+      </div>
+      <div class="callout info" style="margin-top: 12px;">
+        <div class="callout-label">Positioning</div>
+        <p>$6.99/month is above Sleep Cycle ($2.99), below Timeshifter ($9.99+). Premium perception without requiring justification for a healthcare professional making $60K–$200K+. Lifetime option at $149.99 for power users.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.3 Product Roadmap</h3>
+      <div class="chart-container" style="padding: 24px 28px 20px;">
+        <div class="chart-title">Release Timeline</div>
+        <div class="chart-sub">Version cadence from launch through enterprise-ready v2.0</div>
+        <div class="timeline" style="margin-top: 8px;">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v1.0</span>
+              <span class="timeline-time">Month 1</span>
+            </div>
+            <p class="timeline-desc">Core plan generation, calendar export, free launch on App Store.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v1.1</span>
+              <span class="timeline-time">Month 3</span>
+            </div>
+            <p class="timeline-desc">AI weekly check-in (Claude API), paywall activation, premium subscription.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v1.2</span>
+              <span class="timeline-time">Month 4</span>
+            </div>
+            <p class="timeline-desc">HealthKit integration, sleep tracking correlation, data-driven insights.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v1.3</span>
+              <span class="timeline-time">Month 6</span>
+            </div>
+            <p class="timeline-desc">Widgets, Live Activities, lock screen presence, dynamic island.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v1.4</span>
+              <span class="timeline-time">Month 9</span>
+            </div>
+            <p class="timeline-desc">Employer dashboard, B2B pilot readiness, HIPAA-aware architecture.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot future"></div>
+            <div class="timeline-header">
+              <span class="timeline-version">v2.0</span>
+              <span class="timeline-time">Month 12–15</span>
+            </div>
+            <p class="timeline-desc">Kronos/QGenda push API, team features, enterprise compliance suite.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>5.4 Technical Architecture</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <span class="card-icon">&#128187;</span>
+          <h4>Stack</h4>
+          <p>React Native (Expo), TypeScript, on-device computation. No backend in v1 — all data stored locally. No servers, no PHI exposure at launch.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#9881;</span>
+          <h4>Algorithm</h4>
+          <p>Deterministic, not LLM-based. Predictable, auditable, explainable. 618+ automated tests across algorithm correctness, edge cases, and ICS parsing.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128274;</span>
+          <h4>Privacy</h4>
+          <p>HIPAA-agnostic in v1 (no server, no PHI). HIPAA-aware architecture from v1.4. SOC2 Type II targeted for enterprise phase.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128179;</span>
+          <h4>Payments</h4>
+          <p>StoreKit 2 + RevenueCat for subscription management. Apple's 30% cut baked into margin model. RevenueCat free to $2.5K MTR.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       06 COMPETITIVE MOAT
+  ============================================================ -->
+  <section class="section" id="moat">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <div class="section-title-block">
+        <h2>Competitive Moat</h2>
+        <p class="section-sub">Six defensible advantages and how competitors compare.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>6.1 Competitive Landscape</h3>
+      <div class="matrix-wrap">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Calendar Import</th>
+              <th>Calendar Export</th>
+              <th>Science-Backed</th>
+              <th>5 Shift Protocols</th>
+              <th>Physician-Built</th>
+              <th>Price/Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="shiftwell-row">
+              <td>ShiftWell &#9733;</td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td class="td-gold">$49.99</td>
+            </tr>
+            <tr>
+              <td>Timeshifter</td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td>$69.99+</td>
+            </tr>
+            <tr>
+              <td>Rise Science</td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="partial">partial</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td>$69.99</td>
+            </tr>
+            <tr>
+              <td>Sleep Cycle</td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td>$39.99</td>
+            </tr>
+            <tr>
+              <td>Calm / Headspace</td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td>$69.99+</td>
+            </tr>
+            <tr>
+              <td>FAID (enterprise)</td>
+              <td><span class="partial">partial</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td><span class="check">&#10003;</span></td>
+              <td><span class="partial">partial</span></td>
+              <td><span class="cross">&#10007;</span></td>
+              <td>Enterprise</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">The white space ShiftWell occupies: No competitor combines calendar-aware scheduling + science-backed circadian algorithms + full plan generation + calendar export in a single product. This is not a feature gap — it is a category gap.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>6.2 Six Defensible Advantages</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <span class="card-icon">&#128209;</span>
+          <h4>1. Physician Founder — Unmatched Credibility</h4>
+          <p>Dr. Singh is an active ED physician who built ShiftWell because he needed it. Instant trust from healthcare workers. Clinical accuracy competitors cannot match. Direct access to the beachhead market.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#9881;</span>
+          <h4>2. Deterministic Algorithm — Not an LLM</h4>
+          <p>Same inputs always produce same outputs. Auditable and explainable for enterprise buyers. No hallucination risk. Every recommendation cites its source publication.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128197;</span>
+          <h4>3. Calendar Integration — Structural Moat</h4>
+          <p>Reading from and writing to the user's actual calendar creates structural lock-in. The more shifts imported, the better the plan improves. Network effects when teams share calendars (enterprise play).</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128240;</span>
+          <h4>4. Published Science as Marketing</h4>
+          <p>15+ cited peer-reviewed papers are not just credibility — they are marketing assets competitors cannot easily replicate. Every citation is an SEO keyword. Every study is a press angle.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128101;</span>
+          <h4>5. Five Circadian Protocols</h4>
+          <p>Fixed night shift, rotating shifts (clockwise/counterclockwise), 12-hour shifts, early morning shifts, irregular/variable schedules. No competitor matches this breadth of protocol coverage.</p>
+        </div>
+        <div class="card">
+          <span class="card-icon">&#128260;</span>
+          <h4>6. Closed-Loop Feedback</h4>
+          <p>As users accumulate shift data and adherence history, the algorithm improves recommendations. A data moat that compounds over time — the longer a user uses ShiftWell, the better it works for them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       07 REVENUE MODEL
+  ============================================================ -->
+  <section class="section" id="revenue">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <div class="section-title-block">
+        <h2>Revenue Model</h2>
+        <p class="section-sub">B2C subscription, B2B enterprise licensing, and unit economics.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>7.1 Unit Economics</h3>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-box-val">$5.50</div>
+          <div class="metric-box-label">Blended ARPU/month</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">70%</div>
+          <div class="metric-box-label">Gross margin (post Apple 30% cut)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">~$99</div>
+          <div class="metric-box-label">LTV at 18-month retention</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-box-val">4–12x</div>
+          <div class="metric-box-label">LTV/CAC ratio (paid channels)</div>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-top: 16px;">
+        <table>
+          <thead>
+            <tr><th>Metric</th><th>Conservative</th><th>Moderate</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>CAC (organic)</strong></td><td class="td-success">$0</td><td class="td-success">$0</td></tr>
+            <tr><td><strong>CAC (Apple Search Ads)</strong></td><td>$8–$12</td><td>$8–$12</td></tr>
+            <tr><td><strong>CAC (Facebook/TikTok)</strong></td><td>$15–$25</td><td>$15–$25</td></tr>
+            <tr><td><strong>Blended ARPU/month</strong></td><td>$5.50</td><td>$5.50</td></tr>
+            <tr><td><strong>Gross margin</strong></td><td>70%</td><td>70%</td></tr>
+            <tr><td><strong>LTV (18-mo retention)</strong></td><td>~$99</td><td>~$99</td></tr>
+            <tr><td><strong>LTV/CAC ratio (paid)</strong></td><td class="td-success">4–12x</td><td class="td-success">4–12x</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>7.2 B2B Enterprise Licensing</h3>
+      <p><strong>Target customers:</strong> Hospital systems, EMS agencies, fire departments, airline carriers, manufacturing companies with rotating shifts.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tier</th><th>Seats</th><th>Price/Seat/Month</th><th>Annual Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Pilot (free)</strong></td><td>50–100</td><td class="td-success">$0</td><td class="muted">$0 (90-day pilot)</td></tr>
+            <tr><td><strong>Small Team</strong></td><td>50–249</td><td>$15/seat</td><td class="td-gold">$9,000–$44,820/yr</td></tr>
+            <tr><td><strong>Mid-Market</strong></td><td>250–999</td><td>$10/seat</td><td class="td-gold">$30,000–$119,880/yr</td></tr>
+            <tr><td><strong>Enterprise</strong></td><td>1,000+</td><td>$5/seat</td><td class="td-gold">$60,000+/yr</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">Minimum contract: 50 seats, 12-month term. ACV range: $9,000–$500,000+ depending on organization size. Enterprise pricing represents 75–85% discount to consumer annual plan, justified by volume and employer benefit framing.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>7.3 Revenue Mix Projection</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Year</th><th>B2C MRR</th><th>B2B ARR</th><th>Total ARR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Year 1</strong></td><td>$2,500</td><td class="muted">$0</td><td class="td-gold">$30,000</td></tr>
+            <tr><td><strong>Year 2</strong></td><td>$12,000</td><td>$50,000</td><td class="td-gold">$194,000</td></tr>
+            <tr><td><strong>Year 3</strong></td><td>$50,000</td><td>$300,000</td><td class="td-gold">$900,000</td></tr>
+            <tr><td><strong>Year 4</strong></td><td>$150,000</td><td>$800,000</td><td class="td-gold">$2.6M</td></tr>
+            <tr><td><strong>Year 5</strong></td><td>$350,000</td><td>$1.8M</td><td class="td-gold">$6M</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-sm muted">Moderate scenario. Conservative scenario applies 50% haircut.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       08 GO-TO-MARKET
+  ============================================================ -->
+  <section class="section" id="gtm">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <div class="section-title-block">
+        <h2>Go-to-Market Strategy</h2>
+        <p class="section-sub">Three-phase strategy from beachhead to enterprise.</p>
+      </div>
+    </div>
+
+    <div class="gtm-grid">
+      <div class="gtm-card">
+        <span class="gtm-phase-label">Phase 1</span>
+        <h4>Beachhead — Healthcare Workers</h4>
+        <span class="gtm-period">Months 1–6</span>
+        <p style="font-size: 12.5px; color: var(--text-dim); margin: 0;">Establish undeniable PMF with nurses and ED physicians before spending on acquisition.</p>
+        <ul>
+          <li>Personal ED network (TGH/HCA Tampa)</li>
+          <li>Reddit: r/nursing, r/residency, r/medicine, r/nightshift</li>
+          <li>Medical podcasts: EM:RAP, EMCrit, Taming the SRU</li>
+          <li>Product Hunt launch (Tue–Thu)</li>
+          <li>App Store SEO optimization</li>
+        </ul>
+        <div style="padding: 10px 12px; background: #C8A84B0A; border-radius: 6px; border: 1px solid #C8A84B20;">
+          <p style="font-size: 11.5px; color: var(--text-muted); margin: 0; font-weight: 600;">Target KPIs</p>
+          <p style="font-size: 12px; color: var(--text-dim); margin: 4px 0 0;">1,000 downloads · 4.5+ rating · 200+ active users · 60+ organic 5-star reviews</p>
+        </div>
+      </div>
+
+      <div class="gtm-card">
+        <span class="gtm-phase-label">Phase 2</span>
+        <h4>Expand — All Shift Workers</h4>
+        <span class="gtm-period">Months 6–12</span>
+        <p style="font-size: 12.5px; color: var(--text-dim); margin: 0;">Expand from healthcare to all shift worker verticals.</p>
+        <ul>
+          <li>TikTok/Reels: "Night shift nurse tries the app"</li>
+          <li>Facebook: Night Shift Nurses (300K+), EMS communities</li>
+          <li>Google UAC + Apple Search Ads</li>
+          <li>Paramedics → Firefighters → Airline → Manufacturing</li>
+        </ul>
+        <div style="padding: 10px 12px; background: #C8A84B0A; border-radius: 6px; border: 1px solid #C8A84B20;">
+          <p style="font-size: 11.5px; color: var(--text-muted); margin: 0; font-weight: 600;">Target KPIs</p>
+          <p style="font-size: 12px; color: var(--text-dim); margin: 4px 0 0;">$500 MRR · First media mention · 5K+ downloads</p>
+        </div>
+      </div>
+
+      <div class="gtm-card">
+        <span class="gtm-phase-label">Phase 3</span>
+        <h4>Enterprise — Hospital Contracts</h4>
+        <span class="gtm-period">Months 9–18</span>
+        <p style="font-size: 12.5px; color: var(--text-dim); margin: 0;">Land first 3 paid enterprise contracts with measurable outcome data.</p>
+        <ul>
+          <li>Start at Sim's own ED — pitch to medical director, CNO</li>
+          <li>Use first pilot data as case study for all subsequent sales</li>
+          <li>Target: hospital HR/benefits directors, CNOs at HCA, Tenet</li>
+          <li>Workers' comp insurance broker channel</li>
+          <li>NAEMSP, NAEMS, IAFF conferences</li>
+        </ul>
+        <div style="padding: 10px 12px; background: #C8A84B0A; border-radius: 6px; border: 1px solid #C8A84B20;">
+          <p style="font-size: 11.5px; color: var(--text-muted); margin: 0; font-weight: 600;">Angle</p>
+          <p style="font-size: 12px; color: var(--text-dim); margin: 4px 0 0;">Not "wellness app" (optional, cuttable) — "fatigue risk management" (regulatory, non-negotiable)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 24px;">
+      <div class="callout-label">The Story That Closes Deals</div>
+      <p><em>"I work night shifts in an emergency department. I spent years Googling when to sleep. The science existed. Nobody connected it to my calendar. So I built ShiftWell."</em></p>
+      <p style="margin-top: 8px; margin-bottom: 0; font-size: 13px;">This is not a marketing pitch — it is a true story that happens to be the best possible marketing. A nurse sees an ED physician built this: instant clinical trust. A hospital administrator sees a physician-founder: protected from liability concerns. A journalist sees it: "doctor who codes" headline writes itself.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       09 FINANCIALS
+  ============================================================ -->
+  <section class="section" id="financials">
+    <div class="section-header">
+      <span class="section-number">09</span>
+      <div class="section-title-block">
+        <h2>Financial Projections</h2>
+        <p class="section-sub">Three scenarios, break-even analysis, and startup costs.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>9.1 5-Year Revenue Projections — Three Scenarios</h3>
+      <div class="chart-container">
+        <div class="chart-title">Total ARR by Year — Conservative / Moderate / Aggressive</div>
+        <div class="chart-sub">Each grouped set = one year (Y1–Y5). Width scaled to $15.7M aggressive Year 5 max.</div>
+
+        <!-- Year labels -->
+        <div class="bar-group-label">Year 1</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Cons.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-conservative" style="--target-width: 0.1%;" data-width="0.1%">$15.6K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Mod.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-moderate" style="--target-width: 0.26%;" data-width="0.26%">$41.2K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Agg.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-aggressive" style="--target-width: 0.66%;" data-width="0.66%">$103K</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bar-group-label">Year 2</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Cons.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-conservative" style="--target-width: 0.46%;" data-width="0.46%">$71.6K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Mod.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-moderate" style="--target-width: 1.30%;" data-width="1.30%">$204K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Agg.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-aggressive" style="--target-width: 4.55%;" data-width="4.55%">$715K</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bar-group-label">Year 3</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Cons.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-conservative" style="--target-width: 1.45%;" data-width="1.45%">$228K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Mod.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-moderate" style="--target-width: 4.05%;" data-width="4.05%">$636K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Agg.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-aggressive" style="--target-width: 16.2%;" data-width="16.2%">$2.54M</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bar-group-label">Year 4</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Cons.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-conservative" style="--target-width: 3.87%;" data-width="3.87%">$608K</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Mod.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-moderate" style="--target-width: 11.0%;" data-width="11.0%">$1.73M</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Agg.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-aggressive" style="--target-width: 43.7%;" data-width="43.7%">$6.86M</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bar-group-label">Year 5</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-label">Cons.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-conservative" style="--target-width: 8.41%;" data-width="8.41%">$1.32M</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Mod.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-moderate" style="--target-width: 24.6%;" data-width="24.6%">$3.86M</div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Agg.</div>
+            <div class="bar-track">
+              <div class="bar-fill bar-aggressive" style="--target-width: 100%;" data-width="100%">$15.7M</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background: #4B5563;"></div>Conservative (no paid acquisition, organic only)</div>
+          <div class="legend-item"><div class="legend-dot" style="background: var(--gold-dim);"></div>Moderate ($2K/mo paid from Month 6, 1 enterprise deal Year 2)</div>
+          <div class="legend-item"><div class="legend-dot" style="background: var(--gold);"></div>Aggressive ($20–50K/mo paid from Month 9, 3+ enterprise Year 2)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>9.2 Conservative Scenario — Detailed 5-Year Model</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Year</th><th>Active Users</th><th>Premium Subs</th><th>Conversion</th><th>MRR</th><th>B2B ARR</th><th>Total ARR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Y1</strong></td><td>3,000</td><td>234</td><td>7.8%</td><td>$1,300</td><td class="muted">$0</td><td class="td-gold">$15,600</td></tr>
+            <tr><td><strong>Y2</strong></td><td>10,000</td><td>780</td><td>7.8%</td><td>$4,300</td><td>$20,000</td><td class="td-gold">$71,600</td></tr>
+            <tr><td><strong>Y3</strong></td><td>25,000</td><td>1,950</td><td>7.8%</td><td>$10,700</td><td>$100,000</td><td class="td-gold">$228,400</td></tr>
+            <tr><td><strong>Y4</strong></td><td>60,000</td><td>4,680</td><td>7.8%</td><td>$25,700</td><td>$300,000</td><td class="td-gold">$608,400</td></tr>
+            <tr><td><strong>Y5</strong></td><td>120,000</td><td>9,360</td><td>7.8%</td><td>$51,500</td><td>$700,000</td><td class="td-gold">$1.32M</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>9.3 Moderate Scenario — Detailed 5-Year Model</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Year</th><th>Active Users</th><th>Premium Subs</th><th>Conversion</th><th>MRR</th><th>B2B ARR</th><th>Total ARR</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Y1</strong></td><td>8,000</td><td>624</td><td>7.8%</td><td>$3,430</td><td class="muted">$0</td><td class="td-gold">$41,160</td></tr>
+            <tr><td><strong>Y2</strong></td><td>30,000</td><td>2,340</td><td>7.8%</td><td>$12,870</td><td>$50,000</td><td class="td-gold">$204,440</td></tr>
+            <tr><td><strong>Y3</strong></td><td>75,000</td><td>5,850</td><td>7.8%</td><td>$32,175</td><td>$250,000</td><td class="td-gold">$636,100</td></tr>
+            <tr><td><strong>Y4</strong></td><td>180,000</td><td>14,040</td><td>7.8%</td><td>$77,220</td><td>$800,000</td><td class="td-gold">$1.73M</td></tr>
+            <tr><td><strong>Y5</strong></td><td>400,000</td><td>31,200</td><td>7.8%</td><td>$171,600</td><td>$1.8M</td><td class="td-gold">$3.86M</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>9.4 Startup Costs &amp; Break-Even</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <h4>Year 1 Startup Costs</h4>
+          <div class="table-wrap" style="margin: 10px 0 0; border: none;">
+            <table style="font-size: 12.5px;">
+              <tbody>
+                <tr><td>LLC Formation (FL)</td><td class="td-gold" style="text-align: right; white-space: nowrap;">$125</td></tr>
+                <tr><td>EIN</td><td class="td-success" style="text-align: right;">$0</td></tr>
+                <tr><td>Apple Developer Program</td><td style="text-align: right;">$99/yr</td></tr>
+                <tr><td>Domain + hosting</td><td style="text-align: right;">$50/yr</td></tr>
+                <tr><td>Trademark (Class 9 + 44)</td><td style="text-align: right;">$500–$700</td></tr>
+                <tr><td>RevenueCat</td><td class="td-success" style="text-align: right;">$0</td></tr>
+                <tr><td>Supabase (v1.1+)</td><td style="text-align: right;">$0–$25/mo</td></tr>
+                <tr style="border-top: 1px solid var(--border);"><td><strong>Total Year 1</strong></td><td class="td-gold" style="text-align: right; font-weight: 800;">~$800–$1,100</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <h4>Break-Even Analysis</h4>
+          <div style="text-align: center; padding: 20px 0;">
+            <div class="stat-value" style="font-size: 40px; margin-bottom: 6px;">2</div>
+            <div class="stat-label" style="font-size: 13px; max-width: 200px; margin: 0 auto;">premium subscribers to break even at $6.99/mo with $12/mo operating costs</div>
+          </div>
+          <div class="callout success" style="margin: 0;">
+            <div class="callout-label">Key Insight</div>
+            <p style="font-size: 12.5px;">Profitable at launch with minimal user base. Operating cost in v1 is <strong>$12/month</strong>. Physician income is the backstop — no external capital required to reach product-market fit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       10 TEAM
+  ============================================================ -->
+  <section class="section" id="team">
+    <div class="section-header">
+      <span class="section-number">10</span>
+      <div class="section-title-block">
+        <h2>Team &amp; Advisory</h2>
+        <p class="section-sub">Founder profile, advisory board needs, and hiring plan.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>10.1 Founder</h3>
+      <div class="team-card">
+        <div class="team-avatar">GS</div>
+        <div class="team-info">
+          <h4>Dr. Gursimran Singh, DO</h4>
+          <div class="team-title">Founder, CEO &amp; Lead Developer</div>
+          <p><strong>Emergency Medicine Physician</strong>, HCA Healthcare, Tampa FL. Solo technical founder: React Native, TypeScript, iOS.</p>
+          <p>Uniquely positioned as both domain expert (works rotating shifts) and product builder. Lived experience of the exact problem ShiftWell solves.</p>
+          <div style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;">
+            <span class="meta-chip"><span class="chip-dot gold"></span>Active ED Physician</span>
+            <span class="meta-chip"><span class="chip-dot green"></span>Solo Technical Founder</span>
+            <span class="meta-chip"><span class="chip-dot blue"></span>28K+ Lines of Production Code</span>
+          </div>
+        </div>
+      </div>
+      <div class="callout success">
+        <div class="callout-label">Why Solo Technical Founder is an Advantage</div>
+        <p>Zero miscommunication between clinical insight and technical execution. Complete ownership of the algorithm and its scientific basis. No equity dilution before product-market fit. Physician income provides runway without external funding dependency.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>10.2 Advisory Board Needs</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Role</th><th>Purpose</th><th>Target Profile</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Chief Nursing Officer (retired/emeritus)</strong></td><td>Enterprise hospital sales credibility</td><td>Former CNO at HCA, Tenet, or regional health system</td></tr>
+            <tr><td><strong>Occupational Health Physician</strong></td><td>Clinical credibility for OSHA/compliance positioning</td><td>Academic or occupational med faculty</td></tr>
+            <tr><td><strong>Healthcare Technology Attorney</strong></td><td>HIPAA, SOC2, BAA structuring, trademark</td><td>Healthcare-focused IP/tech counsel</td></tr>
+            <tr><td><strong>mHealth Investor</strong></td><td>Fundraising networks, term sheet guidance</td><td>Partner-level at a16z bio, Rock Health, or similar</td></tr>
+            <tr><td><strong>B2B Healthcare Sales (enterprise)</strong></td><td>Cold outreach playbook, hospital purchasing process</td><td>Former VP Sales at athenahealth, Epic, or similar</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>10.3 Hiring Plan (Funded Scenario)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Hire</th><th>Timing</th><th>Role</th><th>Budget</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Part-time React Native Developer</strong></td><td>$5K MRR</td><td>HealthKit, widgets, enterprise dashboard</td><td>$3K–$5K/mo</td></tr>
+            <tr><td><strong>Part-time Designer</strong></td><td>$3K MRR</td><td>UI polish, marketing assets</td><td>$2K–$3K/mo</td></tr>
+            <tr><td><strong>Part-time Marketing Contractor</strong></td><td>$5K MRR</td><td>Content, social, App Store ASO</td><td>$2K–$3K/mo</td></tr>
+            <tr><td><strong>First FTE (Enterprise Sales)</strong></td><td>Seed round</td><td>Hospital/EMS outreach, pilot coordination</td><td>$80K–$100K/yr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       11 FUNDING ROADMAP
+  ============================================================ -->
+  <section class="section" id="funding">
+    <div class="section-header">
+      <span class="section-number">11</span>
+      <div class="section-title-block">
+        <h2>Funding Roadmap</h2>
+        <p class="section-sub">Stage 0 → 1 → 2 funding ladder and the bootstrap alternative.</p>
+      </div>
+    </div>
+
+    <div class="funding-ladder">
+
+      <div class="funding-stage current">
+        <div class="funding-stage-header">
+          <span class="stage-badge current-badge">Stage 0 — Current</span>
+          <span class="stage-amount">Bootstrap</span>
+        </div>
+        <p class="stage-trigger"><strong>Status:</strong> Self-funded by founder. Physician income as runway.</p>
+        <p class="stage-trigger"><strong>Exit trigger:</strong> App Store live, 500+ active users, $500+ MRR</p>
+        <p class="stage-trigger"><strong>Operating cost:</strong> ~$1,100 Year 1 total</p>
+      </div>
+
+      <div class="funding-stage">
+        <div class="funding-stage-header">
+          <span class="stage-badge future-badge">Stage 1 — Pre-Seed</span>
+          <span class="stage-amount">$300K–$500K</span>
+        </div>
+        <p class="stage-trigger"><strong>Trigger:</strong> 1,000+ active users, strong App Store reviews, or first enterprise inbound</p>
+        <p class="stage-trigger"><strong>Use of funds:</strong> 12 months founder comp (if transitioning), enterprise pilot infrastructure (employer dashboard, compliance docs, SOC2 Type I), paid user acquisition testing ($5K–$10K/mo), part-time developer</p>
+        <p class="stage-trigger"><strong>Valuation:</strong> $2M–$4M pre-money, based on team quality, market size, and early traction</p>
+        <p class="stage-trigger muted"><strong>Targets:</strong> Rock Health, a16z bio, First Round Capital, angel physicians/nurses with exit experience</p>
+      </div>
+
+      <div class="funding-stage">
+        <div class="funding-stage-header">
+          <span class="stage-badge future-badge">Stage 2 — Seed</span>
+          <span class="stage-amount">$1.5M–$3M</span>
+        </div>
+        <p class="stage-trigger"><strong>Trigger:</strong> $10K+ MRR B2C, 2+ enterprise contracts, pilot outcome data</p>
+        <p class="stage-trigger"><strong>Use of funds:</strong> Full-time founding team (CTO or senior developer, VP Enterprise Sales), aggressive B2C paid acquisition ($20K–$50K/mo), SOC2 Type II certification (~$30K–$50K), partnership infrastructure (Kronos, QGenda API integrations), publication of first enterprise outcome study</p>
+        <p class="stage-trigger muted"><strong>Targets:</strong> Rock Health, Andreessen Horowitz Bio, UCSF/hospital-system strategic investors, health insurance company venture arms</p>
+      </div>
+
+    </div>
+
+    <div class="callout info" style="margin-top: 20px;">
+      <div class="callout-label">Bootstrap Alternative</div>
+      <p>Given physician income as backstop and minimal operating costs, ShiftWell can operate profitably as a bootstrapped business at any revenue level above $200/mo. <strong>Bootstrap decision gate:</strong> If Year 1 ends with &gt;$5K MRR purely organically, the bootstrap path to $50K+ MRR is highly viable.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       12 KEY RISKS
+  ============================================================ -->
+  <section class="section" id="risks">
+    <div class="section-header">
+      <span class="section-number">12</span>
+      <div class="section-title-block">
+        <h2>Key Risks</h2>
+        <p class="section-sub">Honest risk assessment with mitigation strategies for each.</p>
+      </div>
+    </div>
+
+    <div class="risk-grid">
+      <div class="risk-item">
+        <div class="risk-title">Low Adoption</div>
+        <div class="risk-badges">
+          <span class="risk-badge med-likelihood">Medium Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">Free launch, physician-founder story, beachhead in personal network. Break-even at 2 subscribers limits downside.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Algorithm Gives Poor Recommendations</div>
+        <div class="risk-badges">
+          <span class="risk-badge low-likelihood">Low Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">618+ tests, beta testing with real shift workers, conservative defaults, clear disclaimers.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Timeshifter Adds Calendar Sync</div>
+        <div class="risk-badges">
+          <span class="risk-badge low-likelihood">Low Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">Ship fast, build community, differentiate on breadth: 5 protocols, HealthKit, enterprise, physician-built brand.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Apple Dependency Risk</div>
+        <div class="risk-badges">
+          <span class="risk-badge med-likelihood">Medium Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">Build web presence and email list early. v1 is App Store only — mitigate by owning the user relationship off-platform.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Low Premium Conversion</div>
+        <div class="risk-badges">
+          <span class="risk-badge med-likelihood">Medium Likelihood</span>
+          <span class="risk-badge med-impact">Medium Impact</span>
+        </div>
+        <div class="risk-mitigation">Break-even at 2 subscribers. $12/mo costs are trivially low. Founder income covers all operations independently.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Regulatory Creep (FDA)</div>
+        <div class="risk-badges">
+          <span class="risk-badge low-likelihood">Low Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">Stay in "general wellness" category. Avoid diagnostic or treatment claims. Clear health disclaimers in v1.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Burnout (Solo Physician-Founder)</div>
+        <div class="risk-badges">
+          <span class="risk-badge med-likelihood">Medium Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">Cap app time at 10hrs/week. Physician income backstop. Hire at $5K MRR. Build in public for accountability.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Enterprise Sales Cycle Too Long</div>
+        <div class="risk-badges">
+          <span class="risk-badge med-likelihood">Medium Likelihood</span>
+          <span class="risk-badge med-impact">Medium Impact</span>
+        </div>
+        <div class="risk-mitigation">Bootstrap B2C first. Enterprise is Phase 3 upside, not Phase 1 dependency. B2C cash flow funds the wait.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">App Store Rejection</div>
+        <div class="risk-badges">
+          <span class="risk-badge low-likelihood">Low Likelihood</span>
+          <span class="risk-badge med-impact">Medium Impact</span>
+        </div>
+        <div class="risk-mitigation">Follow health app guidelines. No medical claims. Test on device before submission. Review guidelines checklist completed.</div>
+      </div>
+
+      <div class="risk-item">
+        <div class="risk-title">Privacy Incident</div>
+        <div class="risk-badges">
+          <span class="risk-badge low-likelihood">Very Low Likelihood</span>
+          <span class="risk-badge high-impact">High Impact</span>
+        </div>
+        <div class="risk-mitigation">v1 all-local, no PHI. Design v1.4 backend for HIPAA-awareness from day one. SOC2 Type II before enterprise contracts.</div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       13 MILESTONES & KPIs
+  ============================================================ -->
+  <section class="section" id="milestones">
+    <div class="section-header">
+      <span class="section-number">13</span>
+      <div class="section-title-block">
+        <h2>Milestones &amp; KPIs</h2>
+        <p class="section-sub">Launch milestones, weekly and monthly KPIs, and decision gates.</p>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>13.1 Launch Milestone Timeline</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Milestone</th><th>Target</th><th>Success Criteria</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>TestFlight Beta</strong></td><td class="td-gold">Month 0</td><td>20+ testers, core loop works without crashes</td></tr>
+            <tr><td><strong>App Store Launch</strong></td><td class="td-gold">Month 1</td><td>Live on store, &lt;1% crash rate</td></tr>
+            <tr><td><strong>500 Downloads</strong></td><td class="td-gold">Month 2</td><td>Organic, personal network, Reddit</td></tr>
+            <tr><td><strong>4.5+ App Store Rating</strong></td><td class="td-gold">Month 3</td><td>20+ reviews, mostly 5-star</td></tr>
+            <tr><td><strong>1,000 Active Users</strong></td><td class="td-gold">Month 3</td><td>30-day retention &gt;30%</td></tr>
+            <tr><td><strong>$500 MRR</strong></td><td class="td-gold">Month 6–8</td><td>~100 premium subscribers</td></tr>
+            <tr><td><strong>First Media Mention</strong></td><td class="td-gold">Month 4–6</td><td>Podcast, medical publication, or press</td></tr>
+            <tr><td><strong>$2,500 MRR</strong></td><td class="td-gold">Month 12</td><td>~500 premium subscribers</td></tr>
+            <tr><td><strong>First Enterprise Conversation</strong></td><td class="td-gold">Month 8–10</td><td>Warm intro to HR/benefits or CNO</td></tr>
+            <tr><td><strong>First Enterprise Pilot</strong></td><td class="td-gold">Month 12–15</td><td>50+ seat 90-day free pilot with outcome tracking</td></tr>
+            <tr><td><strong>$10K MRR</strong></td><td class="td-gold">Month 18–24</td><td>Evaluate full-time transition</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>13.2 Operational KPIs</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <h4>Weekly KPIs</h4>
+          <ul>
+            <li>Downloads (App Store Connect)</li>
+            <li>Active users (7-day and 30-day)</li>
+            <li>Retention (Day 1, Day 7, Day 30)</li>
+            <li>Plan generation rate (% of users who generate a sleep plan)</li>
+            <li>Export rate (% of users who export to calendar)</li>
+            <li>Crash-free rate (EAS/Sentry)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Monthly KPIs</h4>
+          <ul>
+            <li>MRR and MoM growth rate</li>
+            <li>Free-to-premium conversion (target: &gt;7%)</li>
+            <li>Churn rate (target: &lt;5%/mo)</li>
+            <li>App Store rating (target: 4.5+)</li>
+            <li>LTV/CAC ratio</li>
+            <li>Net Promoter Score (NPS)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>13.3 Decision Gates</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Question</th><th>Signal</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Add a backend?</strong></td><td>&gt;500 users requesting sync</td><td>Build Supabase auth/sync (Phase 2)</td></tr>
+            <tr><td><strong>Start paid acquisition?</strong></td><td>Organic growth plateaus, retention strong</td><td>Apple Search Ads $200–$500/mo</td></tr>
+            <tr><td><strong>Pursue enterprise?</strong></td><td>3+ inbound inquiries from organizations</td><td>Build employer dashboard (v1.4)</td></tr>
+            <tr><td><strong>Raise pre-seed?</strong></td><td>1,000+ active users, compelling story</td><td>Begin investor conversations</td></tr>
+            <tr><td><strong>Hire first FTE?</strong></td><td>$10K+ MRR, 3+ months sustained</td><td>Part-time developer or enterprise sales</td></tr>
+            <tr><td><strong>Go full-time?</strong></td><td>$10K+ MRR for 3 consecutive months</td><td>Evaluate against clinical income</td></tr>
+            <tr><td><strong>Raise seed?</strong></td><td>$20K+ MRR + enterprise traction</td><td>Engage Rock Health, a16z bio</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Immediate Next Actions</h3>
+      <div class="card-grid cols-2">
+        <div class="card">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Form LLC in Florida via Sunbiz.org ($125)</span></li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Get EIN via irs.gov (free, 10 minutes)</span></li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Apply for D-U-N-S number (free, 5 business days)</span></li>
+            <li style="padding: 7px 0; display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Enroll in Apple Developer Program ($99, requires D-U-N-S)</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Generate app icon and screenshots</span></li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Recruit 10–20 TestFlight beta testers from ED network</span></li>
+            <li style="padding: 7px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Register domain (shiftwell.app or getshiftwell.com)</span></li>
+            <li style="padding: 7px 0; display: flex; align-items: center; gap: 10px;"><span style="color: var(--warning); font-size: 13px;">&#9744;</span> <span style="font-size: 13px;">Set up landing page with email waitlist capture</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="doc-footer">
+    <div class="footer-brand">ShiftWell</div>
+    <p>Business Plan v2.0 &mdash; April 2026</p>
+    <p>Built by an ED physician. Validated by 618+ tests. Backed by 15+ peer-reviewed publications.</p>
+    <p style="margin-top: 8px;">Dr. Gursimran Singh, DO &mdash; Founder &amp; CEO &mdash; HCA Healthcare, Tampa FL</p>
+    <p style="margin-top: 12px; font-size: 10px; color: var(--text-muted);">Confidential — For investor and partner review only. All projections are forward-looking estimates.</p>
+  </footer>
+
+</main>
+
+<script>
+  // ============================================================
+  // SCROLL-IN ANIMATION
+  // ============================================================
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ============================================================
+  // BAR CHART ANIMATION — trigger on first visibility
+  // ============================================================
+  const barChartContainer = document.querySelector('.chart-container');
+  let barsAnimated = false;
+
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !barsAnimated) {
+        barsAnimated = true;
+        document.querySelectorAll('.bar-fill').forEach((bar, i) => {
+          const targetWidth = bar.getAttribute('data-width');
+          setTimeout(() => {
+            bar.style.width = targetWidth;
+          }, i * 60);
+        });
+        barObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+
+  const projectionSection = document.getElementById('financials');
+  if (projectionSection) barObserver.observe(projectionSection);
+
+  // ============================================================
+  // ACTIVE NAV LINK ON SCROLL
+  // ============================================================
+  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  const allSections = Array.from(document.querySelectorAll('section[id], .hero[id]'));
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-20% 0px -60% 0px' });
+
+  allSections.forEach(s => navObserver.observe(s));
+
+  // ============================================================
+  // MOBILE SIDEBAR CLOSE ON LINK CLICK
+  // ============================================================
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

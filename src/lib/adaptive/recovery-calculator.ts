@@ -20,6 +20,7 @@
  */
 
 import type { SleepRecord } from '../healthkit/healthkit-service';
+import type { HRVRecoveryModifier } from './hrv-recovery-modifier';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -41,12 +42,17 @@ const W_DURATION = 0.10;
  * Returns null if the source is not an Apple Watch (unreliable stage data).
  * Returns 0 (not null) when totalSleepMinutes is 0 — avoids divide-by-zero.
  *
- * @param record   - Single night's aggregated HealthKit sleep record
- * @param sleepNeed - User's target sleep duration in hours (e.g. 7.5)
+ * @param record       - Single night's aggregated HealthKit sleep record
+ * @param sleepNeed    - User's target sleep duration in hours (e.g. 7.5)
+ * @param hrvModifier  - Optional HRV-based adjustment (-20 to +20). When
+ *                       provided, the modifier is applied after computing
+ *                       the base score and the result is clamped to 0–100.
+ *                       When omitted, the behaviour is unchanged.
  */
 export function computeRecoveryScore(
   record: SleepRecord,
   sleepNeed: number,
+  hrvModifier?: HRVRecoveryModifier,
 ): number | null {
   // Only compute when Apple Watch data is present (reliable sleep staging)
   if (!record.source.includes('Apple Watch')) {
@@ -89,7 +95,14 @@ export function computeRecoveryScore(
       durationScore * W_DURATION) *
     100;
 
-  return Math.max(0, Math.min(100, Math.round(raw)));
+  const base = Math.max(0, Math.min(100, Math.round(raw)));
+
+  // Apply optional HRV modifier (clamped to 0-100)
+  if (hrvModifier !== undefined) {
+    return Math.max(0, Math.min(100, base + hrvModifier.modifier));
+  }
+
+  return base;
 }
 
 // ─── scoreToZone ──────────────────────────────────────────────────────────────

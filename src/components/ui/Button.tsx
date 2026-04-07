@@ -12,7 +12,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { COLORS, ACCENT } from '@/src/theme';
+import { COLORS, ACCENT, PURPLE } from '@/src/theme';
 
 interface ButtonProps {
   title: string;
@@ -99,7 +99,7 @@ export default function Button({
     textStyle.push(styles.disabledText);
   }
 
-  const indicatorColor = variant === 'primary' ? COLORS.text.primary : ACCENT.primary;
+  const indicatorColor = variant === 'primary' ? COLORS.text.primary : PURPLE;
 
   return (
     <Animated.View style={animatedStyle}>
@@ -136,12 +136,12 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   primaryBg: {
-    backgroundColor: ACCENT.primary,
+    backgroundColor: PURPLE,
   },
   secondaryBg: {
     backgroundColor: 'transparent',
     borderWidth: 1.5,
-    borderColor: ACCENT.primary,
+    borderColor: PURPLE,
   },
   fullWidth: {
     width: '100%',
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.primary,
   },
   secondaryText: {
-    color: ACCENT.primary,
+    color: PURPLE,
   },
   disabledText: {
     color: COLORS.text.tertiary,

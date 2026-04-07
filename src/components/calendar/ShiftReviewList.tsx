@@ -15,7 +15,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ACCENT, BACKGROUND, BORDER, RADIUS, SPACING, TEXT } from '@/src/theme';
+import { ACCENT, BACKGROUND, BORDER, RADIUS, SPACING, TEXT, PURPLE } from '@/src/theme';
 import type { RawCalendarEvent } from '@/src/lib/calendar/calendar-types';
 
 interface ShiftReviewListProps {
@@ -271,8 +271,8 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   checkboxChecked: {
-    backgroundColor: ACCENT.primary,
-    borderColor: ACCENT.primary,
+    backgroundColor: PURPLE,
+    borderColor: PURPLE,
   },
   checkmark: {
     color: TEXT.primary,

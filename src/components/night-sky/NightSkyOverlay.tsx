@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '40%',
-    backgroundColor: 'rgba(13,16,37,0.5)',
+    backgroundColor: 'rgba(10,8,28,0.5)',
   },
   safeArea: {
     flex: 1,

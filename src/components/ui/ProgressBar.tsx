@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
-import { COLORS, ACCENT } from '@/src/theme';
+import { COLORS, ACCENT, PURPLE } from '@/src/theme';
 
 interface ProgressBarProps {
   currentStep: number;
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   fill: {
     height: '100%',
-    backgroundColor: ACCENT.primary,
+    backgroundColor: PURPLE,
     borderRadius: 3,
   },
   label: {

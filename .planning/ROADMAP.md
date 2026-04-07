@@ -585,7 +585,7 @@ Plans:
 | 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
 | 17. Growth Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
-| 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 19. AI Coaching Research | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 21. Predictive Scheduling Research | v1.3 | 1/1 | Complete | 2026-04-07 |

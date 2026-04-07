@@ -4,7 +4,7 @@ import { format, isSameDay } from 'date-fns';
 import type { ShiftEvent, PlanBlock, SleepBlockType } from '@/src/lib/circadian/types';
 import Card from '@/src/components/ui/Card';
 import Button from '@/src/components/ui/Button';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER } from '@/src/theme';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, PURPLE } from '@/src/theme';
 
 interface DayDetailProps {
   date: Date;
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   editText: {
-    color: ACCENT.primary,
+    color: PURPLE,
     fontSize: 14,
     fontWeight: '600',
   },

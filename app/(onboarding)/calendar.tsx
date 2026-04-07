@@ -18,6 +18,7 @@ import {
   View,
 } from 'react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addDays } from 'date-fns';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -71,7 +72,8 @@ export default function CalendarScreen() {
 
   // ─── Navigation ────────────────────────────────────────────────────────────
 
-  function finishOnboarding() {
+  async function finishOnboarding() {
+    await AsyncStorage.setItem('installedAt', new Date().toISOString());
     router.replace('/(tabs)');
   }
 

@@ -15,3 +15,5 @@ export { ScienceInsightCard } from './ScienceInsightCard';
 export { NapCalculatorModal } from './NapCalculatorModal';
 export { PatternAlertCard } from './PatternAlertCard';
 export { AdaptiveInsightCard } from './AdaptiveInsightCard';
+export { WeeklyBriefCard } from './WeeklyBriefCard';
+export { CircadianForecastCard } from './CircadianForecastCard';

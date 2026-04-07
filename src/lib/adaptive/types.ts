@@ -165,7 +165,7 @@ export type ChangeType =
   | 'window-extended'
   | 'banking-triggered';
 
-export type ChangeFactor = 'circadian' | 'debt' | 'schedule' | 'recovery';
+export type ChangeFactor = 'circadian' | 'debt' | 'schedule' | 'recovery' | 'feedback';
 
 /**
  * A single meaningful plan change, surfaced on the AdaptiveInsightCard.

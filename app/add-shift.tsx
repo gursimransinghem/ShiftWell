@@ -16,7 +16,7 @@ import DateTimePicker, { type DateTimePickerEvent } from '@react-native-communit
 import Button from '@/src/components/ui/Button';
 import { useShiftsStore } from '@/src/store';
 import type { ShiftType } from '@/src/lib/circadian/types';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, SEMANTIC } from '@/src/theme';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, SEMANTIC, PURPLE } from '@/src/theme';
 
 /** Auto-detect shift type from start hour */
 function detectShiftType(start: Date, end: Date): ShiftType {
@@ -244,7 +244,7 @@ export default function AddShiftScreen() {
               onChangeText={setTitle}
               placeholder="Shift"
               placeholderTextColor={TEXT.tertiary}
-              selectionColor={ACCENT.primary}
+              selectionColor={PURPLE}
             />
           </View>
 
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   cancelText: {
-    color: ACCENT.primary,
+    color: PURPLE,
     fontSize: 16,
     fontWeight: '500',
   },
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pickerPressed: {
-    borderColor: ACCENT.primary,
+    borderColor: PURPLE,
     opacity: 0.8,
   },
   pickerText: {

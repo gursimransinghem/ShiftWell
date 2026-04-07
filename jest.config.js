@@ -19,5 +19,6 @@ module.exports = {
     '^src/lib/sync/sync-engine$': '<rootDir>/__mocks__/sync-engine.ts',
     '^expo-notifications$': '<rootDir>/__mocks__/expo-notifications.ts',
     '^react-native-svg$': '<rootDir>/__mocks__/react-native-svg.ts',
+    '^@kingstinct/react-native-healthkit$': '<rootDir>/__mocks__/healthkit.js',
   },
 };

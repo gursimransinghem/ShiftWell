@@ -1,7 +1,8 @@
 /**
  * PatternAlertCard — detects and displays upcoming schedule pattern alerts.
  *
- * Detects: night-shift-soon, consecutive nights, mixed week.
+ * Phase 6: Detects night-shift-soon, consecutive nights, mixed week.
+ * Phase 23: Enhanced with pattern recognition engine data (behavioral patterns).
  * Alerts can be individually dismissed. Returns null when no alerts remain.
  */
 
@@ -10,7 +11,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { differenceInDays } from 'date-fns';
 import { useShiftsStore } from '@/src/store/shifts-store';
+import { usePatternStore, patternDismissalKey } from '@/src/store/pattern-store';
 import type { ShiftEvent } from '@/src/lib/circadian/types';
+import type { DetectedPattern } from '@/src/lib/patterns/pattern-detector';
 import { COLORS, SPACING, RADIUS } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -121,19 +124,66 @@ function detectAlerts(shifts: ShiftEvent[]): PatternAlert[] {
 }
 
 // ---------------------------------------------------------------------------
+// Pattern recognition alert helpers (Phase 23)
+// ---------------------------------------------------------------------------
+
+const PATTERN_SEVERITY_COLORS: Record<DetectedPattern['severity'], string> = {
+  info: '#60A5FA',    // blue
+  warning: '#C8A84B', // yellow
+  alert: '#FB923C',   // orange
+};
+
+const PATTERN_ICONS: Record<DetectedPattern['severity'], keyof typeof Ionicons.glyphMap> = {
+  info: 'trending-down',
+  warning: 'alert-circle',
+  alert: 'warning',
+};
+
+function patternToAlert(
+  pattern: DetectedPattern,
+  dismissedPatterns: string[],
+): (PatternAlert & { dismissKey: string }) | null {
+  const key = patternDismissalKey(pattern);
+  if (dismissedPatterns.includes(key)) return null;
+
+  const color = PATTERN_SEVERITY_COLORS[pattern.severity];
+  return {
+    id: `pattern-${key}`,
+    icon: PATTERN_ICONS[pattern.severity],
+    color,
+    title: pattern.message,
+    body: pattern.evidence,
+    action: pattern.recommendation,
+    dismissKey: key,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
 export function PatternAlertCard() {
   const shifts = useShiftsStore((state) => state.shifts);
+  const { patterns, dismissedPatterns, dismissPattern } = usePatternStore();
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
 
-  const allAlerts = useMemo(() => detectAlerts(shifts), [shifts]);
-  const visibleAlerts = allAlerts.filter((a) => !dismissed.has(a.id));
+  // Schedule-based alerts (Phase 6)
+  const scheduleAlerts = useMemo(() => detectAlerts(shifts), [shifts]);
+  const visibleScheduleAlerts = scheduleAlerts.filter((a) => !dismissed.has(a.id));
 
-  if (visibleAlerts.length === 0) return null;
+  // Behavioral pattern alerts (Phase 23)
+  const patternAlerts = useMemo(
+    () =>
+      patterns
+        .map((p) => patternToAlert(p, dismissedPatterns))
+        .filter(Boolean) as Array<PatternAlert & { dismissKey: string }>,
+    [patterns, dismissedPatterns],
+  );
 
-  const dismiss = (id: string) => {
+  const hasAlerts = visibleScheduleAlerts.length > 0 || patternAlerts.length > 0;
+  if (!hasAlerts) return null;
+
+  const dismissSchedule = (id: string) => {
     setDismissed((prev) => new Set([...prev, id]));
   };
 
@@ -142,38 +192,50 @@ export function PatternAlertCard() {
       {/* Section label */}
       <Text style={styles.sectionLabel}>PATTERN ALERTS</Text>
 
-      {visibleAlerts.map((alert) => (
+      {/* Schedule-based alerts */}
+      {visibleScheduleAlerts.map((alert) => (
         <View key={alert.id} style={[styles.card, { borderLeftColor: alert.color }]}>
-          {/* Icon row */}
           <View style={styles.iconRow}>
             <View style={[styles.iconCircle, { backgroundColor: alert.color + '20' }]}>
               <Ionicons name={alert.icon} size={16} color={alert.color} />
             </View>
-
             <Text style={styles.alertTitle}>{alert.title}</Text>
-
             <TouchableOpacity
-              onPress={() => dismiss(alert.id)}
+              onPress={() => dismissSchedule(alert.id)}
               accessibilityLabel="Dismiss alert"
               accessibilityRole="button"
               style={styles.dismissButton}
             >
-              <Ionicons
-                name="close-circle-outline"
-                size={18}
-                color={COLORS.text.tertiary}
-              />
+              <Ionicons name="close-circle-outline" size={18} color={COLORS.text.tertiary} />
             </TouchableOpacity>
           </View>
-
-          {/* Body */}
           <Text style={styles.bodyText}>{alert.body}</Text>
-
-          {/* Action chip */}
           <View style={[styles.actionChip, { backgroundColor: alert.color + '20' }]}>
-            <Text style={[styles.actionText, { color: alert.color }]}>
-              {alert.action}
-            </Text>
+            <Text style={[styles.actionText, { color: alert.color }]}>{alert.action}</Text>
+          </View>
+        </View>
+      ))}
+
+      {/* Behavioral pattern alerts (Phase 23) */}
+      {patternAlerts.map((alert) => (
+        <View key={alert.id} style={[styles.card, { borderLeftColor: alert.color }]}>
+          <View style={styles.iconRow}>
+            <View style={[styles.iconCircle, { backgroundColor: alert.color + '20' }]}>
+              <Ionicons name={alert.icon} size={16} color={alert.color} />
+            </View>
+            <Text style={styles.alertTitle}>{alert.title}</Text>
+            <TouchableOpacity
+              onPress={() => dismissPattern(alert.dismissKey)}
+              accessibilityLabel="Dismiss alert"
+              accessibilityRole="button"
+              style={styles.dismissButton}
+            >
+              <Ionicons name="close-circle-outline" size={18} color={COLORS.text.tertiary} />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.bodyText}>{alert.body}</Text>
+          <View style={[styles.actionChip, { backgroundColor: alert.color + '20' }]}>
+            <Text style={[styles.actionText, { color: alert.color }]}>{alert.action}</Text>
           </View>
         </View>
       ))}

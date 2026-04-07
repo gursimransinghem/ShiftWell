@@ -25,9 +25,59 @@
 import { addMinutes, addHours, isBefore, isAfter, setHours, setMinutes } from 'date-fns';
 import type { ClassifiedDay, UserProfile, PlanBlock } from './types';
 
-/** Nap duration options in minutes */
+/**
+ * Flexible nap duration tiers.
+ *
+ * - power (20 min): below N2/N3 threshold — alertness boost, minimal inertia
+ *   (Milner & Cote, 2009: 10-20 min maximises performance, avoids inertia)
+ * - short (30 min): enters N2 for deeper rest, brief inertia possible
+ * - full  (90 min): complete NREM/REM cycle — maximum restoration
+ *
+ * Sleep inertia buffers (time needed before performance-critical activity):
+ * - power nap: 5 min
+ * - short nap: 10 min
+ * - full nap:  15 min
+ */
+export type NapDuration = 'power' | 'short' | 'full';
+
+export const NAP_DURATIONS: Record<NapDuration, number> = {
+  power: 20,
+  short: 30,
+  full: 90,
+};
+
+const INERTIA_BUFFER: Record<NapDuration, number> = {
+  power: 5,
+  short: 10,
+  full: 15,
+};
+
+/** Legacy constants preserved for backward compatibility */
 const NAP_SHORT = 25;  // Power nap: alertness boost, no inertia
 const NAP_FULL_CYCLE = 90;  // Full sleep cycle: deep restoration
+
+/**
+ * Resolve the user's nap preference to a duration in minutes.
+ *
+ * profile.napPreference may be a boolean (legacy) or a NapDuration string.
+ * - boolean true → use the caller-supplied legacyMinutes (preserves pre-existing behaviour)
+ * - NapDuration string ('power' | 'short' | 'full') → use NAP_DURATIONS lookup
+ *
+ * Returns { durationMinutes, inertiaBufMinutes }.
+ */
+function resolveNapDuration(
+  napPreference: boolean | string,
+  legacyMinutes: number,
+): { durationMinutes: number; inertiaBufMinutes: number } {
+  if (typeof napPreference === 'string') {
+    const tier = napPreference as NapDuration;
+    if (tier === 'power' || tier === 'short' || tier === 'full') {
+      return { durationMinutes: NAP_DURATIONS[tier], inertiaBufMinutes: INERTIA_BUFFER[tier] };
+    }
+  }
+  // boolean true → use the legacy constant with 0 extra inertia buffer (legacy had no buffer concept)
+  return { durationMinutes: legacyMinutes, inertiaBufMinutes: 0 };
+}
 
 /** Set a specific time on a date */
 function setTime(date: Date, hours: number): Date {
@@ -57,6 +107,13 @@ function hasConflict(
  *
  * Called AFTER sleep-windows has generated main sleep blocks.
  * Naps are placed in the gaps between sleep and shift blocks.
+ *
+ * Nap duration is personalised via profile.napPreference:
+ *   - boolean true/false: true uses the per-context default tier
+ *   - NapDuration string ('power' | 'short' | 'full'): applied directly
+ *
+ * If shift starts in < 3 hours, forces 'power' nap regardless of preference
+ * to avoid sleep inertia at shift start (Milner & Cote, 2009).
  */
 export function generateNaps(
   day: ClassifiedDay,
@@ -71,12 +128,22 @@ export function generateNaps(
 
   switch (day.dayType) {
     case 'work-night': {
-      // Pre-shift prophylactic nap: 90 min before leaving for work
-      // This is the single most effective intervention for night shift alertness
+      // Pre-shift prophylactic nap: best bang-for-buck intervention for night shift alertness
+      // (Ruggiero & Redeker, 2014)
       const shift = day.shift!;
       const leaveTime = addMinutes(shift.start, -profile.commuteDuration);
-      const napEnd = addMinutes(leaveTime, -30); // 30 min buffer to fully wake
-      const napStart = addMinutes(napEnd, -NAP_FULL_CYCLE);
+
+      // Force 'power' if shift starts within 3 hours — no time for a full cycle
+      // and sleep inertia would impair performance at shift start (Milner & Cote, 2009)
+      const timeToShiftMinutes = (shift.start.getTime() - date.getTime()) / 60000;
+      const forcePower = timeToShiftMinutes < 180 && typeof profile.napPreference === 'string';
+
+      const { durationMinutes, inertiaBufMinutes } = forcePower
+        ? { durationMinutes: NAP_DURATIONS.power, inertiaBufMinutes: INERTIA_BUFFER.power }
+        : resolveNapDuration(profile.napPreference, NAP_FULL_CYCLE);
+
+      const napEnd = addMinutes(leaveTime, -(30 + inertiaBufMinutes));
+      const napStart = addMinutes(napEnd, -durationMinutes);
 
       if (!hasConflict(napStart, napEnd, existingBlocks)) {
         naps.push({
@@ -85,7 +152,11 @@ export function generateNaps(
           start: napStart,
           end: napEnd,
           label: 'Pre-Shift Nap',
-          description: 'Full 90-minute sleep cycle before your night shift. This is the #1 evidence-based intervention for night shift alertness.',
+          description: durationMinutes === 90
+            ? 'Full 90-minute sleep cycle before your night shift. This is the #1 evidence-based intervention for night shift alertness.'
+            : durationMinutes === 30
+            ? '30-minute nap for deeper rest before your night shift. Set an alarm to avoid oversleeping.'
+            : `${durationMinutes}-minute power nap before your night shift — alertness boost with minimal inertia.`,
           priority: 2,
         });
       }
@@ -93,11 +164,15 @@ export function generateNaps(
     }
 
     case 'work-evening': {
-      // Afternoon power nap before an evening shift
+      // Afternoon nap before an evening shift
       const shift = day.shift!;
       const leaveTime = addMinutes(shift.start, -profile.commuteDuration);
-      const napEnd = addMinutes(leaveTime, -45); // More buffer — need to be fully alert
-      const napStart = addMinutes(napEnd, -NAP_SHORT);
+
+      const { durationMinutes: eveningDur, inertiaBufMinutes: eveningBuf } =
+        resolveNapDuration(profile.napPreference, NAP_SHORT);
+      // More buffer for evening shifts — need to arrive fully alert
+      const napEnd = addMinutes(leaveTime, -(eveningBuf + 45));
+      const napStart = addMinutes(napEnd, -eveningDur);
 
       if (!hasConflict(napStart, napEnd, existingBlocks)) {
         naps.push({
@@ -106,7 +181,7 @@ export function generateNaps(
           start: napStart,
           end: napEnd,
           label: 'Power Nap',
-          description: '25-minute power nap. Set an alarm — do NOT oversleep into deep sleep or you will feel groggy.',
+          description: `${eveningDur}-minute nap. Set an alarm — do NOT oversleep into deep sleep or you will feel groggy.`,
           priority: 3,
         });
       }
@@ -117,8 +192,11 @@ export function generateNaps(
       // Pre-shift nap before a 24h shift — bank sleep
       const shift = day.shift!;
       const leaveTime = addMinutes(shift.start, -profile.commuteDuration);
-      const napEnd = addMinutes(leaveTime, -30);
-      const napStart = addMinutes(napEnd, -NAP_FULL_CYCLE);
+
+      const { durationMinutes: extDur, inertiaBufMinutes: extBuf } =
+        resolveNapDuration(profile.napPreference, NAP_FULL_CYCLE);
+      const napEnd = addMinutes(leaveTime, -(extBuf + 30));
+      const napStart = addMinutes(napEnd, -extDur);
 
       if (!hasConflict(napStart, napEnd, existingBlocks)) {
         naps.push({
@@ -127,7 +205,7 @@ export function generateNaps(
           start: napStart,
           end: napEnd,
           label: 'Sleep Banking Nap',
-          description: 'Full 90-min cycle to bank sleep before your extended shift. Critical for maintaining performance at hour 20+.',
+          description: `${extDur}-min nap to bank sleep before your extended shift. Critical for maintaining performance at hour 20+.`,
           priority: 2,
         });
       }
@@ -137,7 +215,9 @@ export function generateNaps(
     case 'transition-to-nights': {
       // Afternoon nap to begin delaying the sleep phase
       const napStart = setTime(date, 15); // 3:00 PM
-      const napEnd = addMinutes(napStart, NAP_FULL_CYCLE);
+      const { durationMinutes: transitionDur } =
+        resolveNapDuration(profile.napPreference, NAP_FULL_CYCLE);
+      const napEnd = addMinutes(napStart, transitionDur);
 
       if (!hasConflict(napStart, napEnd, existingBlocks)) {
         naps.push({
@@ -162,8 +242,10 @@ export function generateNaps(
         const shiftEndHour = shift.end.getHours();
         // Only suggest if shift ends by early afternoon
         if (shiftEndHour <= 15) {
+          const { durationMinutes: dayDur } =
+            resolveNapDuration(profile.napPreference, NAP_SHORT);
           const napStart = setTime(date, 14); // 2:00 PM
-          const napEnd = addMinutes(napStart, NAP_SHORT);
+          const napEnd = addMinutes(napStart, dayDur);
 
           if (!hasConflict(napStart, napEnd, existingBlocks)) {
             naps.push({
@@ -172,7 +254,7 @@ export function generateNaps(
               start: napStart,
               end: napEnd,
               label: 'Power Nap (Optional)',
-              description: 'Your body naturally dips in alertness around 2-3 PM. A quick 25-min nap here boosts the rest of your day.',
+              description: `Your body naturally dips in alertness around 2-3 PM. A quick ${dayDur}-min nap here boosts the rest of your day.`,
               priority: 3,
             });
           }

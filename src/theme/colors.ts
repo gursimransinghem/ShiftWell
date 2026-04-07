@@ -10,12 +10,12 @@
 // ---------------------------------------------------------------------------
 
 export const BACKGROUND = {
-  /** App-level background — very dark navy */
-  primary: '#0B0D16',
+  /** App-level background — deep space (Path B darker navy) */
+  primary: '#080B14',
   /** Cards, sheets, modals */
-  surface: '#151A2A',
+  surface: '#131726',
   /** Elevated surfaces (e.g. floating action buttons) */
-  elevated: '#1C2137',
+  elevated: '#1A1F35',
 } as const;
 
 export const TEXT = {
@@ -44,11 +44,17 @@ export const BORDER = {
 // ---------------------------------------------------------------------------
 
 export const ACCENT = {
-  /** Warm gold — primary brand accent (per DES-01) */
+  /** Warm gold — brand/data accent (text highlights, scores, labels) */
   primary: '#C8A84B',
   primaryMuted: '#8B6914',
   /** Soft highlight for positive states */
   highlight: '#F59E0B',
+  /** Path B purple — interactive elements (buttons, active states, progress rings) */
+  purple: '#7B61FF',
+  purpleMuted: 'rgba(123,97,255,0.15)',
+  /** Purple-gold gradient stops (use with LinearGradient) */
+  gradientPurple: '#7B61FF',
+  gradientGold: '#C8A84B',
   /** Legacy blue — retained for calendar block colors only */
   blue: '#4A90D9',
   blueMuted: '#3468A3',

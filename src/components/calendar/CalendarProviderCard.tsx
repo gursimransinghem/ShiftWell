@@ -13,7 +13,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ACCENT, BACKGROUND, BORDER, COLORS, RADIUS, SPACING, TEXT } from '@/src/theme';
+import { ACCENT, BACKGROUND, BORDER, COLORS, RADIUS, SPACING, TEXT, PURPLE } from '@/src/theme';
 
 interface CalendarProviderCardProps {
   provider: 'apple' | 'google';
@@ -64,7 +64,7 @@ export function CalendarProviderCard({
 
       {/* Action */}
       {loading ? (
-        <ActivityIndicator color={ACCENT.primary} size="small" />
+        <ActivityIndicator color={PURPLE} size="small" />
       ) : connected ? (
         <Pressable onPress={onManage} style={styles.manageButton}>
           <Text style={styles.manageText}>Manage</Text>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     color: TEXT.secondary,
   },
   connectButton: {
-    backgroundColor: ACCENT.primary,
+    backgroundColor: PURPLE,
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
     borderRadius: RADIUS.md,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   connectText: {
     fontSize: 14,
     fontWeight: '600',
-    color: COLORS.text.inverse,
+    color: COLORS.text.primary,
   },
   manageButton: {
     paddingHorizontal: SPACING.md,
@@ -140,6 +140,6 @@ const styles = StyleSheet.create({
   manageText: {
     fontSize: 14,
     fontWeight: '500',
-    color: ACCENT.primary,
+    color: PURPLE,
   },
 });

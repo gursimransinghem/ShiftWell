@@ -12,7 +12,7 @@ import { usePremiumStore } from '@/src/store/premium-store';
 import { useUserStore } from '@/src/store/user-store';
 import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
 import { logExposure } from '@/src/lib/growth/ab-testing';
-import { COLORS, SPACING, RADIUS } from '@/src/theme';
+import { COLORS, SPACING, RADIUS, PURPLE } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -631,8 +631,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   planCardSelected: {
-    borderColor: GOLD,
-    backgroundColor: `${GOLD}0D`,
+    borderColor: PURPLE,
+    backgroundColor: 'rgba(123,97,255,0.07)',
   },
   planBadge: {
     position: 'absolute',
@@ -656,7 +656,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   planLabelSelected: {
-    color: GOLD,
+    color: PURPLE,
   },
   planPrice: {
     fontSize: 20,
@@ -664,7 +664,7 @@ const styles = StyleSheet.create({
     color: COLORS.text.primary,
   },
   planPriceSelected: {
-    color: GOLD,
+    color: PURPLE,
   },
   planPeriod: {
     fontSize: 11,
@@ -680,15 +680,15 @@ const styles = StyleSheet.create({
   // ── CTA
   cta: {
     borderRadius: RADIUS.lg,
-    backgroundColor: GOLD,
+    backgroundColor: PURPLE,
     paddingVertical: 18,
     alignItems: 'center',
     gap: 4,
     marginBottom: 16,
-    shadowColor: GOLD,
+    shadowColor: PURPLE,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
+    shadowOpacity: 0.4,
+    shadowRadius: 14,
     elevation: 8,
   },
   ctaDisabled: {

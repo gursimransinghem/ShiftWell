@@ -144,6 +144,20 @@ None — all wired logic is functional. The `hrvContext` parameter in `useAdapti
 - Energy curve available for caffeine cutoff notifications and coaching cards
 - HRV dead zone (HK-11) will activate automatically once `latestHRVReading` and `hrvP20` are added to plan-store
 
+## Self-Check: PASSED
+
+| Artifact | Status |
+|----------|--------|
+| `src/lib/adaptive/feedback-engine.ts` | FOUND |
+| `src/lib/energy/energy-engine.ts` | FOUND |
+| `__tests__/lib/adaptive/feedback-engine.test.ts` | FOUND |
+| `__tests__/lib/energy/energy-engine.test.ts` | FOUND |
+| `.planning/phases/15-algorithm-feedback-engine/15-01-SUMMARY.md` | FOUND |
+| Commit `03ad5d6` (Task 1) | FOUND |
+| Commit `4f0f4e5` (Task 2) | FOUND |
+| Commit `708c552` (Task 3) | FOUND |
+| Commit `6bf33a5` (metadata) | FOUND |
+
 ---
 *Phase: 15-algorithm-feedback-engine*
 *Completed: 2026-04-07*

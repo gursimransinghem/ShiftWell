@@ -16,6 +16,13 @@ export {
 } from './colors';
 export type { Colors } from './colors';
 
+/** Path B purple accent — use for interactive elements, active states, progress rings */
+export const PURPLE = '#7B61FF';
+/** Purple ambient glow — shadow/overlay tint */
+export const PURPLE_GLOW = 'rgba(123,97,255,0.35)';
+/** Path B gradient: purple → gold */
+export const ACCENT_GRADIENT = ['#7B61FF', '#C8A84B'] as const;
+
 export {
   TYPOGRAPHY,
   FONT_SIZE,
