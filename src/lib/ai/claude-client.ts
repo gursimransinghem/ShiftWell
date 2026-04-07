@@ -2,8 +2,12 @@
  * Claude API client — generates personalized weekly sleep briefs.
  *
  * Uses fetch() against the Anthropic messages endpoint.
- * API key loaded from EXPO_PUBLIC_CLAUDE_API_KEY env var (never hardcoded).
+ * API key loaded from EXPO_PUBLIC_ANTHROPIC_API_KEY (or EXPO_PUBLIC_CLAUDE_API_KEY) env var.
  * Timeout: 15 seconds. Falls back to a static brief on any failure.
+ *
+ * Exports:
+ *   generateCompletion — low-level call returning { text, tokensUsed }
+ *   generateWeeklyBrief — legacy pipeline used by brief-store.ts
  */
 
 // ---------------------------------------------------------------------------
@@ -174,3 +178,72 @@ export async function generateWeeklyBrief(
 }
 
 export { FALLBACK_BRIEF };
+
+// ---------------------------------------------------------------------------
+// generateCompletion — low-level Claude API call (used by weekly-brief-generator)
+// ---------------------------------------------------------------------------
+
+import { ClaudeAPIError } from './types';
+
+const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+const DEFAULT_MODEL = 'claude-haiku-4-5';
+
+/**
+ * Send a single-turn message to the Anthropic API.
+ *
+ * @param systemPrompt   System instructions (role, rules, tone)
+ * @param userMessage    User turn content
+ * @param model          Anthropic model ID (defaults to claude-haiku-4-5)
+ * @returns              { text: string; tokensUsed: number }
+ * @throws               ClaudeAPIError on 4xx/5xx HTTP responses
+ */
+export async function generateCompletion(
+  systemPrompt: string,
+  userMessage: string,
+  model?: string,
+): Promise<{ text: string; tokensUsed: number }> {
+  const apiKey =
+    process.env.EXPO_PUBLIC_ANTHROPIC_API_KEY ??
+    process.env.EXPO_PUBLIC_CLAUDE_API_KEY;
+
+  if (!apiKey) {
+    throw new ClaudeAPIError(401, 'EXPO_PUBLIC_ANTHROPIC_API_KEY is not set');
+  }
+
+  const response = await fetch(ANTHROPIC_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: model ?? DEFAULT_MODEL,
+      max_tokens: 300,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMessage }],
+    }),
+  });
+
+  if (!response.ok) {
+    let message = `HTTP ${response.status}`;
+    try {
+      const body = await response.json();
+      message = body?.error?.message ?? message;
+    } catch {
+      // ignore parse failure — use default message
+    }
+
+    if (response.status === 429) {
+      throw new ClaudeAPIError(429, 'Rate limit exceeded — retry after 60s');
+    }
+    throw new ClaudeAPIError(response.status, message);
+  }
+
+  const data = await response.json();
+  const text: string = data?.content?.[0]?.text ?? '';
+  const tokensUsed: number =
+    (data?.usage?.input_tokens ?? 0) + (data?.usage?.output_tokens ?? 0);
+
+  return { text, tokensUsed };
+}
