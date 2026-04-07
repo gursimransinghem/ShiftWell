@@ -18,3 +18,4 @@ export { AdaptiveInsightCard } from './AdaptiveInsightCard';
 export { WeeklyBriefCard } from './WeeklyBriefCard';
 export { CircadianForecastCard } from './CircadianForecastCard';
 export { BehavioralChecklist } from './BehavioralChecklist';
+export { HRVCalibrationBanner } from './HRVCalibrationBanner';

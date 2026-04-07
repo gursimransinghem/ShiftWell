@@ -42,6 +42,7 @@ import {
   WeeklyBriefCard,
   CircadianForecastCard,
   BehavioralChecklist,
+  HRVCalibrationBanner,
 } from '@/src/components/today';
 import { useBriefStore } from '@/src/store/brief-store';
 import { useWeeklyBrief } from '@/src/hooks/useWeeklyBrief';
@@ -651,6 +652,11 @@ export default function TodayScreen() {
                     <ScoreBreakdownCard score={heroScoreData.score} />
                   </View>
                 )}
+
+                {/* HRV Calibration Banner (Phase 33) — shows during calibration or when HRV active */}
+                <View style={styles.section}>
+                  <HRVCalibrationBanner />
+                </View>
 
                 {/* Sleep Debt Tracker (Feature 1) — premium gate (adaptive_brain) */}
                 {canUseAdaptiveBrain && showDebtCard && (
