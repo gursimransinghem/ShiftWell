@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-07
+**Last updated:** 2026-04-07 (Midday)
 **CEO Loop version:** 1.0
-**Cycle count:** 1
+**Cycle count:** 2
 
 ## Department Status
 
@@ -10,7 +10,7 @@
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 | Next: phase completion or feedback | Updated VISUAL_ROADMAP.md — phases 7-11 complete, Phase 12 blocked |
 | 2 | Engineering | Active | 2026-04-07 | Next: STATE.md change or test failure | 383 tests passing, 0 TS errors; npm test script missing |
-| 3 | Marketing | Active | -- | First cycle skipped (cost); trigger at next cycle | WebSearch deferred; no urgent competitive intel |
+| 3 | Marketing | Active | 2026-04-07 | Next: >3 days since last run OR COMPETITOR_LOG >7 days old | ASO strategy + 6-week content calendar complete; "shift worker" keywords uncontested |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 | Next: phase completion or monthly | Updated BUSINESS_PLAN.md pricing; Individual dev enrollment flagged |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
@@ -28,8 +28,30 @@
 | 3 | Trademark clearance search + filing | Operations | HIGH | Can parallelize with LLC; protect name before marketing spend |
 | 4 | Add `"test": "jest"` to package.json scripts | Engineering | LOW | One-line fix; unblocks CEO Loop test checks |
 | 5 | Commit and push Phase 10/11 staged changes | Engineering | MEDIUM | 11 modified files + 1 new test; should be committed before TestFlight build |
+| 6 | Record 60-second app walkthrough (screen capture) | Marketing | HIGH | Single highest-value pre-launch asset; app is ready now |
+| 7 | Build waitlist landing page (shiftwell.com) | Marketing | HIGH | Email capture pre-launch; every week delayed = fewer Day 1 users |
+| 8 | LinkedIn founder story in Sim's voice | Marketing | HIGH | Medical audience trusts MD voice; Claude can draft structure, Sim must write it |
+| 9 | Claim social handles (@shiftwell_sleep) | Marketing | MEDIUM | Name squatting risk; claim now before marketing spend |
+| 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
 
 ## Recent Activity
+
+### Cycle 2 — 2026-04-07 (Midday)
+**Departments dispatched:** Marketing
+**All others:** Not triggered (no STATE.md changes, no financial changes, not first of month)
+
+**Key findings:**
+- "Shift worker sleep" keyword cluster is uncontested in App Store — ShiftWell has first-mover ASO advantage
+- Timeshifter owns "jet lag" keywords (not shift work); Rise Science owns "energy/sleep debt" — neither owns our niche
+- Arcashift users actively frustrated (persistent bugs) — primed to switch; monitor their 1-star reviews
+- App name is blocking ASO copy, social handles, domain registration — CRITICAL path item
+- 60-second app screen recording is single highest-value pre-launch marketing asset (app is ready to record now)
+- Waitlist landing page: every week of delay = fewer Day 1 users; build before TestFlight
+- Best pre-launch window (~5-6 weeks while waiting on LLC) maps perfectly to 6-week content calendar
+
+**New Pending Approvals added:** App name finalization, LinkedIn founder story (Sim voice), waitlist page launch, social handle claims, app demo recording
+
+**Artifacts committed:** COMPETITOR_LOG.md (Marketing Analysis appended), MARKETING-CYCLE-REPORT.md (new)
 
 ### Cycle 1 — 2026-04-07 (Morning)
 **Departments dispatched:** Engineering, Product, Operations, Strategy & Planning
