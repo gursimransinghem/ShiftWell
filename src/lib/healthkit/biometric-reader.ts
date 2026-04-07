@@ -198,6 +198,107 @@ export async function fetchDailyStepCount(date: Date): Promise<number> {
   }
 }
 
+// ─── fetchSleepApneaEvents ────────────────────────────────────────────────────
+
+/**
+ * Read sleep apnea event count during a sleep window.
+ *
+ * Queries HKCategoryTypeIdentifierSleepApneaEvent (iOS 18+, Apple Watch S9+).
+ * Returns the count of apnea events recorded during the sleep window,
+ * or null if unsupported (older iOS/watchOS).
+ *
+ * Any non-zero count indicates the user had sleep apnea events — a medical
+ * finding requiring clinical follow-up, not algorithmic correction.
+ *
+ * @param sleepStart - Start of the sleep window
+ * @param sleepEnd - End of the sleep window
+ */
+export async function fetchSleepApneaEvents(
+  sleepStart: Date,
+  sleepEnd: Date,
+): Promise<number | null> {
+  try {
+    // HKCategoryTypeIdentifierSleepApneaEvent is iOS 18+ — wrap in try/catch
+    const samples = await HealthKit.queryCategorySamples(
+      'HKCategoryTypeIdentifierSleepApneaEvent' as Parameters<typeof HealthKit.queryCategorySamples>[0],
+      { from: sleepStart, to: sleepEnd },
+    );
+
+    if (!samples) return null;
+    return samples.length;
+  } catch {
+    // Identifier not available on this iOS version — return null gracefully
+    return null;
+  }
+}
+
+// ─── fetchBreathingDisturbances ───────────────────────────────────────────────
+
+/**
+ * Read Apple Sleeping Breathing Disturbances rate for a sleep window.
+ *
+ * Queries HKQuantityTypeIdentifierAppleSleepingBreathingDisturbances (iOS 18+).
+ * Returns the mean breathing disturbance rate per hour across all samples,
+ * or null if unsupported.
+ *
+ * Threshold: > 10 disturbances/hour = clinically significant (AHI-equivalent).
+ * When above threshold, sleep quality data should be suppressed as the user
+ * may have undiagnosed obstructive sleep apnea.
+ *
+ * @param sleepStart - Start of the sleep window
+ * @param sleepEnd - End of the sleep window
+ */
+export async function fetchBreathingDisturbances(
+  sleepStart: Date,
+  sleepEnd: Date,
+): Promise<number | null> {
+  try {
+    // HKQuantityTypeIdentifierAppleSleepingBreathingDisturbances is iOS 18+
+    const samples = await HealthKit.queryQuantitySamples(
+      'HKQuantityTypeIdentifierAppleSleepingBreathingDisturbances' as HKQuantityTypeIdentifier,
+      { from: sleepStart, to: sleepEnd },
+    );
+
+    if (!samples || samples.length === 0) return null;
+
+    // Mean disturbance rate per hour across all samples in the window
+    const sum = samples.reduce((acc: number, s: { quantity: number }) => acc + s.quantity, 0);
+    const mean = sum / samples.length;
+    return Math.round(mean * 10) / 10;
+  } catch {
+    // Identifier not available on this iOS version — return null gracefully
+    return null;
+  }
+}
+
+// ─── shouldSuppressSleepQuality ───────────────────────────────────────────────
+
+/**
+ * Determine if sleep quality data should be suppressed due to breathing events.
+ *
+ * Returns true when either:
+ * - apneaEventCount > 0 (any apnea event detected)
+ * - breathingDisturbanceRate > 10 per hour (AHI-equivalent threshold)
+ *
+ * When true, the adaptive brain should NOT use sleep staging data as algorithm
+ * input — the poor quality is medical (potential OSA), not behavioral.
+ * Surface a clinical screening prompt to the user instead.
+ *
+ * Scientific basis: American Academy of Sleep Medicine (AASM) AHI threshold ≥5/hr
+ * for mild OSA; we use 10/hr as a conservative screening threshold.
+ *
+ * @param apneaEventCount - Count from fetchSleepApneaEvents, or null if unavailable
+ * @param breathingDisturbanceRate - Rate from fetchBreathingDisturbances, or null
+ */
+export function shouldSuppressSleepQuality(
+  apneaEventCount: number | null,
+  breathingDisturbanceRate: number | null,
+): boolean {
+  if (apneaEventCount !== null && apneaEventCount > 0) return true;
+  if (breathingDisturbanceRate !== null && breathingDisturbanceRate > 10) return true;
+  return false;
+}
+
 // ─── detectDeviceTier ────────────────────────────────────────────────────────
 
 /**
