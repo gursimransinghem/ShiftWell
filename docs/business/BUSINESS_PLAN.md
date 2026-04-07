@@ -36,9 +36,9 @@
 - Deterministic algorithm based on peer-reviewed research (15+ cited papers)
 - Zero backend costs in v1 (all computation on-device)
 
-**Revenue Model:** Free at launch → Freemium at Month 3 ($4.99/mo or $39.99/yr) → B2B team plans at Month 8+
+**Revenue Model:** Free at launch → Freemium at v1.2 ($6.99/mo or $49.99/yr or $149.99 lifetime) → B2B team plans at Month 8+
 
-**Target:** 1,000 users by Month 3, first revenue by Month 4, $5-10K MRR by Month 12.
+**Target:** 1,000 users by Month 3, first revenue at v1.2, $5-10K MRR by Month 12.
 
 ---
 
@@ -259,7 +259,7 @@ Introduce premium tier based on beta feedback about what features users value mo
 
 **Suggested split:**
 
-| Feature | Free | Premium ($4.99/mo or $39.99/yr) |
+| Feature | Free | Premium ($6.99/mo or $49.99/yr or $149.99 lifetime) |
 |---------|------|------|
 | Manual shift entry | ✅ | ✅ |
 | Basic sleep plan (sleep windows only) | ✅ | ✅ |
@@ -273,11 +273,13 @@ Introduce premium tier based on beta feedback about what features users value mo
 | Priority support | ❌ | ✅ |
 
 **Pricing rationale:**
-- $4.99/mo is the sleep app sweet spot (Timeshifter charges $9.99/mo)
-- $39.99/yr (33% discount) incentivizes annual commitment
-- Both are impulse-buy prices for healthcare professionals ($150K+ avg salary)
+- $6.99/mo is the sleep app sweet spot — above Sleep Cycle ($2.99), below Timeshifter ($9.99/mo), positioned for premium perception
+- $49.99/yr (~40% discount) incentivizes annual commitment
+- $149.99 lifetime is the high-value one-time purchase for committed shift workers
+- All three are impulse-buy prices for healthcare professionals ($150K+ avg salary)
+- *(Updated 2026-04-07: aligns with built paywall — original $4.99/$39.99 was superseded by pricing decision in PROJECT.md)*
 
-**Implementation:** Use StoreKit 2 with RevenueCat (free up to $2.5K MRR, then 1% fee) for subscription management. RevenueCat handles receipts, renewals, trial management, and analytics.
+**Implementation:** Use StoreKit 2 with RevenueCat (free up to $2.5K MRR, then 1% fee) for subscription management. RevenueCat handles receipts, renewals, trial management, and analytics. Note: premium gating is intentionally disabled for v1 launch (all features free). Hard paywall activates at v1.2.
 
 ### Phase 3: B2B Team Plans (Month 8+)
 
@@ -392,14 +394,17 @@ Lead with your clinical identity in all marketing. This is your moat.
 **Assumptions:**
 - 40% 30-day retention (strong for niche utility apps)
 - 8-10% free-to-premium conversion (industry avg is 2-5%, but ShiftWell's niche audience converts higher)
-- $4.99/mo average (mix of monthly + annual)
+- ~$5.50/mo average (blend of $6.99/mo monthly, $49.99/yr annual, $149.99 lifetime)
 - Zero paid advertising (organic only)
+- Premium gating disabled at launch (v1 all-free) — MRR begins when paywall activates at v1.2
+- *(Updated 2026-04-07: revenue model aligned with built paywall pricing)*
 
 ### Break-Even Analysis
 
 - Monthly costs: ~$30/mo
-- Break-even: **7 premium subscribers** ($35/mo revenue)
-- This is almost certainly achievable by Month 4-5
+- Break-even: **5 premium subscribers** (~$35/mo revenue at $6.99/mo avg)
+- This is almost certainly achievable within weeks of paywall activation
+- *(Updated 2026-04-07: revised down from 7 to 5 based on actual $6.99/mo pricing)*
 
 ### When to Invest More
 

@@ -1,7 +1,7 @@
 # ShiftWell — Visual Roadmap
 
-> **Last Updated:** 2026-03-14
-> **Status:** MVP Feature-Complete (Week 4) — 83 Tests Passing — Ready for TestFlight
+> **Last Updated:** 2026-04-07
+> **Status:** v1.1 Milestone — Phases 7–11 Complete (116 Tests Passing) — Phase 12 BLOCKED on Apple Developer Enrollment
 > **Founder:** Emergency Department Physician
 
 ---
@@ -279,7 +279,7 @@
   │ ● Calendar   │   │   Report         │   │                │  │ algorithm,  │  │          │
   │   view       │   │ ● Smart "Phone   │   │                │  │ different   │  │          │
   │ ● Dark mode  │   │   Down" nudges   │   │                │  │ input modes │  │          │
-  │ ● 83 tests   │   │                  │   │                │  │             │  │          │
+  │ ● 116 tests  │   │                  │   │                │  │             │  │          │
   └──────────────┘   └──────────────────┘   └────────────────┘  └─────────────┘  └──────────┘
 
        Revenue:             Revenue:            Revenue:          Revenue:       Revenue:
@@ -430,7 +430,7 @@
  │                       │   caffeine         →  meals          →  light        │      │
  │                       │                                                      │      │
  │                       │   ★ Zero dependencies on React or UI                 │      │
- │                       │   ★ 83 unit tests                                    │      │
+ │                       │   ★ 116 unit tests                                   │      │
  │                       │   ★ Based on peer-reviewed circadian science         │      │
  │                       └────────────────────────┬─────────────────────────────┘      │
  │                                                │                                    │
@@ -478,7 +478,65 @@
  │  ██ = Complete    ░░ = Planned    ▓▓ = In Progress                                 │
  └──────────────────────────────────────────────────────────────────────────────────────┘
 
- PHASE 1 — MVP (Weeks 1-6)                                           Status
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ v1.1 MILESTONE — BUILD PHASES (as of 2026-04-07)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Phase 7  — Critical Bug Fixes (BUG-04–06 fixed; BUG-01–03 OPEN)      ██████ COMPLETE
+ Phase 8  — Adaptive Brain Core (BRAIN-01,02,04,06 done; BRAIN-03,05 OPEN) ██████ COMPLETE
+ Phase 9  — Adaptive Brain Wire-up                                     ██████ COMPLETE
+ Phase 10 — TestFlight Prep (TF-01–05 OPEN — needs Apple Dev account)  ██████ COMPLETE
+ Phase 11 — App Store Prep (APP-01–05 OPEN — needs Apple Dev account)  ██████ COMPLETE
+ Phase 12 — Live Activities / ActivityKit                              ░░░░░░ BLOCKED
+             Blocked on: Apple Developer enrollment → D-U-N-S (~5 wks) → LLC filing
+
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ v1.1 REQUIREMENTS STATUS (REQUIREMENTS.md — 24 total)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ BUG-01  Trial auto-starts on first launch                             ░░ OPEN
+ BUG-02  Recovery Score accumulates real data                          ░░ OPEN
+ BUG-03  Expired trial graceful downgrade path                         ░░ OPEN
+ BUG-04  EAS build succeeds (TS errors fixed)                          ██ DONE
+ BUG-05  AdaptiveInsightCard shows real plan changes                   ██ DONE
+ BUG-06  Morning Dynamic Island includes recovery score                ██ DONE
+ BRAIN-01 Morning recalculation runs once per day                      ██ DONE
+ BRAIN-02 Sleep debt engine operational                                ██ DONE
+ BRAIN-03 Circadian transition protocols fire correctly                ░░ OPEN
+ BRAIN-04 AdaptiveInsightCard renders on Today screen                  ██ DONE
+ BRAIN-05 SleepDebtCard dual-meter visualization                       ░░ OPEN
+ BRAIN-06 Plan change logger human-readable                            ██ DONE
+ TF-01   Privacy manifest in app.json                                  ░░ OPEN (needs Apple Dev)
+ TF-02   HealthKit entitlements declared                               ░░ OPEN (needs Apple Dev)
+ TF-03   App icon + splash in EAS                                      ░░ OPEN (asset needed)
+ TF-04   EAS production build profile                                  ░░ OPEN (needs Apple Dev)
+ TF-05   installedAt timestamp at onboarding                           ░░ OPEN
+ APP-01  Account deletion in Settings                                  ░░ OPEN (Apple required)
+ APP-02  Medical disclaimer in onboarding + Settings                   ░░ OPEN
+ APP-03  App Store screenshots (6.9-inch)                              ░░ OPEN
+ APP-04  App Privacy nutrition labels                                   ░░ OPEN
+ APP-05  App Review notes                                              ░░ OPEN
+ LIVE-04 expo-live-activity wired                                      ░░ BLOCKED (Phase 12)
+ LIVE-05 Real Dynamic Island transitions                               ░░ BLOCKED (Phase 12)
+
+ Complete: 8/24     Open (actionable now): 14/24     Blocked: 2/24
+
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ WHAT TO DO WHILE PHASE 12 IS BLOCKED (Priority Order)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 1. Fix BUG-01–03 (production correctness — trial, score store, downgrade path)
+ 2. Close BRAIN-03 + BRAIN-05 (transition protocol routing, dual-meter visual)
+ 3. TF-03: App icon (1024×1024) + splash — no Apple Dev account required
+ 4. TF-05: installedAt timestamp — pure code, no Apple Dev required
+ 5. APP-01: Account deletion flow — pure code, no Apple Dev required
+ 6. APP-02: Medical disclaimer — pure code, no Apple Dev required
+ 7. APP-03: App Store screenshots — design work, can do on simulator
+ 8. App Store listing copy finalization (marketing content, no Apple Dev)
+ 9. LLC decision: Circadian Labs vs Vigil Health — unblocks everything
+
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PRODUCT VISION — LONG-TERM PHASE MAP (unchanged)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ PHASE 1 — MVP (Weeks 1-6) — COMPLETE                                    Status
  ═══════════════════════════════════════════════════════════════════════════════
  Circadian algorithm (6 modules)                                  ██████ DONE
  Calendar parsing (ical.js)                                       ██████ DONE
@@ -496,13 +554,13 @@
  Sleep tips engine (25+ tips)                                     ██████ DONE
  Dark mode UI                                                     ██████ DONE
  Animations & polish                                              ██████ DONE
- Unit tests (83 passing)                                          ██████ DONE
+ Unit tests (116 passing)                                         ██████ DONE
  EAS build config                                                 ██████ DONE
  Personal calendar conflict awareness                             ██████ DONE
+ Adaptive Brain (partial — 4/6 reqs done)                        ████░░ DONE
  ─────────────────────────────────────────────────────────────────────────────
- TestFlight deployment                                            ▓▓▓▓░░ NEXT
- App Store submission                                             ░░░░░░ Wk 5-6
- TestFlight feedback iteration                                    ░░░░░░ Wk 5-6
+ TestFlight deployment                                            ░░░░░░ BLOCKED
+ App Store submission                                             ░░░░░░ BLOCKED
 
 
  PHASE 2 — Smart Features (Weeks 7-12)                                Status
@@ -550,11 +608,12 @@
 
  PROGRESS SUMMARY
  ═══════════════════════════════════════════════════════════════════════════════
- Phase 1:  ████████████████████████████████████████████░░░░  19/22 features (86%)
+ v1.1 phases 7–11:  ██████████████████████████████████████████████████  5/6 phases (Phase 12 blocked)
+ v1.1 requirements: █████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   8/24 complete (14 open, 2 blocked)
  Phase 2:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/11 features
  Phase 3:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/7  features
  Phase 4:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/5  features
- Phase 5:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/4  features
+ Phase 5:  ░░░░░░░░░░░░░░░░░░░░░░░░░━━━━━━━━━━━━━━━━━━━━━   0/4  features
 ```
 
 ---
@@ -585,7 +644,7 @@
   (peer-  │          │              │ circadian │          │    cal aware   │  │
   reviewed│          │              │ science   │          │  ★ .ics export │  │
   research│          │              │ NO cal    │          │  ★ Meals+naps  │  │
-  basis)  │          │              │ import    │          │  ★ 83 tests    │  │
+  basis)  │          │              │ import    │          │  ★ 116 tests   │  │
           │          │              └──────────┘          │  ★ Offline     │  │
           │          │                                    └────────────────┘  │
           │          │     ┌──────────┐                                       │
@@ -747,7 +806,7 @@
 
  ═══════════════════════════════════════════════════════════════════════════════════════
   15 peer-reviewed papers  │  CDC/NIOSH guidelines  │  AHA scientific statements
-  Deterministic algorithm  │  Fully testable         │  83 unit tests validating output
+  Deterministic algorithm  │  Fully testable         │  116 unit tests validating output
  ═══════════════════════════════════════════════════════════════════════════════════════
 ```
 
@@ -786,7 +845,7 @@
  │  │  every week  │  │  caffeine,   │  │  over time   │  │                          ││
  │  │              │  │  meals, light│  │              │  │  B2B creates             ││
  │  │  Trust with  │  │              │  │  Compounding │  │  institutional           ││
- │  │  healthcare  │  │  83 tests,   │  │  advantage   │  │  lock-in                 ││
+ │  │  healthcare  │  │  116 tests,  │  │  advantage   │  │  lock-in                 ││
  │  │  community   │  │  15 papers   │  │              │  │                          ││
  │  └──────────────┘  └──────────────┘  └──────────────┘  └──────────────────────────┘│
  │                                                                                     │
@@ -809,7 +868,7 @@
  │   │  schedule   │        │  Engine          │        │  your calendar          │   │
  │   │             │        │                  │        │                         │   │
  │   │  + personal │        │  15 papers       │        │  Sleep windows          │   │
- │   │  calendar   │        │  83 tests        │        │  Strategic naps         │   │
+ │   │  calendar   │        │  116 tests       │        │  Strategic naps         │   │
  │   │  + family   │        │  6 modules       │        │  Caffeine cutoffs       │   │
  │   │  + kids     │        │  0 API calls     │        │  Meal timing            │   │
  │   │             │        │  100% offline    │        │  Light protocols        │   │
