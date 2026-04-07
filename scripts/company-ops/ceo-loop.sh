@@ -71,6 +71,17 @@ EXIT_CODE=$?
 
 echo "$(date): CEO Loop finished (exit code: $EXIT_CODE)" >> "$LOG_FILE"
 
+# Send daily briefing via iMessage (morning cycle only)
+SEND_SCRIPT="$PROJECT_DIR/scripts/company-ops/send-briefing.sh"
+SENT_MARKER="/tmp/shiftwell-briefing-sent-$(date +%Y-%m-%d)"
+if [ "$TIME_OF_DAY" = "morning" ] && [ ! -f "$SENT_MARKER" ] && [ "$EXIT_CODE" -eq 0 ]; then
+    if [ -x "$SEND_SCRIPT" ]; then
+        echo "$(date): Sending daily briefing via iMessage" >> "$LOG_FILE"
+        bash "$SEND_SCRIPT" >> "$LOG_FILE" 2>&1 || echo "$(date): Briefing send failed" >> "$LOG_FILE"
+        touch "$SENT_MARKER"
+    fi
+fi
+
 # Keep only last 30 days of logs
 find "$LOG_DIR" -name "*.log" -mtime +30 -delete 2>/dev/null
 
