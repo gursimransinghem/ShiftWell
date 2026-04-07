@@ -182,9 +182,9 @@
 
 ### App Store Optimization (Phase 31)
 
-- [ ] **ASO-01**: Screenshots with real outcome data
-- [ ] **ASO-02**: ASO keyword optimization based on search volume
-- [ ] **ASO-03**: Spanish localization
+- [x] **ASO-01**: Screenshots with real outcome data
+- [x] **ASO-02**: ASO keyword optimization based on search volume
+- [x] **ASO-03**: Spanish localization
 
 ---
 

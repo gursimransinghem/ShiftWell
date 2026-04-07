@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 30-01-PLAN.md
-last_updated: "2026-04-07T19:39:43.790Z"
+stopped_at: Completed 31-01-PLAN.md
+last_updated: "2026-04-07T19:41:53.572Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 20
+  completed_phases: 21
   total_plans: 56
-  completed_plans: 37
+  completed_plans: 38
   percent: 64
 ---
 
@@ -79,6 +79,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 26-enterprise-research P01 | 6min | 3 tasks | 3 files |
 | Phase 29-api-layer P01 | 6min | 2 tasks | 10 files |
 | Phase 30-enterprise-sales-kit P01 | 8min | 2 tasks | 2 files |
+| Phase 31-app-store-optimization P01 | 4min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -182,6 +183,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 29-api-layer]: In-memory ScheduleRepository + UserRepository stubs — PostgreSQL swap is drop-in via same interface
 - [Phase 30-enterprise-sales-kit]: Enterprise sales kit docs preserved and extended: existing high-quality docs kept, beta user case studies added as new section, Slide 15 added to close pitch deck at 15 slides
 - [Phase 30-enterprise-sales-kit]: Enterprise pricing confirmed: Standard $5/seat/month, Professional $10/seat/month, Enterprise $15/seat/month with volume discounts at 500/1000/2000+ seats
+- [Phase 31-app-store-optimization]: i18n provider uses expo-localization getLocales() with startsWith('es') — covers all Spanish variants; English fallback in t() prevents blank UI for partial translations
+- [Phase 31-app-store-optimization]: Review solicitation triggers after first adherent day (recovery >60) at Day 3-7, max once per 90 days — compliant with Apple guideline 1.1.7 (no pre-prompt)
 
 ### Pending Todos
 
@@ -196,6 +199,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:39:43.785Z
-Stopped at: Completed 30-01-PLAN.md
+Last session: 2026-04-07T19:41:53.563Z
+Stopped at: Completed 31-01-PLAN.md
 Resume file: None
