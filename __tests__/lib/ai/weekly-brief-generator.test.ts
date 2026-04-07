@@ -92,26 +92,32 @@ describe('generateCompletion', () => {
   });
 
   it('Test 2: throws ClaudeAPIError when API returns 429', async () => {
-    mockGenerateCompletion.mockRejectedValueOnce(
-      new ClaudeAPIError(429, 'Rate limit exceeded — retry after 60s'),
-    );
+    const error = new ClaudeAPIError(429, 'Rate limit exceeded — retry after 60s');
+    mockGenerateCompletion.mockRejectedValueOnce(error);
 
-    await expect(generateCompletion('system', 'user')).rejects.toThrow(
-      ClaudeAPIError,
-    );
+    await expect(generateCompletion('system', 'user')).rejects.toThrow(ClaudeAPIError);
+  });
+
+  it('Test 2b: ClaudeAPIError from 429 has correct statusCode', async () => {
+    const error = new ClaudeAPIError(429, 'Rate limit exceeded — retry after 60s');
+    mockGenerateCompletion.mockRejectedValueOnce(error);
+
     await expect(generateCompletion('system', 'user')).rejects.toMatchObject({
       statusCode: 429,
     });
   });
 
   it('Test 3: throws ClaudeAPIError when API returns 500', async () => {
-    mockGenerateCompletion.mockRejectedValueOnce(
-      new ClaudeAPIError(500, 'Internal server error'),
-    );
+    const error = new ClaudeAPIError(500, 'Internal server error');
+    mockGenerateCompletion.mockRejectedValueOnce(error);
 
-    await expect(generateCompletion('system', 'user')).rejects.toThrow(
-      ClaudeAPIError,
-    );
+    await expect(generateCompletion('system', 'user')).rejects.toThrow(ClaudeAPIError);
+  });
+
+  it('Test 3b: ClaudeAPIError from 500 has correct statusCode', async () => {
+    const error = new ClaudeAPIError(500, 'Internal server error');
+    mockGenerateCompletion.mockRejectedValueOnce(error);
+
     await expect(generateCompletion('system', 'user')).rejects.toMatchObject({
       statusCode: 500,
     });
