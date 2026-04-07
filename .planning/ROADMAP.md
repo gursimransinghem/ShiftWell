@@ -67,7 +67,7 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 
 - [x] **Phase 26: Enterprise Research** — Literature review: shift worker wellness programs, employer outcome metrics, HIPAA assessment (completed 2026-04-07)
 - [x] **Phase 27: Outcome Data Pipeline** — Anonymized, HIPAA-aware data export with differential privacy (completed 2026-04-07)
-- [ ] **Phase 28: Employer Dashboard** — DEFERRED: Next.js web app, separate repo when enterprise customers exist
+- [x] **Phase 28: Employer Dashboard** — Next.js web app at ~/projects/shiftwell-dashboard/ (completed 2026-04-07)
 - [x] **Phase 29: API Layer** — REST API types, schedule importer for Kronos/QGenda (completed 2026-04-07)
 - [x] **Phase 30: Enterprise Sales Kit** — Case studies, ROI calculator, pitch deck, compliance docs (completed 2026-04-07)
 - [ ] **Phase 31: App Store Optimization** — In progress: i18n skeleton, ASO keyword strategy
