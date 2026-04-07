@@ -131,14 +131,14 @@
 
 ### Pattern Recognition (Phase 23)
 
-- [ ] **AI-02**: Pattern recognition alerts — multi-week trend detection with natural language
-- [ ] **PAT-01**: Consecutive night shift impact detection and quantification
-- [ ] **PAT-02**: Recovery debt trend analysis over rolling 4-week window
+- [x] **AI-02**: Pattern recognition alerts — multi-week trend detection with natural language
+- [x] **PAT-01**: Consecutive night shift impact detection and quantification
+- [x] **PAT-02**: Recovery debt trend analysis over rolling 4-week window
 
 ### Wellness Prescriptions (Phase 23)
 
-- [ ] **BEH-04**: Fitness rules by shift type — workout restrictions/suggestions contextualized to shift pattern and recovery state
-- [ ] **BEH-05**: Meal timing prescriptions — pre-shift meal timing, midnight carb restrictions, meal prep reminders 4-5 days before night blocks
+- [x] **BEH-04**: Fitness rules by shift type — workout restrictions/suggestions contextualized to shift pattern and recovery state
+- [x] **BEH-05**: Meal timing prescriptions — pre-shift meal timing, midnight carb restrictions, meal prep reminders 4-5 days before night blocks
 
 ### Research: Intelligence Validation (Phase 24)
 
