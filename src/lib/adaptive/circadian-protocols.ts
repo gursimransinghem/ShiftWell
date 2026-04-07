@@ -170,6 +170,106 @@ export function detectTransition(
   return { type: 'none', daysUntil: 999 };
 }
 
+// ─── detectAllTransitions ──────────────────────────────────────────────────────
+
+/**
+ * Scan ALL shift-type boundaries in the 14-day window and return every
+ * transition, sorted by daysUntil ascending.
+ *
+ * Unlike detectTransition(), which returns only the FIRST boundary found,
+ * this function returns all of them — enabling downstream handling of
+ * complex patterns like night→day→night in the same week.
+ *
+ * Isolated-night detection is performed first (same logic as detectTransition)
+ * and isolated nights are included as their own entries.
+ *
+ * Returns an empty array when no shifts are present or all shifts are the
+ * same type.
+ *
+ * Reference: Eastman & Burgess (2009) — multiple transitions in shift blocks
+ */
+export function detectAllTransitions(
+  shifts: ShiftEvent[],
+  today: Date,
+): Array<{ type: TransitionType; daysUntil: number }> {
+  const windowEnd = addDays(today, 14);
+  const todayStart = startOfDay(today);
+
+  const upcoming = shifts
+    .filter((s) => s.start >= todayStart && s.start <= windowEnd)
+    .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  if (upcoming.length === 0) return [];
+
+  const results: Array<{ type: TransitionType; daysUntil: number }> = [];
+  const reportedShiftIds = new Set<string>();
+
+  // ── Step 1: Detect isolated nights first ─────────────────────────────────
+  const nightShifts = upcoming.filter((s) => s.shiftType === 'night');
+  for (const nightShift of nightShifts) {
+    const nightDay = differenceInDays(nightShift.start, today);
+
+    const nightBefore = upcoming.find(
+      (s) =>
+        s !== nightShift &&
+        s.shiftType === 'night' &&
+        differenceInDays(nightShift.start, s.start) > 0 &&
+        differenceInDays(nightShift.start, s.start) <= 5,
+    );
+    const nightAfter = upcoming.find(
+      (s) =>
+        s !== nightShift &&
+        s.shiftType === 'night' &&
+        differenceInDays(s.start, nightShift.start) > 0 &&
+        differenceInDays(s.start, nightShift.start) <= 5,
+    );
+    const nonNightBefore = upcoming.find(
+      (s) => s !== nightShift && s.shiftType !== 'night' && s.start < nightShift.start,
+    );
+    const nonNightAfter = upcoming.find(
+      (s) => s !== nightShift && s.shiftType !== 'night' && s.start > nightShift.start,
+    );
+
+    if (!nightBefore && !nightAfter && nonNightBefore && nonNightAfter) {
+      results.push({ type: 'isolated-night', daysUntil: nightDay });
+      reportedShiftIds.add(nightShift.id);
+    }
+  }
+
+  // ── Step 2: Scan all consecutive pairs for shift-type boundaries ──────────
+  for (let i = 1; i < upcoming.length; i++) {
+    const prev = upcoming[i - 1];
+    const curr = upcoming[i];
+
+    // Skip if either shift was already reported as an isolated night
+    if (reportedShiftIds.has(prev.id) || reportedShiftIds.has(curr.id)) continue;
+
+    if (prev.shiftType === curr.shiftType) continue;
+
+    const daysUntil = differenceInDays(curr.start, today);
+    let type: TransitionType | null = null;
+
+    if (prev.shiftType === 'day' && curr.shiftType === 'night') {
+      type = 'day-to-night';
+    } else if (prev.shiftType === 'night' && curr.shiftType === 'day') {
+      type = 'night-to-day';
+    } else if (prev.shiftType === 'evening' && curr.shiftType === 'night') {
+      type = 'evening-to-night';
+    } else if (prev.shiftType === 'day' && curr.shiftType === 'evening') {
+      type = 'day-to-evening';
+    }
+
+    if (type !== null) {
+      results.push({ type, daysUntil });
+    }
+  }
+
+  // Sort by daysUntil ascending so the most immediate transition is first
+  results.sort((a, b) => a.daysUntil - b.daysUntil);
+
+  return results;
+}
+
 // ─── buildProtocol ─────────────────────────────────────────────────────────────
 
 /**
