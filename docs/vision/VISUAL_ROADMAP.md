@@ -1,7 +1,8 @@
 # ShiftWell — Visual Roadmap
 
 > **Last Updated:** 2026-04-07
-> **Status:** v1.1 Milestone — Phases 7–11 Complete (116 Tests Passing) — Phase 12 BLOCKED on Apple Developer Enrollment
+> **Status:** STRATEGIC PIVOT — Ship Path Adopted (Phase A: Slim Down → Phase B: Polish → Phase C: TestFlight)
+> **Active Work:** Phase A Slim Down — archiving premature features, reducing codebase from ~219 to ~160 files
 > **Founder:** Emergency Department Physician
 
 ---
@@ -469,151 +470,141 @@
 
 ---
 
-## 7. Feature Completion Matrix
+## 7. Ship Path Status — Active Roadmap (2026-04-07)
+
+> **Strategic Pivot:** The 38-phase pre-planned development model is replaced by a pull-based ship path.
+> The algorithm is the moat. Everything else is premature until validated by real users.
+> **Spec:** `docs/superpowers/specs/2026-04-07-ship-path-design.md`
 
 ```
  ┌──────────────────────────────────────────────────────────────────────────────────────┐
- │                         FEATURE COMPLETION MATRIX                                   │
+ │                           SHIP PATH — 3 PHASES TO TESTFLIGHT                        │
  ├──────────────────────────────────────────────────────────────────────────────────────┤
- │  ██ = Complete    ░░ = Planned    ▓▓ = In Progress                                 │
+ │  ██ = Complete    ▓▓ = In Progress    ░░ = Next    ── = Deferred to post-launch      │
  └──────────────────────────────────────────────────────────────────────────────────────┘
 
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- v1.1 MILESTONE — BUILD PHASES (as of 2026-04-07)
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- Phase 7  — Critical Bug Fixes (BUG-04–06 fixed; BUG-01–03 OPEN)      ██████ COMPLETE
- Phase 8  — Adaptive Brain Core (BRAIN-01,02,04,06 done; BRAIN-03,05 OPEN) ██████ COMPLETE
- Phase 9  — Adaptive Brain Wire-up                                     ██████ COMPLETE
- Phase 10 — TestFlight Prep (TF-01–05 OPEN — needs Apple Dev account)  ██████ COMPLETE
- Phase 11 — App Store Prep (APP-01–05 OPEN — needs Apple Dev account)  ██████ COMPLETE
- Phase 12 — Live Activities / ActivityKit                              ░░░░░░ BLOCKED
-             Blocked on: Apple Developer enrollment → D-U-N-S (~5 wks) → LLC filing
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PHASE A — SLIM DOWN  (1-2 sessions)                                       ▓▓ ACTIVE
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Goal: Archive premature code, reduce ~219 files to ~160, make all features free.
+ Plan: docs/superpowers/plans/2026-04-07-slim-down.md
 
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- v1.1 REQUIREMENTS STATUS (REQUIREMENTS.md — 24 total)
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- BUG-01  Trial auto-starts on first launch                             ░░ OPEN
- BUG-02  Recovery Score accumulates real data                          ░░ OPEN
- BUG-03  Expired trial graceful downgrade path                         ░░ OPEN
- BUG-04  EAS build succeeds (TS errors fixed)                          ██ DONE
- BUG-05  AdaptiveInsightCard shows real plan changes                   ██ DONE
- BUG-06  Morning Dynamic Island includes recovery score                ██ DONE
- BRAIN-01 Morning recalculation runs once per day                      ██ DONE
- BRAIN-02 Sleep debt engine operational                                ██ DONE
- BRAIN-03 Circadian transition protocols fire correctly                ░░ OPEN
- BRAIN-04 AdaptiveInsightCard renders on Today screen                  ██ DONE
- BRAIN-05 SleepDebtCard dual-meter visualization                       ░░ OPEN
- BRAIN-06 Plan change logger human-readable                            ██ DONE
- TF-01   Privacy manifest in app.json                                  ░░ OPEN (needs Apple Dev)
- TF-02   HealthKit entitlements declared                               ░░ OPEN (needs Apple Dev)
- TF-03   App icon + splash in EAS                                      ░░ OPEN (asset needed)
- TF-04   EAS production build profile                                  ░░ OPEN (needs Apple Dev)
- TF-05   installedAt timestamp at onboarding                           ░░ OPEN
- APP-01  Account deletion in Settings                                  ░░ OPEN (Apple required)
- APP-02  Medical disclaimer in onboarding + Settings                   ░░ OPEN
- APP-03  App Store screenshots (6.9-inch)                              ░░ OPEN
- APP-04  App Privacy nutrition labels                                   ░░ OPEN
- APP-05  App Review notes                                              ░░ OPEN
- LIVE-04 expo-live-activity wired                                      ░░ BLOCKED (Phase 12)
- LIVE-05 Real Dynamic Island transitions                               ░░ BLOCKED (Phase 12)
+ Archive enterprise module (9 files, 0 imports)                    ░░ TODO
+ Archive growth/referral module (4 files) + fix paywall.tsx        ░░ TODO
+ Archive watch module (1 file, 0 imports)                          ░░ TODO
+ Archive intelligence module (2 files, 0 imports)                  ░░ TODO
+ Archive prediction-store + CircadianForecastCard                   ░░ TODO
+ Archive Express backend /api/ (1,613 LOC, unused)                 ░░ TODO
+ Archive Spanish i18n — simplify to English-only                   ░░ TODO
+ Archive dead Today screen components (WellnessCard, OutcomeDash)  ░░ TODO
+ Unlock all features free for TestFlight (entitlements.ts)         ░░ TODO
+ Full test suite pass — verify 0 broken imports                    ░░ TODO
 
- Complete: 8/24     Open (actionable now): 14/24     Blocked: 2/24
+ Verification: npx expo start succeeds, all remaining tests pass, no broken imports.
 
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- WHAT TO DO WHILE PHASE 12 IS BLOCKED (Priority Order)
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- 1. Fix BUG-01–03 (production correctness — trial, score store, downgrade path)
- 2. Close BRAIN-03 + BRAIN-05 (transition protocol routing, dual-meter visual)
- 3. TF-03: App icon (1024×1024) + splash — no Apple Dev account required
- 4. TF-05: installedAt timestamp — pure code, no Apple Dev required
- 5. APP-01: Account deletion flow — pure code, no Apple Dev required
- 6. APP-02: Medical disclaimer — pure code, no Apple Dev required
- 7. APP-03: App Store screenshots — design work, can do on simulator
- 8. App Store listing copy finalization (marketing content, no Apple Dev)
- 9. LLC decision: Circadian Labs vs Vigil Health — unblocks everything
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PHASE B — SHIP POLISH  (2-3 sessions, starts after Phase A)               ░░ NEXT
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Goal: Make remaining features feel complete. No new features.
 
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- PRODUCT VISION — LONG-TERM PHASE MAP (unchanged)
- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Onboarding walkthrough — all 8 screens on fresh install           ░░ TODO
+ Today screen audit — every card renders + handles empty state     ░░ TODO
+ Calendar sync smoke test (connect → detect shifts → plan)         ░░ TODO
+ Adaptive Brain check — insights surface from real data            ░░ TODO
+ Notification test — wind-down, caffeine cutoff, morning brief     ░░ TODO
+ Recovery score — 14-night history displays correctly              ░░ TODO
+ Add crash reporting (Sentry / expo-sentry)                        ░░ TODO
+ Add minimal analytics (PostHog — screen views, onboarding, plans) ░░ TODO
+ Add feedback mechanism (Settings → email or in-app form)          ░░ TODO
+ Performance check — cold start, memory, battery                   ░░ TODO
 
- PHASE 1 — MVP (Weeks 1-6) — COMPLETE                                    Status
- ═══════════════════════════════════════════════════════════════════════════════
- Circadian algorithm (6 modules)                                  ██████ DONE
- Calendar parsing (ical.js)                                       ██████ DONE
- Shift detection heuristics                                       ██████ DONE
- .ics export (RFC 5545)                                           ██████ DONE
- Onboarding flow (4 screens)                                      ██████ DONE
- Chronotype quiz (MEQ-based)                                      ██████ DONE
- Household profile input                                          ██████ DONE
- Zustand stores (3 stores)                                        ██████ DONE
- Today screen (timeline + countdowns)                             ██████ DONE
- Calendar/Schedule view                                           ██████ DONE
- Add/Edit shift modal                                             ██████ DONE
- .ics import (3-step flow)                                        ██████ DONE
- Settings screen                                                  ██████ DONE
- Sleep tips engine (25+ tips)                                     ██████ DONE
- Dark mode UI                                                     ██████ DONE
- Animations & polish                                              ██████ DONE
- Unit tests (116 passing)                                         ██████ DONE
- EAS build config                                                 ██████ DONE
- Personal calendar conflict awareness                             ██████ DONE
- Adaptive Brain (partial — 4/6 reqs done)                        ████░░ DONE
- ─────────────────────────────────────────────────────────────────────────────
- TestFlight deployment                                            ░░░░░░ BLOCKED
- App Store submission                                             ░░░░░░ BLOCKED
+ Verification: Full device walkthrough. Every screen renders. Analytics + crash reporting live.
 
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PHASE C — TESTFLIGHT PREP  (1 session, requires Apple Dev account)        ── BLOCKED
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Blocked on: LLC filing (sunbiz.org, $125) → Apple Developer ($99) → D-U-N-S (~5 wks)
 
- PHASE 2 — Smart Features (Weeks 7-12)                                Status
- ═══════════════════════════════════════════════════════════════════════════════
- Supabase backend + user accounts                                 ░░░░░░ Planned
- Google Calendar OAuth sync                                       ░░░░░░ Planned
- Apple HealthKit integration                                      ░░░░░░ Planned
- Push notifications                                               ░░░░░░ Planned
- Recovery Score                                                   ░░░░░░ Planned
- Subscribable calendar URLs                                       ░░░░░░ Planned
- Caffeine & Light tracking screens                                ░░░░░░ Planned
- Smart "Phone Down" nudges                                        ░░░░░░ Planned
- Soundscapes (brown noise, rain, etc.)                            ░░░░░░ Planned
- Family/Spouse notifications                                      ░░░░░░ Planned
- Weekly Sleep Intelligence Report                                 ░░░░░░ Planned
+ Finalize app icon (1024×1024)                                     ── BLOCKED
+ Screenshots (5 screens, iPhone 15 Pro + iPhone SE sizes)          ── BLOCKED
+ App Store description + metadata                                  ── BLOCKED
+ Privacy nutrition labels (accurate to build)                      ── BLOCKED
+ Medical disclaimers verified in-app                               ── BLOCKED
+ Submit to TestFlight                                              ── BLOCKED
+ Recruit 20-50 testers (Sim's network, Reddit r/nursing, r/ems)   ── BLOCKED
 
+ Verification: TestFlight build downloadable. 20+ testers invited.
 
- PHASE 3 — iOS Power Features (Months 4-6)                            Status
- ═══════════════════════════════════════════════════════════════════════════════
- Live Activities + Dynamic Island                                 ░░░░░░ Planned
- Home Screen Widgets (WidgetKit)                                  ░░░░░░ Planned
- Sleep Focus Automation                                           ░░░░░░ Planned
- Alarm Automation (Shortcuts)                                     ░░░░░░ Planned
- Apple Watch (complications + haptics)                            ░░░░░░ Planned
- Shift Transition Planner                                         ░░░░░░ Planned
- Social/Family Mode                                               ░░░░░░ Planned
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ WHAT'S ARCHIVED — PRESERVED IN src/_archive/, REINTRODUCED BY TRIGGER
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+ Archived Module                         Reintroduction Trigger
+ ──────────────────────────────────────  ──────────────────────────────────────────────
+ Premium paywall ($6.99/$49.99/$149.99)  100+ WAU + >30% day-7 retention
+ Spanish i18n                            500+ active users OR first non-English request
+ Growth/referral module                  Paywall live + 50+ paying users
+ Predictive scheduling                   50+ users with 30+ days HealthKit data
+ AI coaching (Claude API)                Post-paywall, premium-only feature
+ Enterprise module                       First inbound hospital/agency inquiry
+ Manager dashboard                       Enterprise live + 1 paying org
+ Express API backend                     Multi-device sync requested by 10+ users
+ Watch app                               200+ users with Apple Watch + HealthKit
+ Differential privacy                    Enterprise live + legal review
 
- PHASE 4 — Audience Expansion (Months 6+)                             Status
- ═══════════════════════════════════════════════════════════════════════════════
- Jet Lag Mode                                                     ░░░░░░ Planned
- On-Call Mode                                                     ░░░░░░ Planned
- New Parent Mode                                                  ░░░░░░ Planned
- Gig/Nightlife Mode                                               ░░░░░░ Planned
- Student Mode                                                     ░░░░░░ Planned
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ BUILD PHASES COMPLETED (38-phase model — context only, superseded by ship path above)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+ Phases 01-06   Foundation, calendar sync, sleep plan gen, notifications,
+                recovery score, live activities (stub)              ██████ COMPLETE
+ Phase 07       Critical bug fixes (BUG-04,05,06 closed)           ██████ COMPLETE
+ Phase 08-09    Adaptive Brain core + wire-up                      ██████ COMPLETE
+ Phase 10-11    TestFlight prep + App Store prep (needs Apple Dev)  ██████ COMPLETE
+ Phase 13-15    Sleep feedback research, HealthKit ingestion,
+                algorithm feedback engine                          ██████ COMPLETE
+ Phase 17       Growth engine (now archived to src/_archive/)      ██████ COMPLETE
+ Phase 18       RevenueCat hard gating (now free for TestFlight)   ██████ COMPLETE
+ Phase 19-20    AI coaching research + weekly brief                ██████ COMPLETE
+ Phase 21-23    Predictive scheduling research, pattern recognition ██████ COMPLETE
+ Phase 25       Intelligence polish                                 ██████ COMPLETE
+ Phase 26-27    Enterprise research + outcome data pipeline         ██████ COMPLETE
+ Phase 28       Employer dashboard                                  ██████ COMPLETE
+ Phase 29-30    API layer + enterprise sales kit                   ██████ COMPLETE
+ Phase 31-35    ASO, HRV research, fatigue model, autopilot,
+                validation study design                            ██████ COMPLETE
+ Phase 38       Advanced platform features (cumulative fatigue,
+                multi-transition, DST handler)                     ██████ COMPLETE
 
- PHASE 5 — AI + B2B (Month 8+)                                        Status
- ═══════════════════════════════════════════════════════════════════════════════
- AI Sleep Coach (Claude API)                                      ░░░░░░ Planned
- B2B Team Dashboards                                              ░░░░░░ Planned
- Fatigue Risk Scoring                                             ░░░░░░ Planned
- Corporate Wellness / OSHA Compliance                             ░░░░░░ Planned
+ 25/38 phases complete. Remaining 13 phases deferred — not needed for TestFlight.
 
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ WHAT SHIPS IN TESTFLIGHT v1.0 (kept, not archived)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Circadian algorithm (src/lib/circadian/, 354 tests)              ██████ CORE IP
+ Calendar-as-interface (import shifts, export sleep plan)         ██████ DIFFERENTIATOR
+ Adaptive Brain (4-factor: circadian/debt/lookahead/recovery)     ██████ DIFFERENTIATOR
+ Autopilot mode (30-day propose → full autopilot)                 ██████ DIFFERENTIATOR
+ Today screen (timeline, countdowns, insights)                    ██████ SHIPS
+ Recovery score (14-night history)                                ██████ SHIPS
+ Push notifications (wind-down, caffeine cutoff, morning brief)   ██████ SHIPS
+ Onboarding (8 screens, MEQ chronotype quiz)                      ██████ SHIPS
+ Night Sky Mode                                                    ██████ SHIPS
+ Local-first / offline architecture                                ██████ NON-NEGOTIABLE
+ Dark theme + warm gold                                            ██████ SHIPS
 
- PROGRESS SUMMARY
- ═══════════════════════════════════════════════════════════════════════════════
- v1.1 phases 7–11:  ██████████████████████████████████████████████████  5/6 phases (Phase 12 blocked)
- v1.1 requirements: █████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   8/24 complete (14 open, 2 blocked)
- Phase 2:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/11 features
- Phase 3:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/7  features
- Phase 4:  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   0/5  features
- Phase 5:  ░░░░░░░░░░░░░░░░░░░░░░░░░━━━━━━━━━━━━━━━━━━━━━   0/4  features
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ POST-TESTFLIGHT — v1.x DRIVEN BY USER DATA (not pre-planned phases)
+ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ After 20-50 testers for 2+ weeks, measure:
+ ● Screen engagement — which screens get visited, which are ignored
+ ● Notification action rate — which drive opens vs. dismissals
+ ● Calendar export rate — do users put sleep plans on their calendar
+ ● Adaptive Brain engagement — do users read and act on insights
+ ● Day-3 and day-7 retention — do they come back
+ ● Feedback themes — what they complain about, what they ask for
+
+ This data determines v1.1 — not any pre-planned phase list.
 ```
 
 ---
@@ -894,6 +885,6 @@
 
 ---
 Created: 2026-03-24
-Last Reviewed: 2026-03-24
-Last Edited: 2026-03-24
-Review Notes: Freshness footer added during comprehensive audit.
+Last Reviewed: 2026-04-07
+Last Edited: 2026-04-07
+Review Notes: Strategic pivot — Section 7 replaced with Ship Path (Phase A/B/C) replacing 38-phase development model. Phase 28 (Employer Dashboard) marked complete. Archive trigger table added.
