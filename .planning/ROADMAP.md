@@ -65,7 +65,7 @@ Plans:
   5. A human-readable log entry is written for every plan change (e.g., "Bedtime moved earlier because next shift starts at 6am and debt is high")
 **Plans:** 2 plans
 Plans:
-- [ ] 08-01-PLAN.md — Plan-store persistence layer, changeLog, AdaptiveInsightCard dismiss fix
+- [x] 08-01-PLAN.md — Plan-store persistence layer, changeLog, AdaptiveInsightCard dismiss fix
 - [ ] 08-02-PLAN.md — Daily debounce gate for useAdaptivePlan, SleepDebtCard conditional render
 **Rationale**: Core Adaptive Brain wiring must be established before adding the complexity of 5 circadian transition protocols in Phase 9. Phase 7's score fix (BUG-02) is a direct prerequisite for the debt engine.
 **UI hint**: yes

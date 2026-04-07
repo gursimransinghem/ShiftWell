@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: executing
-stopped_at: Phase 8 context gathered
-last_updated: "2026-04-07T02:23:57.571Z"
+stopped_at: Completed 08-01-PLAN.md
+last_updated: "2026-04-07T04:13:27.894Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 4
+  completed_plans: 3
   percent: 0
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 07 — critical-bug-fixes
+**Current focus:** Phase 08 — adaptive-brain-core
 
 ## Current Position
 
-Phase: 8
-Plan: Not started
+Phase: 08 (adaptive-brain-core) — EXECUTING
+Plan: 2 of 2
 Status: Ready to execute
 Last activity: 2026-04-07
 
@@ -64,6 +64,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 05-live-activities-recovery-score P03 | 4 | 2 tasks | 2 files |
 | Phase 05-live-activities-recovery-score P02 | 2min | 2 tasks | 2 files |
 | Phase 07 P02 | 18min | 2 tasks | 8 files |
+| Phase 08-adaptive-brain-core P01 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -114,6 +115,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 07]: BUG-05: planSnapshot (not currentPlan) passed as old-plan arg to computeDelta — enables real before/after delta for AdaptiveInsightCard
 - [Phase 07]: BUG-06: useScoreStore.getState().todayScore() called imperatively inside useEffect — Zustand pattern for reading state in effects
 - [Phase 07]: UserProfile: commuteDuration not commuteMinutes, napPreference is boolean (napMinutes > 0 conversion)
+- [Phase 08-01]: plan-store partialize persists only changeLog, daysUntilTransition, snapshotTimestamp — never SleepPlan objects (too large, non-serializable Dates)
+- [Phase 08-01]: X/Accept buttons call onDismiss() before setDismissed(true) — onDismiss triggers dismissChanges in store, setDismissed for immediate UI feedback
+- [Phase 08-01]: AdaptiveInsightCard component tests use source-analysis pattern (fs.readFileSync + regex) — node test env cannot render RN components; source inspection sufficient for callback wiring verification
 
 ### Pending Todos
 
@@ -128,6 +132,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T02:23:57.564Z
-Stopped at: Phase 8 context gathered
-Resume file: .planning/phases/08-adaptive-brain-core/08-CONTEXT.md
+Last session: 2026-04-07T04:13:27.891Z
+Stopped at: Completed 08-01-PLAN.md
+Resume file: None

@@ -26,9 +26,9 @@ Formalize and wire the partial Adaptive Brain implementation to production.
 - [ ] **BRAIN-01**: Morning recalculation runs once per day on app foreground — AppState background→active trigger with AsyncStorage daily debounce, no expo-background-task
 - [ ] **BRAIN-02**: Sleep debt engine operational — rolling 14-night debt tracker with banking protocol (extra sleep on off-days reduces upcoming debt)
 - [ ] **BRAIN-03**: Circadian transition protocols fire correctly — 5 transition types (pre-shift, post-shift, rotating, recovery, off-sequence) route to correct protocol handler
-- [ ] **BRAIN-04**: AdaptiveInsightCard renders on Today screen when plan changes — shows what changed, which factors drove it, with undo action
+- [x] **BRAIN-04**: AdaptiveInsightCard renders on Today screen when plan changes — shows what changed, which factors drove it, with undo action
 - [ ] **BRAIN-05**: SleepDebtCard shows dual-meter visualization — current debt (minutes) vs banked credit on same gauge
-- [ ] **BRAIN-06**: Plan change logger produces human-readable explanation — "Bedtime moved earlier because your next shift starts at 6am and debt is high"
+- [x] **BRAIN-06**: Plan change logger produces human-readable explanation — "Bedtime moved earlier because your next shift starts at 6am and debt is high"
 
 ### TestFlight Prep
 
@@ -112,9 +112,9 @@ Populated during roadmap creation.
 | BRAIN-01 | Phase 8 | Pending |
 | BRAIN-02 | Phase 8 | Pending |
 | BRAIN-03 | Phase 9 | Pending |
-| BRAIN-04 | Phase 8 | Pending |
+| BRAIN-04 | Phase 8 | Complete |
 | BRAIN-05 | Phase 9 | Pending |
-| BRAIN-06 | Phase 8 | Pending |
+| BRAIN-06 | Phase 8 | Complete |
 | TF-01 | Phase 10 | Pending |
 | TF-02 | Phase 10 | Pending |
 | TF-03 | Phase 10 | Pending |
