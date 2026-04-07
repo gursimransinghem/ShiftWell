@@ -1,13 +1,11 @@
-<<<<<<< HEAD
 /**
- * AI types — WeeklyBrief, BriefContext, BriefGenerationResult, ClaudeAPIError.
+ * AI types — WeeklyBrief, BriefContext, BriefGenerationResult, ClaudeAPIError,
+ * BriefFeedback.
  *
  * Used by claude-client.ts (generateCompletion), weekly-brief-generator.ts,
- * and ai-store.ts.
+ * feedback-tracker.ts, and ai-store.ts.
  */
 
-=======
->>>>>>> worktree-agent-a211ed4f
 export interface BriefContext {
   userId: string;
   weekStartISO: string;           // Monday date (yyyy-MM-dd)
@@ -31,6 +29,12 @@ export interface WeeklyBrief {
   model: string;                  // e.g. "claude-haiku-4-5"
   tokensUsed: number;
   passedGuardrails: boolean;
+}
+
+export interface BriefFeedback {
+  briefId: string;
+  rating: 'positive' | 'negative';
+  recordedAtISO: string;
 }
 
 export interface BriefGenerationResult {
