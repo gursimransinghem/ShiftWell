@@ -150,7 +150,9 @@ Plans:
 **Goal**: Real Dynamic Island transitions replace the notification stub — wind-down, sleep start, and morning transitions use native ActivityKit.
 **Depends on**: Phase 10 (EAS production build required), Apple Developer enrollment
 **Requirements**: LIVE-04, LIVE-05
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 12-01-PLAN.md — expo-live-activity install, Swift Widget Extension, live-activity-service real transitions
 **Rationale**: Externally gated on Apple Developer enrollment (D-U-N-S number, ~5 weeks).
 **UI hint**: yes
 
@@ -166,7 +168,9 @@ Plans:
   2. ALGORITHM-SPEC.md defines convergence formula with inputs, outputs, thresholds, and edge cases
   3. VALIDATION-PLAN.md defines success metrics for 30-day convergence study
   4. SLEEP-SCIENCE-DATABASE.md updated with all new citations
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 13-01-PLAN.md — Literature review, algorithm spec, validation plan
 **Rationale**: Deep research sprint before building the feedback engine. Wearable accuracy varies — literature review prevents building on flawed assumptions.
 **Science anchor**: Chinoy et al. 2021, de Zambotti et al. 2019, Menghini et al. 2021
 
@@ -179,7 +183,9 @@ Plans:
   2. Plan-vs-reality comparison produces a nightly discrepancy record (planned vs actual start/end/duration)
   3. Discrepancy history is persisted and queryable for the last 30 nights
   4. Graceful fallback when HealthKit data is unavailable (no watch, permissions denied)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 14-01-PLAN.md — HealthKit reader, discrepancy calculator, history persistence
 **Rationale**: BRAIN-07 requirement. Foundation for the feedback engine.
 
 ### Phase 15: Algorithm Feedback Engine
@@ -191,7 +197,9 @@ Plans:
   2. Convergence target: average discrepancy < 15 min within 7 nights of feedback
   3. Feedback adjustments are bounded (max 30 min shift per cycle, never violates minimum sleep need)
   4. Feedback disabled during circadian transitions (Phase 9 protocols take priority)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 15-01-PLAN.md — feedback-engine.ts EMA algorithm, plan-store wiring, context-builder integration
 **Rationale**: Core of the closed-loop system. Two-Process Model parameter tuning based on real behavior.
 **Science anchor**: Borbely 1982 (Process S calibration)
 
@@ -205,7 +213,9 @@ Plans:
   2. Report includes convergence rate, mean discrepancy reduction, and outlier analysis
   3. Statistical significance assessed (paired t-test or Wilcoxon signed-rank)
   4. Recommendations for algorithm tuning documented
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 16-01-PLAN.md — data analysis, 30-day convergence report, algorithm tuning recommendations
 **Rationale**: Validate before scaling. If the loop doesn't converge, fix before adding AI features.
 **Science anchor**: AASM sleep quality metrics, PSQI methodology
 
@@ -218,7 +228,9 @@ Plans:
   2. Onboarding A/B framework can serve 2+ onboarding variants with conversion tracking
   3. Push notification re-engagement sequence fires at D1, D3, D7 for inactive users
   4. Paywall pricing experiment framework supports 2+ price points with revenue tracking
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 17-01-PLAN.md — referral service, A/B framework, re-engagement notifications, paywall experiment
 **Rationale**: Growth infrastructure needed before revenue gating. User base must be growing for feedback validation and enterprise data.
 
 ### Phase 18: RevenueCat Hard Gating
@@ -230,7 +242,9 @@ Plans:
   2. Users who installed before paywall date retain free access to premium features
   3. Free tier includes: basic sleep windows, calendar sync, notifications
   4. Premium tier includes: adaptive brain, AI coaching, patterns, predictive scheduling
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 18-01-PLAN.md — entitlements update, grandfathering module, Today screen feature gates
 **Rationale**: Revenue before enterprise. Grandfathering builds loyalty and prevents churn from early adopters.
 
 ### Phase 19: AI Coaching Research
@@ -524,13 +538,13 @@ Plans:
 | 9. Circadian Protocols | v1.1 | - | Complete | 2026-04-07 |
 | 10. TestFlight Prep | v1.1 | - | Complete | 2026-04-07 |
 | 11. App Store Prep | v1.1 | - | Complete | 2026-04-07 |
-| 12. ActivityKit Integration | v1.1 | TBD | Blocked | - |
-| 13. Sleep Feedback Research | v1.2 | TBD | Not started | - |
-| 14. HealthKit Sleep Ingestion | v1.2 | TBD | Not started | - |
-| 15. Algorithm Feedback Engine | v1.2 | TBD | Not started | - |
-| 16. Feedback Validation Sprint | v1.2 | TBD | Not started | - |
-| 17. Growth Engine | v1.2 | TBD | Not started | - |
-| 18. RevenueCat Hard Gating | v1.2 | TBD | Not started | - |
+| 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
+| 13. Sleep Feedback Research | v1.2 | 0/1 | Not started | - |
+| 14. HealthKit Sleep Ingestion | v1.2 | 0/1 | Not started | - |
+| 15. Algorithm Feedback Engine | v1.2 | 0/1 | Not started | - |
+| 16. Feedback Validation Sprint | v1.2 | 0/1 | Not started | - |
+| 17. Growth Engine | v1.2 | 0/1 | Not started | - |
+| 18. RevenueCat Hard Gating | v1.2 | 0/1 | Not started | - |
 | 19. AI Coaching Research | v1.3 | 0/1 | Not started | - |
 | 20. Claude Weekly Brief | v1.3 | 0/1 | Not started | - |
 | 21. Predictive Scheduling Research | v1.3 | 0/1 | Not started | - |
