@@ -56,6 +56,76 @@
 | Advertising | App published on App Store | App Store Connect status = "Ready for Sale" |
 | Sales | MRR >= $2,500 | RevenueCat dashboard or FINANCIAL_TRACKER.md |
 
+## Launch Pipeline
+
+Three parallel tracks to App Store. Operations department auto-checks each step every cycle.
+
+**Statuses:** `blocked` → `ready` → `waiting-on-sim` → `in-progress` → `done`
+
+### Track 1: Legal (gates TestFlight)
+
+| # | Step | Status | Blocked By | Auto-Check | Notes |
+|---|------|--------|-----------|------------|-------|
+| L1 | LLC filing (FL) | waiting-on-sim | -- | Sim confirms filing receipt | Pick name: ShiftWell recommended |
+| L2 | EIN from IRS | blocked | L1 | Sim provides EIN number | Free, instant online after LLC |
+| L3 | Business bank account | blocked | L2 | Sim confirms account open | Mercury or local bank |
+| L4a | Apple Dev (Individual) | blocked | Apple ID | `eas whoami` shows paid account | Instant, $99 — bridge to TestFlight |
+| L4b | Apple Dev (Organization) | blocked | L1+L2+D-U-N-S | `eas whoami` shows org account | 5+ weeks, full brand on App Store |
+| L5 | D-U-N-S number | blocked | L1 | Sim confirms D-U-N-S received | 1-5 business days after LLC |
+| L6 | Trademark clearance | blocked | L1 | Sim confirms search complete | ~$300-500, 2 weeks, parallelizable |
+| L7 | Trademark filing | blocked | L6 | Sim confirms USPTO filed | Class 9 + 44, ~$500-700 |
+
+### Track 2: Code (gates clean build)
+
+| # | Step | Status | Blocked By | Auto-Check | Notes |
+|---|------|--------|-----------|------------|-------|
+| C1 | BUG-01 trial start | in-progress | -- | `grep "startTrial" src/store/premium-store.ts` in initializePremium | Phase 7 |
+| C2 | BUG-02 score pipeline | in-progress | -- | `grep "finalizeDay" app/_layout.tsx` in AppState handler | Phase 7 |
+| C3 | BUG-03 downgrade screen | in-progress | -- | `test -f app/downgrade.tsx` | Phase 7 |
+| C4 | BUG-04 TypeScript errors | done | -- | `npx tsc --noEmit 2>&1 \| grep -c error` = 0 | Fixed in Phase 7 |
+| C5 | BUG-05 computeDelta | done | -- | Distinct args in useAdaptivePlan.ts | Fixed in Phase 7 |
+| C6 | BUG-06 LIVE-03 score | done | -- | todayScore() in startSleepActivity | Fixed in Phase 7 |
+| C7 | Privacy manifest | ready | -- | `grep "privacyManifests" app.json` | TF-01, 15-min config |
+| C8 | HealthKit entitlements | ready | -- | `grep "healthkit.background-delivery" app.json` | TF-02 |
+| C9 | EAS production profile | ready | -- | `grep '"production"' eas.json` | TF-04 |
+| C10 | Google OAuth real ID | ready | -- | No "placeholder" in OAuth config | CEO Cycle 1 finding |
+| C11 | npm test script | ready | -- | `grep '"test"' package.json` | CEO Cycle 1 finding |
+| C12 | installedAt timestamp | ready | -- | `grep "installedAt" src/` in onboarding completion | TF-05 |
+
+### Track 3: Assets (gates App Store submission)
+
+| # | Step | Status | Blocked By | Auto-Check | Notes |
+|---|------|--------|-----------|------------|-------|
+| A1 | App icon (1024x1024) | ready | -- | `test -f assets/images/icon.png` + not default Expo | TF-03 |
+| A2 | Splash screen | ready | -- | Custom splash in app.json, not default | TF-03 |
+| A3 | Screenshots (1290x2796) | blocked | C1-C3 | Files exist in docs/launch/screenshots/ | After bug fixes |
+| A4 | Privacy policy hosted | ready | -- | URL live and returning 200 | APP-04 |
+| A5 | Medical disclaimer | ready | -- | `grep "not a substitute" app/` in onboarding | APP-02 |
+| A6 | App Store listing copy | ready | -- | APP_STORE_LISTING.md complete | APP-05 |
+| A7 | Account deletion | ready | -- | `test -f app/settings/delete-account.tsx` or equivalent | APP-01 |
+| A8 | App Review notes | blocked | A3-A7 | Written in docs/launch/ | Last before submission |
+
+### Pipeline Summary
+
+| Track | Total | Done | In Progress | Ready | Blocked |
+|-------|-------|------|-------------|-------|---------|
+| Legal | 7 | 0 | 0 | 0 | 7 |
+| Code | 12 | 3 | 3 | 6 | 0 |
+| Assets | 8 | 0 | 0 | 5 | 3 |
+| **Total** | **27** | **3** | **3** | **11** | **10** |
+
+### Critical Path
+
+```
+LLC (L1) → EIN (L2) → Apple Dev Individual (L4a) → TestFlight build
+                                                      ↑
+Bug fixes (C1-C3) + Privacy manifest (C7) + EAS profile (C9) ──┘
+```
+
+**Shortest path to TestFlight:** LLC filed → EIN (same day) → Apple Dev Individual ($99, instant) → fix C1-C3 + C7 + C9 → `eas build --platform ios --profile production` → `eas submit` → TestFlight live.
+
+**Estimated time if LLC filed today:** ~1 week to TestFlight (LLC processing + bug fixes in parallel).
+
 ## Smart Throttle
 
 Departments only dispatch when their trigger conditions fire. If no triggers are met for a department in a cycle, it is skipped entirely. Silent cycles (where no departments trigger) are expected behavior — not a bug. This keeps API costs proportional to actual work.

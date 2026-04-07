@@ -4,18 +4,19 @@
 
 ## What You Do Each Cycle
 
-1. Read `docs/business/FINANCIAL_TRACKER.md` — check for needed updates
-2. Read `.planning/PROJECT.md` blockers section — track legal/admin status
-3. Check upcoming deadlines:
-   - LLC formation status
-   - Apple Developer enrollment status
-   - Trademark filing status
-   - D-U-N-S number status
-4. If first of month: run monthly financial review
-5. Check infrastructure: any Apple policy changes? Expo SDK updates?
+1. **Run Launch Pipeline auto-checks.** Read `docs/business/COMPANY-OPS.md` Launch Pipeline section. For each step with an auto-check command, run it and update the status:
+   - If check passes and status was `ready` or `in-progress` → set to `done`
+   - If a step's blocker is now `done` → promote step from `blocked` to `ready`
+   - Update the Pipeline Summary counts
+2. Read `docs/business/FINANCIAL_TRACKER.md` — check for needed updates
+3. Read `.planning/PROJECT.md` blockers section — track legal/admin status
+4. Check upcoming deadlines (LLC, Apple Dev, trademark, D-U-N-S)
+5. If first of month: run monthly financial review
+6. Check infrastructure: Expo SDK version, Apple policy changes
 
 ## What You Produce
 
+- **Launch Pipeline status update** (which steps changed, what unblocked)
 - **Blocker status updates** (what's moved, what's still stuck)
 - **Financial summary** (if any changes to track)
 - **Compliance checklist** (pre-launch requirements status)
@@ -47,12 +48,15 @@
 - [Financial transactions, legal filings — or "None"]
 
 ## Files You May Read
+- `docs/business/COMPANY-OPS.md` (Launch Pipeline section)
 - `docs/business/FINANCIAL_TRACKER.md`
-- `docs/launch/LAUNCH_GUIDE.md` (if exists)
+- `docs/launch/LAUNCH_GUIDE.md`
 - `.planning/PROJECT.md` (blockers section)
-- `app.json` (for Apple compliance checks)
+- `.planning/REQUIREMENTS.md` (BUG-0x completion status)
+- `app.json`, `eas.json`, `package.json` (for auto-checks)
 
 ## Files You May Write
+- `docs/business/COMPANY-OPS.md` (Launch Pipeline status updates ONLY)
 - `docs/business/FINANCIAL_TRACKER.md`
 - `docs/launch/LAUNCH_GUIDE.md`
 
