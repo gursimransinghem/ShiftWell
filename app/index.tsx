@@ -37,8 +37,8 @@ function seedMockData() {
     setProfile({
       sleepNeed: 7.5,
       caffeineHalfLife: 5,
-      napPreference: 20,
-      commuteMinutes: 15,
+      napPreference: true,
+      commuteDuration: 15,
     });
   }
 

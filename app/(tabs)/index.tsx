@@ -374,7 +374,9 @@ export default function TodayScreen() {
     const trend = score - prevDayScore;
     return {
       score: Math.round(score),
-      sleepHours: recovery.lastNight?.actual?.totalHours ?? profile.sleepNeed ?? 7.5,
+      sleepHours: recovery.lastNight?.actual
+        ? recovery.lastNight.actual.durationMinutes / 60
+        : (profile.sleepNeed ?? 7.5),
       targetHours: profile.sleepNeed ?? 7.5,
       weeklyScores: weeklyScores.slice(-7),
       trend: Math.round(trend),

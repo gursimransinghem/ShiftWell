@@ -97,14 +97,14 @@ export default function SettingsScreen() {
 
   const [sleepNeed, setSleepNeed] = useState(profile.sleepNeed ?? 7.5);
   const [caffeineHalfLife, setCaffeineHalfLife] = useState(profile.caffeineHalfLife ?? 5);
-  const [commuteMinutes, setCommuteMinutes] = useState(profile.commuteMinutes ?? 15);
+  const [commuteMinutes, setCommuteMinutes] = useState(profile.commuteDuration ?? 15);
   const [napMinutes, setNapMinutes] = useState(
     typeof profile.napPreference === 'number' ? profile.napPreference : 20,
   );
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
-    setProfile({ sleepNeed, caffeineHalfLife, commuteMinutes, napPreference: napMinutes });
+    setProfile({ sleepNeed, caffeineHalfLife, commuteDuration: commuteMinutes, napPreference: napMinutes > 0 });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
