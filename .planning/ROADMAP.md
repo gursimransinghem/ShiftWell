@@ -440,7 +440,7 @@ Plans:
   5. Pricing model: $5-15/seat/month with volume discounts
 **Plans**: 1 plan
 Plans:
-- [ ] 30-01-PLAN.md — Case studies, ROI calculator, pitch deck, compliance docs, pricing model
+- [x] 30-01-PLAN.md — Case studies, ROI calculator, pitch deck, compliance docs, pricing model
 **Rationale**: Sales kit before sales conversations. Data-driven pitch, not vaporware.
 
 ### Phase 31: App Store Optimization
@@ -597,7 +597,7 @@ Plans:
 | 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 28. Employer Dashboard | v1.4 | 0/1 | Deferred (separate repo) | - |
 | 29. API Layer | v1.4 | 1/1 | Complete    | 2026-04-07 |
-| 30. Enterprise Sales Kit | v1.4 | 1/1 | In Progress | - |
+| 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete   | 2026-04-07 |
 | 31. App Store Optimization | v1.4 | 0/1 | Not started | - |
 | 32. HRV + Wearable Research | v2.0 | 1/1 | Complete | 2026-04-07 |
 | 33. Apple Watch Integration | v2.0 | 1/1 | Complete | 2026-04-07 |

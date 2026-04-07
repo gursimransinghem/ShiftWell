@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 29-01-PLAN.md
-last_updated: "2026-04-07T19:35:38.163Z"
+stopped_at: Completed 30-01-PLAN.md
+last_updated: "2026-04-07T19:39:43.790Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 19
+  completed_phases: 20
   total_plans: 56
-  completed_plans: 36
+  completed_plans: 37
   percent: 64
 ---
 
@@ -78,6 +78,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 25-intelligence-polish P01 | 5min | 2 tasks | 8 files |
 | Phase 26-enterprise-research P01 | 6min | 3 tasks | 3 files |
 | Phase 29-api-layer P01 | 6min | 2 tasks | 10 files |
+| Phase 30-enterprise-sales-kit P01 | 8min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -179,6 +180,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 29-api-layer]: buildApp() factory with repo injection enables supertest integration tests without a real database
 - [Phase 29-api-layer]: Sliding-window rate limiter (not fixed window) — prevents burst abuse at window boundaries
 - [Phase 29-api-layer]: In-memory ScheduleRepository + UserRepository stubs — PostgreSQL swap is drop-in via same interface
+- [Phase 30-enterprise-sales-kit]: Enterprise sales kit docs preserved and extended: existing high-quality docs kept, beta user case studies added as new section, Slide 15 added to close pitch deck at 15 slides
+- [Phase 30-enterprise-sales-kit]: Enterprise pricing confirmed: Standard $5/seat/month, Professional $10/seat/month, Enterprise $15/seat/month with volume discounts at 500/1000/2000+ seats
 
 ### Pending Todos
 
@@ -193,6 +196,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:32:05Z
-Stopped at: Completed 29-01-PLAN.md
+Last session: 2026-04-07T19:39:43.785Z
+Stopped at: Completed 30-01-PLAN.md
 Resume file: None
