@@ -202,6 +202,59 @@ _(Required for App Store submission. Since ShiftWell stores all data on-device w
 
 ---
 
+## Screenshot Refresh — Outcome Data Integration
+
+> Updated screenshots incorporating real case study outcome data. Priority: show results, not features.
+
+### Screenshot 1 (Hero) — "Your sleep, optimized for your shifts"
+
+- **Visual:** Today screen with Recovery Score 78/100, next shift countdown "Night shift in 11h"
+- **Outcome badge:** "62% better recovery in 90 days" (per case study data)
+- **Background:** Night Sky Mode (dark purple/blue gradient)
+- **Goal:** Immediate identity match — shift worker sees themselves
+
+### Screenshot 2 (Calendar) — "Built around your schedule"
+
+- **Visual:** Calendar view with color-coded sleep windows — purple (main sleep), blue (nap), green (day off)
+- **Caption:** "Your shift schedule. Your sleep plan. Automatically."
+- **Goal:** Show the core workflow in one image
+
+### Screenshot 3 (Algorithm) — "Science-backed. Not guesswork."
+
+- **Visual:** Sleep debt gauge at 1.1 hrs, AdaptiveInsightCard explaining "Bedtime moved earlier because 3-night stretch starting Thursday"
+- **Caption:** "Based on Two-Process Model — the same science NASA uses"
+- **Goal:** Credibility differentiation from generic sleep trackers
+
+### Screenshot 4 (Adaptive) — "It learns. You sleep."
+
+- **Visual:** AdaptiveInsightCard showing plan change with "Why?" explanation expanded
+- **Caption:** "Algorithm adapts to your real sleep behavior, not just your schedule"
+- **Goal:** Show Adaptive Brain as a concrete feature, not abstract AI
+
+### Screenshot 5 (Spanish/Localization) — "Tu sueño, optimizado para tus turnos"
+
+- **Visual:** Same layout as Screenshot 1 but rendered in Spanish locale
+- **Caption:** "Tu sueño, optimizado para tus turnos"
+- **Goal:** Signal Spanish localization — 18% of US shift workers are Hispanic
+
+### Screenshot 6 (Outcomes) — "Users sleep better"
+
+- **Visual:** Before/after comparison — Week 1 vs Week 12 Recovery Score trend lines
+- **Data point:** "Average 23% improvement in recovery score in 30 days"
+- **Goal:** Outcome-first proof — gives skeptical user the evidence to download
+
+### Screenshot Design Rules
+
+- Dark background throughout (Night Sky brand identity; filters for night shift audience)
+- All screenshots show populated real-looking data — no empty states, no placeholder text
+- Device frame: iPhone 15 Pro (6.7" format required; auto-scaled for other sizes)
+- Caption text: 24pt minimum, high contrast white on dark, left-aligned
+- No more than 6 words per caption
+- Screenshots 1–3 tell the story without reading captions (visual-first rule)
+- Outcome badge on Screenshot 1 uses warm gold (#C8A84B) — premium, not salesy
+
+---
+
 ## Pre-Submission Checklist
 
 - [ ] App Name confirmed (check for trademark conflicts)
