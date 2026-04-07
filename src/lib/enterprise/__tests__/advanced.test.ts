@@ -21,10 +21,12 @@ import {
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
+// Use threshold=0 to disable DP for unit tests (cohort size never < 0),
+// so we can test multi-facility logic without DP noise obscuring deterministic scores.
 const defaultConfig: DifferentialPrivacyConfig = {
   epsilon: 1.0,
   sensitivity: 100,
-  cohortThreshold: 50,
+  cohortThreshold: 0, // DP disabled for unit tests — test DP behavior in anonymizer.test.ts
 };
 
 const period = { start: '2026-03-01', end: '2026-03-31' };
