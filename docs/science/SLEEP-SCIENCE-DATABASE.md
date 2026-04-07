@@ -985,6 +985,126 @@ New sources added during the Phase 13 Sleep Feedback Research sprint to support 
 
 ---
 
+## v1.3 AI Coaching & Digital Health — Phase 19 (2026-04-07)
+
+New sources added during Phase 19 AI Coaching Research sprint to support the Claude AI coaching framework (Phases 19–25). These citations underpin the prompt architecture, safety guardrails, and editorial decisions in AI-COACHING-FRAMEWORK.md and SAFETY-GUARDRAILS.md.
+
+### AI Applications in Behavioral Coaching
+
+- **Luxton et al. 2016 — AI in Mental Health and Behavioral Coaching**
+  *Artificial Intelligence in Behavioral and Mental Health Care. Academic Press, 2016.*
+  AI-driven behavioral coaching achieves engagement when feedback is personalized to user-specific data. Generic feedback produces 70%+ dropout. Foundational rationale for ShiftWell requiring at least one specific data point per AI response.
+
+- **Scholten et al. 2023 — Conversational Agents in Health Promotion**
+  *Journal of Medical Internet Research 25:e43740, 2023.*
+  Meta-analysis: conversational agents achieve best outcomes with structured summaries (not open-ended conversation), 3–5 exchange limit before redirecting to action, and motivational interviewing tone. Validates ShiftWell's structured JSON output approach and turn limits for future chat.
+
+- **Naslund et al. 2020 — Digital Health Coaching Outcomes**
+  *Lancet Psychiatry 7(10):914–925, 2020.*
+  Just-in-time adaptive interventions (JITAIs) triggered by behavioral data outperform fixed-schedule notifications. Validates ShiftWell's pattern-alert approach (Phase 23) over fixed weekly notifications.
+
+- **Amagai et al. 2022 — Challenges in Conversational AI for Healthcare**
+  *Journal of Medical Internet Research 24(2):e35120, 2022.*
+  Four primary failure modes for AI health interventions: generic responses, clinical language, scope failure, AI overconfidence. ShiftWell's language boundary rules and post-generation scanner are direct mitigations.
+
+### AI Safety and Scope Boundaries in Health Contexts
+
+- **Torous et al. 2021 — Digital Mental Health Guidelines**
+  *World Psychiatry 20(3):318–335, 2021.*
+  LLM-based health apps must distinguish wellness coaching from clinical intervention. Diagnostic language from any dynamically generated AI output triggers SaMD reclassification. Foundation for ShiftWell's 8-category prohibition list.
+
+- **FDA General Wellness Guidance (revised January 6, 2026)**
+  *FDA Guidance for Industry — General Wellness: Policy for Low Risk Devices.*
+  Two-factor test for general wellness classification: (1) intended only for general wellness use, (2) low risk to user safety. AI content containing diagnostic language or treatment recommendations changes SaMD classification. Regulatory basis for ShiftWell's post-generation scanner.
+
+- **LLM Guardrails in Medical Safety-Critical Settings (Nature Scientific Reports 2025)**
+  *Scientific Reports 15, 2025. DOI: 10.1038/s41598-025-09138-0.*
+  Multi-layer defense (system prompt + output scanning + fallback content) required for reliable safety in health AI applications. Architecture matches ShiftWell's 3-layer guardrail approach.
+
+### Chatbot Efficacy Studies
+
+- **Fitzpatrick et al. 2017 — Woebot RCT (CBT Delivery)**
+  *JMIR Mental Health 4(2):e19, 2017.*
+  Automated CBT chatbot reduced PHQ-9 depression symptoms vs. control in RCT. Effectiveness attributed to strict scope maintenance — consistently redirecting clinical questions to professionals. ShiftWell's warm redirect templates follow this pattern.
+
+- **Inkster et al. 2018 — Wysa AI Mental Wellness Support**
+  *JMIR mHealth and uHealth 6(11):e12106, 2018.*
+  Crisis escalation protocols (redirecting to human help when distress detected) are essential to user safety AND app store approval. Validated ShiftWell's tiered distress detection with UI overlay for severe distress.
+
+- **Prochaska et al. 2021 — Technology in Health Behavior Change**
+  *JMIR mHealth and uHealth 9(3):e24850, 2021.*
+  Behavior change AI must meet users at their Transtheoretical Model (TTM) stage. Agents assuming action-stage readiness when users are in contemplation produce resistance. ShiftWell's constraint-aware tone (no-lecture policy) is TTM-aligned.
+
+### Emotional Intelligence and Engagement
+
+- **Martinez-Miranda & Aldea 2005 — Emotional Intelligence in Health Agents**
+  *Computers in Human Behavior 21(2):323–341, 2005.*
+  AI health coaching agents that acknowledge emotional state (without attempting therapy) achieve higher satisfaction and self-reported adherence. Simple validation ("that sounds tough") before problem-solving improves engagement. Foundation for ShiftWell's validate-before-advise tone principle.
+
+---
+
+---
+
+## v1.3 Predictive Scheduling Research — Phase 21 (2026-04-07)
+
+New sources added during the Phase 21 Predictive Scheduling Research sprint to support the ShiftWell Circadian Stress Index (SCSI) algorithm (Phase 22 implementation).
+
+### Predictive Scheduling & Fatigue Models
+
+- **Hursh et al. (2004) — SAFTE Model Validation**
+  "Fatigue models for applied research in warfighting." Aviation, Space, and Environmental Medicine, 75(3), A44-A53. [PMID: 15018265](https://pubmed.ncbi.nlm.nih.gov/15018265/)
+  The canonical SAFTE reference. Validates sleep reservoir model against PVT data from Belenky (2003) chronic restriction study. R² ~0.85 in laboratory conditions. Key source for SCSI severity band calibration.
+
+- **Dawson & McCulloch (2005) — FAID Schedule-Only Model**
+  "A model to predict work-related fatigue based on hours of work." ASEM, 75(3), A61-A67. [PMID: 15018266](https://pubmed.ncbi.nlm.nih.gov/15018266/)
+  Schedule-only fatigue scoring (no sleep data required). FAID threshold ≥ 63.18 = significant risk, ≥ 80 = high risk. Validated in Australian mining, rail, and healthcare. Source for ShiftWell's calendar-only fallback scoring.
+
+- **Akerstedt & Folkard (1997) — Three-Process Model of Alertness**
+  Chronobiology International, 14(2), 115-123. [PMID: 9095372](https://pubmed.ncbi.nlm.nih.gov/9095372/)
+  Extends Two-Process Model with Process W (sleep inertia): `W(t) = W_0 * e^(-t/tau_i)`, tau_i ≈ 35 min. Directly implements the missing component for shift-transition nadir prediction.
+
+- **Akerstedt et al. (2004) — TPM Predictions for Shift Work**
+  Aviation, Space, and Environmental Medicine, 75(3), A75-A83. [PMID: 15018267](https://pubmed.ncbi.nlm.nih.gov/15018267/)
+  Validates Three-Process Model against KSS sleepiness ratings in shift-working populations. R² ~0.78 for typical rotation patterns. Extended to airline crew validation (n=136 aircrews, Akerstedt et al. 2014).
+
+- **Folkard & Lombardi (2006) — Long Work Hours Risk Curves**
+  "Modeling the impact of components of long work hours on injuries and accidents." Chronobiology International. [PMID: 16570251](https://pubmed.ncbi.nlm.nih.gov/16570251/)
+  Quantifies injury risk as function of shift duration and time-of-day. Source for SCSI shift duration penalty weights. Key finding: risk increases non-linearly beyond 8h shifts.
+
+- **Folkard & Tucker (2003) — Consecutive Night Shift Risk**
+  "Shift work, safety and productivity." Occupational Medicine, 53(2), 95-101. [PMID: 12637593](https://pubmed.ncbi.nlm.nih.gov/12637593/)
+  Meta-analysis establishing relative risk multipliers by consecutive nights: Night 1=1.0x, 2=1.08x, 3=1.17x, 4=1.28x, 5+=1.4x+. Used directly in SCSI consecutive nights penalty calculation.
+
+- **Mallis et al. (2004) — Seven Biomathematical Models Compared**
+  Aviation, Space, and Environmental Medicine, 75(3), A107-A118. [PMID: 15018262](https://pubmed.ncbi.nlm.nih.gov/15018262/)
+  Definitive comparative summary of SAFTE, FAID, CAS, TPM and four other models against common test conditions. Primary reference for ShiftWell's model selection decision.
+
+- **Gander et al. (2011) — Fatigue Risk Management in Transportation**
+  Validates schedule-based FRMS screening in operational settings. Confirms FAID-like schedule scoring is effective for identifying high-risk roster patterns without individual biometric data. Supports ShiftWell's calendar-only fallback mode.
+
+- **Moore-Ede et al. (2004) — CAS (Circadian Alertness Simulator)**
+  Aviation, Space, and Environmental Medicine, 75(3), A108-A114. [PMID: 15018272](https://pubmed.ncbi.nlm.nih.gov/15018272/)
+  CAS evaluation. Documents fully proprietary parameters and enterprise-only licensing — confirms CAS is unsuitable for consumer app implementation.
+
+- **St. Hilaire et al. (2017) — Mathematical Circadian Modeling**
+  Science Translational Medicine. Key finding: individual variation in tau (circadian period) significantly affects required adaptation time. Supports personalized threshold calibration in Phase 22.
+
+### Circadian Adaptation and Transition Science
+
+- **Eastman & Burgess (2009) — Practical Circadian Shifting Interventions**
+  "Practical interventions to promote circadian adaptation." Journal of Biological Rhythms. [PMID: 19346453](https://pubmed.ncbi.nlm.nih.gov/19346453/)
+  Maximum circadian shift rates: delay ~1.5-2.0h/day, advance ~1.0-1.5h/day. Source for SCSI transition detection threshold (>4h) and pre-adaptation protocol timelines.
+
+- **Burgess, Crowley et al. (2003) — Pre-Flight Eastward Adaptation Protocol**
+  Journal of Biological Rhythms. [PMC1262683](https://pmc.ncbi.nlm.nih.gov/articles/PMC1262683/)
+  3-5 day pre-adaptation window validated for 8-12 hour phase shifts. Combined light + melatonin protocol faster than either alone. Direct source for SCSI protocol start date calculation.
+
+- **Wilson et al. (2020) — FIPS Open-Source Three-Process Model**
+  [github.com/humanfactors/FIPS](https://github.com/humanfactors/FIPS). MIT/GPL license.
+  Open-source R package implementing the full Three-Process Model and Unified Model. Validates that TPM equations are freely implementable from literature. TypeScript port estimated ~300 LOC.
+
+---
+
 *This document is maintained as a living reference. Update when new research becomes available. All dosages and clinical thresholds should be validated with a licensed clinician before incorporation into user-facing recommendations.*
 
 *Assembled by Claude Code for ShiftWell -- 2026-04-06. Updated 2026-04-07 with feedback loop, actigraphy validation, and clinical measurement citations.*
