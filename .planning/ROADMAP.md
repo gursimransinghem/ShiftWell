@@ -566,29 +566,29 @@ Plans:
 | 10. TestFlight Prep | v1.1 | - | Complete | 2026-04-07 |
 | 11. App Store Prep | v1.1 | - | Complete | 2026-04-07 |
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
-| 13. Sleep Feedback Research | v1.2 | 1/2 | In Progress|  |
-| 14. HealthKit Sleep Ingestion | v1.2 | 0/1 | Not started | - |
-| 15. Algorithm Feedback Engine | v1.2 | 0/1 | Not started | - |
-| 16. Feedback Validation Sprint | v1.2 | 0/1 | Not started | - |
-| 17. Growth Engine | v1.2 | 0/1 | Not started | - |
-| 18. RevenueCat Hard Gating | v1.2 | 0/1 | Not started | - |
-| 19. AI Coaching Research | v1.3 | 0/1 | Not started | - |
-| 20. Claude Weekly Brief | v1.3 | 0/1 | Not started | - |
-| 21. Predictive Scheduling Research | v1.3 | 0/1 | Not started | - |
-| 22. Predictive Calendar Engine | v1.3 | 0/1 | Not started | - |
-| 23. Pattern Recognition Engine | v1.3 | 0/1 | Not started | - |
-| 24. Intelligence Validation Sprint | v1.3 | 0/1 | Not started | - |
-| 25. Intelligence Polish | v1.3 | 0/1 | Not started | - |
-| 26. Enterprise Research | v1.4 | 0/1 | Not started | - |
-| 27. Outcome Data Pipeline | v1.4 | 0/1 | Not started | - |
-| 28. Employer Dashboard | v1.4 | 0/1 | Not started | - |
-| 29. API Layer | v1.4 | 0/1 | Not started | - |
-| 30. Enterprise Sales Kit | v1.4 | 0/1 | Not started | - |
+| 13. Sleep Feedback Research | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 14. HealthKit Sleep Ingestion | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
+| 17. Growth Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 19. AI Coaching Research | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 21. Predictive Scheduling Research | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 22. Predictive Calendar Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |
+| 25. Intelligence Polish | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 26. Enterprise Research | v1.4 | 1/1 | Complete | 2026-04-07 |
+| 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete | 2026-04-07 |
+| 28. Employer Dashboard | v1.4 | 0/1 | Deferred (separate repo) | - |
+| 29. API Layer | v1.4 | 1/1 | Complete | 2026-04-07 |
+| 30. Enterprise Sales Kit | v1.4 | 1/1 | In Progress | - |
 | 31. App Store Optimization | v1.4 | 0/1 | Not started | - |
-| 32. HRV + Wearable Research | v2.0 | 0/1 | Not started | - |
-| 33. Apple Watch Integration | v2.0 | 0/2 | Not started | - |
-| 34. 30-Day Autopilot | v2.0 | 0/1 | Not started | - |
-| 35. Validation Study Design | v2.0 | 0/1 | Not started | - |
-| 36. Validation Study Execution | v2.0 | 0/1 | Not started | - |
-| 37. Android Launch | v2.0 | 0/1 | Not started | - |
-| 38. Advanced Platform Features | v2.0 | 0/1 | Not started | - |
+| 32. HRV + Wearable Research | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 33. Apple Watch Integration | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 34. 30-Day Autopilot | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 35. Validation Study Design | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 36. Validation Study Execution | v2.0 | 0/1 | Blocked (100+ users) | - |
+| 37. Android Launch | v2.0 | 0/1 | Blocked (iOS rev first) | - |
+| 38. Advanced Platform Features | v2.0 | 0/1 | Deferred (needs Phase 28) | - |
