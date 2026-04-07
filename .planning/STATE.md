@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: "Checkpoint: 34-01-PLAN.md Tasks 1-2 complete, awaiting human verify"
-last_updated: "2026-04-07T19:53:39.183Z"
+stopped_at: Completed 35-01-PLAN.md
+last_updated: "2026-04-07T19:54:58.728Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
   completed_phases: 23
   total_plans: 57
-  completed_plans: 40
+  completed_plans: 41
   percent: 64
 ---
 
@@ -82,6 +82,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 31-app-store-optimization P01 | 4min | 2 tasks | 6 files |
 | Phase 32-hrv-wearable-research P01 | 6min | 2 tasks | 3 files |
 | Phase 34 P01 | 7min | 2 tasks | 8 files |
+| Phase 35-validation-study-design P01 | 10min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -194,6 +195,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 34]: Separate autopilot-store from plan-store — richer schema for transparency log screen vs plan-store lightweight state
 - [Phase 34]: isWithinBounds validates bedtime AND wake shift independently, each capped at 30 min
 - [Phase 34]: TransparencyLogScreen at app/autopilot-log.tsx as root Stack modal matching existing add-shift pattern
+- [Phase 35]: Observational cohort (not RCT): avoids withholding guidance from fatigued healthcare workers; dose-response provides internal causal evidence
+- [Phase 35]: PSQI primary outcome with d=0.5 power calc: n=100 completers provides >95% power and enables subgroup analyses
+- [Phase 35]: USF IRB EXEMPT pathway (Tampa, digital health experience); ClinicalTrials.gov pre-registration before enrollment
 
 ### Pending Todos
 
@@ -208,6 +212,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:53:39.176Z
-Stopped at: Checkpoint: 34-01-PLAN.md Tasks 1-2 complete, awaiting human verify
+Last session: 2026-04-07T19:54:58.720Z
+Stopped at: Completed 35-01-PLAN.md
 Resume file: None

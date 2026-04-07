@@ -518,7 +518,7 @@ Plans:
   6. IRB pathway identified (exempt vs expedited review)
 **Plans**: 1 plan
 Plans:
-- [ ] 35-01-PLAN.md — Study protocol (STROBE) and statistical analysis plan with power calculation
+- [x] 35-01-PLAN.md — Study protocol (STROBE) and statistical analysis plan with power calculation
 **Rationale**: Published validation is the ultimate science moat. No competitor has this.
 
 ### Phase 36: Validation Study Execution
@@ -602,7 +602,7 @@ Plans:
 | 32. HRV + Wearable Research | v2.0 | 1/1 | Complete    | 2026-04-07 |
 | 33. Apple Watch Integration | v2.0 | 1/1 | Complete | 2026-04-07 |
 | 34. 30-Day Autopilot | v2.0 | 1/1 | Complete   | 2026-04-07 |
-| 35. Validation Study Design | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 35. Validation Study Design | v2.0 | 1/2 | In Progress|  |
 | 36. Validation Study Execution | v2.0 | 0/1 | Blocked (100+ users) | - |
 | 37. Android Launch | v2.0 | 0/1 | Blocked (iOS rev first) | - |
 | 38. Advanced Platform Features | v2.0 | 0/1 | Deferred (needs Phase 28) | - |
