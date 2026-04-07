@@ -59,17 +59,17 @@
 
 ### HealthKit Ingestion (Phase 14)
 
-- [ ] **HK-01**: HealthKit sleep samples read for each night (Apple Watch worn)
-- [ ] **HK-02**: Plan-vs-reality comparison produces nightly discrepancy record
-- [ ] **HK-03**: Discrepancy history persisted and queryable for last 30 nights
+- [x] **HK-01**: HealthKit sleep samples read for each night (Apple Watch worn)
+- [x] **HK-02**: Plan-vs-reality comparison produces nightly discrepancy record
+- [x] **HK-03**: Discrepancy history persisted and queryable for last 30 nights
 
 ### Biometric Data Foundation (Phase 14)
 
-- [ ] **HK-06**: Overnight HRV (SDNN) read from HealthKit — recovery score upgrade from timing-only to physiological recovery
-- [ ] **HK-07**: Resting Heart Rate read from HealthKit — 5-7 day lagging fatigue signal, pairs with HRV
-- [ ] **HK-08**: Sleeping Wrist Temperature read from HealthKit (optional, Series 8+) — circadian phase verification, illness detection, menstrual cycle detection
-- [ ] **HK-09**: Step Count read from HealthKit (iPhone-only, no Watch required) — activity zeitgeber verification
-- [ ] **HK-10**: Device-tier detection (iPhone-only / Watch S1-7 / Watch S8+) for graceful feature gating
+- [x] **HK-06**: Overnight HRV (SDNN) read from HealthKit — recovery score upgrade from timing-only to physiological recovery
+- [x] **HK-07**: Resting Heart Rate read from HealthKit — 5-7 day lagging fatigue signal, pairs with HRV
+- [x] **HK-08**: Sleeping Wrist Temperature read from HealthKit (optional, Series 8+) — circadian phase verification, illness detection, menstrual cycle detection
+- [x] **HK-09**: Step Count read from HealthKit (iPhone-only, no Watch required) — activity zeitgeber verification
+- [x] **HK-10**: Device-tier detection (iPhone-only / Watch S1-7 / Watch S8+) for graceful feature gating
 
 ### Algorithm Feedback (Phase 15)
 

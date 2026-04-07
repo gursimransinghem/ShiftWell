@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: verifying
-stopped_at: Completed 13-01-PLAN.md
-last_updated: "2026-04-07T05:52:25.895Z"
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-04-07T17:26:38.541Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 7
-  total_plans: 55
-  completed_plans: 23
+  completed_phases: 8
+  total_plans: 56
+  completed_plans: 24
   percent: 0
 ---
 
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 08 — adaptive-brain-core
+**Current focus:** Phase 14 — healthkit-data-foundation
 
 ## Current Position
 
-Phase: 9
-Plan: Not started
+Phase: 14 (healthkit-data-foundation) — EXECUTING
+Plan: 1 of 1
 Status: Phase complete — ready for verification
 Last activity: 2026-04-07
 
@@ -67,6 +67,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 08-adaptive-brain-core P01 | 5 | 2 tasks | 5 files |
 | Phase 08-adaptive-brain-core P02 | 20 | 2 tasks | 3 files |
 | Phase 13-sleep-feedback-research P01 | 11min | 2 tasks | 4 files |
+| Phase 14-healthkit-sleep-ingestion P01 | 8min | 4 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -126,6 +127,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 13-sleep-feedback-research]: Use asleepStart not inBedStart for feedback signal (removes 10-30 min pre-sleep latency)
 - [Phase 13-sleep-feedback-research]: EMA dead zone 20 min (Apple Watch TST error floor per Menghini 2021)
 - [Phase 13-sleep-feedback-research]: Wilcoxon signed-rank test for Phase 16 validation (non-normal shift worker distributions)
+- [Phase 14]: asleepStart used (not inBedStart) for feedback timing — removes pre-sleep latency from deviation signal
+- [Phase 14]: discrepancyHistory added to zustand persist partialize — survives app restart for Phase 15 feedback engine
+- [Phase 14]: detectDeviceTier uses opportunistic data presence check — HRV samples = Watch present, temperature samples = Series 8+
 
 ### Pending Todos
 
@@ -140,6 +144,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T05:52:25.892Z
-Stopped at: Completed 13-01-PLAN.md
+Last session: 2026-04-07T17:26:38.537Z
+Stopped at: Completed 14-01-PLAN.md
 Resume file: None

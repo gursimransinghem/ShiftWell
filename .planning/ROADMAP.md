@@ -189,7 +189,7 @@ Plans:
   8. Device-tier detection gates optional features; Sleeping Wrist Temperature read only on Series 8+
 **Plans**: 1 plan
 Plans:
-- [ ] 14-01-PLAN.md — HealthKit reader, discrepancy calculator, history persistence
+- [x] 14-01-PLAN.md — HealthKit reader, discrepancy calculator, history persistence
 **Rationale**: BRAIN-07 requirement. Foundation for the feedback engine.
 
 ### Phase 15: Algorithm Feedback Engine
@@ -581,7 +581,7 @@ Plans:
 | 11. App Store Prep | v1.1 | - | Complete | 2026-04-07 |
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
 | 13. Sleep Feedback Research | v1.2 | 1/1 | Complete | 2026-04-07 |
-| 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete   | 2026-04-07 |
 | 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
 | 17. Growth Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
