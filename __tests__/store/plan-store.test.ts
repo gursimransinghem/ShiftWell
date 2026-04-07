@@ -336,7 +336,7 @@ describe('usePlanStore — changeLog persistence (BRAIN-06)', () => {
     };
     const result = partialize(fullState);
     const resultKeys = Object.keys(result).sort();
-    expect(resultKeys).toEqual(['autopilot', 'changeLog', 'daysUntilTransition', 'feedbackAdjustment', 'snapshotTimestamp', 'transparencyLog'].sort());
+    expect(resultKeys).toEqual(['autopilot', 'changeLog', 'daysUntilTransition', 'discrepancyHistory', 'feedbackAdjustment', 'snapshotTimestamp', 'transparencyLog'].sort());
     expect(result).not.toHaveProperty('plan');
     expect(result).not.toHaveProperty('planSnapshot');
     expect(result).not.toHaveProperty('adaptiveContext');
