@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: "Checkpoint: 25-01 Task 3 — awaiting human verification of BriefFeedbackRow and OutcomeDashboard"
-last_updated: "2026-04-07T19:13:40.231Z"
+stopped_at: "Completed 26-01-PLAN.md"
+last_updated: "2026-04-07T19:25:00.000Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 16
+  completed_phases: 17
   total_plans: 56
-  completed_plans: 33
-  percent: 52
+  completed_plans: 34
+  percent: 61
 ---
 
 # ShiftWell — Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 21
-Plan: Not started
-Status: Plan 01 complete — 22-01-SUMMARY.md created
+Phase: 26
+Plan: 01 complete
+Status: Plan 01 complete — 26-01-SUMMARY.md created
 Last activity: 2026-04-07
 
-Progress: [██░░░░░░░░] 52% (30/56 plans complete)
+Progress: [██████░░░░] 61% (34/56 plans complete)
 
 ## Performance Metrics
 
@@ -76,6 +76,7 @@ Progress: [██░░░░░░░░] 52% (30/56 plans complete)
 | Phase 23-pattern-recognition-engine P01 | 12min | 3 tasks | 7 files |
 | Phase 20 P01 | 5min | 3 tasks | 9 files |
 | Phase 25-intelligence-polish P01 | 5min | 2 tasks | 8 files |
+| Phase 26-enterprise-research P01 | 6min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -164,6 +165,11 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 20]: Derive sleepDebtHours from circadianDebtScore (0-100 to 0-14h mapping) since PlanStats has no direct debt field
 - [Phase 25-intelligence-polish]: BriefFeedback upsert by briefId in ai-store — filter then append pattern, no duplicates per brief
 - [Phase 25-intelligence-polish]: OutcomeDashboard derives all metrics from Zustand stores — no API calls, local-first design
+- [Phase 26-enterprise-research]: BAA required before any employer API key issued — architectural constraint, not optional
+- [Phase 26-enterprise-research]: Differential privacy epsilon=1.0 for employer dashboard; cohort minimum=20 per subgroup
+- [Phase 26-enterprise-research]: CNO/VP Nursing is primary enterprise buyer (not general HR); they control scheduling and understand circadian burden
+- [Phase 26-enterprise-research]: Pricing: $5/$10/$15/seat/month (Standard/Professional/Enterprise); 90-day free pilot at 50-200 users
+- [Phase 26-enterprise-research]: SOC 2 deferred until $50K+ ARR; HIPAA docs + BAA serve as interim trust signals for pilots
 
 ### Pending Todos
 
@@ -178,6 +184,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:13:40.227Z
-Stopped at: Checkpoint: 25-01 Task 3 — awaiting human verification of BriefFeedbackRow and OutcomeDashboard
+Last session: 2026-04-07T19:25:00.000Z
+Stopped at: Completed 26-01-PLAN.md
 Resume file: None

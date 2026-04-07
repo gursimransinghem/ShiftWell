@@ -156,9 +156,9 @@
 
 ### Research: Enterprise (Phase 26)
 
-- [ ] **RES-13**: Enterprise outcomes framework (absenteeism, error rates, turnover, injuries)
-- [ ] **RES-14**: HIPAA compliance assessment for data pipeline
-- [ ] **RES-15**: Competitive analysis of enterprise wellness platforms
+- [x] **RES-13**: Enterprise outcomes framework (absenteeism, error rates, turnover, injuries) — completed 2026-04-07 (26-01)
+- [x] **RES-14**: HIPAA compliance assessment for data pipeline — completed 2026-04-07 (26-01)
+- [x] **RES-15**: Competitive analysis of enterprise wellness platforms — completed 2026-04-07 (26-01)
 
 ### Outcome Data Pipeline (Phase 27)
 
@@ -318,9 +318,9 @@
 | RES-12 | 24 | v1.3 | Pending |
 | INT-01 | 25 | v1.3 | Pending |
 | INT-02 | 25 | v1.3 | Pending |
-| RES-13 | 26 | v1.4 | Pending |
-| RES-14 | 26 | v1.4 | Pending |
-| RES-15 | 26 | v1.4 | Pending |
+| RES-13 | 26 | v1.4 | Complete |
+| RES-14 | 26 | v1.4 | Complete |
+| RES-15 | 26 | v1.4 | Complete |
 | ENT-01 | 27 | v1.4 | Pending |
 | ENT-02 | 27 | v1.4 | Pending |
 | ENT-03 | 28 | v1.4 | Pending |
