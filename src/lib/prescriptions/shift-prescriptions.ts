@@ -170,3 +170,229 @@ export function suggestLightExposure(
       };
   }
 }
+
+// ---------------------------------------------------------------------------
+// Phase 23: Workout & Meal Planning
+// ---------------------------------------------------------------------------
+
+export type WorkoutIntensity = 'rest' | 'light' | 'moderate' | 'full';
+
+export interface WorkoutSuggestion {
+  intensity: WorkoutIntensity;
+  durationMin: number;
+  type: string;
+  note: string;
+}
+
+export interface MealWindow {
+  label: string;
+  timeISO: string;
+  macroFocus: string;
+}
+
+export interface MealPlan {
+  meals: MealWindow[];
+  mealPrepReminder?: string;
+}
+
+/**
+ * Suggest workout intensity based on shift type, recovery position, and score.
+ *
+ * Rules (from SimVault fitness protocol):
+ *   - Recovery Day 1 post-night: rest only — no exercise regardless of score
+ *   - Night shift day: light only (walk, gentle stretch)
+ *   - Low recovery score (< 50): light only
+ *   - Good recovery (>= 70) on off days: full session (45-60 min)
+ *   - Moderate recovery (50-69) or day/evening shift day: moderate (30-45 min)
+ *
+ * @param shiftType       'day' | 'evening' | 'night' | 'off' | 'extended'
+ * @param isRecoveryDay1  True if today is the first day after completing a night block
+ * @param recoveryScore   0-100 score from score-store, or null if not yet available
+ */
+export function suggestWorkout(
+  shiftType: string,
+  isRecoveryDay1: boolean,
+  recoveryScore: number | null,
+): WorkoutSuggestion {
+  // Recovery Day 1 post-night: always rest
+  if (isRecoveryDay1) {
+    return {
+      intensity: 'rest',
+      durationMin: 0,
+      type: 'Rest',
+      note: 'First recovery day after nights — full rest. Light walk only if you feel well by evening.',
+    };
+  }
+
+  // Night shift day: light only
+  if (shiftType === 'night') {
+    return {
+      intensity: 'light',
+      durationMin: 20,
+      type: 'Walk or gentle stretch',
+      note: 'Night shift day — light movement only. Save energy for your shift.',
+    };
+  }
+
+  // Low recovery: light only
+  if (recoveryScore !== null && recoveryScore < 50) {
+    return {
+      intensity: 'light',
+      durationMin: 20,
+      type: 'Walk or yoga',
+      note: `Recovery score ${recoveryScore} — light session only. Prioritize sleep tonight.`,
+    };
+  }
+
+  // Off day with good recovery: full session
+  if (shiftType === 'off' && (recoveryScore === null || recoveryScore >= 70)) {
+    return {
+      intensity: 'full',
+      durationMin: 50,
+      type: 'Strength, cardio, or sport',
+      note: recoveryScore !== null
+        ? `Recovery score ${recoveryScore} — great day for a full training session.`
+        : 'Off day — no restriction. Train as planned.',
+    };
+  }
+
+  // Default: moderate
+  const noteByShift =
+    shiftType === 'day'
+      ? 'Day shift — moderate workout after work or in the morning before shift.'
+      : shiftType === 'evening'
+      ? 'Evening shift — morning workout recommended before fatigue builds.'
+      : 'Moderate session — listen to your body.';
+
+  return {
+    intensity: 'moderate',
+    durationMin: 35,
+    type: 'Cardio or moderate strength',
+    note: noteByShift,
+  };
+}
+
+/**
+ * Generate a meal timing plan based on shift type.
+ *
+ * Scientific basis:
+ *   - Manoogian et al. (2022): eating aligned to waking hours improves metabolic health
+ *   - Chellappa et al. (2021): daytime eating reduces metabolic disruption for night workers
+ *
+ * @param shiftType     'day' | 'evening' | 'night' | 'off' | 'extended'
+ * @param shiftStartISO ISO datetime of shift start (required for night shift timing)
+ */
+export function suggestMealPlan(
+  shiftType: string,
+  shiftStartISO: string | null,
+): MealPlan {
+  const refDate = shiftStartISO ? new Date(shiftStartISO) : new Date();
+  const todayDate = refDate.toISOString().slice(0, 10);
+
+  function isoAt(hour: number): string {
+    const normalizedHour = ((hour % 24) + 24) % 24;
+    const d = new Date(`${todayDate}T00:00:00`);
+    d.setHours(Math.floor(normalizedHour), Math.round((normalizedHour % 1) * 60), 0, 0);
+    return d.toISOString();
+  }
+
+  if (shiftType === 'night') {
+    // Night shift meal timing: pre-shift (~5:30 PM), mid-shift (~midnight), late (~3 AM)
+    // Scientific: front-load calories before the night work period
+    const shiftStartDate = shiftStartISO ? new Date(shiftStartISO) : null;
+    const shiftHour = shiftStartDate ? shiftStartDate.getHours() + shiftStartDate.getMinutes() / 60 : 19;
+    const preShiftHour = shiftHour - 1.5;   // ~1.5h before shift
+    const midShiftHour = shiftHour + 4;     // ~4h into shift
+    const lateHour = shiftHour + 7;         // ~7h into shift
+
+    return {
+      meals: [
+        {
+          label: 'Pre-shift meal',
+          timeISO: isoAt(preShiftHour),
+          macroFocus: 'High protein + complex carbs (chicken, rice, vegetables)',
+        },
+        {
+          label: 'Mid-shift meal',
+          timeISO: isoAt(midShiftHour),
+          macroFocus: 'Moderate protein + fiber (turkey wrap, salad)',
+        },
+        {
+          label: 'Late-shift snack',
+          timeISO: isoAt(lateHour),
+          macroFocus: 'Light protein (Greek yogurt, nuts, boiled egg)',
+        },
+      ],
+    };
+  }
+
+  if (shiftType === 'evening') {
+    return {
+      meals: [
+        {
+          label: 'Breakfast',
+          timeISO: isoAt(7.5),
+          macroFocus: 'Balanced — protein + complex carbs',
+        },
+        {
+          label: 'Lunch',
+          timeISO: isoAt(12.5),
+          macroFocus: 'High protein + vegetables (main meal before shift)',
+        },
+        {
+          label: 'Pre-shift snack',
+          timeISO: isoAt(14.5),
+          macroFocus: 'Light carbs for sustained energy (banana, oats)',
+        },
+      ],
+    };
+  }
+
+  // Day shift or off day: standard timing
+  return {
+    meals: [
+      {
+        label: 'Breakfast',
+        timeISO: isoAt(7),
+        macroFocus: 'Protein + healthy fats to sustain morning energy',
+      },
+      {
+        label: 'Lunch',
+        timeISO: isoAt(12.5),
+        macroFocus: 'Balanced macros — protein, carbs, vegetables',
+      },
+      {
+        label: 'Dinner',
+        timeISO: isoAt(18),
+        macroFocus: 'High protein + vegetables, lighter carbs',
+      },
+    ],
+  };
+}
+
+/**
+ * Check if a meal prep reminder should be shown.
+ *
+ * Rule: Show reminder 4-5 days before an upcoming night block starts.
+ *
+ * @param upcomingNightBlockStartISO  ISO date of the first night shift in an upcoming block (or null)
+ * @param todayISO                    Today's date ISO string
+ * @returns Reminder text, or undefined if no reminder needed
+ */
+export function getMealPrepReminder(
+  upcomingNightBlockStartISO: string | null,
+  todayISO: string,
+): string | undefined {
+  if (!upcomingNightBlockStartISO) return undefined;
+
+  const today = new Date(todayISO);
+  const blockStart = new Date(upcomingNightBlockStartISO);
+  const daysUntil = Math.floor((blockStart.getTime() - today.getTime()) / 86400000);
+
+  if (daysUntil >= 4 && daysUntil <= 5) {
+    const blockDateStr = blockStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return `Meal prep by ${blockDateStr} for upcoming night block`;
+  }
+
+  return undefined;
+}
