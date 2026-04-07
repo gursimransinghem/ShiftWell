@@ -22,6 +22,10 @@ import { DEFAULT_PROFILE } from '../../src/lib/circadian/types';
 // Mocks
 // ---------------------------------------------------------------------------
 
+jest.mock('react-native', () => ({
+  AppState: { currentState: 'active', addEventListener: jest.fn() },
+}));
+
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(),
   setItem: jest.fn().mockResolvedValue(undefined),

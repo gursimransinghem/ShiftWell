@@ -8,7 +8,8 @@
  * Call this once at the root of app/(tabs)/index.tsx.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AppState, type AppStateStatus } from 'react-native';
 import { subDays, format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getSleepHistory, isAvailable } from '../lib/healthkit/healthkit-service';
@@ -127,11 +128,21 @@ export function useAdaptivePlan(): AdaptivePlanData {
 
     run();
 
+    // Re-run on background → active transition (debounce gate prevents duplicates)
+    const lastState = { current: AppState.currentState };
+    const sub = AppState.addEventListener('change', (next: AppStateStatus) => {
+      if (lastState.current !== 'active' && next === 'active' && !cancelled) {
+        run();
+      }
+      lastState.current = next;
+    });
+
     return () => {
       cancelled = true;
+      sub.remove();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run once on mount
+  }, []); // Run on mount + foreground transitions (BRAIN-01)
 
   return {
     context: adaptiveContext,
