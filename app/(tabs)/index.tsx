@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import {
   Pressable,
   RefreshControl,
@@ -19,6 +19,7 @@ import { format, isWithinInterval, differenceInMinutes } from 'date-fns';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { usePredictionStore } from '@/src/store/prediction-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
 import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
 import { useAdaptivePlan } from '@/src/hooks/useAdaptivePlan';
@@ -39,6 +40,7 @@ import {
   PatternAlertCard,
   AdaptiveInsightCard,
   WeeklyBriefCard,
+  CircadianForecastCard,
 } from '@/src/components/today';
 import { useBriefStore } from '@/src/store/brief-store';
 import { useWeeklyBrief } from '@/src/hooks/useWeeklyBrief';
@@ -222,6 +224,31 @@ export default function TodayScreen() {
 
   // Weekly Brief — checks if today is Monday and triggers Claude API if needed
   useWeeklyBrief();
+
+  // Predictive Calendar Engine — refresh predictions daily (Phase 22)
+  const refreshPredictions = usePredictionStore((s) => s.refreshPredictions);
+  const adaptiveContextForPrediction = usePlanStore((s) => s.adaptiveContext);
+  useEffect(() => {
+    if (shifts.length === 0) return;
+
+    const predictionShifts = shifts.slice(0, 28).map((s) => ({
+      date: s.start.toISOString().slice(0, 10),
+      startHour: s.start.getHours(),
+      endHour: s.end.getHours(),
+      type: (s.shiftType === 'extended' ? 'night' : s.shiftType) as 'day' | 'evening' | 'night' | 'off',
+    }));
+
+    const sleepDebt = adaptiveContextForPrediction?.debt.rollingHours ?? 0;
+    const baselineMidsleep = 2.5; // default intermediate chronotype
+
+    refreshPredictions({
+      shifts: predictionShifts,
+      currentSleepDebt: Math.max(0, sleepDebt),
+      baselineMidsleep,
+      lookAheadDays: 14,
+    });
+  }, [shifts, refreshPredictions, adaptiveContextForPrediction]);
+
   const currentBrief = useBriefStore((s) => s.currentBrief);
   const briefEnabled = useBriefStore((s) => s.enabled);
   const dismissBrief = useBriefStore((s) => s.dismissCurrentBrief);
@@ -630,6 +657,11 @@ export default function TodayScreen() {
                     <SleepDebtCard />
                   </View>
                 )}
+
+                {/* Circadian Forecast Card (Phase 22) — upcoming transitions */}
+                <View style={styles.section}>
+                  <CircadianForecastCard />
+                </View>
 
                 {/* Countdown Row */}
                 {recoveryCells.length > 0 && (

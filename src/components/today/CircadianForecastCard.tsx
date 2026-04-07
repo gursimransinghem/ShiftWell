@@ -1,54 +1,78 @@
 /**
  * CircadianForecastCard — Phase 22
  *
- * Displays upcoming shift transitions with stress severity badges and
- * pre-adaptation protocol actions. Only visible when a medium+ stress
- * transition exists within the next 7 days.
+ * Displays the most critical upcoming shift transition with a severity badge
+ * and pre-adaptation start date prompt.
+ *
+ * Reads from usePredictionStore().mostCriticalTransition().
+ * Falls back gracefully to "Clear skies ahead" when no transitions exist.
  */
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { format } from 'date-fns';
 import { COLORS, SPACING, RADIUS } from '@/src/theme';
-import type { TransitionStressPoint, StressSeverity } from '@/src/lib/predictive/stress-scorer';
-import type { PreAdaptationPlan } from '@/src/lib/predictive/pre-adaptation';
+import { usePredictionStore } from '@/src/store/prediction-store';
+import type { TransitionPrediction } from '@/src/lib/circadian/types';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
 interface Props {
-  stressPoints: TransitionStressPoint[];
-  preAdaptation: PreAdaptationPlan | null;
+  /** Optional override — if not provided, reads from prediction store */
+  prediction?: TransitionPrediction | null;
 }
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+const SEVERITY_COLORS = {
+  critical: '#FF3B30',
+  high: '#FF9500',
+  medium: '#FFCC00',
+  low: '#34C759',
+};
+
+const SEVERITY_LABELS = {
+  critical: 'Critical',
+  high: 'High',
+  medium: 'Moderate',
+  low: 'Low',
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-const SEVERITY_COLORS: Record<StressSeverity, string> = {
-  low: '#34D399',    // green
-  medium: '#C8A84B', // yellow
-  high: '#FB923C',   // orange
-  critical: '#FF6B6B', // red
-};
-
-const SEVERITY_LABELS: Record<StressSeverity, string> = {
-  low: 'Low stress',
-  medium: 'Moderate stress',
-  high: 'High stress',
-  critical: 'Critical stress',
-};
-
-function transitionLabel(type: TransitionStressPoint['transitionType']): string {
+function formatTransitionType(type: string): string {
   switch (type) {
     case 'day-to-night': return 'Day → Night shift';
     case 'night-to-day': return 'Night → Day shift';
-    case 'evening-to-night': return 'Evening → Night shift';
-    case 'isolated-night': return 'Isolated night shift';
     case 'day-to-evening': return 'Day → Evening shift';
+    case 'evening-to-day': return 'Evening → Day shift';
+    case 'evening-to-night': return 'Evening → Night shift';
+    case 'night-to-evening': return 'Night → Evening shift';
+    case 'off-to-night': return 'Return to nights';
+    case 'off-to-extended': return '24h shift ahead';
+    case 'extended-recovery': return 'Extended shift recovery';
     default: return 'Shift transition';
+  }
+}
+
+function formatDaysUntil(days: number): string {
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Tomorrow';
+  return `In ${days} days`;
+}
+
+function formatDate(isoDate: string): string {
+  try {
+    const d = new Date(isoDate + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  } catch {
+    return isoDate;
   }
 }
 
@@ -56,17 +80,28 @@ function transitionLabel(type: TransitionStressPoint['transitionType']): string 
 // Component
 // ---------------------------------------------------------------------------
 
-export function CircadianForecastCard({ stressPoints, preAdaptation }: Props) {
-  // Only show when medium+ stress within 7 days
-  const relevantPoints = stressPoints.filter(
-    (p) => p.severity !== 'low' && p.daysUntil <= 7,
-  );
+export function CircadianForecastCard({ prediction: predictionProp }: Props) {
+  const storePrediction = usePredictionStore((s) => s.mostCriticalTransition());
+  const prediction = predictionProp !== undefined ? predictionProp : storePrediction;
 
-  if (relevantPoints.length === 0) return null;
+  // Empty state — clear skies
+  if (!prediction) {
+    return (
+      <View>
+        <Text style={styles.sectionLabel}>CIRCADIAN FORECAST</Text>
+        <View style={styles.card}>
+          <View style={styles.clearRow}>
+            <Ionicons name="checkmark-circle" size={18} color="#34C759" />
+            <Text style={styles.clearText}>Clear skies ahead</Text>
+          </View>
+          <Text style={styles.clearSubtext}>No high-stress transitions in the next 14 days.</Text>
+        </View>
+      </View>
+    );
+  }
 
-  const primary = relevantPoints[0];
-  const color = SEVERITY_COLORS[primary.severity];
-  const isPreAdapting = preAdaptation !== null;
+  const color = SEVERITY_COLORS[prediction.severity];
+  const hasPreAdaptation = prediction.preAdaptationStartDate !== prediction.transitionDate;
 
   return (
     <View>
@@ -78,69 +113,42 @@ export function CircadianForecastCard({ stressPoints, preAdaptation }: Props) {
           <View style={[styles.iconCircle, { backgroundColor: color + '20' }]}>
             <Ionicons name="moon-outline" size={16} color={color} />
           </View>
+
           <View style={styles.headerText}>
-            <Text style={styles.transitionLabel}>{transitionLabel(primary.transitionType)}</Text>
+            <Text style={styles.transitionLabel}>
+              {formatTransitionType(prediction.transitionType)}
+            </Text>
             <Text style={styles.dateLabel}>
-              {primary.daysUntil === 0
-                ? 'Today'
-                : primary.daysUntil === 1
-                ? 'Tomorrow'
-                : `In ${primary.daysUntil} days`}
+              {formatDaysUntil(prediction.daysUntilTransition)}
               {' · '}
-              {format(primary.date, 'MMM d')}
+              {formatDate(prediction.transitionDate)}
             </Text>
           </View>
 
           {/* Severity badge */}
           <View style={[styles.badge, { backgroundColor: color + '20' }]}>
             <Text style={[styles.badgeText, { color }]}>
-              {SEVERITY_LABELS[primary.severity]}
+              {SEVERITY_LABELS[prediction.severity]}
             </Text>
           </View>
         </View>
 
-        {/* Pre-adaptation status */}
-        {isPreAdapting && (
-          <View style={[styles.statusRow, { backgroundColor: color + '10' }]}>
-            <Ionicons name="checkmark-circle" size={14} color={color} />
-            <Text style={[styles.statusText, { color }]}>
-              Pre-adaptation protocol active
+        {/* Pre-adaptation prompt */}
+        {hasPreAdaptation && (
+          <View style={[styles.preAdaptRow, { backgroundColor: color + '10' }]}>
+            <Ionicons name="calendar-outline" size={13} color={color} />
+            <Text style={[styles.preAdaptText, { color }]}>
+              Start adapting {formatDate(prediction.preAdaptationStartDate)}
             </Text>
           </View>
         )}
 
-        {/* Today's pre-adaptation action (if any) */}
-        {isPreAdapting && preAdaptation!.dailyActions.length > 0 && (() => {
-          const todayISO = new Date().toISOString().slice(0, 10);
-          const todayAction = preAdaptation!.dailyActions.find(
-            (a) => a.date.toISOString().slice(0, 10) === todayISO,
-          );
-          return todayAction ? (
-            <View style={styles.actionBlock}>
-              <Text style={styles.actionTitle}>Today's preparation</Text>
-              <Text style={styles.actionBody}>{todayAction.lightGuidance}</Text>
-              {todayAction.napGuidance && (
-                <Text style={styles.actionBody}>{todayAction.napGuidance}</Text>
-              )}
-              <View style={styles.shiftPill}>
-                <Text style={styles.shiftPillText}>
-                  Bedtime: {todayAction.bedtimeShift > 0 ? '+' : ''}
-                  {todayAction.bedtimeShift} min
-                </Text>
-              </View>
-            </View>
-          ) : null;
-        })()}
-
-        {/* Additional upcoming transitions */}
-        {relevantPoints.length > 1 && (
-          <View style={styles.moreRow}>
-            <Text style={styles.moreText}>
-              +{relevantPoints.length - 1} more transition
-              {relevantPoints.length > 2 ? 's' : ''} in the next 7 days
-            </Text>
-          </View>
-        )}
+        {/* Alertness nadir footer */}
+        <View style={styles.footerRow}>
+          <Text style={styles.footerText}>
+            Predicted alertness nadir: {Math.round(prediction.predictedAlertnesNadir)}%
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -165,6 +173,7 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 10,
     borderLeftWidth: 3,
+    borderLeftColor: COLORS.border.subtle,
   },
   headerRow: {
     flexDirection: 'row',
@@ -205,7 +214,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
     textTransform: 'uppercase',
   },
-  statusRow: {
+  preAdaptRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
@@ -214,49 +223,30 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     marginBottom: SPACING.sm,
   },
-  statusText: {
+  preAdaptText: {
     fontSize: 12,
     fontWeight: '600',
   },
-  actionBlock: {
-    marginTop: SPACING.sm,
-    paddingTop: SPACING.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: COLORS.border.subtle,
-  },
-  actionTitle: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: COLORS.text.tertiary,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: 4,
-  },
-  actionBody: {
-    fontSize: 13,
-    color: COLORS.text.secondary,
-    lineHeight: 19,
-    marginBottom: 4,
-  },
-  shiftPill: {
-    alignSelf: 'flex-start',
-    backgroundColor: COLORS.background.elevated,
-    borderRadius: RADIUS.full,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: 3,
+  footerRow: {
     marginTop: 2,
   },
-  shiftPillText: {
+  footerText: {
     fontSize: 11,
-    fontWeight: '600',
-    color: COLORS.text.secondary,
-  },
-  moreRow: {
-    marginTop: SPACING.sm,
-  },
-  moreText: {
-    fontSize: 12,
     color: COLORS.text.tertiary,
-    fontStyle: 'italic',
+  },
+  clearRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 4,
+  },
+  clearText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#34C759',
+  },
+  clearSubtext: {
+    fontSize: 12,
+    color: COLORS.text.secondary,
   },
 });
