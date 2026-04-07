@@ -1,0 +1,38 @@
+{
+  "name": "shiftwell-enterprise-api",
+  "version": "1.0.0",
+  "description": "ShiftWell Enterprise REST API — schedule ingestion + outcomes reporting",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "test": "jest --passWithNoTests"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "jose": "^5.10.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.63"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "@types/supertest": "^6.0.3",
+    "@types/uuid": "^10.0.0",
+    "jest": "^30.3.0",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/src"],
+    "testMatch": ["**/__tests__/**/*.test.ts"],
+    "transform": {
+      "^.+\\.tsx?$": ["ts-jest", {
+        "tsconfig": "<rootDir>/tsconfig.json"
+      }]
+    }
+  }
+}

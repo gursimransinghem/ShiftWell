@@ -1,0 +1,498 @@
+openapi: 3.0.3
+info:
+  title: ShiftWell Enterprise API
+  version: 1.0.0
+  description: |
+    REST API for hospital scheduling system integrations.
+    Push shift schedules, pull anonymized outcome data.
+    All data de-identified per HIPAA Safe Harbor (45 CFR §164.514(b)).
+
+    ## Authentication
+
+    Use OAuth2 client credentials flow to obtain a Bearer token, then include
+    `Authorization: Bearer <token>` on all protected endpoints.
+
+    ## Rate Limiting
+
+    Requests are limited to 100 per minute per `client_id`.
+    On excess, the API returns `429 Too Many Requests` with a `Retry-After` header.
+
+    ## Privacy
+
+    All outcome data is anonymized via differential privacy (Laplace mechanism,
+    ε=1.0) and suppressed for cohorts below 5 members.
+    No PII ever leaves ShiftWell systems.
+  contact:
+    name: ShiftWell Enterprise Support
+    email: enterprise@shiftwell.app
+  license:
+    name: Proprietary
+    url: https://shiftwell.app/terms
+
+servers:
+  - url: https://api.shiftwell.app/v1
+    description: Production
+  - url: http://localhost:3002/v1
+    description: Local development
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token obtained via POST /oauth/token (client_credentials flow).
+        Token payload contains `sub` (client_id), `orgId`, and `scope` claims.
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth/token
+          scopes:
+            schedule:write: Push shift schedules into ShiftWell
+            outcomes:read: Pull anonymized cohort outcome metrics
+
+  schemas:
+    ShiftRecord:
+      type: object
+      required: [employeeId, shiftType, startTime, endTime]
+      properties:
+        employeeId:
+          type: string
+          description: "Opaque employee identifier — not name, SSN, or DOB"
+          example: "EMP-00042"
+        shiftType:
+          type: string
+          enum: [day, evening, night, rotating]
+          description: "Shift category. 'rotating' covers irregular or on-call shifts."
+        startTime:
+          type: string
+          format: date-time
+          description: "ISO 8601 shift start (UTC recommended)"
+          example: "2025-01-15T07:00:00Z"
+        endTime:
+          type: string
+          format: date-time
+          description: "ISO 8601 shift end (UTC recommended)"
+          example: "2025-01-15T19:00:00Z"
+        unit:
+          type: string
+          description: "Optional: clinical unit (ICU, ED, Med-Surg, PACU, etc.)"
+          example: "ED"
+
+    SchedulePushRequest:
+      type: object
+      required: [orgId, schedules, format]
+      properties:
+        orgId:
+          type: string
+          description: "Organization identifier issued at contract signing"
+          example: "org_hospital_tampa"
+        format:
+          type: string
+          enum: [kronos, qgenda, shiftwell]
+          description: |
+            Source scheduling system format.
+            - `shiftwell`: native ShiftRecord[] — no transformation applied
+            - `kronos`: Kronos Workforce Central export format
+            - `qgenda`: QGenda JSON API format
+        schedules:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShiftRecord"
+          minItems: 1
+          description: "Array of shift records to ingest"
+        periodStart:
+          type: string
+          format: date
+          description: "Optional: start of schedule period (YYYY-MM-DD)"
+          example: "2025-01-01"
+        periodEnd:
+          type: string
+          format: date
+          description: "Optional: end of schedule period (YYYY-MM-DD)"
+          example: "2025-01-31"
+
+    SchedulePushResponse:
+      type: object
+      required: [accepted, rejected, requestId]
+      properties:
+        accepted:
+          type: integer
+          description: "Number of shift records successfully ingested"
+          example: 48
+        rejected:
+          type: integer
+          description: "Number of records rejected due to validation errors"
+          example: 2
+        requestId:
+          type: string
+          format: uuid
+          description: "Unique identifier for this ingestion request (for support)"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: "0-based index of the rejected record in input array"
+              reason:
+                type: string
+                description: "Human-readable rejection reason"
+
+    CohortMetrics:
+      type: object
+      description: "Anonymized aggregate metrics for the organization's cohort"
+      properties:
+        orgId:
+          type: string
+        cohortSize:
+          type: integer
+          description: "Number of enrolled workers in the cohort"
+        avgRecoveryScore:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: "Mean Recovery Score (0-100) across cohort during period"
+        adherenceRate:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: "Fraction of planned sleep windows that were honored (±30 min)"
+        avgDebtBalance:
+          type: number
+          description: "Mean accumulated sleep debt in minutes across cohort"
+        p25RecoveryScore:
+          type: number
+          description: "25th percentile Recovery Score"
+        p75RecoveryScore:
+          type: number
+          description: "75th percentile Recovery Score"
+        lowRecoveryWorkerPct:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: "Fraction of workers with Recovery Score below 40 (high-risk threshold)"
+        periodStart:
+          type: string
+          format: date
+        periodEnd:
+          type: string
+          format: date
+
+    OutcomesResponse:
+      type: object
+      description: "Wrapper for cohort metrics with request metadata"
+      properties:
+        metadata:
+          type: object
+          required: [orgId, generatedAt, cohortSize, dpApplied]
+          properties:
+            orgId:
+              type: string
+            generatedAt:
+              type: string
+              format: date-time
+              description: "UTC timestamp when this response was generated"
+            cohortSize:
+              type: integer
+              description: "Number of workers included in aggregate (suppressed if < 5)"
+            dpApplied:
+              type: boolean
+              description: "True if Laplace differential privacy noise was applied (cohort < 50)"
+            periodStart:
+              type: string
+              format: date
+            periodEnd:
+              type: string
+              format: date
+        metrics:
+          $ref: "#/components/schemas/CohortMetrics"
+
+    TokenResponse:
+      type: object
+      required: [access_token, token_type, expires_in, scope]
+      properties:
+        access_token:
+          type: string
+          description: "JWT Bearer token — include in Authorization header"
+        token_type:
+          type: string
+          enum: [bearer]
+          example: bearer
+        expires_in:
+          type: integer
+          description: "Token lifetime in seconds"
+          example: 3600
+        scope:
+          type: string
+          description: "Space-separated list of granted scopes"
+          example: "schedule:write outcomes:read"
+
+    ErrorResponse:
+      type: object
+      required: [error, code]
+      properties:
+        error:
+          type: string
+          description: "Human-readable error message"
+          example: "Invalid or expired token"
+        code:
+          type: string
+          description: "Machine-readable error code"
+          example: "TOKEN_EXPIRED"
+        requestId:
+          type: string
+          format: uuid
+          description: "Request identifier for support escalation"
+        details:
+          type: array
+          description: "Optional: validation error details"
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+paths:
+  /oauth/token:
+    post:
+      operationId: getAccessToken
+      summary: Get access token (client credentials)
+      description: |
+        Exchange `client_id` + `client_secret` for a JWT Bearer token.
+        Tokens expire in 3600 seconds (1 hour).
+        Include the returned token in `Authorization: Bearer <token>` on all
+        protected endpoints.
+      security: []
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [grant_type, client_id, client_secret]
+              properties:
+                grant_type:
+                  type: string
+                  enum: [client_credentials]
+                  example: client_credentials
+                client_id:
+                  type: string
+                  description: "Enterprise client identifier"
+                client_secret:
+                  type: string
+                  description: "Enterprise client secret — keep confidential"
+                scope:
+                  type: string
+                  description: "Space-separated scopes (default: schedule:write outcomes:read)"
+                  example: "schedule:write outcomes:read"
+      responses:
+        "200":
+          description: Token issued successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        "400":
+          description: Malformed request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Invalid client credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /schedules:
+    post:
+      operationId: pushSchedules
+      summary: Push shift schedules
+      description: |
+        Ingest one or more shift records for enrolled workers.
+        Supports Kronos Workforce Central, QGenda, and ShiftWell native formats.
+
+        Records are validated, parsed into canonical ShiftRecord format,
+        and queued for distribution to enrolled workers' apps.
+      tags: [Schedules]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SchedulePushRequest"
+            examples:
+              kronos_example:
+                summary: Kronos format example
+                value:
+                  orgId: "org_hospital_tampa"
+                  format: "kronos"
+                  schedules:
+                    - EmployeeNumber: "EMP-00042"
+                      AssignedShiftCode: "N12"
+                      ScheduleDate: "2025-01-15"
+                      StartTime: "19:00"
+                      StopTime: "07:00"
+              qgenda_example:
+                summary: QGenda format example
+                value:
+                  orgId: "org_hospital_tampa"
+                  format: "qgenda"
+                  schedules:
+                    - EmployeeId: "EMP-00042"
+                      TaskName: "Night Coverage"
+                      StartDate: "2025-01-15T19:00:00"
+                      EndDate: "2025-01-16T07:00:00"
+      responses:
+        "201":
+          description: Schedules accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SchedulePushResponse"
+        "400":
+          description: Validation error in request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Invalid or missing Bearer token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Token scope insufficient (requires schedule:write)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded (100 req/min per client_id)
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: "Seconds until rate limit window resets"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /outcomes:
+    get:
+      operationId: getOutcomes
+      summary: Pull cohort outcome metrics
+      description: |
+        Retrieve anonymized aggregate sleep and recovery metrics for your organization's
+        enrolled worker cohort over a specified date range.
+
+        **Privacy guarantees:**
+        - Cohorts with fewer than 5 enrolled workers return 204 (suppressed)
+        - Cohorts between 5-49 workers have Laplace noise applied (ε=1.0)
+        - No individual-level data is ever returned
+
+        **HIPAA:** All data de-identified per Safe Harbor standard (45 CFR §164.514(b)).
+      tags: [Outcomes]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: start
+          in: query
+          required: true
+          description: "Start of reporting period (YYYY-MM-DD)"
+          schema:
+            type: string
+            format: date
+          example: "2025-01-01"
+        - name: end
+          in: query
+          required: true
+          description: "End of reporting period (YYYY-MM-DD)"
+          schema:
+            type: string
+            format: date
+          example: "2025-01-31"
+        - name: period
+          in: query
+          required: false
+          description: "Aggregation granularity (default: monthly)"
+          schema:
+            type: string
+            enum: [daily, weekly, monthly]
+            default: monthly
+        - name: format
+          in: query
+          required: false
+          description: "Response format (default: json)"
+          schema:
+            type: string
+            enum: [json, csv]
+            default: json
+      responses:
+        "200":
+          description: Cohort metrics returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OutcomesResponse"
+            text/csv:
+              schema:
+                type: string
+                description: "RFC 4180 CSV with headers: orgId,periodStart,periodEnd,cohortSize,avgRecoveryScore,adherenceRate,avgDebtBalance"
+        "204":
+          description: Cohort suppressed (fewer than 5 enrolled workers)
+        "400":
+          description: Missing or invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Invalid or missing Bearer token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Token scope insufficient (requires outcomes:read)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limit exceeded (100 req/min per client_id)
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
