@@ -251,7 +251,7 @@ Plans:
   4. Premium tier includes: adaptive brain, AI coaching, patterns, predictive scheduling
 **Plans**: 1 plan
 Plans:
-- [ ] 18-01-PLAN.md — entitlements update, grandfathering module, Today screen feature gates
+- [x] 18-01-PLAN.md — entitlements update, grandfathering module, Today screen feature gates (completed 2026-04-07)
 **Rationale**: Revenue before enterprise. Grandfathering builds loyalty and prevents churn from early adopters.
 
 ### Phase 19: AI Coaching Research
@@ -582,9 +582,9 @@ Plans:
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
 | 13. Sleep Feedback Research | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete    | 2026-04-07 |
-| 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete   | 2026-04-07 |
+| 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
-| 17. Growth Engine | v1.2 | 1/1 | Complete   | 2026-04-07 |
+| 17. Growth Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 19. AI Coaching Research | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |

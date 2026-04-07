@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: verifying
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-04-07T18:07:24.014Z"
+stopped_at: Completed 18-01-PLAN.md
+last_updated: "2026-04-07T18:25:00.000Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
   completed_phases: 10
   total_plans: 56
-  completed_plans: 26
+  completed_plans: 27
   percent: 0
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-06)
 
 **Core value:** Sleep on autopilot — set up once, never think about sleep scheduling again.
-**Current focus:** Phase 15 — algorithm-feedback-engine
+**Current focus:** Phase 18 — revenucat-hard-gating
 
 ## Current Position
 
-Phase: 15 (algorithm-feedback-engine) — EXECUTING
-Plan: 1 of 1
-Status: Phase complete — ready for verification
+Phase: 18
+Plan: 01 (complete)
+Status: Plan 01 complete — phase complete
 Last activity: 2026-04-07
 
 Progress: [░░░░░░░░░░] 0% (requirements in progress)
@@ -70,6 +70,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 14-healthkit-sleep-ingestion P01 | 8min | 4 tasks | 9 files |
 | Phase 17-growth-engine P01 | 8 | 2 tasks | 7 files |
 | Phase 15-algorithm-feedback-engine P01 | 10min | 3 tasks | 9 files |
+| Phase 18-revenucat-hard-gating P01 | 25min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -138,6 +139,10 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 15]: feedback-engine deps injected via buildAdaptiveContext params (not store.getState()) to avoid circular import
 - [Phase 15]: Dead zone applied twice: per-night before EMA input + on smoothed signal — prevents micro-oscillations
 - [Phase 15]: Energy engine in src/lib/energy/ wraps circadian/energy-model.ts — avoids duplicating Borbely math
+- [Phase 18-01]: PAYWALL_LAUNCH_DATE set to 2026-06-01 — placeholder grandfathers all current users until actual TestFlight launch date known
+- [Phase 18-01]: isGrandfathered returns true for null/undefined/invalid dates — safety net for unknown install history
+- [Phase 18-01]: SleepDebtCard gated with canUseAdaptiveBrain — it is Adaptive Brain data, not a free-tier feature
+- [Phase 18-01]: resolveGrandfathered() must be called at app startup to populate isGrandfathered state from AsyncStorage
 
 ### Pending Todos
 
@@ -152,6 +157,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T18:07:24.006Z
-Stopped at: Completed 15-01-PLAN.md
+Last session: 2026-04-07T18:25:00.000Z
+Stopped at: Completed 18-01-PLAN.md
 Resume file: None

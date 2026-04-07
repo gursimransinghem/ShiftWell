@@ -95,8 +95,8 @@
 
 ### Premium Gating (Phase 18)
 
-- [ ] **PREM-03**: RevenueCat hard gating — adaptive brain behind paywall
-- [ ] **PREM-04**: Grandfathering logic — pre-paywall users retain free access
+- [x] **PREM-03**: RevenueCat hard gating — adaptive brain behind paywall (Phase 18-01)
+- [x] **PREM-04**: Grandfathering logic — pre-paywall users retain free access (Phase 18-01)
 
 ---
 
@@ -295,8 +295,8 @@
 | GRO-02 | 17 | v1.2 | Pending |
 | GRO-03 | 17 | v1.2 | Pending |
 | GRO-04 | 17 | v1.2 | Pending |
-| PREM-03 | 18 | v1.2 | Pending |
-| PREM-04 | 18 | v1.2 | Pending |
+| PREM-03 | 18 | v1.2 | Complete |
+| PREM-04 | 18 | v1.2 | Complete |
 | RES-06 | 19 | v1.3 | Pending |
 | RES-07 | 19 | v1.3 | Pending |
 | RES-08 | 19 | v1.3 | Pending |
