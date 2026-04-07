@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 35-01-PLAN.md
-last_updated: "2026-04-07T19:54:58.728Z"
+stopped_at: Completed 33-01-PLAN.md
+last_updated: "2026-04-07T19:58:51.372Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
   completed_phases: 23
   total_plans: 57
-  completed_plans: 41
+  completed_plans: 42
   percent: 64
 ---
 
@@ -83,6 +83,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 32-hrv-wearable-research P01 | 6min | 2 tasks | 3 files |
 | Phase 34 P01 | 7min | 2 tasks | 8 files |
 | Phase 35-validation-study-design P01 | 10min | 2 tasks | 2 files |
+| Phase 33 P01 | 12min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -198,6 +199,8 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 35]: Observational cohort (not RCT): avoids withholding guidance from fatigued healthcare workers; dose-response provides internal causal evidence
 - [Phase 35]: PSQI primary outcome with d=0.5 power calc: n=100 completers provides >95% power and enables subgroup analyses
 - [Phase 35]: USF IRB EXEMPT pathway (Tampa, digital health experience); ClinicalTrials.gov pre-registration before enrollment
+- [Phase 33]: finalizeDay stays synchronous; HRV enrichment via separate async finalizeWithHRV()
+- [Phase 33]: buildHRVWeights no-HRV case: 0.50/0.45/0.00/0.05 (not 0.55/0.40/0.05) to ensure sum=1.0
 
 ### Pending Todos
 
@@ -212,6 +215,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:54:58.720Z
-Stopped at: Completed 35-01-PLAN.md
+Last session: 2026-04-07T19:58:51.368Z
+Stopped at: Completed 33-01-PLAN.md
 Resume file: None

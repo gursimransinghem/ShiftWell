@@ -198,11 +198,11 @@
 
 ### Apple Watch (Phase 33)
 
-- [ ] **BRAIN-08**: Apple Watch HRV integration — HRV data into recovery score
-- [ ] **WATCH-01**: Watch complication for shift countdown
-- [ ] **WATCH-02**: Background delivery for overnight data collection
-- [ ] **WATCH-03**: Sleep Apnea Events read from HealthKit (iOS 18, Watch S9+) — suppress sleep quality from algorithm input, surface screening flag
-- [ ] **WATCH-04**: Breathing Disturbances rate read from HealthKit — continuous trending signal, suppress sleep quality scores when >10/hour
+- [x] **BRAIN-08**: Apple Watch HRV integration — HRV data into recovery score
+- [x] **WATCH-01**: Watch complication for shift countdown
+- [x] **WATCH-02**: Background delivery for overnight data collection
+- [x] **WATCH-03**: Sleep Apnea Events read from HealthKit (iOS 18, Watch S9+) — suppress sleep quality from algorithm input, surface screening flag
+- [x] **WATCH-04**: Breathing Disturbances rate read from HealthKit — continuous trending signal, suppress sleep quality scores when >10/hour
 
 ### Autopilot (Phase 34)
 
@@ -211,8 +211,8 @@
 
 ### Research: Validation Study (Phase 35)
 
-- [ ] **RES-19**: Study protocol following CONSORT/STROBE guidelines
-- [ ] **RES-20**: Statistical analysis plan with power calculation
+- [x] **RES-19**: Study protocol following CONSORT/STROBE guidelines
+- [x] **RES-20**: Statistical analysis plan with power calculation
 
 ### Validation Study (Phase 36)
 
