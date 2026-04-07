@@ -333,6 +333,38 @@ IMPACT INDICATORS
 
 ---
 
+## Slide 15: Close — What Happens Next
+
+**Headline:** "Three steps from today to your first ShiftWell-enrolled shift."
+
+**Visual:** Three-step horizontal timeline
+
+```
+STEP 1 (This Week)          STEP 2 (Week 2)             STEP 3 (Week 4)
+Sign pilot agreement   →    IT intro call (30 min)  →    Launch: first nurses
++ data sharing MOU          No EMR access needed          enrolled, plans active
+Contact: enterprise@         Schedule sync options         Monthly reports begin
+shiftwell.app               discussed                      
+```
+
+**Pilot terms recap:**
+- Duration: 90 days, free
+- Minimum: 50 shift workers
+- Required from you: Roster (name + email), PSQI baseline survey, 30-min/month check-in
+- Deliverable from us: Monthly reports + 90-day ROI outcome analysis
+
+**What you're not committing to:**
+- No EMR integration
+- No mandatory employee participation
+- No IT overhaul
+- No cost during pilot
+
+**Speaker note:** "The hardest part of this process is usually getting IT comfortable with a new vendor. We handle that in a 30-minute call — it's a simple mobile app, not a clinical system integration. The question isn't whether this works. The question is whether we start measuring it this quarter or next."
+
+**CTA:** Hand over a one-page pilot term sheet. Ask for a decision before leaving the room.
+
+---
+
 ## Appendix: Common Objections
 
 **"We already have a wellness program."**
