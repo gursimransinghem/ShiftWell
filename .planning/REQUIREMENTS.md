@@ -172,8 +172,8 @@
 
 ### API Layer (Phase 29)
 
-- [ ] **ENT-05**: OpenAPI 3.0 REST API with OAuth2 auth and rate limiting
-- [ ] **ENT-06**: Schedule push endpoint (Kronos, QGenda format) + outcome pull endpoint
+- [x] **ENT-05**: OpenAPI 3.0 REST API with OAuth2 auth and rate limiting
+- [x] **ENT-06**: Schedule push endpoint (Kronos, QGenda format) + outcome pull endpoint
 
 ### Enterprise Sales Kit (Phase 30)
 
@@ -325,8 +325,8 @@
 | ENT-02 | 27 | v1.4 | Pending |
 | ENT-03 | 28 | v1.4 | Pending |
 | ENT-04 | 28 | v1.4 | Pending |
-| ENT-05 | 29 | v1.4 | Pending |
-| ENT-06 | 29 | v1.4 | Pending |
+| ENT-05 | 29 | v1.4 | Complete |
+| ENT-06 | 29 | v1.4 | Complete |
 | ENT-07 | 30 | v1.4 | Pending |
 | ENT-08 | 30 | v1.4 | Pending |
 | ASO-01 | 31 | v1.4 | Pending |

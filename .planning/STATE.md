@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 27-01-PLAN.md
-last_updated: "2026-04-07T19:32:08.816Z"
+stopped_at: Completed 29-01-PLAN.md
+last_updated: "2026-04-07T19:32:05Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 18
+  completed_phases: 19
   total_plans: 56
-  completed_plans: 35
-  percent: 61
+  completed_plans: 36
+  percent: 64
 ---
 
 # ShiftWell — Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 27
-Plan: Not started
-Status: Plan 01 complete — 26-01-SUMMARY.md created
+Phase: 29
+Plan: 01 complete
+Status: Plan 01 complete — 29-01-SUMMARY.md created
 Last activity: 2026-04-07
 
-Progress: [██████░░░░] 61% (34/56 plans complete)
+Progress: [██████░░░░] 64% (36/56 plans complete)
 
 ## Performance Metrics
 
@@ -77,6 +77,7 @@ Progress: [██████░░░░] 61% (34/56 plans complete)
 | Phase 20 P01 | 5min | 3 tasks | 9 files |
 | Phase 25-intelligence-polish P01 | 5min | 2 tasks | 8 files |
 | Phase 26-enterprise-research P01 | 6min | 3 tasks | 3 files |
+| Phase 29-api-layer P01 | 6min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -173,6 +174,11 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 27-outcome-data-pipeline]: Laplace DP implemented from scratch via inverse CDF — no Google DP/OpenDP dependency
 - [Phase 27-outcome-data-pipeline]: Aggregator imports laplaceSample directly for debt/adherence DP to apply custom clamping per metric sensitivity
 - [Phase 27-outcome-data-pipeline]: shouldApplyDP uses strictly-less-than threshold — cohort of exactly 50 does not get DP (consistent with HIPAA assessment)
+- [Phase 29-api-layer]: Used jose instead of jsonwebtoken — Edge-runtime compatible, supports RS256/HS256, first-class JOSE standard
+- [Phase 29-api-layer]: Standalone api/package.json decoupled from Expo root — avoids bundler conflicts with server-only deps (express, jose)
+- [Phase 29-api-layer]: buildApp() factory with repo injection enables supertest integration tests without a real database
+- [Phase 29-api-layer]: Sliding-window rate limiter (not fixed window) — prevents burst abuse at window boundaries
+- [Phase 29-api-layer]: In-memory ScheduleRepository + UserRepository stubs — PostgreSQL swap is drop-in via same interface
 
 ### Pending Todos
 
@@ -187,6 +193,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:32:08.812Z
-Stopped at: Completed 27-01-PLAN.md
+Last session: 2026-04-07T19:32:05Z
+Stopped at: Completed 29-01-PLAN.md
 Resume file: None

@@ -425,7 +425,7 @@ Plans:
   5. Outcome data pull endpoint with date range filtering
 **Plans**: 1 plan
 Plans:
-- [ ] 29-01-PLAN.md — OpenAPI spec, OAuth2 auth middleware, schedule push and outcomes pull endpoints
+- [x] 29-01-PLAN.md — OpenAPI spec, OAuth2 auth middleware, schedule push and outcomes pull endpoints (completed 2026-04-07)
 **Rationale**: API enables partner integrations without custom development.
 
 ### Phase 30: Enterprise Sales Kit
