@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * AI types — WeeklyBrief, BriefContext, BriefGenerationResult, ClaudeAPIError.
  *
@@ -5,6 +6,8 @@
  * and ai-store.ts.
  */
 
+=======
+>>>>>>> worktree-agent-a211ed4f
 export interface BriefContext {
   userId: string;
   weekStartISO: string;           // Monday date (yyyy-MM-dd)
