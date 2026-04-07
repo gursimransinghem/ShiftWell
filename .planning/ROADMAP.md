@@ -365,7 +365,9 @@ Plans:
   2. Literature review cites 10+ sources on shift work wellness interventions and ROI
   3. HIPAA-COMPLIANCE-ASSESSMENT.md maps data flows and identifies required safeguards
   4. Competitive analysis of existing enterprise wellness platforms (Wellhub, Virgin Pulse, etc.)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 26-01-PLAN.md — Enterprise outcomes framework, HIPAA compliance assessment, competitive analysis
 **Rationale**: Enterprise is B2B revenue. Research before building ensures the right metrics.
 **Science anchor**: AHA Scientific Statement 2025, Caruso et al. 2014 (NIOSH), Kecklund & Axelsson 2016
 
@@ -378,7 +380,9 @@ Plans:
   2. Differential privacy applied for cohorts < 50 users
   3. Aggregate metrics match the enterprise outcomes framework from Phase 26
   4. Export format: JSON API + CSV download
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 27-01-PLAN.md — Anonymized data pipeline with differential privacy and JSON/CSV export
 **Rationale**: Data pipeline is the foundation for dashboards and API.
 
 ### Phase 28: Employer Dashboard
@@ -391,7 +395,9 @@ Plans:
   3. Shift schedule impact analysis (which schedules produce worst outcomes)
   4. ROI calculator: estimated savings from reduced absenteeism/turnover
   5. White-label ready (custom logo, colors)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 28-01-PLAN.md — Next.js employer dashboard with ROI calculator and white-label theming
 **Rationale**: Visual proof of value for enterprise sales.
 **UI hint**: yes
 
@@ -405,7 +411,9 @@ Plans:
   3. Rate limiting and usage tracking per client
   4. Schedule push endpoint (Kronos, QGenda format support)
   5. Outcome data pull endpoint with date range filtering
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 29-01-PLAN.md — OpenAPI spec, OAuth2 auth middleware, schedule push and outcomes pull endpoints
 **Rationale**: API enables partner integrations without custom development.
 
 ### Phase 30: Enterprise Sales Kit
@@ -418,7 +426,9 @@ Plans:
   3. Pitch deck (15 slides max): problem, solution, science, outcomes, pricing
   4. Compliance documentation: HIPAA readiness, SOC2 roadmap, BAA template
   5. Pricing model: $5-15/seat/month with volume discounts
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 30-01-PLAN.md — Case studies, ROI calculator, pitch deck, compliance docs, pricing model
 **Rationale**: Sales kit before sales conversations. Data-driven pitch, not vaporware.
 
 ### Phase 31: App Store Optimization
@@ -430,7 +440,9 @@ Plans:
   2. ASO keyword optimization based on competitor analysis and search volume
   3. Review solicitation flow triggers at peak satisfaction moments
   4. Spanish localization complete (18% of US shift workers are Hispanic)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 31-01-PLAN.md — Screenshot refresh, ASO keyword strategy, Spanish i18n localization
 **Rationale**: Organic discovery compounds. Every optimization multiplies growth.
 
 ### Phase 32: HRV + Wearable Research
@@ -443,7 +455,9 @@ Plans:
   2. WEARABLE-ACCURACY-ASSESSMENT.md compares Apple Watch to clinical gold standards
   3. BIOMETRIC-ALGORITHM-SPEC.md defines how HRV data modifies recovery score
   4. Recommendation for real-time vs batch processing with justification
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 32-01-PLAN.md — HRV literature review, Apple Watch accuracy assessment, biometric algorithm spec
 **Rationale**: Apple Watch HRV is the next frontier. Research prevents building on inaccurate signals.
 **Science anchor**: Shaffer & Ginsberg 2017, de Zambotti et al. 2019, Natale et al. 2021
 
@@ -456,7 +470,10 @@ Plans:
   2. Recovery score accuracy improves 20%+ vs phone-only baseline
   3. Watch complication shows shift countdown and current sleep status
   4. Background delivery enabled for overnight data collection
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 33-01-PLAN.md — HRV reader, processor modules, score-store update
+- [ ] 33-02-PLAN.md — HRV calibration banner, background delivery config, watch complication spec
 **Rationale**: Apple Watch data is the highest-quality consumer biometric signal available.
 
 ### Phase 34: 30-Day Autopilot
@@ -468,7 +485,9 @@ Plans:
   2. All autonomous changes logged in transparency view with full explanation
   3. User can exit autopilot anytime and review pending changes
   4. 60%+ of eligible users opt in to autopilot within first week of eligibility
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 34-01-PLAN.md — Autopilot eligibility, bounds logic, activation card, transparency log screen
 **Rationale**: Autopilot is the "sleep on autopilot" promise fulfilled. The transparency log builds trust.
 
 ### Phase 35: Validation Study Design
@@ -483,7 +502,9 @@ Plans:
   4. Secondary outcomes: ESS, actigraphy concordance, adherence rates
   5. Statistical analysis plan with power calculation
   6. IRB pathway identified (exempt vs expedited review)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 35-01-PLAN.md — Study protocol (STROBE) and statistical analysis plan with power calculation
 **Rationale**: Published validation is the ultimate science moat. No competitor has this.
 
 ### Phase 36: Validation Study Execution
@@ -495,7 +516,9 @@ Plans:
   2. 90-day data collection completed with < 20% dropout
   3. Results show statistically significant PSQI improvement (p < 0.05)
   4. Manuscript drafted targeting Journal of Clinical Sleep Medicine or Sleep Health
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 36-01-PLAN.md — Consent modal, enrollment flow, study data pipeline, manuscript skeleton
 **Rationale**: A published paper in a peer-reviewed sleep journal is worth more than $1M in marketing.
 
 ### Phase 37: Android Launch
@@ -507,7 +530,9 @@ Plans:
   2. Google Health Connect integration reads sleep data (Android equivalent of HealthKit)
   3. Play Store listing with screenshots, description, privacy policy
   4. Device testing matrix: Samsung, Pixel, OnePlus (top 3 Android shift worker devices)
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 37-01-PLAN.md — Android build config, Health Connect adapter, Play Store listing
 **Rationale**: Android doubles the addressable market. React Native makes this mostly a config + testing phase.
 
 ### Phase 38: Advanced Platform Features
@@ -519,7 +544,9 @@ Plans:
   2. Manager fatigue alerts: notification when a team member's recovery score drops below threshold
   3. Schedule optimization recommendations: "Moving Nurse A to Tuesday nights reduces her circadian disruption by 40%"
   4. FMLA/ADA compliance documentation tools
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 38-01-PLAN.md — Multi-facility support, manager fatigue alerts, schedule optimizer
 **Rationale**: Advanced enterprise features differentiate ShiftWell from generic wellness platforms.
 **Science anchor**: Folkard & Tucker 2003, Costa 2010
 
@@ -552,16 +579,16 @@ Plans:
 | 23. Pattern Recognition Engine | v1.3 | 0/1 | Not started | - |
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Not started | - |
 | 25. Intelligence Polish | v1.3 | 0/1 | Not started | - |
-| 26. Enterprise Research | v1.4 | TBD | Not started | - |
-| 27. Outcome Data Pipeline | v1.4 | TBD | Not started | - |
-| 28. Employer Dashboard | v1.4 | TBD | Not started | - |
-| 29. API Layer | v1.4 | TBD | Not started | - |
-| 30. Enterprise Sales Kit | v1.4 | TBD | Not started | - |
-| 31. App Store Optimization | v1.4 | TBD | Not started | - |
-| 32. HRV + Wearable Research | v2.0 | TBD | Not started | - |
-| 33. Apple Watch Integration | v2.0 | TBD | Not started | - |
-| 34. 30-Day Autopilot | v2.0 | TBD | Not started | - |
-| 35. Validation Study Design | v2.0 | TBD | Not started | - |
-| 36. Validation Study Execution | v2.0 | TBD | Not started | - |
-| 37. Android Launch | v2.0 | TBD | Not started | - |
-| 38. Advanced Platform Features | v2.0 | TBD | Not started | - |
+| 26. Enterprise Research | v1.4 | 0/1 | Not started | - |
+| 27. Outcome Data Pipeline | v1.4 | 0/1 | Not started | - |
+| 28. Employer Dashboard | v1.4 | 0/1 | Not started | - |
+| 29. API Layer | v1.4 | 0/1 | Not started | - |
+| 30. Enterprise Sales Kit | v1.4 | 0/1 | Not started | - |
+| 31. App Store Optimization | v1.4 | 0/1 | Not started | - |
+| 32. HRV + Wearable Research | v2.0 | 0/1 | Not started | - |
+| 33. Apple Watch Integration | v2.0 | 0/2 | Not started | - |
+| 34. 30-Day Autopilot | v2.0 | 0/1 | Not started | - |
+| 35. Validation Study Design | v2.0 | 0/1 | Not started | - |
+| 36. Validation Study Execution | v2.0 | 0/1 | Not started | - |
+| 37. Android Launch | v2.0 | 0/1 | Not started | - |
+| 38. Advanced Platform Features | v2.0 | 0/1 | Not started | - |
