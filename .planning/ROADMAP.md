@@ -594,9 +594,9 @@ Plans:
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |
 | 25. Intelligence Polish | v1.3 | 1/1 | Complete    | 2026-04-07 |
 | 26. Enterprise Research | v1.4 | 1/1 | Complete    | 2026-04-07 |
-| 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete   | 2026-04-07 |
+| 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 28. Employer Dashboard | v1.4 | 0/1 | Deferred (separate repo) | - |
-| 29. API Layer | v1.4 | 1/1 | Complete | 2026-04-07 |
+| 29. API Layer | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 30. Enterprise Sales Kit | v1.4 | 1/1 | In Progress | - |
 | 31. App Store Optimization | v1.4 | 0/1 | Not started | - |
 | 32. HRV + Wearable Research | v2.0 | 1/1 | Complete | 2026-04-07 |
