@@ -435,33 +435,22 @@ nav .wrap { display: flex; justify-content: space-between; align-items: center; 
   position: relative;
   overflow: hidden;
 }
-.science-carousel-wrap::before,
-.science-carousel-wrap::after {
-  content: '';
-  position: absolute; top: 0; bottom: 0; width: 80px; z-index: 10;
-  pointer-events: none;
-}
-.science-carousel-wrap::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--deep), transparent);
-}
-.science-carousel-wrap::after {
-  right: 0;
-  background: linear-gradient(270deg, var(--deep), transparent);
-}
 
 .science-carousel {
-  display: flex; gap: 24px;
-  overflow-x: auto; scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 8px 80px 24px;
+  position: relative;
+  min-height: 420px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 8px 28px 24px;
 }
-.science-carousel::-webkit-scrollbar { display: none; }
 
 .science-card {
-  flex: 0 0 min(380px, 80vw); min-width: min(380px, 80vw);
-  scroll-snap-align: center;
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
   padding: 40px 36px;
   border-radius: 20px;
   background: var(--surface);
@@ -470,7 +459,12 @@ nav .wrap { display: flex; justify-content: space-between; align-items: center; 
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 }
-.science-card:hover {
+.science-card.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.science-card.active:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
@@ -1183,8 +1177,8 @@ footer .footer-copy { color: var(--text-muted); font-size: 0.78rem; }
   .steps { grid-template-columns: 1fr; }
   .trust-grid { grid-template-columns: 1fr; }
   .founder-card { flex-direction: column; }
-  .science-card { flex: 0 0 290px; min-width: 290px; }
-  .science-carousel { padding: 8px 28px 24px; }
+  .science-carousel { max-width: 100%; padding: 8px 16px 24px; }
+  .science-card { padding: 28px 24px; }
   .problem, .science, .features-section, .before-after, .how, .pricing, .trust, .cta-bottom { padding: 80px 0; }
   .sticky-footer-cta { display: none; }
   .ba-grid { gap: 16px; }
@@ -1326,7 +1320,7 @@ footer .footer-copy { color: var(--text-muted); font-size: 0.78rem; }
   <div class="science-carousel-wrap">
     <div class="science-carousel" id="science-carousel" role="list" aria-label="Research papers">
 
-      <div class="science-card reveal" role="listitem">
+      <div class="science-card reveal active" role="listitem">
         <div class="science-card-num">Paper 01</div>
         <div class="science-card-title">Two-Process Model of Sleep Regulation</div>
         <div class="science-card-authors">Borbely, 1982 · Sleep</div>
@@ -1394,6 +1388,7 @@ footer .footer-copy { color: var(--text-muted); font-size: 0.78rem; }
         <button class="science-dot" role="tab" aria-label="Paper 4" aria-selected="false" data-index="3"></button>
         <button class="science-dot" role="tab" aria-label="Paper 5" aria-selected="false" data-index="4"></button>
       </div>
+      <span class="science-counter" id="sci-counter" aria-live="polite">1 / 5</span>
       <button class="science-arrow" id="sci-next" aria-label="Next paper">&#8594;</button>
     </div>
   </div>
@@ -2023,7 +2018,7 @@ footer .footer-copy { color: var(--text-muted); font-size: 0.78rem; }
     statNums.forEach(function(el) { counterObs.observe(el); });
   }
 
-  /* ─── Science carousel ─── */
+  /* ─── Science carousel (crossfade pagination) ─── */
   var carousel = document.getElementById('science-carousel');
   var dotsContainer = document.getElementById('science-dots');
   var dots = dotsContainer ? dotsContainer.querySelectorAll('.science-dot') : [];
@@ -2031,74 +2026,57 @@ footer .footer-copy { color: var(--text-muted); font-size: 0.78rem; }
   var currentCard = 0;
   var prevBtn = document.getElementById('sci-prev');
   var nextBtn = document.getElementById('sci-next');
+  var counter = document.getElementById('sci-counter');
 
-  function updateSciNav(index) {
+  function goToCard(index) {
+    if (cards.length === 0) return;
+    index = Math.max(0, Math.min(index, cards.length - 1));
     currentCard = index;
+    // Toggle active class — CSS handles the crossfade
+    cards.forEach(function(card, i) { card.classList.toggle('active', i === index); });
+    // Update dots
     dots.forEach(function(dot, i) {
       dot.classList.toggle('active', i === index);
       dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
     });
+    // Update counter
+    if (counter) counter.textContent = (index + 1) + ' / ' + cards.length;
     // Dim arrows at bounds
     if (prevBtn) prevBtn.style.opacity = index === 0 ? '0.3' : '1';
     if (nextBtn) nextBtn.style.opacity = index === cards.length - 1 ? '0.3' : '1';
   }
 
-  function goToCard(index) {
-    if (!carousel || cards.length === 0) return;
-    index = Math.max(0, Math.min(index, cards.length - 1));
-    if (index === currentCard && index !== 0) return;
-
-    var card = cards[index];
-    // Calculate position to center the card in the viewport
-    var carouselRect = carousel.getBoundingClientRect();
-    var cardRect = card.getBoundingClientRect();
-    var currentScroll = carousel.scrollLeft;
-    var targetScroll = currentScroll + cardRect.left - carouselRect.left - (carouselRect.width - cardRect.width) / 2;
-
-    carousel.style.scrollSnapType = 'none';
-    carousel.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
-    updateSciNav(index);
-    setTimeout(function() { carousel.style.scrollSnapType = 'x proximity'; }, 600);
-  }
-
-  if (carousel && cards.length > 0) {
+  if (cards.length > 0) {
     // Arrow clicks
-    if (prevBtn) prevBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); goToCard(currentCard - 1); });
-    if (nextBtn) nextBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); goToCard(currentCard + 1); });
+    if (prevBtn) prevBtn.addEventListener('click', function() { goToCard(currentCard - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function() { goToCard(currentCard + 1); });
 
     // Dot clicks
     dots.forEach(function(dot, i) {
-      dot.addEventListener('click', function(e) { e.preventDefault(); goToCard(i); });
+      dot.addEventListener('click', function() { goToCard(i); });
     });
 
-    // Sync dots on manual scroll/swipe
-    var scrollTimer = null;
-    carousel.addEventListener('scroll', function() {
-      if (scrollTimer) clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(function() {
-        var carouselRect = carousel.getBoundingClientRect();
-        var centerX = carouselRect.left + carouselRect.width / 2;
-        var closest = 0;
-        var closestDist = Infinity;
-        cards.forEach(function(card, i) {
-          var cardRect = card.getBoundingClientRect();
-          var cardCenter = cardRect.left + cardRect.width / 2;
-          var dist = Math.abs(cardCenter - centerX);
-          if (dist < closestDist) { closestDist = dist; closest = i; }
-        });
-        if (closest !== currentCard) updateSciNav(closest);
-      }, 100);
-    }, { passive: true });
+    // Touch swipe
+    if (carousel) {
+      var touchStartX = 0;
+      carousel.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      carousel.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) { goToCard(dx < 0 ? currentCard + 1 : currentCard - 1); }
+      }, { passive: true });
 
-    // Keyboard
-    carousel.setAttribute('tabindex', '0');
-    carousel.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); goToCard(currentCard - 1); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); goToCard(currentCard + 1); }
-    });
+      // Keyboard
+      carousel.setAttribute('tabindex', '0');
+      carousel.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); goToCard(currentCard - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); goToCard(currentCard + 1); }
+      });
+    }
 
-    // Init state
-    updateSciNav(0);
+    // Init
+    goToCard(0);
   }
 
   /* ─── Feature cards (accordion + visual update) ─── */
