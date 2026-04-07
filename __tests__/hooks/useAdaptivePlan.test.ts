@@ -33,10 +33,12 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 
 const mockIsAvailable = jest.fn().mockResolvedValue(true);
 const mockGetSleepHistory = jest.fn();
+const mockGetSleepHistoryForRange = jest.fn().mockResolvedValue([]);
 
 jest.mock('../../src/lib/healthkit/healthkit-service', () => ({
   isAvailable: () => mockIsAvailable(),
   getSleepHistory: (...args: unknown[]) => mockGetSleepHistory(...args),
+  getSleepHistoryForRange: (...args: unknown[]) => mockGetSleepHistoryForRange(...args),
 }));
 
 const mockBuildAdaptiveContext = jest.fn();
@@ -49,6 +51,20 @@ const mockComputeDelta = jest.fn().mockReturnValue([]);
 
 jest.mock('../../src/lib/adaptive/change-logger', () => ({
   computeDelta: (...args: unknown[]) => mockComputeDelta(...args),
+}));
+
+const mockComparePlannedVsActual = jest.fn().mockReturnValue({
+  planned: { start: new Date(), end: new Date(), durationMinutes: 480 },
+  actual: null,
+  bedtimeDeviationMinutes: 0,
+  wakeDeviationMinutes: 0,
+  durationDeviationMinutes: 0,
+  adherenceScore: 0,
+  insight: 'No data',
+});
+
+jest.mock('../../src/lib/healthkit/sleep-comparison', () => ({
+  comparePlannedVsActual: (...args: unknown[]) => mockComparePlannedVsActual(...args),
 }));
 
 const mockSetAdaptiveContext = jest.fn();
@@ -89,6 +105,7 @@ const MOCK_CONTEXT = {
 };
 
 const mockSetFeedbackAdjustment = jest.fn();
+const mockSetDiscrepancyHistory = jest.fn();
 
 function buildDeps() {
   return {
@@ -100,6 +117,7 @@ function buildDeps() {
     setAdaptiveContext: mockSetAdaptiveContext,
     feedbackHistory: [],
     setFeedbackAdjustment: mockSetFeedbackAdjustment,
+    setDiscrepancyHistory: mockSetDiscrepancyHistory,
   };
 }
 
@@ -113,9 +131,11 @@ const YESTERDAY_ISO = format(subDays(new Date(), 1), 'yyyy-MM-dd');
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetSleepHistory.mockResolvedValue([MOCK_SLEEP_RECORD]);
+  mockGetSleepHistoryForRange.mockResolvedValue([]);
   mockBuildAdaptiveContext.mockReturnValue(MOCK_CONTEXT);
   mockComputeDelta.mockReturnValue([]);
   mockSetAdaptiveContext.mockReturnValue(undefined);
+  mockSetDiscrepancyHistory.mockReturnValue(undefined);
 });
 
 // 1. Skip when already ran today
@@ -185,4 +205,50 @@ test('passes 14-night history to buildAdaptiveContext (BRAIN-02)', async () => {
   expect(mockBuildAdaptiveContext).toHaveBeenCalledWith(
     expect.objectContaining({ history: [MOCK_SLEEP_RECORD] }),
   );
+});
+
+// ---------------------------------------------------------------------------
+// Discrepancy History (Phase 14 — HK-01, HK-02, HK-03)
+// ---------------------------------------------------------------------------
+
+// 7. getSleepHistoryForRange(30) called after debt context assembly
+test('calls getSleepHistoryForRange(30) during successful run', async () => {
+  (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+
+  await runAdaptiveBrain(buildDeps());
+
+  expect(mockGetSleepHistoryForRange).toHaveBeenCalledTimes(1);
+  expect(mockGetSleepHistoryForRange).toHaveBeenCalledWith(30);
+});
+
+// 8. setDiscrepancyHistory called with [] when getSleepHistoryForRange returns []
+test('calls setDiscrepancyHistory with [] when no HK data', async () => {
+  (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+  mockGetSleepHistoryForRange.mockResolvedValue([]);
+
+  await runAdaptiveBrain(buildDeps());
+
+  expect(mockSetDiscrepancyHistory).toHaveBeenCalledWith([]);
+});
+
+// 9. setDiscrepancyHistory called with [] when plan is null
+test('calls setDiscrepancyHistory with [] when plan is null', async () => {
+  (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+  // Return some HK data — but plan is null so no comparison possible
+  mockGetSleepHistoryForRange.mockResolvedValue([MOCK_SLEEP_RECORD]);
+
+  const deps = buildDeps(); // currentPlan is null in buildDeps
+  await runAdaptiveBrain(deps);
+
+  // With null plan, should still call setDiscrepancyHistory (with [])
+  expect(mockSetDiscrepancyHistory).toHaveBeenCalledWith([]);
+});
+
+// 10. setDiscrepancyHistory not called when debounce gate prevents run
+test('does not call setDiscrepancyHistory when run is skipped (debounce gate)', async () => {
+  (AsyncStorage.getItem as jest.Mock).mockResolvedValue(format(new Date(), 'yyyy-MM-dd'));
+
+  await runAdaptiveBrain(buildDeps());
+
+  expect(mockSetDiscrepancyHistory).not.toHaveBeenCalled();
 });
