@@ -282,7 +282,7 @@ Plans:
   5. User can disable weekly briefs in Settings
 **Plans**: 1 plan
 Plans:
-- [ ] 20-01-PLAN.md — Claude API client, brief generator pipeline, Settings toggle and scheduling
+- [x] 20-01-PLAN.md — Claude API client, brief generator pipeline, Settings toggle and scheduling
 **Rationale**: First AI-visible feature. Sets the tone for the intelligence layer.
 
 ### Phase 21: Predictive Scheduling Research
@@ -587,10 +587,10 @@ Plans:
 | 17. Growth Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 19. AI Coaching Research | v1.3 | 1/1 | Complete    | 2026-04-07 |
-| 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 20. Claude Weekly Brief | v1.3 | 1/1 | Complete   | 2026-04-07 |
 | 21. Predictive Scheduling Research | v1.3 | 0/1 | Complete    | 2026-04-07 |
-| 22. Predictive Calendar Engine | v1.3 | 1/2 | In Progress|  |
-| 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete   | 2026-04-07 |
+| 22. Predictive Calendar Engine | v1.3 | 1/2 | Complete    | 2026-04-07 |
+| 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete    | 2026-04-07 |
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |
 | 25. Intelligence Polish | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 26. Enterprise Research | v1.4 | 1/1 | Complete | 2026-04-07 |

@@ -110,7 +110,7 @@
 
 ### Claude Weekly Brief (Phase 20)
 
-- [ ] **AI-01**: AI-generated personalized sleep summary every Monday with one recommendation
+- [x] **AI-01**: AI-generated personalized sleep summary every Monday with one recommendation
 
 ### Research: Predictive Scheduling (Phase 21)
 

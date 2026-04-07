@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 23-01-PLAN.md
-last_updated: "2026-04-07T18:56:46.578Z"
+stopped_at: Completed 20-01-PLAN.md
+last_updated: "2026-04-07T19:05:27.471Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 56
-  completed_plans: 31
+  completed_plans: 32
   percent: 52
 ---
 
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 22
-Plan: 01 complete
+Phase: 24
+Plan: Not started
 Status: Plan 01 complete — 22-01-SUMMARY.md created
 Last activity: 2026-04-07
 
@@ -74,6 +74,7 @@ Progress: [██░░░░░░░░] 52% (30/56 plans complete)
 | Phase 21-predictive-scheduling-research P01 | 6min | 2 tasks | 3 files |
 | Phase 19-ai-coaching-research P01 | 16min | 2 tasks | 4 files |
 | Phase 23-pattern-recognition-engine P01 | 12min | 3 tasks | 7 files |
+| Phase 20 P01 | 5min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -157,6 +158,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 23-pattern-recognition-engine]: Static templates chosen over LLM for alert generation — zero API cost, deterministic, guardrail-safe
 - [Phase 23-pattern-recognition-engine]: PatternSeverity uses critical not alert — aligns with industry standard severity taxonomy
 - [Phase 23-pattern-recognition-engine]: Weekend compensation threshold lowered to 90 min — matches social jetlag research threshold
+- [Phase 20]: Use claude-haiku-4-5 as default model per AI-COACHING-FRAMEWORK cost analysis
+- [Phase 20]: Guardrails cover all 8 SAFETY-GUARDRAILS.md prohibited categories via regex
+- [Phase 20]: Derive sleepDebtHours from circadianDebtScore (0-100 to 0-14h mapping) since PlanStats has no direct debt field
 
 ### Pending Todos
 
@@ -171,6 +175,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T18:56:46.572Z
-Stopped at: Completed 23-01-PLAN.md
+Last session: 2026-04-07T19:05:27.467Z
+Stopped at: Completed 20-01-PLAN.md
 Resume file: None
