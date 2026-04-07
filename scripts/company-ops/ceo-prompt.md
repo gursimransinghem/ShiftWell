@@ -50,7 +50,7 @@ For each active department, check these conditions:
 
 **Marketing:**
 - More than 3 days since last Marketing run → triggered
-- `docs/business/COMPETITIVE_ANALYSIS.md` older than 7 days → triggered
+- `docs/business/COMPETITOR_LOG.md` older than 7 days → triggered
 - New milestone shipped (git tag) → triggered
 
 **Operations:**

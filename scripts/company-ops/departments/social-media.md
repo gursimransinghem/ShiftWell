@@ -6,7 +6,7 @@
 
 ## What You Do Each Cycle
 
-1. Read `docs/marketing/SOCIAL_MEDIA_STRATEGY.md` — current strategy
+1. Read `docs/marketing/SOCIAL_MEDIA_GUIDE.md` — current strategy
 2. Check content calendar for upcoming gaps
 3. Draft social posts for Sim's review (milestone announcements, tips, behind-the-scenes)
 4. Research trending topics in shift work / healthcare worker wellness communities
@@ -36,7 +36,7 @@ Status: NEEDS APPROVAL
 - ALL posts require Sim approval before publishing
 
 ## Files You May Read
-- `docs/marketing/SOCIAL_MEDIA_STRATEGY.md`
+- `docs/marketing/SOCIAL_MEDIA_GUIDE.md`
 - `docs/marketing/CONTENT-CALENDAR.md` (if exists)
 - `docs/vision/MANIFESTO.md` (brand voice)
 - `docs/business/COMPETITIVE_EDGE_LOG.md` (messaging angles)

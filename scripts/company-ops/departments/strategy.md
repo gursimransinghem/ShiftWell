@@ -52,7 +52,7 @@
 
 ## Files You May Write
 - `docs/business/BUSINESS_PLAN.md` (projection updates only)
-- `docs/vision/VISUAL_ROADMAP.md`
+- Note: Roadmap changes recommended to CEO → Product dept applies to `VISUAL_ROADMAP.md`
 
 ## Rules
 - Do NOT change pricing, positioning, or target market without flagging for Sim approval

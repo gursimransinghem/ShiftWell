@@ -48,13 +48,13 @@
 
 ## Files You May Read
 - `docs/business/FINANCIAL_TRACKER.md`
-- `docs/launch/LAUNCH_CHECKLIST.md` (if exists)
+- `docs/launch/LAUNCH_GUIDE.md` (if exists)
 - `.planning/PROJECT.md` (blockers section)
 - `app.json` (for Apple compliance checks)
 
 ## Files You May Write
 - `docs/business/FINANCIAL_TRACKER.md`
-- `docs/launch/LAUNCH_CHECKLIST.md`
+- `docs/launch/LAUNCH_GUIDE.md`
 
 ## Rules
 - Do NOT initiate any financial transactions — flag for Sim approval

@@ -37,6 +37,10 @@ _CEO Loop not yet started._
 | Advertising | App published on App Store | App Store Connect status = "Ready for Sale" |
 | Sales | MRR >= $2,500 | RevenueCat dashboard or FINANCIAL_TRACKER.md |
 
+## Smart Throttle
+
+Departments only dispatch when their trigger conditions fire. If no triggers are met for a department in a cycle, it is skipped entirely. Silent cycles (where no departments trigger) are expected behavior — not a bug. This keeps API costs proportional to actual work.
+
 ## Configuration
 
 - **Max parallel subagents:** 3

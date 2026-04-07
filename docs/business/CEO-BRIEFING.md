@@ -15,6 +15,11 @@
 | Marketing | -- | -- | -- |
 | Operations | -- | -- | -- |
 | Strategy | -- | -- | -- |
+| Design | Dormant | -- | Activates: TestFlight launch |
+| Social Media | Dormant | -- | Activates: TestFlight launch |
+| Customer Success | Dormant | -- | Activates: TestFlight launch |
+| Advertising | Dormant | -- | Activates: App Store launch |
+| Sales | Dormant | -- | Activates: $2.5K MRR |
 
 ## Needs Your Approval
 

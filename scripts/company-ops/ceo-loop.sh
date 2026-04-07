@@ -9,22 +9,17 @@ PROJECT_DIR="$HOME/projects/ShiftWell"
 CEO_PROMPT="$PROJECT_DIR/scripts/company-ops/ceo-prompt.md"
 LOG_DIR="$PROJECT_DIR/logs/ceo-loop"
 LOG_FILE="$LOG_DIR/$(date +%Y-%m-%d_%H%M).log"
-LOCK_FILE="/tmp/shiftwell-ceo-loop.lock"
+LOCK_DIR="/tmp/shiftwell-ceo-loop.lock"
 
 # Ensure log directory exists
 mkdir -p "$LOG_DIR"
 
-# Prevent overlapping runs
-if [ -f "$LOCK_FILE" ]; then
-    PID=$(cat "$LOCK_FILE" 2>/dev/null)
-    if kill -0 "$PID" 2>/dev/null; then
-        echo "$(date): CEO Loop already running (PID $PID), skipping" >> "$LOG_FILE"
-        exit 0
-    fi
-    rm -f "$LOCK_FILE"
+# Prevent overlapping runs (mkdir is atomic on POSIX)
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+    echo "$(date): CEO Loop already running, skipping" >> "$LOG_FILE"
+    exit 0
 fi
-echo $$ > "$LOCK_FILE"
-trap 'rm -f "$LOCK_FILE"' EXIT
+trap 'rm -rf "$LOCK_DIR"' EXIT
 
 echo "$(date): CEO Loop starting" >> "$LOG_FILE"
 
@@ -38,13 +33,11 @@ else
     TIME_OF_DAY="evening"
 fi
 
-# Read the CEO prompt
+# Verify the CEO prompt exists
 if [ ! -f "$CEO_PROMPT" ]; then
     echo "$(date): ERROR — CEO prompt not found at $CEO_PROMPT" >> "$LOG_FILE"
     exit 1
 fi
-
-CEO_PROMPT_TEXT=$(cat "$CEO_PROMPT")
 
 # Construct the cycle-specific message
 CYCLE_MSG="Run the CEO Loop now.
@@ -70,7 +63,7 @@ claude -p \
     --model sonnet \
     --dangerously-skip-permissions \
     --max-budget-usd 5 \
-    --append-system-prompt "$CEO_PROMPT_TEXT" \
+    --append-system-prompt-file "$CEO_PROMPT" \
     "$CYCLE_MSG" \
     >> "$LOG_FILE" 2>&1
 

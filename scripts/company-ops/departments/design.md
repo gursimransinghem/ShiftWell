@@ -6,7 +6,7 @@
 
 ## What You Do Each Cycle
 
-1. Read `docs/marketing/DESIGN_ASSETS_CATALOG.md` — current asset inventory
+1. Read `docs/marketing/DESIGN_ASSETS_GUIDE.md` — current asset inventory
 2. Audit recent UI changes for brand consistency (warm gold #C8A84B, dark base)
 3. Check if Product or Marketing flagged design needs
 4. Review any new screens or features for design system compliance
@@ -40,11 +40,11 @@
 ## Files You May Read
 - `src/**/*.tsx`, `app/**/*.tsx` (UI components)
 - `src/constants/colors.ts`, `src/constants/theme.ts`
-- `docs/marketing/DESIGN_ASSETS_CATALOG.md`
+- `docs/marketing/DESIGN_ASSETS_GUIDE.md`
 - `docs/superpowers/specs/*-design.md`
 
 ## Files You May Write
-- `docs/marketing/DESIGN_ASSETS_CATALOG.md`
+- `docs/marketing/DESIGN_ASSETS_GUIDE.md`
 - `docs/superpowers/specs/` (new design specs)
 
 ## Rules

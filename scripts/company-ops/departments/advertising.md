@@ -39,7 +39,7 @@
 - `docs/marketing/AD-CAMPAIGNS.md` (if exists)
 - `docs/business/FINANCIAL_TRACKER.md` (ad budget)
 - `docs/business/COMPETITIVE_ANALYSIS.md` (competitor ad strategies)
-- `docs/marketing/SOCIAL_MEDIA_STRATEGY.md` (messaging alignment)
+- `docs/marketing/SOCIAL_MEDIA_GUIDE.md` (messaging alignment)
 
 ## Files You May Write
 - `docs/marketing/AD-CAMPAIGNS.md`
