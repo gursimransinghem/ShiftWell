@@ -70,6 +70,9 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const checkSession = useAuthStore((s) => s.checkSession);
   const initializePremium = usePremiumStore((s) => s.initializePremium);
+  const trialStartedAt = usePremiumStore((s) => s.trialStartedAt);
+  const isInTrial = usePremiumStore((s) => s.isInTrial);
+  const isPremium = usePremiumStore((s) => s.isPremium);
 
   useEffect(() => {
     // Restore auth session and initialize premium status on cold launch
@@ -114,6 +117,13 @@ function RootLayoutNav() {
     return () => sub.remove();
   }, []);
 
+  useEffect(() => {
+    // Route to downgrade screen when trial has expired and user is not premium (BUG-03)
+    if (trialStartedAt && !isInTrial && !isPremium) {
+      router.replace('/downgrade');
+    }
+  }, [trialStartedAt, isInTrial, isPremium]);
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AdaptiveColorProvider>
@@ -143,6 +153,7 @@ function RootLayoutNav() {
               headerShown: false,
             }}
           />
+          <Stack.Screen name="downgrade" options={{ headerShown: false }} />
         </Stack>
       </AdaptiveColorProvider>
     </ThemeProvider>
