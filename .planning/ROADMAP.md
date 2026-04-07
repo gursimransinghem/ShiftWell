@@ -487,7 +487,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 33-01-PLAN.md — HRV reader, processor modules, score-store update
-- [ ] 33-02-PLAN.md — HRV calibration banner, background delivery config, watch complication spec
+- [x] 33-02-PLAN.md — HRV calibration banner, background delivery config, watch complication spec
 **Rationale**: Apple Watch data is the highest-quality consumer biometric signal available.
 
 ### Phase 34: 30-Day Autopilot
@@ -600,7 +600,7 @@ Plans:
 | 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 31. App Store Optimization | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 32. HRV + Wearable Research | v2.0 | 1/1 | Complete    | 2026-04-07 |
-| 33. Apple Watch Integration | v2.0 | 1/2 | In Progress|  |
+| 33. Apple Watch Integration | v2.0 | 2/2 | Complete   | 2026-04-07 |
 | 34. 30-Day Autopilot | v2.0 | 1/1 | Complete   | 2026-04-07 |
 | 35. Validation Study Design | v2.0 | 1/2 | In Progress|  |
 | 36. Validation Study Execution | v2.0 | 0/1 | Blocked (100+ users) | - |
