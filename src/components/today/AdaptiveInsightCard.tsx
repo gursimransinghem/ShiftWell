@@ -59,7 +59,7 @@ export function AdaptiveInsightCard({ changes, context, onUndo, onDismiss }: Pro
             {isLearning ? 'Suggested Change' : 'Plan Updated'}
           </Text>
         </View>
-        <Pressable onPress={() => setDismissed(true)} hitSlop={10}>
+        <Pressable onPress={() => { onDismiss(); setDismissed(true); }} hitSlop={10}>
           <Ionicons name="close-circle-outline" size={18} color={COLORS.text.dim} />
         </Pressable>
       </View>
@@ -84,7 +84,7 @@ export function AdaptiveInsightCard({ changes, context, onUndo, onDismiss }: Pro
           <>
             <Pressable
               style={[styles.actionButton, { borderColor: accentColor }]}
-              onPress={() => setDismissed(true)}
+              onPress={() => { onDismiss(); setDismissed(true); }}
             >
               <Text style={[styles.actionText, { color: accentColor }]}>Accept</Text>
             </Pressable>
