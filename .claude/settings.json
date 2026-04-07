@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "pattern": "gsd-tools.*phase complete|gsd-tools.*commit.*docs\\(phase",
+        "command": "node scripts/generate-dashboards.js --fast 2>/dev/null &",
+        "description": "Auto-update HTML dashboards after GSD phase completion"
+      }
+    ]
+  }
+}
