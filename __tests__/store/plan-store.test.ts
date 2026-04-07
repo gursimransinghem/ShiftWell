@@ -83,6 +83,8 @@ beforeEach(() => {
     error: null,
     lastGeneratedAt: null,
     lastResetAt: null,
+    changeLog: [],
+    pendingChanges: [],
   } as any);
 
   useShiftsStore.setState({ shifts: [], personalEvents: [], recalculationNeeded: [] });
@@ -104,7 +106,7 @@ beforeEach(() => {
   (writeChangedBlocks as jest.Mock).mockResolvedValue(undefined);
 
   // Reset plan to null AFTER clearing mocks — subscription may have set a plan during reset
-  usePlanStore.setState({ plan: null, lastGeneratedAt: null, lastResetAt: null } as any);
+  usePlanStore.setState({ plan: null, lastGeneratedAt: null, lastResetAt: null, changeLog: [], pendingChanges: [] } as any);
 });
 
 // ── Tests ──────────────────────────────────────────────────────────────────────
@@ -235,5 +237,133 @@ describe('usePlanStore — recalculationNeeded subscription (PLAN-06)', () => {
     await Promise.resolve();
 
     expect(generateSleepPlan).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ── changeLog persistence tests (BRAIN-06) ─────────────────────────────────────
+
+import type { AdaptiveChange } from '../../src/lib/adaptive/types';
+
+const MOCK_CHANGE: AdaptiveChange = {
+  type: 'bedtime-shifted',
+  factor: 'debt',
+  magnitudeMinutes: 30,
+  humanReadable: 'Bedtime shifted 30min earlier',
+  reason: 'High sleep debt',
+};
+
+describe('usePlanStore — changeLog persistence (BRAIN-06)', () => {
+  it('BRAIN-06-01: dismissChanges moves pendingChanges to changeLog with ISO timestamp', () => {
+    usePlanStore.setState({ pendingChanges: [MOCK_CHANGE], changeLog: [] } as any);
+
+    usePlanStore.getState().dismissChanges();
+
+    const { changeLog, pendingChanges } = usePlanStore.getState();
+    expect(pendingChanges).toHaveLength(0);
+    expect(changeLog).toHaveLength(1);
+    expect(changeLog[0].humanReadable).toBe('Bedtime shifted 30min earlier');
+    expect(typeof changeLog[0].timestamp).toBe('string');
+    expect(changeLog[0].timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  });
+
+  it('BRAIN-06-02: dismissChanges with empty pendingChanges does NOT add entries to changeLog', () => {
+    usePlanStore.setState({ pendingChanges: [], changeLog: [] } as any);
+
+    usePlanStore.getState().dismissChanges();
+
+    const { changeLog } = usePlanStore.getState();
+    expect(changeLog).toHaveLength(0);
+  });
+
+  it('BRAIN-06-03: changeLog caps at 30 entries — oldest trimmed', () => {
+    // Build 29 existing entries
+    const existingEntries: AdaptiveChange[] = Array.from({ length: 29 }, (_, i) => ({
+      ...MOCK_CHANGE,
+      humanReadable: `Change ${i}`,
+      timestamp: new Date(Date.now() - (29 - i) * 1000).toISOString(),
+    }));
+
+    // 3 new pending changes
+    const newChanges: AdaptiveChange[] = [
+      { ...MOCK_CHANGE, humanReadable: 'New Change A' },
+      { ...MOCK_CHANGE, humanReadable: 'New Change B' },
+      { ...MOCK_CHANGE, humanReadable: 'New Change C' },
+    ];
+
+    usePlanStore.setState({ pendingChanges: newChanges, changeLog: existingEntries } as any);
+
+    usePlanStore.getState().dismissChanges();
+
+    const { changeLog } = usePlanStore.getState();
+    // 29 + 3 = 32, capped at 30 => oldest 2 trimmed
+    expect(changeLog).toHaveLength(30);
+    // The newest entries should be the new changes
+    expect(changeLog[29].humanReadable).toBe('New Change C');
+    expect(changeLog[28].humanReadable).toBe('New Change B');
+    expect(changeLog[27].humanReadable).toBe('New Change A');
+  });
+
+  it('BRAIN-06-04: changeLog entries from dismiss have valid ISO timestamp', () => {
+    const before = new Date();
+    usePlanStore.setState({ pendingChanges: [MOCK_CHANGE], changeLog: [] } as any);
+
+    usePlanStore.getState().dismissChanges();
+
+    const after = new Date();
+    const { changeLog } = usePlanStore.getState();
+    const ts = new Date(changeLog[0].timestamp!);
+    expect(ts.getTime()).toBeGreaterThanOrEqual(before.getTime());
+    expect(ts.getTime()).toBeLessThanOrEqual(after.getTime());
+  });
+
+  it('BRAIN-06-05: partialize returns only changeLog, daysUntilTransition, snapshotTimestamp', () => {
+    const store = usePlanStore as any;
+    if (!store.persist) {
+      // persist not yet added — this test is a sentinel for the RED phase
+      throw new Error('usePlanStore does not have persist middleware yet');
+    }
+    const partialize = store.persist.getOptions().partialize;
+    const fullState = {
+      plan: { blocks: [] },
+      planSnapshot: { blocks: [] },
+      adaptiveContext: { meta: {} },
+      pendingChanges: [MOCK_CHANGE],
+      isGenerating: true,
+      error: 'some error',
+      changeLog: [{ ...MOCK_CHANGE, timestamp: '2026-01-01T00:00:00.000Z' }],
+      daysUntilTransition: 5,
+      snapshotTimestamp: '2026-01-01T00:00:00.000Z',
+    };
+    const result = partialize(fullState);
+    const resultKeys = Object.keys(result).sort();
+    expect(resultKeys).toEqual(['changeLog', 'daysUntilTransition', 'snapshotTimestamp'].sort());
+    expect(result).not.toHaveProperty('plan');
+    expect(result).not.toHaveProperty('planSnapshot');
+    expect(result).not.toHaveProperty('adaptiveContext');
+    expect(result).not.toHaveProperty('pendingChanges');
+    expect(result).not.toHaveProperty('isGenerating');
+    expect(result).not.toHaveProperty('error');
+  });
+
+  it('BRAIN-06-06: undoPlan still works correctly — clears pendingChanges without affecting existing changeLog', () => {
+    const existingLog: AdaptiveChange[] = [
+      { ...MOCK_CHANGE, humanReadable: 'Old change', timestamp: new Date().toISOString() },
+    ];
+    const snapshot = { ...MOCK_PLAN };
+    usePlanStore.setState({
+      plan: MOCK_PLAN,
+      planSnapshot: snapshot,
+      snapshotTimestamp: new Date(),
+      pendingChanges: [MOCK_CHANGE],
+      changeLog: existingLog,
+    } as any);
+
+    usePlanStore.getState().undoPlan();
+
+    const { changeLog, pendingChanges } = usePlanStore.getState();
+    expect(pendingChanges).toHaveLength(0);
+    // changeLog should be untouched by undoPlan
+    expect(changeLog).toHaveLength(1);
+    expect(changeLog[0].humanReadable).toBe('Old change');
   });
 });

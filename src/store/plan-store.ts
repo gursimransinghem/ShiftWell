@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addDays, differenceInHours } from 'date-fns';
 import type { SleepPlan } from '../lib/circadian/types';
 import { generateSleepPlan } from '../lib/circadian';
@@ -29,6 +31,8 @@ export interface PlanState {
   pendingChanges: AdaptiveChange[];
   /** Days until the next shift transition (exposed for FloatingTabBar conditional) */
   daysUntilTransition: number;
+  /** Persisted log of past plan changes, capped at 30 entries (D-07) */
+  changeLog: AdaptiveChange[];
 
   regeneratePlan: (opts?: { isCircadianReset?: boolean }) => Promise<void>;
   clearError: () => void;
@@ -49,110 +53,132 @@ function getDefaultDateRange(): { start: Date; end: Date } {
   };
 }
 
-export const usePlanStore = create<PlanState>()((set, get) => ({
-  plan: null,
-  dateRange: getDefaultDateRange(),
-  isGenerating: false,
-  error: null,
-  lastGeneratedAt: null,
-  lastResetAt: null,
+export const usePlanStore = create<PlanState>()(
+  persist(
+    (set, get) => ({
+      plan: null,
+      dateRange: getDefaultDateRange(),
+      isGenerating: false,
+      error: null,
+      lastGeneratedAt: null,
+      lastResetAt: null,
 
-  // Adaptive Brain initial state
-  adaptiveContext: null,
-  planSnapshot: null,
-  snapshotTimestamp: null,
-  pendingChanges: [],
-  daysUntilTransition: 999,
-
-  clearError: () => set({ error: null }),
-
-  regeneratePlan: async (opts) => {
-    const { dateRange, adaptiveContext, plan: existingPlan } = get();
-    const { shifts, personalEvents } = useShiftsStore.getState();
-    const { profile } = useUserStore.getState();
-
-    set({ isGenerating: true, error: null });
-
-    try {
-      const plan = generateSleepPlan(
-        dateRange.start,
-        dateRange.end,
-        shifts,
-        personalEvents,
-        profile,
-        adaptiveContext ?? undefined,
-      );
-
-      const oldPlan = get().plan;
-      const calStore = useCalendarStore.getState();
-
-      // Save snapshot of previous plan before overwriting (for undo)
-      const snapshotUpdate = existingPlan
-        ? { planSnapshot: existingPlan, snapshotTimestamp: new Date() }
-        : {};
-
-      set({
-        plan,
-        isGenerating: false,
-        lastGeneratedAt: new Date(),
-        lastResetAt: opts?.isCircadianReset ? new Date() : get().lastResetAt,
-        error: null,
-        ...snapshotUpdate,
-      });
-
-      // Write calendar changes (non-blocking — errors logged, don't fail the plan)
-      writeChangedBlocks(oldPlan, plan, calStore).catch((e) => {
-        console.warn('[PlanStore] Calendar write-back failed:', e);
-      });
-
-      // Schedule push notifications for the next 24h of plan blocks
-      schedulePlanNotifications(plan.blocks).catch(() => {
-        // Notifications may not be permitted yet — fail silently
-      });
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Failed to generate sleep plan';
-      set({ isGenerating: false, error: message });
-    }
-  },
-
-  setAdaptiveContext: (context, changes) => {
-    const daysUntil = context.schedule.daysUntilTransition ?? 999;
-    set({
-      adaptiveContext: context,
-      pendingChanges: changes,
-      daysUntilTransition: daysUntil,
-    });
-    // Regenerate with the new context
-    get().regeneratePlan();
-  },
-
-  undoPlan: () => {
-    const { planSnapshot, snapshotTimestamp } = get();
-    if (!planSnapshot || !snapshotTimestamp) return;
-
-    // 24-hour undo window
-    const hoursElapsed = differenceInHours(new Date(), snapshotTimestamp);
-    if (hoursElapsed > 24) return;
-
-    set({
-      plan: planSnapshot,
+      // Adaptive Brain initial state
+      adaptiveContext: null,
       planSnapshot: null,
       snapshotTimestamp: null,
       pendingChanges: [],
-      adaptiveContext: null,
-    });
-  },
+      daysUntilTransition: 999,
+      changeLog: [],
 
-  dismissChanges: () => {
-    set({ pendingChanges: [] });
-  },
+      clearError: () => set({ error: null }),
 
-  setDateRange: (start, end) => {
-    set({ dateRange: { start, end } });
-    // Regenerate plan with new date range
-    get().regeneratePlan();
-  },
-}));
+      regeneratePlan: async (opts) => {
+        const { dateRange, adaptiveContext, plan: existingPlan } = get();
+        const { shifts, personalEvents } = useShiftsStore.getState();
+        const { profile } = useUserStore.getState();
+
+        set({ isGenerating: true, error: null });
+
+        try {
+          const plan = generateSleepPlan(
+            dateRange.start,
+            dateRange.end,
+            shifts,
+            personalEvents,
+            profile,
+            adaptiveContext ?? undefined,
+          );
+
+          const oldPlan = get().plan;
+          const calStore = useCalendarStore.getState();
+
+          // Save snapshot of previous plan before overwriting (for undo)
+          const snapshotUpdate = existingPlan
+            ? { planSnapshot: existingPlan, snapshotTimestamp: new Date() }
+            : {};
+
+          set({
+            plan,
+            isGenerating: false,
+            lastGeneratedAt: new Date(),
+            lastResetAt: opts?.isCircadianReset ? new Date() : get().lastResetAt,
+            error: null,
+            ...snapshotUpdate,
+          });
+
+          // Write calendar changes (non-blocking — errors logged, don't fail the plan)
+          writeChangedBlocks(oldPlan, plan, calStore).catch((e) => {
+            console.warn('[PlanStore] Calendar write-back failed:', e);
+          });
+
+          // Schedule push notifications for the next 24h of plan blocks
+          schedulePlanNotifications(plan.blocks).catch(() => {
+            // Notifications may not be permitted yet — fail silently
+          });
+        } catch (e) {
+          const message = e instanceof Error ? e.message : 'Failed to generate sleep plan';
+          set({ isGenerating: false, error: message });
+        }
+      },
+
+      setAdaptiveContext: (context, changes) => {
+        const daysUntil = context.schedule.daysUntilTransition ?? 999;
+        set({
+          adaptiveContext: context,
+          pendingChanges: changes,
+          daysUntilTransition: daysUntil,
+        });
+        // Regenerate with the new context
+        get().regeneratePlan();
+      },
+
+      undoPlan: () => {
+        const { planSnapshot, snapshotTimestamp } = get();
+        if (!planSnapshot || !snapshotTimestamp) return;
+
+        // 24-hour undo window
+        const hoursElapsed = differenceInHours(new Date(), snapshotTimestamp);
+        if (hoursElapsed > 24) return;
+
+        set({
+          plan: planSnapshot,
+          planSnapshot: null,
+          snapshotTimestamp: null,
+          pendingChanges: [],
+          adaptiveContext: null,
+        });
+      },
+
+      dismissChanges: () => {
+        const { pendingChanges, changeLog } = get();
+        if (pendingChanges.length === 0) {
+          set({ pendingChanges: [] });
+          return;
+        }
+        const timestamp = new Date().toISOString();
+        const stamped = pendingChanges.map((c) => ({ ...c, timestamp }));
+        const updated = [...changeLog, ...stamped].slice(-30);
+        set({ pendingChanges: [], changeLog: updated });
+      },
+
+      setDateRange: (start, end) => {
+        set({ dateRange: { start, end } });
+        // Regenerate plan with new date range
+        get().regeneratePlan();
+      },
+    }),
+    {
+      name: 'adaptive-plan-store',
+      storage: createJSONStorage(() => AsyncStorage),
+      partialize: (s) => ({
+        changeLog: s.changeLog,
+        daysUntilTransition: s.daysUntilTransition,
+        snapshotTimestamp: s.snapshotTimestamp,
+      }),
+    },
+  ),
+);
 
 // ── Debounce helper ────────────────────────────────────────────────────────────
 

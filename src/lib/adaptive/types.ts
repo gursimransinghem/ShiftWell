@@ -147,4 +147,6 @@ export interface AdaptiveChange {
   /** "Night shift starts Friday" */
   reason: string;
   citation?: string;
+  /** ISO string, populated when moved to changeLog on dismiss (D-08) */
+  timestamp?: string;
 }
