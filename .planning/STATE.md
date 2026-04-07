@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: verifying
-stopped_at: Completed 17-01-PLAN.md
-last_updated: "2026-04-07T17:59:08.968Z"
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-04-07T18:07:24.014Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 56
-  completed_plans: 25
+  completed_plans: 26
   percent: 0
 ---
 
@@ -69,6 +69,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 13-sleep-feedback-research P01 | 11min | 2 tasks | 4 files |
 | Phase 14-healthkit-sleep-ingestion P01 | 8min | 4 tasks | 9 files |
 | Phase 17-growth-engine P01 | 8 | 2 tasks | 7 files |
+| Phase 15-algorithm-feedback-engine P01 | 10min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -134,6 +135,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 17-growth-engine]: Referral URL is /r/{userId} (userId is the code in v1, Supabase resolves attribution server-side)
 - [Phase 17-growth-engine]: A/B framework uses djb2 deterministic hash — no external SDK, supports 2 or 3 variants via variantCount param
 - [Phase 17-growth-engine]: Paywall experiment affects display price only — RevenueCat purchase uses actual offering to avoid App Store issues
+- [Phase 15]: feedback-engine deps injected via buildAdaptiveContext params (not store.getState()) to avoid circular import
+- [Phase 15]: Dead zone applied twice: per-night before EMA input + on smoothed signal — prevents micro-oscillations
+- [Phase 15]: Energy engine in src/lib/energy/ wraps circadian/energy-model.ts — avoids duplicating Borbely math
 
 ### Pending Todos
 
@@ -148,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T17:59:08.959Z
-Stopped at: Completed 17-01-PLAN.md
+Last session: 2026-04-07T18:07:24.006Z
+Stopped at: Completed 15-01-PLAN.md
 Resume file: None

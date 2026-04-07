@@ -73,13 +73,13 @@
 
 ### Algorithm Feedback (Phase 15)
 
-- [ ] **HK-04**: Algorithm reads discrepancy history and adjusts sleep window timing
-- [ ] **HK-05**: Convergence target: average discrepancy < 15 min within 7 nights
-- [ ] **HK-11**: HRV-calibrated dead zone — when overnight HRV below user's 20th percentile, feedback dead zone expands from 20 to 30 min
+- [x] **HK-04**: Algorithm reads discrepancy history and adjusts sleep window timing
+- [x] **HK-05**: Convergence target: average discrepancy < 15 min within 7 nights
+- [x] **HK-11**: HRV-calibrated dead zone — when overnight HRV below user's 20th percentile, feedback dead zone expands from 20 to 30 min
 
 ### Energy Prediction (Phase 15)
 
-- [ ] **ENERGY-01**: Two-Process Model (Borbely) energy prediction ported from ULOS/Grafana — hourly alertness curve (0-100) with zone labels and caffeine half-life model
+- [x] **ENERGY-01**: Two-Process Model (Borbely) energy prediction ported from ULOS/Grafana — hourly alertness curve (0-100) with zone labels and caffeine half-life model
 
 ### Research: Feedback Validation (Phase 16)
 

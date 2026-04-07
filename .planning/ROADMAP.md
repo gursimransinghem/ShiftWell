@@ -206,7 +206,7 @@ Plans:
   7. Caffeine half-life model with auto-cutoff calculation
 **Plans**: 1 plan
 Plans:
-- [ ] 15-01-PLAN.md — feedback-engine.ts EMA algorithm, plan-store wiring, context-builder integration
+- [x] 15-01-PLAN.md — feedback-engine.ts EMA algorithm, plan-store wiring, context-builder integration
 **Rationale**: Core of the closed-loop system. Two-Process Model parameter tuning based on real behavior.
 **Science anchor**: Borbely 1982 (Process S calibration)
 
@@ -582,7 +582,7 @@ Plans:
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
 | 13. Sleep Feedback Research | v1.2 | 1/1 | Complete | 2026-04-07 |
 | 14. HealthKit Data Foundation | v1.2 | 1/1 | Complete    | 2026-04-07 |
-| 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete | 2026-04-07 |
+| 15. Algorithm Feedback Engine | v1.2 | 1/1 | Complete   | 2026-04-07 |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
 | 17. Growth Engine | v1.2 | 1/1 | Complete   | 2026-04-07 |
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete | 2026-04-07 |
