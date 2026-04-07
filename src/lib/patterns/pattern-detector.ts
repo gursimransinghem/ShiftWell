@@ -16,33 +16,13 @@
  *   Ruggiero & Redeker (2014) napping in shift work.
  */
 
-import { parseISO, differenceInDays, getDay, formatISO } from 'date-fns';
-import type { SleepDiscrepancy } from '../feedback/types';
+import { differenceInDays, formatISO } from 'date-fns';
+import type { SleepDiscrepancy, DiscrepancyHistory } from '../feedback/types';
 import type { ShiftEvent } from '../circadian/types';
+import type { DetectedPattern, PatternType, PatternSeverity } from './types';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-export type PatternType =
-  | 'consecutive-night-impact'
-  | 'recovery-debt-trend'
-  | 'weekend-compensation'
-  | 'chronic-late-sleep'
-  | 'improving-adherence';
-
-export interface DetectedPattern {
-  type: PatternType;
-  severity: 'info' | 'warning' | 'alert';
-  /** Natural language description of the pattern */
-  message: string;
-  /** Data that supports the pattern detection */
-  evidence: string;
-  /** Actionable suggestion */
-  recommendation: string;
-  /** ISO date when this pattern was detected */
-  detectedAt: string;
-}
+// Re-export types for backward compatibility
+export type { DetectedPattern, PatternType, PatternSeverity };
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -53,9 +33,21 @@ function average(values: number[]): number {
   return values.reduce((a, b) => a + b, 0) / values.length;
 }
 
+function makeId(): string {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+function windowDates(records: { dateISO: string }[]): { start: string; end: string } {
+  if (records.length === 0) {
+    const today = new Date().toISOString().slice(0, 10);
+    return { start: today, end: today };
+  }
+  const sorted = records.map((r) => r.dateISO).sort();
+  return { start: sorted[0], end: sorted[sorted.length - 1] };
+}
+
 /**
- * Check if a date string represents a weekend day (Saturday or Sunday).
- * Uses the ISO date string directly — no timezone shift needed.
+ * Check if a date string falls on a shift day.
  */
 function isOffDay(dateISO: string, shiftDates: Set<string>): boolean {
   return !shiftDates.has(dateISO);
@@ -68,6 +60,7 @@ function isOffDay(dateISO: string, shiftDates: Set<string>): boolean {
 /**
  * Pattern 1: consecutive-night-impact
  * Detects if 3+ consecutive night shifts are followed by a spike in sleep debt.
+ * Severity: 3-4 nights = warning, 5+ nights = critical
  */
 function detectConsecutiveNightImpact(
   shiftHistory: ShiftEvent[],
@@ -106,27 +99,40 @@ function detectConsecutiveNightImpact(
 
   if (!afterRunDebt || afterRunDebt.hours < 2) return null;
 
+  const severity: PatternSeverity = maxRun >= 5 ? 'critical' : 'warning';
+  const { start, end } = windowDates(
+    nightShifts.map((s) => ({ dateISO: formatISO(s.start, { representation: 'date' }) })),
+  );
+
   return {
+    id: makeId(),
     type: 'consecutive-night-impact',
-    severity: afterRunDebt.hours >= 4 ? 'alert' : 'warning',
+    severity,
+    detectedAt: new Date().toISOString(),
+    windowStartISO: start,
+    windowEndISO: end,
     message: `${maxRun} consecutive night shifts causing sleep debt buildup`,
     evidence: `${maxRun} night shifts detected in a row. Post-run debt: ${afterRunDebt.hours.toFixed(1)}h`,
     recommendation: 'Schedule a 90-min anchor nap between nights 2 and 3 of any multi-night stretch.',
-    detectedAt: new Date().toISOString(),
+    metadata: {
+      nightCount: maxRun,
+      debtAfterRun: afterRunDebt.hours,
+    },
   };
 }
 
 /**
  * Pattern 2: recovery-debt-trend
  * Computes a rolling 4-week debt trend (improving / stable / worsening).
+ * Mapped to debt-trend-rising / debt-trend-improving pattern types.
  */
 function detectRecoveryDebtTrend(
   debtHistory: { dateISO: string; hours: number }[],
 ): DetectedPattern | null {
   if (debtHistory.length < 14) return null;
 
-  const sorted = [...debtHistory].sort((a, b) => a.dateISO.localeCompare(b.dateISO));
-  const recent = sorted.slice(-14);
+  const sortedDebt = [...debtHistory].sort((a, b) => a.dateISO.localeCompare(b.dateISO));
+  const recent = sortedDebt.slice(-14);
   const firstHalf = recent.slice(0, 7);
   const secondHalf = recent.slice(7);
 
@@ -134,16 +140,26 @@ function detectRecoveryDebtTrend(
   const secondAvg = average(secondHalf.map((d) => d.hours));
   const delta = secondAvg - firstAvg;
 
+  const { start, end } = windowDates(recent);
+
   if (Math.abs(delta) < 0.5) {
     // Stable — only report if debt is high
     if (secondAvg >= 3) {
       return {
+        id: makeId(),
         type: 'recovery-debt-trend',
         severity: 'warning',
+        detectedAt: new Date().toISOString(),
+        windowStartISO: start,
+        windowEndISO: end,
         message: 'Persistent sleep debt with no improvement trend',
         evidence: `Avg debt last 2 weeks: ${firstAvg.toFixed(1)}h → ${secondAvg.toFixed(1)}h (stable, high)`,
         recommendation: 'Add a 90-min recovery block on your next day off. Prioritize sleep over social obligations.',
-        detectedAt: new Date().toISOString(),
+        metadata: {
+          week1AvgHours: firstAvg,
+          week4AvgHours: secondAvg,
+          direction: 'stable',
+        },
       };
     }
     return null;
@@ -151,29 +167,46 @@ function detectRecoveryDebtTrend(
 
   if (delta > 0.5) {
     return {
-      type: 'recovery-debt-trend',
-      severity: delta > 1.5 ? 'alert' : 'warning',
+      id: makeId(),
+      type: 'debt-trend-rising',
+      severity: delta > 1.5 ? 'critical' : 'warning',
+      detectedAt: new Date().toISOString(),
+      windowStartISO: start,
+      windowEndISO: end,
       message: 'Sleep debt is worsening week over week',
       evidence: `Avg debt increased from ${firstAvg.toFixed(1)}h to ${secondAvg.toFixed(1)}h (+${delta.toFixed(1)}h)`,
       recommendation: 'Protect at least one full 8-hour sleep opportunity this week. Avoid scheduling extras on off-days.',
-      detectedAt: new Date().toISOString(),
+      metadata: {
+        week1AvgHours: firstAvg,
+        week4AvgHours: secondAvg,
+        direction: 'rising',
+      },
     };
   }
 
   // Improving
   return {
-    type: 'recovery-debt-trend',
+    id: makeId(),
+    type: 'debt-trend-improving',
     severity: 'info',
+    detectedAt: new Date().toISOString(),
+    windowStartISO: start,
+    windowEndISO: end,
     message: 'Sleep debt is improving — keep it up',
     evidence: `Avg debt decreased from ${firstAvg.toFixed(1)}h to ${secondAvg.toFixed(1)}h (-${Math.abs(delta).toFixed(1)}h)`,
     recommendation: 'Maintain your current sleep schedule. Consistency is the key driver of this improvement.',
-    detectedAt: new Date().toISOString(),
+    metadata: {
+      week1AvgHours: firstAvg,
+      week4AvgHours: secondAvg,
+      direction: 'improving',
+    },
   };
 }
 
 /**
  * Pattern 3: weekend-compensation
  * Detects sleeping 2+ hours more on off-days vs work days consistently.
+ * Severity: 90-120 min excess = warning, 120+ = critical (social jetlag signal)
  */
 function detectWeekendCompensation(
   discrepancyHistory: SleepDiscrepancy[],
@@ -198,16 +231,29 @@ function detectWeekendCompensation(
   const workAvg = average(workDaySleep);
   const offAvg = average(offDaySleep);
   const diff = offAvg - workAvg;
+  const excessMinutes = diff * 60;
 
-  if (diff < 2) return null;
+  // Threshold: 90 minutes (1.5 hours)
+  if (excessMinutes < 90) return null;
+
+  const severity: PatternSeverity = excessMinutes >= 120 ? 'critical' : 'warning';
+  const { start, end } = windowDates(discrepancyHistory);
 
   return {
+    id: makeId(),
     type: 'weekend-compensation',
-    severity: diff >= 3 ? 'alert' : 'warning',
+    severity,
+    detectedAt: new Date().toISOString(),
+    windowStartISO: start,
+    windowEndISO: end,
     message: `Sleeping ${diff.toFixed(1)}h more on off-days — a sign of chronic shift-day under-sleep`,
     evidence: `Avg work-day sleep: ${workAvg.toFixed(1)}h. Avg off-day sleep: ${offAvg.toFixed(1)}h. Delta: +${diff.toFixed(1)}h`,
     recommendation: 'Increase shift-day sleep opportunity by 30–45 min. Consider a pre-shift nap instead of weekend oversleeping.',
-    detectedAt: new Date().toISOString(),
+    metadata: {
+      weekdayAvgHours: workAvg,
+      weekendAvgHours: offAvg,
+      excessMinutes,
+    },
   };
 }
 
@@ -230,13 +276,21 @@ function detectChronicLateSleep(
 
   if (avgDelta <= 30) return null;
 
+  const { start, end } = windowDates(recent);
+
   return {
+    id: makeId(),
     type: 'chronic-late-sleep',
-    severity: avgDelta > 60 ? 'alert' : 'warning',
+    severity: avgDelta > 60 ? 'critical' : 'warning',
+    detectedAt: new Date().toISOString(),
+    windowStartISO: start,
+    windowEndISO: end,
     message: `Consistently starting sleep ${Math.round(avgDelta)} min later than planned`,
     evidence: `14-day average start delta: +${Math.round(avgDelta)} min (>${30} min threshold)`,
     recommendation: 'Your planned bedtime may be too early for your chronotype. The algorithm will auto-adjust, but you can also shift your target bedtime 30 min later in settings.',
-    detectedAt: new Date().toISOString(),
+    metadata: {
+      avgDeltaMinutes: avgDelta,
+    },
   };
 }
 
@@ -264,13 +318,23 @@ function detectImprovingAdherence(
 
   if (improvement < 10) return null;
 
+  const { start, end } = windowDates(withDelta);
+
   return {
+    id: makeId(),
     type: 'improving-adherence',
     severity: 'info',
+    detectedAt: new Date().toISOString(),
+    windowStartISO: start,
+    windowEndISO: end,
     message: 'Sleep adherence is improving — your schedule is becoming more consistent',
     evidence: `Avg discrepancy dropped from ${Math.round(firstAvgAbs)} min to ${Math.round(secondAvgAbs)} min (-${Math.round(improvement)} min)`,
     recommendation: 'Keep it up. Consistency within 15 min of target is the goal for optimal circadian stability.',
-    detectedAt: new Date().toISOString(),
+    metadata: {
+      firstHalfAvgMin: firstAvgAbs,
+      secondHalfAvgMin: secondAvgAbs,
+      improvementMin: improvement,
+    },
   };
 }
 
@@ -307,5 +371,18 @@ export function detectPatterns(
   const p5 = detectImprovingAdherence(discrepancyHistory);
   if (p5) patterns.push(p5);
 
-  return patterns;
+  // Sort by severity: critical first, then warning, then info
+  const severityOrder: Record<PatternSeverity, number> = { critical: 0, warning: 1, info: 2 };
+  return patterns.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
+}
+
+/**
+ * Convenience overload that accepts a DiscrepancyHistory object.
+ */
+export function detectPatternsFromHistory(
+  history: DiscrepancyHistory,
+  shiftHistory: ShiftEvent[],
+  debtHistory: { dateISO: string; hours: number }[],
+): DetectedPattern[] {
+  return detectPatterns(history.records, shiftHistory, debtHistory);
 }

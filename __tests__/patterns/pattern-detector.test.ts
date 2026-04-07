@@ -66,18 +66,22 @@ describe('detectPatterns — consecutive-night-impact', () => {
     const p = patterns.find((x) => x.type === 'consecutive-night-impact');
     expect(p).toBeDefined();
     expect(p!.severity).toBe('warning');
+    expect(p!.metadata.nightCount).toBe(3);
   });
 
-  it('detects alert severity when debt spike >= 4h', () => {
+  it('detects critical severity when 5+ consecutive nights', () => {
     const shifts = [
       makeShift('n1', '2026-04-01T19:00:00', '2026-04-02T07:00:00', 'night'),
       makeShift('n2', '2026-04-02T19:00:00', '2026-04-03T07:00:00', 'night'),
       makeShift('n3', '2026-04-03T19:00:00', '2026-04-04T07:00:00', 'night'),
+      makeShift('n4', '2026-04-04T19:00:00', '2026-04-05T07:00:00', 'night'),
+      makeShift('n5', '2026-04-05T19:00:00', '2026-04-06T07:00:00', 'night'),
     ];
-    const debtHistory = [makeDebt('2026-04-04', 4.5)];
+    const debtHistory = [makeDebt('2026-04-06', 4.5)];
     const patterns = detectPatterns([], shifts, debtHistory);
     const p = patterns.find((x) => x.type === 'consecutive-night-impact');
-    expect(p!.severity).toBe('alert');
+    expect(p!.severity).toBe('critical');
+    expect(p!.metadata.nightCount).toBe(5);
   });
 
   it('does not detect when < 3 consecutive nights', () => {
@@ -104,33 +108,46 @@ describe('detectPatterns — consecutive-night-impact', () => {
   });
 });
 
-describe('detectPatterns — recovery-debt-trend', () => {
-  it('detects worsening trend when second-week avg is higher', () => {
+describe('detectPatterns — debt trend (rising/improving)', () => {
+  it('detects debt-trend-rising when second-week avg is higher by > 0.5h', () => {
     const dates = dateRange('2026-03-24', 14);
     const debtHistory = [
       ...dates.slice(0, 7).map((d) => makeDebt(d, 1.0)),
-      ...dates.slice(7).map((d) => makeDebt(d, 2.5)), // worsening
+      ...dates.slice(7).map((d) => makeDebt(d, 2.5)), // worsening by 1.5h
     ];
     const patterns = detectPatterns([], [], debtHistory);
-    const p = patterns.find((x) => x.type === 'recovery-debt-trend');
+    const p = patterns.find((x) => x.type === 'debt-trend-rising');
     expect(p).toBeDefined();
     expect(p!.message).toContain('worsening');
+    expect(p!.metadata.direction).toBe('rising');
   });
 
-  it('detects improving trend when second-week avg is lower', () => {
+  it('detects debt-trend-improving when second-week avg is lower', () => {
     const dates = dateRange('2026-03-24', 14);
     const debtHistory = [
       ...dates.slice(0, 7).map((d) => makeDebt(d, 3.0)),
       ...dates.slice(7).map((d) => makeDebt(d, 1.5)), // improving
     ];
     const patterns = detectPatterns([], [], debtHistory);
-    const p = patterns.find((x) => x.type === 'recovery-debt-trend');
+    const p = patterns.find((x) => x.type === 'debt-trend-improving');
     expect(p).toBeDefined();
     expect(p!.severity).toBe('info');
     expect(p!.message).toContain('improving');
+    expect(p!.metadata.direction).toBe('improving');
   });
 
-  it('reports stable high debt as warning', () => {
+  it('does not trigger trend when variation < 0.5h per week', () => {
+    const dates = dateRange('2026-03-24', 14);
+    // Stable low debt — delta < 0.5h and avg < 3h
+    const debtHistory = dates.map((d) => makeDebt(d, 1.0));
+    const patterns = detectPatterns([], [], debtHistory);
+    const rising = patterns.find((x) => x.type === 'debt-trend-rising');
+    const improving = patterns.find((x) => x.type === 'debt-trend-improving');
+    expect(rising).toBeUndefined();
+    expect(improving).toBeUndefined();
+  });
+
+  it('reports stable high debt as warning via recovery-debt-trend', () => {
     const dates = dateRange('2026-03-24', 14);
     const debtHistory = dates.map((d) => makeDebt(d, 3.5));
     const patterns = detectPatterns([], [], debtHistory);
@@ -149,8 +166,8 @@ describe('detectPatterns — recovery-debt-trend', () => {
 });
 
 describe('detectPatterns — weekend-compensation', () => {
-  it('detects when off-day sleep is 2+ hours more than work-day sleep', () => {
-    // 5 work days (April 7-9, 12-13) with 6h sleep, 2 off days (April 10-11) with 9h sleep
+  it('detects when off-day sleep is 90+ min more than work-day sleep', () => {
+    // Work days with 6h sleep, off days with 7.5h sleep (diff = 1.5h = 90 min exactly)
     const shifts = [
       makeShift('d1', '2026-04-07T07:00:00', '2026-04-07T15:00:00', 'day'),
       makeShift('d2', '2026-04-08T07:00:00', '2026-04-08T15:00:00', 'day'),
@@ -158,13 +175,12 @@ describe('detectPatterns — weekend-compensation', () => {
       makeShift('d4', '2026-04-12T07:00:00', '2026-04-12T15:00:00', 'day'),
       makeShift('d5', '2026-04-13T07:00:00', '2026-04-13T15:00:00', 'day'),
     ];
-    // Work days: 6h sleep. Off days: 8h sleep. Diff = 2h → warning (< 3h alert threshold)
     const discrepancyHistory = [
       makeDiscrepancy('2026-04-07', 0, 6),
       makeDiscrepancy('2026-04-08', 0, 6),
       makeDiscrepancy('2026-04-09', 0, 6),
-      makeDiscrepancy('2026-04-10', 0, 8), // off day
-      makeDiscrepancy('2026-04-11', 0, 8), // off day
+      makeDiscrepancy('2026-04-10', 0, 7.5), // off day
+      makeDiscrepancy('2026-04-11', 0, 7.5), // off day
       makeDiscrepancy('2026-04-12', 0, 6),
       makeDiscrepancy('2026-04-13', 0, 6),
     ];
@@ -172,9 +188,10 @@ describe('detectPatterns — weekend-compensation', () => {
     const p = patterns.find((x) => x.type === 'weekend-compensation');
     expect(p).toBeDefined();
     expect(p!.severity).toBe('warning');
+    expect(p!.metadata.excessMinutes).toBeGreaterThanOrEqual(90);
   });
 
-  it('does not detect when off-day sleep difference is < 2h', () => {
+  it('detects critical severity when off-day excess >= 120 min', () => {
     const shifts = [
       makeShift('d1', '2026-04-07T07:00:00', '2026-04-07T15:00:00', 'day'),
       makeShift('d2', '2026-04-08T07:00:00', '2026-04-08T15:00:00', 'day'),
@@ -182,7 +199,31 @@ describe('detectPatterns — weekend-compensation', () => {
       makeShift('d4', '2026-04-12T07:00:00', '2026-04-12T15:00:00', 'day'),
       makeShift('d5', '2026-04-13T07:00:00', '2026-04-13T15:00:00', 'day'),
     ];
-    // Work days: 7h sleep. Off days: 8h sleep. Diff = 1h < 2h → no pattern
+    // Off days: 9h sleep, work days: 6h sleep — diff = 3h = 180 min → critical
+    const discrepancyHistory = [
+      makeDiscrepancy('2026-04-07', 0, 6),
+      makeDiscrepancy('2026-04-08', 0, 6),
+      makeDiscrepancy('2026-04-09', 0, 6),
+      makeDiscrepancy('2026-04-10', 0, 9), // off day
+      makeDiscrepancy('2026-04-11', 0, 9), // off day
+      makeDiscrepancy('2026-04-12', 0, 6),
+      makeDiscrepancy('2026-04-13', 0, 6),
+    ];
+    const patterns = detectPatterns(discrepancyHistory, shifts, []);
+    const p = patterns.find((x) => x.type === 'weekend-compensation');
+    expect(p).toBeDefined();
+    expect(p!.severity).toBe('critical');
+  });
+
+  it('does not detect when off-day sleep difference is < 90 min', () => {
+    const shifts = [
+      makeShift('d1', '2026-04-07T07:00:00', '2026-04-07T15:00:00', 'day'),
+      makeShift('d2', '2026-04-08T07:00:00', '2026-04-08T15:00:00', 'day'),
+      makeShift('d3', '2026-04-09T07:00:00', '2026-04-09T15:00:00', 'day'),
+      makeShift('d4', '2026-04-12T07:00:00', '2026-04-12T15:00:00', 'day'),
+      makeShift('d5', '2026-04-13T07:00:00', '2026-04-13T15:00:00', 'day'),
+    ];
+    // Work days: 7h sleep. Off days: 8h sleep. Diff = 1h = 60 min < 90 min → no pattern
     const discrepancyHistory = [
       makeDiscrepancy('2026-04-07', 0, 7),
       makeDiscrepancy('2026-04-08', 0, 7),
@@ -208,12 +249,12 @@ describe('detectPatterns — chronic-late-sleep', () => {
     expect(p!.severity).toBe('warning');
   });
 
-  it('detects alert severity when avg delta > 60 min', () => {
+  it('detects critical severity when avg delta > 60 min', () => {
     const dates = dateRange('2026-03-24', 14);
     const discrepancyHistory = dates.map((d) => makeDiscrepancy(d, 75));
     const patterns = detectPatterns(discrepancyHistory, [], []);
     const p = patterns.find((x) => x.type === 'chronic-late-sleep');
-    expect(p!.severity).toBe('alert');
+    expect(p!.severity).toBe('critical');
   });
 
   it('does not detect when avg delta <= 30 min', () => {
@@ -253,10 +294,16 @@ describe('detectPatterns — improving-adherence', () => {
   });
 });
 
-describe('detectPatterns — combined', () => {
+describe('detectPatterns — combined and data requirements', () => {
   it('returns empty array when no data', () => {
     const patterns = detectPatterns([], [], []);
     expect(patterns).toEqual([]);
+  });
+
+  it('returns empty array with insufficient data (< 14 days discrepancy + no shifts)', () => {
+    const discrepancyHistory = [makeDiscrepancy('2026-04-01', 50)];
+    const patterns = detectPatterns(discrepancyHistory, [], []);
+    expect(patterns).toHaveLength(0);
   });
 
   it('can return multiple patterns simultaneously', () => {
@@ -271,17 +318,45 @@ describe('detectPatterns — combined', () => {
     expect(patterns.length).toBeGreaterThanOrEqual(2);
   });
 
-  it('each pattern has required fields', () => {
+  it('each pattern has required fields including id, windowStartISO, windowEndISO, metadata', () => {
     const dates = dateRange('2026-03-24', 14);
     const discrepancyHistory = dates.map((d) => makeDiscrepancy(d, 50));
     const patterns = detectPatterns(discrepancyHistory, [], []);
     for (const p of patterns) {
+      expect(typeof p.id).toBe('string');
+      expect(p.id.length).toBeGreaterThan(0);
       expect(typeof p.type).toBe('string');
-      expect(['info', 'warning', 'alert']).toContain(p.severity);
+      expect(['info', 'warning', 'critical']).toContain(p.severity);
       expect(typeof p.message).toBe('string');
       expect(typeof p.evidence).toBe('string');
       expect(typeof p.recommendation).toBe('string');
       expect(typeof p.detectedAt).toBe('string');
+      expect(typeof p.windowStartISO).toBe('string');
+      expect(typeof p.windowEndISO).toBe('string');
+      expect(typeof p.metadata).toBe('object');
+    }
+  });
+
+  it('returns results sorted by severity (critical first)', () => {
+    // 5+ consecutive nights (critical) + chronic late sleep (warning) + improving-adherence (info)
+    const shifts = [
+      makeShift('n1', '2026-04-01T19:00:00', '2026-04-02T07:00:00', 'night'),
+      makeShift('n2', '2026-04-02T19:00:00', '2026-04-03T07:00:00', 'night'),
+      makeShift('n3', '2026-04-03T19:00:00', '2026-04-04T07:00:00', 'night'),
+      makeShift('n4', '2026-04-04T19:00:00', '2026-04-05T07:00:00', 'night'),
+      makeShift('n5', '2026-04-05T19:00:00', '2026-04-06T07:00:00', 'night'),
+    ];
+    const debtHistory = [makeDebt('2026-04-06', 5.0)];
+    const dates = dateRange('2026-03-24', 14);
+    const discrepancyHistory = dates.map((d) => makeDiscrepancy(d, 45));
+    const patterns = detectPatterns(discrepancyHistory, shifts, debtHistory);
+    if (patterns.length >= 2) {
+      const severityOrder = ['critical', 'warning', 'info'];
+      for (let i = 1; i < patterns.length; i++) {
+        const prevOrder = severityOrder.indexOf(patterns[i - 1].severity);
+        const currOrder = severityOrder.indexOf(patterns[i].severity);
+        expect(prevOrder).toBeLessThanOrEqual(currOrder);
+      }
     }
   });
 });
