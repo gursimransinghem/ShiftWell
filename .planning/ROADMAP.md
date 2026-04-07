@@ -588,7 +588,7 @@ Plans:
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 19. AI Coaching Research | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
-| 21. Predictive Scheduling Research | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 21. Predictive Scheduling Research | v1.3 | 0/1 | Planned    |  |
 | 22. Predictive Calendar Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |

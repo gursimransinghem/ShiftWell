@@ -114,8 +114,8 @@
 
 ### Research: Predictive Scheduling (Phase 21)
 
-- [ ] **RES-09**: Fatigue model comparison (FAID, SAFTE, CAS) for mobile implementation
-- [ ] **RES-10**: Prediction algorithm specification with inputs, outputs, thresholds
+- [x] **RES-09**: Fatigue model comparison (FAID, SAFTE, CAS) for mobile implementation
+- [x] **RES-10**: Prediction algorithm specification with inputs, outputs, thresholds
 
 ### Predictive Calendar Engine (Phase 22)
 

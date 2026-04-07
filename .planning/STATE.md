@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 18-01-PLAN.md
-last_updated: "2026-04-07T18:21:17.390Z"
+stopped_at: Completed 21-01-PLAN.md
+last_updated: "2026-04-07T18:30:59.390Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
@@ -71,6 +71,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 17-growth-engine P01 | 8 | 2 tasks | 7 files |
 | Phase 15-algorithm-feedback-engine P01 | 10min | 3 tasks | 9 files |
 | Phase 18-revenucat-hard-gating P01 | 25min | 2 tasks | 8 files |
+| Phase 21-predictive-scheduling-research P01 | 6min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -143,6 +144,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 18-01]: isGrandfathered returns true for null/undefined/invalid dates — safety net for unknown install history
 - [Phase 18-01]: SleepDebtCard gated with canUseAdaptiveBrain — it is Adaptive Brain data, not a free-tier feature
 - [Phase 18-01]: resolveGrandfathered() must be called at app startup to populate isGrandfathered state from AsyncStorage
+- [Phase 21-predictive-scheduling-research]: Hybrid Modified TPM + FAID-inspired Transition Stress Scorer chosen for SCSI — extends existing engine, all equations public domain, no licensing required
+- [Phase 21-predictive-scheduling-research]: SCSI (ShiftWell Circadian Stress Index): 5-factor scoring with thresholds from published research (Hursh 2004, Folkard & Tucker 2003, Van Dongen 2003, Eastman 2009, Crowley 2003)
+- [Phase 21-predictive-scheduling-research]: Sleep debt >8h entering transition escalates severity one tier — Van Dongen (2003) threshold
 
 ### Pending Todos
 
@@ -157,6 +161,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T18:25:00.000Z
-Stopped at: Completed 18-01-PLAN.md
+Last session: 2026-04-07T18:30:59.382Z
+Stopped at: Completed 21-01-PLAN.md
 Resume file: None
