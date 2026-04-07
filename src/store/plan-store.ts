@@ -10,6 +10,10 @@ import { useCalendarStore } from '../lib/calendar/calendar-store';
 import { useShiftsStore } from './shifts-store';
 import { useUserStore } from './user-store';
 import type { AdaptiveContext, AdaptiveChange } from '../lib/adaptive/types';
+import type { SleepComparison } from '../lib/healthkit/sleep-comparison';
+import type { FeedbackAdjustment } from '../lib/feedback/feedback-engine';
+import type { AutopilotState } from '../lib/adaptive/autopilot';
+import type { TransparencyEntry } from '../lib/adaptive/transparency-log';
 
 export interface PlanState {
   plan: SleepPlan | null;
@@ -33,16 +37,38 @@ export interface PlanState {
   daysUntilTransition: number;
   /** Persisted log of past plan changes, capped at 30 entries (D-07) */
   changeLog: AdaptiveChange[];
+  /** Feedback engine adjustment applied during the last adaptive run (null = none) */
+  feedbackAdjustment: FeedbackAdjustment | null;
+
+  // ── Autopilot (Phase 34) ──────────────────────────────────────────────────
+  /** Autopilot opt-in state and eligibility */
+  autopilot: AutopilotState;
+  /** Transparency log of all autonomous changes, capped at 90 entries */
+  transparencyLog: TransparencyEntry[];
+
+  // ── Discrepancy History (Phase 14) ────────────────────────────────────────
+  /** Last 30 nights of planned-vs-actual sleep comparisons (feedback engine input) */
+  discrepancyHistory: SleepComparison[];
+  /** Replace the full discrepancy history (sliced to 30) */
+  setDiscrepancyHistory: (history: SleepComparison[]) => void;
+  /** Append a single comparison to the history (auto-trims to 30) */
+  appendDiscrepancy: (comparison: SleepComparison) => void;
 
   regeneratePlan: (opts?: { isCircadianReset?: boolean }) => Promise<void>;
   clearError: () => void;
   setDateRange: (start: Date, end: Date) => void;
   /** Called by useAdaptivePlan hook after HealthKit context is assembled */
   setAdaptiveContext: (context: AdaptiveContext, changes: AdaptiveChange[]) => void;
+  /** Store the feedback engine adjustment from the current adaptive run */
+  setFeedbackAdjustment: (adjustment: FeedbackAdjustment | null) => void;
   /** Restore the pre-adaptive plan snapshot. Only works within 24h. */
   undoPlan: () => void;
   /** Dismiss pending changes without undoing (user accepted the new plan) */
   dismissChanges: () => void;
+  /** Toggle autopilot enabled/disabled */
+  setAutopilotEnabled: (enabled: boolean) => void;
+  /** Append a transparency entry (auto-caps at 90) */
+  addTransparencyEntry: (entry: TransparencyEntry) => void;
 }
 
 function getDefaultDateRange(): { start: Date; end: Date } {
@@ -70,8 +96,29 @@ export const usePlanStore = create<PlanState>()(
       pendingChanges: [],
       daysUntilTransition: 999,
       changeLog: [],
+      feedbackAdjustment: null,
+
+      // Autopilot initial state (Phase 34)
+      autopilot: {
+        eligible: false,
+        enabled: false,
+        activeSince: null,
+        autonomousChanges: 0,
+      },
+      transparencyLog: [],
+
+      // Discrepancy history initial state (Phase 14)
+      discrepancyHistory: [],
 
       clearError: () => set({ error: null }),
+
+      setDiscrepancyHistory: (history) =>
+        set({ discrepancyHistory: history.slice(-30) }),
+
+      appendDiscrepancy: (comparison) =>
+        set((state) => ({
+          discrepancyHistory: [...state.discrepancyHistory, comparison].slice(-30),
+        })),
 
       regeneratePlan: async (opts) => {
         const { dateRange, adaptiveContext, plan: existingPlan } = get();
@@ -162,6 +209,33 @@ export const usePlanStore = create<PlanState>()(
         set({ pendingChanges: [], changeLog: updated });
       },
 
+      setFeedbackAdjustment: (adjustment) => {
+        set({ feedbackAdjustment: adjustment });
+      },
+
+      setAutopilotEnabled: (enabled) => {
+        const { autopilot } = get();
+        set({
+          autopilot: {
+            ...autopilot,
+            enabled,
+            activeSince: enabled ? new Date().toISOString() : autopilot.activeSince,
+          },
+        });
+      },
+
+      addTransparencyEntry: (entry) => {
+        const { transparencyLog, autopilot } = get();
+        const updated = [...transparencyLog, entry].slice(-90);
+        set({
+          transparencyLog: updated,
+          autopilot: {
+            ...autopilot,
+            autonomousChanges: autopilot.autonomousChanges + 1,
+          },
+        });
+      },
+
       setDateRange: (start, end) => {
         set({ dateRange: { start, end } });
         // Regenerate plan with new date range
@@ -175,6 +249,10 @@ export const usePlanStore = create<PlanState>()(
         changeLog: s.changeLog,
         daysUntilTransition: s.daysUntilTransition,
         snapshotTimestamp: s.snapshotTimestamp,
+        feedbackAdjustment: s.feedbackAdjustment,
+        autopilot: s.autopilot,
+        transparencyLog: s.transparencyLog,
+        discrepancyHistory: s.discrepancyHistory,
       }),
     },
   ),

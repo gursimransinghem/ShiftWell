@@ -27,7 +27,7 @@ import HealthKit, {
   QuantityTypeIdentifier as HKQuantityTypeIdentifier,
   StatisticsOptions as HKStatisticsOptions,
 } from '@kingstinct/react-native-healthkit';
-import { startOfDay, endOfDay, subHours, addHours, differenceInMinutes } from 'date-fns';
+import { startOfDay, endOfDay, subHours, addHours, differenceInMinutes, subDays } from 'date-fns';
 
 /** A single night's sleep record aggregated from HealthKit samples */
 export interface SleepRecord {
@@ -149,6 +149,32 @@ export async function getSleepHistory(
   }
 
   return records;
+}
+
+/**
+ * Read sleep records for the last N nights (for discrepancy history).
+ * Returns up to 30 records. Uses asleepStart (not inBedStart) per Phase 13
+ * research: asleepStart is more accurate for feedback timing (avoids
+ * pre-sleep reading-in-bed latency skewing the deviation calculation).
+ *
+ * Returns empty array when HealthKit is unavailable — never throws.
+ *
+ * @param nights - Number of nights to look back (default: 30, max: 30)
+ */
+export async function getSleepHistoryForRange(nights: number = 30): Promise<SleepRecord[]> {
+  const available = await isAvailable();
+  if (!available) return [];
+
+  const endDate = new Date();
+  const startDate = subDays(endDate, Math.min(nights, 30));
+
+  try {
+    const records = await getSleepHistory(startDate, endDate);
+    // Filter to records with asleepStart (required for feedback timing accuracy)
+    return records.filter(r => r.asleepStart !== null);
+  } catch {
+    return [];
+  }
 }
 
 /**
