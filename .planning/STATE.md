@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: verifying
-stopped_at: Completed 08-02-PLAN.md
-last_updated: "2026-04-07T04:31:54.580Z"
+stopped_at: Completed 13-01-PLAN.md
+last_updated: "2026-04-07T05:52:25.895Z"
 last_activity: 2026-04-07
 progress:
-  total_phases: 6
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  total_phases: 38
+  completed_phases: 7
+  total_plans: 55
+  completed_plans: 23
   percent: 0
 ---
 
@@ -66,6 +66,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 07 P02 | 18min | 2 tasks | 8 files |
 | Phase 08-adaptive-brain-core P01 | 5 | 2 tasks | 5 files |
 | Phase 08-adaptive-brain-core P02 | 20 | 2 tasks | 3 files |
+| Phase 13-sleep-feedback-research P01 | 11min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -122,6 +123,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 08-02]: runAdaptiveBrain extracted as exported async function — hooks cannot be tested in node env (renderHook requires jsdom)
 - [Phase 08-02]: AsyncStorage setItem called AFTER setAdaptiveContext succeeds — failures retry on next foreground
 - [Phase 08-02]: showDebtCard fallback is true when adaptiveContext is null — card visible on first launch before HealthKit runs
+- [Phase 13-sleep-feedback-research]: Use asleepStart not inBedStart for feedback signal (removes 10-30 min pre-sleep latency)
+- [Phase 13-sleep-feedback-research]: EMA dead zone 20 min (Apple Watch TST error floor per Menghini 2021)
+- [Phase 13-sleep-feedback-research]: Wilcoxon signed-rank test for Phase 16 validation (non-normal shift worker distributions)
 
 ### Pending Todos
 
@@ -136,6 +140,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T04:19:45.031Z
-Stopped at: Completed 08-02-PLAN.md
+Last session: 2026-04-07T05:52:25.892Z
+Stopped at: Completed 13-01-PLAN.md
 Resume file: None

@@ -53,9 +53,9 @@
 
 ### Research: Sleep Feedback (Phase 13)
 
-- [ ] **RES-01**: Literature review on wearable sleep accuracy (15+ peer-reviewed sources)
-- [ ] **RES-02**: Algorithm specification for HealthKit feedback loop with convergence formula
-- [ ] **RES-03**: Validation plan with success metrics for 30-day convergence study
+- [x] **RES-01**: Literature review on wearable sleep accuracy (15+ peer-reviewed sources)
+- [x] **RES-02**: Algorithm specification for HealthKit feedback loop with convergence formula
+- [x] **RES-03**: Validation plan with success metrics for 30-day convergence study
 
 ### HealthKit Ingestion (Phase 14)
 

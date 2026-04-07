@@ -170,7 +170,7 @@ Plans:
   4. SLEEP-SCIENCE-DATABASE.md updated with all new citations
 **Plans**: 1 plan
 Plans:
-- [ ] 13-01-PLAN.md — Literature review, algorithm spec, validation plan
+- [x] 13-01-PLAN.md — Literature review, algorithm spec, validation plan
 **Rationale**: Deep research sprint before building the feedback engine. Wearable accuracy varies — literature review prevents building on flawed assumptions.
 **Science anchor**: Chinoy et al. 2021, de Zambotti et al. 2019, Menghini et al. 2021
 
@@ -566,7 +566,7 @@ Plans:
 | 10. TestFlight Prep | v1.1 | - | Complete | 2026-04-07 |
 | 11. App Store Prep | v1.1 | - | Complete | 2026-04-07 |
 | 12. ActivityKit Integration | v1.1 | 0/1 | Blocked | - |
-| 13. Sleep Feedback Research | v1.2 | 0/1 | Not started | - |
+| 13. Sleep Feedback Research | v1.2 | 1/2 | In Progress|  |
 | 14. HealthKit Sleep Ingestion | v1.2 | 0/1 | Not started | - |
 | 15. Algorithm Feedback Engine | v1.2 | 0/1 | Not started | - |
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Not started | - |
