@@ -363,7 +363,7 @@ Plans:
   4. Weekly brief engagement rate > 70%
 **Plans**: 1 plan
 Plans:
-- [ ] 25-01-PLAN.md — Brief feedback UI (thumbs up/down) and personal outcome dashboard
+- [x] 25-01-PLAN.md — Brief feedback UI (thumbs up/down) and personal outcome dashboard
 **Rationale**: Polish phase uses validation data to optimize the intelligence layer before enterprise.
 **UI hint**: yes
 
@@ -592,7 +592,7 @@ Plans:
 | 22. Predictive Calendar Engine | v1.3 | 1/2 | Complete    | 2026-04-07 |
 | 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete    | 2026-04-07 |
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |
-| 25. Intelligence Polish | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 25. Intelligence Polish | v1.3 | 1/1 | Complete   | 2026-04-07 |
 | 26. Enterprise Research | v1.4 | 1/1 | Complete | 2026-04-07 |
 | 27. Outcome Data Pipeline | v1.4 | 1/1 | Complete | 2026-04-07 |
 | 28. Employer Dashboard | v1.4 | 0/1 | Deferred (separate repo) | - |

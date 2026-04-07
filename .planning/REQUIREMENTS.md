@@ -147,8 +147,8 @@
 
 ### Intelligence Polish (Phase 25)
 
-- [ ] **INT-01**: Thumbs up/down feedback on AI recommendations
-- [ ] **INT-02**: Personal outcome dashboard ("Your sleep improved 23%")
+- [x] **INT-01**: Thumbs up/down feedback on AI recommendations
+- [x] **INT-02**: Personal outcome dashboard ("Your sleep improved 23%")
 
 ---
 
