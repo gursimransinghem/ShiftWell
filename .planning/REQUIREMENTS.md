@@ -227,9 +227,9 @@
 
 ### Advanced Platform (Phase 38)
 
-- [ ] **ENT-09**: Multi-facility support with cross-facility comparison
-- [ ] **ENT-10**: Manager fatigue alerts when team recovery drops
-- [ ] **ENT-11**: Schedule optimization recommendations
+- [x] **ENT-09**: Multi-facility support with cross-facility comparison
+- [x] **ENT-10**: Manager fatigue alerts when team recovery drops
+- [x] **ENT-11**: Schedule optimization recommendations
 
 ---
 
@@ -349,9 +349,9 @@
 | AND-01 | 37 | v2.0 | Pending |
 | AND-02 | 37 | v2.0 | Pending |
 | AND-03 | 37 | v2.0 | Pending |
-| ENT-09 | 38 | v2.0 | Pending |
-| ENT-10 | 38 | v2.0 | Pending |
-| ENT-11 | 38 | v2.0 | Pending |
+| ENT-09 | 38 | v2.0 | Complete (38-01) |
+| ENT-10 | 38 | v2.0 | Complete (38-01) |
+| ENT-11 | 38 | v2.0 | Complete (38-01) |
 
 **Coverage:**
 - v1.1 requirements: 24 total (19 complete, 5 pending external gates)

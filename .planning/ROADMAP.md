@@ -560,7 +560,7 @@ Plans:
   4. FMLA/ADA compliance documentation tools
 **Plans**: 1 plan
 Plans:
-- [ ] 38-01-PLAN.md — Multi-facility support, manager fatigue alerts, schedule optimizer
+- [x] 38-01-PLAN.md — Multi-facility support, manager fatigue alerts, schedule optimizer
 **Rationale**: Advanced enterprise features differentiate ShiftWell from generic wellness platforms.
 **Science anchor**: Folkard & Tucker 2003, Costa 2010
 
@@ -600,9 +600,9 @@ Plans:
 | 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 31. App Store Optimization | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 32. HRV + Wearable Research | v2.0 | 1/1 | Complete    | 2026-04-07 |
-| 33. Apple Watch Integration | v2.0 | 2/2 | Complete   | 2026-04-07 |
-| 34. 30-Day Autopilot | v2.0 | 1/1 | Complete   | 2026-04-07 |
-| 35. Validation Study Design | v2.0 | 1/2 | In Progress|  |
+| 33. Apple Watch Integration | v2.0 | 2/2 | Complete    | 2026-04-07 |
+| 34. 30-Day Autopilot | v2.0 | 1/1 | Complete    | 2026-04-07 |
+| 35. Validation Study Design | v2.0 | 1/2 | Complete    | 2026-04-07 |
 | 36. Validation Study Execution | v2.0 | 0/1 | Blocked (100+ users) | - |
 | 37. Android Launch | v2.0 | 0/1 | Blocked (iOS rev first) | - |
-| 38. Advanced Platform Features | v2.0 | 0/1 | Deferred (needs Phase 28) | - |
+| 38. Advanced Platform Features | v2.0 | 1/1 | Complete | 2026-04-07 |

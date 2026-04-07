@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: "Completed 33-02-PLAN.md (checkpoint:human-verify pending)"
-last_updated: "2026-04-07T20:03:05.916Z"
+stopped_at: "Completed 38-01-PLAN.md"
+last_updated: "2026-04-07T20:13:39Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
   completed_phases: 24
   total_plans: 57
-  completed_plans: 43
-  percent: 64
+  completed_plans: 44
+  percent: 77
 ---
 
 # ShiftWell — Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 33
-Plan: Not started
-Status: Plan 01 complete — 29-01-SUMMARY.md created
+Phase: 38
+Plan: 01 complete
+Status: Plan 01 complete — 38-01-SUMMARY.md created
 Last activity: 2026-04-07
 
-Progress: [██████░░░░] 64% (36/56 plans complete)
+Progress: [████████░░] 77% (44/57 plans complete)
 
 ## Performance Metrics
 
@@ -85,6 +85,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 35-validation-study-design P01 | 10min | 2 tasks | 2 files |
 | Phase 33 P01 | 12min | 3 tasks | 6 files |
 | Phase 33 P02 | 8min | 2 tasks | 5 files |
+| Phase 38-advanced-platform-features P01 | 9min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -203,6 +204,10 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 33]: finalizeDay stays synchronous; HRV enrichment via separate async finalizeWithHRV()
 - [Phase 33]: buildHRVWeights no-HRV case: 0.50/0.45/0.00/0.05 (not 0.55/0.40/0.05) to ensure sum=1.0
 - [Phase 33]: Watch complication REQUIRES-NATIVE — Expo managed workflow cannot build watchOS extensions; deferred to Phase 36+
+- [Phase 38-01]: Consistent-nights threshold set at 90% (not 70%) — single day shift mixed in = rotation, not adaptation
+- [Phase 38-01]: Long-run night penalty suppressed for adapted permanent night workers — Kecklund 2016 targets rotating workers
+- [Phase 38-01]: Night-to-day transition = 25 pts highest disruption — backward phase-advance opposes circadian delay direction
+- [Phase 38-01]: ManagerAlerts uses anonymizedId only — real worker identities never reach employer UI component (HIPAA constraint)
 
 ### Pending Todos
 
@@ -217,6 +222,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T20:03:05.912Z
-Stopped at: Completed 33-02-PLAN.md (checkpoint:human-verify pending)
+Last session: 2026-04-07T20:13:39Z
+Stopped at: Completed 38-01-PLAN.md
 Resume file: None
