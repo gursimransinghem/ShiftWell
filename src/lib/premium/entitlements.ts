@@ -6,6 +6,7 @@
  */
 
 export type Feature =
+  // Free tier features (always available)
   | 'manual_shift_entry'
   | 'basic_sleep_plan'
   | 'today_screen'
@@ -19,15 +20,19 @@ export type Feature =
   | 'nap_placement'
   | 'meal_timing'
   | 'light_protocols'
-  | 'cloud_backup';
+  | 'cloud_backup'
+  // Premium features (Phase 18+)
+  | 'adaptive_brain'        // Adaptive Brain: debt card, insight card, circadian protocols
+  | 'ai_coaching'           // Future Phase 20
+  | 'pattern_recognition'   // Future Phase 23
+  | 'predictive_scheduling'; // Future Phase 22
 
 /**
- * V1 LAUNCH: All features are free.
- * Committee decision (7/7 consensus): launch free, monetize in v1.2+
- * when RevenueCat is properly integrated and retention data exists.
+ * Phase 18: Premium gating activated for Adaptive Brain and future AI features.
+ * Free tier retains full core value: sleep windows, calendar sync, notifications.
  *
- * To re-enable premium gating, restore original FREE_FEATURES list:
- * ['manual_shift_entry', 'basic_sleep_plan', 'today_screen', 'onboarding']
+ * Features NOT in this list are premium-only (gated by isFeatureAvailable).
+ * Original V1 comment: all features were free during beta — now monetizing.
  */
 const FREE_FEATURES: Feature[] = [
   'manual_shift_entry',
@@ -44,6 +49,8 @@ const FREE_FEATURES: Feature[] = [
   'meal_timing',
   'light_protocols',
   'cloud_backup',
+  // adaptive_brain, ai_coaching, pattern_recognition, predictive_scheduling are NOT listed here
+  // — they are premium-only, gated in isFeatureAvailable
 ];
 
 const FEATURE_DESCRIPTIONS: Record<Feature, string> = {
@@ -61,24 +68,34 @@ const FEATURE_DESCRIPTIONS: Record<Feature, string> = {
   meal_timing: 'Meal timing windows aligned to your circadian rhythm',
   light_protocols: 'Light exposure and avoidance guidance for faster adaptation',
   cloud_backup: 'Back up your data and sync across devices',
+  // Premium features
+  adaptive_brain: 'Your plan adapts automatically to your sleep debt and circadian phase',
+  ai_coaching: 'Personalized weekly coaching insights powered by AI',
+  pattern_recognition: 'Detect long-term sleep patterns and receive proactive adjustments',
+  predictive_scheduling: 'Predict optimal shift scheduling weeks in advance',
 };
 
 /**
- * Check whether a feature is available for the given subscription tier.
+ * Check whether a feature is available for the given subscription status.
+ *
+ * Access is granted when any of the following are true:
+ *  1. The feature is in FREE_FEATURES (always free)
+ *  2. The user is grandfathered (installed before PAYWALL_LAUNCH_DATE)
+ *  3. The user is in an active trial
+ *  4. The user has an active premium subscription
  *
  * @param feature - The feature to check
- * @param isPremium - Whether the user has an active premium subscription
+ * @param status  - Subscription and grandfathering status
  * @returns Whether the feature is available
  */
 export function isFeatureAvailable(
   feature: Feature,
-  isPremium: boolean,
+  status: { isPremium: boolean; isInTrial?: boolean; isGrandfathered?: boolean },
 ): boolean {
-  if (isPremium) {
-    return true;
-  }
-
-  return FREE_FEATURES.includes(feature);
+  if (FREE_FEATURES.includes(feature)) return true;
+  if (status.isGrandfathered) return true;
+  if (status.isInTrial) return true;
+  return status.isPremium;
 }
 
 /**

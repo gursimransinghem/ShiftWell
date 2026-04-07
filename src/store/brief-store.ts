@@ -54,7 +54,7 @@ export const useBriefStore = create<BriefState>()(
 
         // Feature gate — passes through in beta (ai-coaching is not a defined Feature yet,
         // so we check enabled flag only; gate can be tightened when the feature is registered)
-        void isFeatureAvailable('cloud_backup', isPremium); // keeps import alive
+        void isFeatureAvailable('cloud_backup', { isPremium }); // keeps import alive
 
         const todayISO = format(new Date(), 'yyyy-MM-dd');
         const brief = await generateWeeklyBrief(request);
