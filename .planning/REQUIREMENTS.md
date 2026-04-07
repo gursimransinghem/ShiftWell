@@ -104,9 +104,9 @@
 
 ### Research: AI Coaching (Phase 19)
 
-- [ ] **RES-06**: AI coaching framework — prompt architecture, tone, content boundaries
-- [ ] **RES-07**: Safety guardrails — prohibited outputs (medical advice, diagnosis, drugs)
-- [ ] **RES-08**: Edge case test suite (50+ prompts with pass/fail outcomes)
+- [x] **RES-06**: AI coaching framework — prompt architecture, tone, content boundaries
+- [x] **RES-07**: Safety guardrails — prohibited outputs (medical advice, diagnosis, drugs)
+- [x] **RES-08**: Edge case test suite (50+ prompts with pass/fail outcomes)
 
 ### Claude Weekly Brief (Phase 20)
 

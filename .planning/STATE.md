@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 21-01-PLAN.md
-last_updated: "2026-04-07T18:30:59.390Z"
+stopped_at: "Completed 19-01-PLAN.md (checkpoint:human-verify pending)"
+last_updated: "2026-04-07T18:40:34.249Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 11
+  completed_phases: 12
   total_plans: 56
-  completed_plans: 27
+  completed_plans: 28
   percent: 0
 ---
 
@@ -72,6 +72,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 15-algorithm-feedback-engine P01 | 10min | 3 tasks | 9 files |
 | Phase 18-revenucat-hard-gating P01 | 25min | 2 tasks | 8 files |
 | Phase 21-predictive-scheduling-research P01 | 6min | 2 tasks | 3 files |
+| Phase 19-ai-coaching-research P01 | 16min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -147,6 +148,10 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 21-predictive-scheduling-research]: Hybrid Modified TPM + FAID-inspired Transition Stress Scorer chosen for SCSI — extends existing engine, all equations public domain, no licensing required
 - [Phase 21-predictive-scheduling-research]: SCSI (ShiftWell Circadian Stress Index): 5-factor scoring with thresholds from published research (Hursh 2004, Folkard & Tucker 2003, Van Dongen 2003, Eastman 2009, Crowley 2003)
 - [Phase 21-predictive-scheduling-research]: Sleep debt >8h entering transition escalates severity one tier — Van Dongen (2003) threshold
+- [Phase 19-01]: Claude model selection: Haiku for high-volume features (Weekly Brief, Pattern Alerts), Sonnet for reasoning-heavy (Transition Coaching, Chat)
+- [Phase 19-01]: All AI output is structured JSON — never freeform text — for safety classification and UI reliability
+- [Phase 19-01]: 3-layer safety architecture mandatory: system prompt + post-generation scanner + fallback content
+- [Phase 19-01]: FDA General Wellness exemption is regulatory anchor — AI diagnostic language triggers SaMD reclassification risk
 
 ### Pending Todos
 
@@ -161,6 +166,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T18:30:59.382Z
-Stopped at: Completed 21-01-PLAN.md
+Last session: 2026-04-07T18:40:34.244Z
+Stopped at: Completed 19-01-PLAN.md (checkpoint:human-verify pending)
 Resume file: None
