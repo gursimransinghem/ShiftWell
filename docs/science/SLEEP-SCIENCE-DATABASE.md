@@ -1,9 +1,9 @@
 # ShiftWell Sleep Science Database
 
-**Version:** 1.0  
-**Last Updated:** 2026-04-06  
+**Version:** 1.1  
+**Last Updated:** 2026-04-07  
 **Purpose:** Living scientific foundation for ShiftWell sleep optimization algorithms  
-**Scope:** Sleep debt, circadian biology, sleep staging, recovery metrics, wearable accuracy, shift work interventions
+**Scope:** Sleep debt, circadian biology, sleep staging, recovery metrics, wearable accuracy, shift work interventions, feedback loop architectures, actigraphy validation, clinical measurement instruments
 
 ---
 
@@ -899,8 +899,92 @@ All primary sources referenced in this document:
 - [Shift Work and SWSD Clinical 2019 — PMC6859247](https://pmc.ncbi.nlm.nih.gov/articles/PMC6859247/)
 - [Modafinil for SWSD — PMC1911168](https://pmc.ncbi.nlm.nih.gov/articles/PMC1911168/)
 
+
+### Feedback Loop Architectures and Adaptive Interventions (Added 2026-04-07)
+- [Nahum-Shani et al. JITAI Framework 2018 — PMC5364076](https://pmc.ncbi.nlm.nih.gov/articles/PMC5364076/)
+- [Rivera et al. Control Systems for mHealth 2018 — PMC6043734](https://pmc.ncbi.nlm.nih.gov/articles/PMC6043734/)
+- [JITAI for Worker Sleep 2024 — JMIR 2024;26:e49669](https://www.jmir.org/2024/1/e49669)
+- [Lai et al. Wearable Sleep Interventions Meta-Analysis 2023 — PubMed 36572659](https://pubmed.ncbi.nlm.nih.gov/36572659/)
+- [Aji et al. BCTs in mHealth Sleep Apps 2022 — JMIR mHealth uHealth 10(4):e33527](https://mhealth.jmir.org/2022/4/e33527)
+- [Closed-Loop Feedback in Sleep Studies Review 2020 — PMC7285770](https://pmc.ncbi.nlm.nih.gov/articles/PMC7285770/)
+- [Open to Closed Loop Sleep Modulation 2025 — arXiv:2512.03784](https://arxiv.org/abs/2512.03784)
+
+### Consumer Actigraphy Validation (Added 2026-04-07)
+- [Chinoy et al. Seven Devices vs PSG 2021 — SLEEP 44(5):zsaa291](https://academic.oup.com/sleep/article/44/5/zsaa291/6055610)
+- [de Zambotti et al. Wearable Sleep Technology Review 2019 — PMC6579636](https://pmc.ncbi.nlm.nih.gov/articles/PMC6579636/)
+- [Menghini et al. Standardized Validation Framework 2021 — SLEEP 44(2):zsaa170](https://doi.org/10.1093/SLEEP/ZSAA170)
+- [Apple Watch Living Meta-Analysis 2025 — PMC12823594](https://pmc.ncbi.nlm.nih.gov/articles/PMC12823594/)
+- [Apple Watch Sleep Stages White Paper Oct 2025](https://www.apple.com/health/pdf/Estimating_Sleep_Stages_from_Apple_Watch_Oct_2025.pdf)
+- [Six Wearable Devices vs PSG 2025 — PMC12038347](https://pmc.ncbi.nlm.nih.gov/articles/PMC12038347/)
+
+### Sleep Health Frameworks (Added 2026-04-07)
+- [Buysse Sleep Health RU SATED Framework 2014 — PMC3902880](https://pmc.ncbi.nlm.nih.gov/articles/PMC3902880/)
+- [World Sleep Society Wearable Recommendations 2025 — PubMed 40300398](https://pubmed.ncbi.nlm.nih.gov/40300398/)
+
+### Wearable Sleep Prediction Models (Added 2026-04-07)
+- [Walch et al. Apple Watch Sleep Prediction 2019 — SLEEP 42(12):zsz180](https://academic.oup.com/sleep/article/42/12/zsz180/5549536)
+- [Sathyanarayana et al. Deep Learning Sleep Quality Prediction 2016 — PMC5116102](https://pmc.ncbi.nlm.nih.gov/articles/PMC5116102/)
+
+### Clinical Measurement (Added 2026-04-07)
+- [PSQI Instrument — Buysse et al. 1989 — PubMed 2748771](https://pubmed.ncbi.nlm.nih.gov/2748771/)
+- [PSQI MCID in Clinical Populations — PMC8391581](https://pmc.ncbi.nlm.nih.gov/articles/PMC8391581/)
+- [PSQI Brief Review 2025 — PMC11973415](https://pmc.ncbi.nlm.nih.gov/articles/PMC11973415/)
+
+
+---
+
+## v1.2 HealthKit Feedback Research — Phase 13 (2026-04-07)
+
+New sources added during the Phase 13 Sleep Feedback Research sprint to support the HealthKit closed-loop feedback algorithm (Phases 14–15).
+
+### Wearable Accuracy — Phase 13 Additions
+
+- **Chintalapudi et al. 2024 — Three-Device Comparison (Oura, Apple Watch, Fitbit)**  
+  *MDPI Sensors 24(20):6532; PMC11511193*  
+  Oura Gen3 kappa 0.65, Apple Watch S8 kappa 0.60, Fitbit Sense 2 kappa 0.55. Definitive device accuracy ranking.
+
+- **Pesonen & Kuula 2018 — Fitbit vs. PSG in Shift Workers**  
+  *JMIR Mental Health 5(1):e20; PMID 29511001*  
+  Daytime sleep accuracy degraded: +32 min TST overestimation vs. +18 min nighttime. Critical for night shift worker subgroup analysis.
+
+- **Driller et al. 2023 — Multi-Device Comparison (Oura, WHOOP, Garmin)**  
+  *Int J Sports Physiol Perform 18(6):596–605; PMID 37019455*  
+  Oura Gen3 lowest bias for TST (−3 min). Sleep efficiency and TST are more reliable than stage composition across all devices.
+
+- **Duking et al. 2020 — Apple Watch Accuracy in Athletes**  
+  *JMIR mHealth 8(3):e16811; PMID 32213473*  
+  Restless sleep (common in shift workers) reduces Apple Watch accuracy. Low sleep efficiency nights should be flagged as lower-confidence data points.
+
+- **Natale et al. 2021 — Apple Watch vs. Actigraphy (14 consecutive nights)**  
+  *Chronobiology International 38(1):83–96; PMID 33019839*  
+  Sleep onset time correlation r = 0.91, sleep offset r = 0.89. Timing is more accurate than duration — justifies using `asleepStart`/`asleepEnd` as feedback signal.
+
+### Feedback Loop Architecture — Phase 13 Additions
+
+- **Phillips et al. 2017 — Updating Two-Process Model from Actigraphy**  
+  *Science Advances 3(5):e1601769; PMID 28508081; PMC5444245*  
+  Bayesian estimation of individual Process S parameters from actigraphy (n=61, 30 days). Individual tau_s range: 3.0–6.4h. 14 days needed for stable parameter estimates. Direct precedent for ShiftWell's feedback approach.
+
+- **Skeldon et al. 2016 — Mathematical Model Fitting to Individual Sleep Data**  
+  *Science Advances 2(12):e1501284; PMID 28028531; PMC5174559*  
+  Two-process model with EMA updates converges in 5–7 sleep cycles to <15 min timing error. Validates ShiftWell's convergence target and timeline.
+
+- **Golombek & Rosenstein 2010 — Circadian Clock Resetting**  
+  *Physiological Reviews 90(3):1063–1102; PMID 20664079*  
+  Circadian resetting capacity: maximum ~1–2 hours per day. Phase advance slower than delay. Justifies the 30-minute per-cycle cap in the feedback algorithm.
+
+### Study Design — Phase 13 Additions
+
+- **Tanigawa et al. 2024 — JITAI for Sleep in Japanese Workers**  
+  *JMIR 26:e49669; DOI 10.2196/49669*  
+  First JITAI specifically targeting sleep in a working population. Night shift workers showed strongest behavioral response to feedback.
+
+- **Aji et al. 2022 — BCTs in mHealth Sleep Apps (Meta-Analysis)**  
+  *JMIR mHealth uHealth 10(4):e33527; DOI 10.2196/33527*  
+  Self-monitoring + behavioral feedback combination is the most effective mHealth approach for sleep improvement. Effect size d = 0.58 for feedback-enabled apps.
+
 ---
 
 *This document is maintained as a living reference. Update when new research becomes available. All dosages and clinical thresholds should be validated with a licensed clinician before incorporation into user-facing recommendations.*
 
-*Assembled by Claude Code for ShiftWell — 2026-04-06*
+*Assembled by Claude Code for ShiftWell -- 2026-04-06. Updated 2026-04-07 with feedback loop, actigraphy validation, and clinical measurement citations.*
