@@ -151,6 +151,69 @@ export interface PlanStats {
   circadianDebtScore: number;
 }
 
+// ─── Prediction Engine Types (Phase 22) ──────────────────────────────────────
+
+/**
+ * Extended transition type for the predictive engine.
+ * Augments existing DayType with directional phase-shift labels.
+ *
+ * Reference: Eastman & Burgess (2009) — transition type taxonomy
+ */
+export type TransitionType =
+  | 'day-to-night'
+  | 'night-to-day'
+  | 'day-to-evening'
+  | 'evening-to-day'
+  | 'evening-to-night'
+  | 'night-to-evening'
+  | 'off-to-night'
+  | 'off-to-extended'
+  | 'extended-recovery';
+
+/**
+ * Input to the 14-day circadian lookahead scanner.
+ *
+ * Reference: ShiftWell Circadian Stress Index (SCSI) spec, Phase 21
+ */
+export interface PredictionInput {
+  shifts: Array<{
+    date: string;       // yyyy-MM-dd
+    startHour: number;  // 0-23
+    endHour: number;    // 0-23 (endHour < startHour means crosses midnight)
+    type: 'day' | 'evening' | 'night' | 'off';
+  }>;
+  currentSleepDebt: number;   // hours
+  baselineMidsleep: number;   // circadian anchor (0-24)
+  lookAheadDays: number;      // 14
+}
+
+/**
+ * A single transition prediction with severity scoring and pre-adaptation window.
+ *
+ * Reference: PREDICTION-ALGORITHM-SPEC.md Section 4 (Phase 21 output)
+ */
+export interface TransitionPrediction {
+  transitionDate: string;           // yyyy-MM-dd
+  transitionType: TransitionType;
+  severityScore: number;            // 0-100 (higher = more stressful)
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  preAdaptationStartDate: string;   // yyyy-MM-dd — when to begin pre-adaptation
+  protocolType: string;             // Phase 9 protocol type name
+  predictedAlertnesNadir: number;   // Estimated alertness % at transition nadir (0-100)
+  daysUntilTransition: number;      // Calendar days from today to transitionDate
+}
+
+/**
+ * A single step in a pre-adaptation protocol.
+ */
+export interface PreAdaptationStep {
+  date: string;         // yyyy-MM-dd
+  action: string;       // human-readable guidance
+  shiftMinutes: number; // minutes to shift bedtime (positive = delay, negative = advance)
+}
+
+// ─── Chronotype Offsets ───────────────────────────────────────────────────────
+
 /**
  * Chronotype-based sleep preference offsets (hours from midnight).
  * Based on MEQ normative data.
