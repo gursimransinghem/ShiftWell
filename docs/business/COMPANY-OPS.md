@@ -1,18 +1,18 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-07 (Midday)
+**Last updated:** 2026-04-07 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 2
+**Cycle count:** 3
 
 ## Department Status
 
 | # | Department | Status | Last Run | Trigger State | Notes |
 |---|-----------|--------|----------|---------------|-------|
-| 1 | Product | Active | 2026-04-07 | Next: phase completion or feedback | Updated VISUAL_ROADMAP.md — phases 7-11 complete, Phase 12 blocked |
-| 2 | Engineering | Active | 2026-04-07 | Next: STATE.md change or test failure | 383 tests passing, 0 TS errors; npm test script missing |
-| 3 | Marketing | Active | 2026-04-07 | Next: >3 days since last run OR COMPETITOR_LOG >7 days old | ASO strategy + 6-week content calendar complete; "shift worker" keywords uncontested |
+| 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
+| 2 | Engineering | Active | 2026-04-07 (Eve) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx) |
+| 3 | Marketing | Active | 2026-04-07 | Next: >3 days since last run (Apr 10) | ASO strategy + 6-week content calendar complete; "shift worker" keywords uncontested |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
-| 5 | Strategy & Planning | Active | 2026-04-07 | Next: phase completion or monthly | Updated BUSINESS_PLAN.md pricing; Individual dev enrollment flagged |
+| 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
 | 7 | Social Media | Dormant | -- | Activates: TestFlight launch | -- |
 | 8 | Customer Success | Dormant | -- | Activates: TestFlight launch | -- |
@@ -28,6 +28,8 @@
 | 3 | Trademark clearance search + filing | Operations | HIGH | Can parallelize with LLC; protect name before marketing spend |
 | 4 | Add `"test": "jest"` to package.json scripts | Engineering | LOW | One-line fix; unblocks CEO Loop test checks |
 | 5 | Commit and push Phase 10/11 staged changes | Engineering | MEDIUM | 11 modified files + 1 new test; should be committed before TestFlight build |
+| 11 | Resolve merge conflict in `app/(tabs)/settings.tsx` | Engineering | CRITICAL | 14 TS errors block EAS builds; choose HEAD vs worktree-agent-a211ed4f (lines 16-46, 336-384) |
+| 12 | Add investor summary line to BUSINESS-PLAN-V2.md | Strategy | LOW | "Enterprise module staged in v2 archive, reintroduced on first hospital inquiry" — protects enterprise story in pre-seed pitch |
 | 6 | Record 60-second app walkthrough (screen capture) | Marketing | HIGH | Single highest-value pre-launch asset; app is ready now |
 | 7 | Build waitlist landing page (shiftwell.com) | Marketing | HIGH | Email capture pre-launch; every week delayed = fewer Day 1 users |
 | 8 | LinkedIn founder story in Sim's voice | Marketing | HIGH | Medical audience trusts MD voice; Claude can draft structure, Sim must write it |
@@ -35,6 +37,29 @@
 | 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
 
 ## Recent Activity
+
+### Cycle 3 — 2026-04-07 (Evening)
+**Departments dispatched:** Engineering, Product, Strategy & Planning
+**Marketing/Operations:** Not triggered (Marketing <3 days since last run; FINANCIAL_TRACKER unchanged)
+
+**Key findings:**
+- **CRITICAL:** `app/(tabs)/settings.tsx` has unresolved git merge conflict from `worktree-agent-a211ed4f` — 14 TS errors, will break EAS build. Must resolve before Phase A.
+- Test count jumped 383→1,059 (71 suites) — 3 new test files for fatigue-model, timezone-handler, circadian-protocols-multi all green
+- Phase 28 (Employer Dashboard) confirmed complete; Phase A slim-down plan written and ready to execute
+- VISUAL_ROADMAP.md updated: 38-phase tracker replaced with Phase A/B/C ship path
+- Slim-down strategy confirmed aligned with existing business plan — free TestFlight was already planned (paywall activates Month 3-4)
+- Enterprise archival does NOT hurt investor story if documented as "demand-gated v2 staging"
+- Phase A + Phase B can be completed entirely within the LLC formation waiting window (~5-6 weeks)
+- Critical path to TestFlight is now LLC filing, not code — code will be ready first
+
+**Slim-down engineering risks flagged:**
+- Resolve settings.tsx merge conflict FIRST before Phase A (risk of compounding errors)
+- CircadianForecastCard → prediction-store import must be removed before archiving prediction-store
+- Run `tsc --noEmit` after each slim-down Task (not just at the end)
+
+**New Pending Approvals added:** #11 settings.tsx merge conflict (CRITICAL), #12 investor summary line
+
+**Artifacts committed:** VISUAL_ROADMAP.md (Product — Phase A/B/C ship path)
 
 ### Cycle 2 — 2026-04-07 (Midday)
 **Departments dispatched:** Marketing
@@ -104,7 +129,7 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | C1 | BUG-01 trial start | in-progress | -- | `grep "startTrial" src/store/premium-store.ts` in initializePremium | Phase 7 |
 | C2 | BUG-02 score pipeline | in-progress | -- | `grep "finalizeDay" app/_layout.tsx` in AppState handler | Phase 7 |
 | C3 | BUG-03 downgrade screen | in-progress | -- | `test -f app/downgrade.tsx` | Phase 7 |
-| C4 | BUG-04 TypeScript errors | done | -- | `npx tsc --noEmit 2>&1 \| grep -c error` = 0 | Fixed in Phase 7 |
+| C4 | BUG-04 TypeScript errors | in-progress | -- | `npx tsc --noEmit 2>&1 \| grep -c error` = 0 | 14 TS errors re-opened: merge conflict in settings.tsx (worktree-agent-a211ed4f) |
 | C5 | BUG-05 computeDelta | done | -- | Distinct args in useAdaptivePlan.ts | Fixed in Phase 7 |
 | C6 | BUG-06 LIVE-03 score | done | -- | todayScore() in startSleepActivity | Fixed in Phase 7 |
 | C7 | Privacy manifest | ready | -- | `grep "privacyManifests" app.json` | TF-01, 15-min config |
@@ -132,9 +157,9 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | Track | Total | Done | In Progress | Ready | Blocked |
 |-------|-------|------|-------------|-------|---------|
 | Legal | 7 | 0 | 0 | 0 | 7 |
-| Code | 12 | 3 | 3 | 6 | 0 |
+| Code | 12 | 2 | 4 | 6 | 0 |
 | Assets | 8 | 0 | 0 | 5 | 3 |
-| **Total** | **27** | **3** | **3** | **11** | **10** |
+| **Total** | **27** | **2** | **4** | **11** | **10** |
 
 ### Critical Path
 
