@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: "Completed 19-01-PLAN.md (checkpoint:human-verify pending)"
-last_updated: "2026-04-07T18:40:34.249Z"
+stopped_at: Completed 22-01-PLAN.md
+last_updated: "2026-04-07T18:55:16.563Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 56
-  completed_plans: 28
-  percent: 0
+  completed_plans: 30
+  percent: 52
 ---
 
 # ShiftWell — Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 ## Current Position
 
-Phase: 19
-Plan: Not started
-Status: Plan 01 complete — phase complete
+Phase: 22
+Plan: 01 complete
+Status: Plan 01 complete — 22-01-SUMMARY.md created
 Last activity: 2026-04-07
 
-Progress: [░░░░░░░░░░] 0% (requirements in progress)
+Progress: [██░░░░░░░░] 52% (30/56 plans complete)
 
 ## Performance Metrics
 
@@ -152,6 +152,7 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 19-01]: All AI output is structured JSON — never freeform text — for safety classification and UI reliability
 - [Phase 19-01]: 3-layer safety architecture mandatory: system prompt + post-generation scanner + fallback content
 - [Phase 19-01]: FDA General Wellness exemption is regulatory anchor — AI diagnostic language triggers SaMD reclassification risk
+- [Phase 22]: SCSI alertness nadir model: 100 - (phaseShiftHours * 8) - (sleepDebt * 4), clamped 0-100; severity bands drive pre-adaptation window (critical: 5d, high: 4d, medium: 3d)
 
 ### Pending Todos
 
@@ -166,6 +167,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T18:40:34.244Z
-Stopped at: Completed 19-01-PLAN.md (checkpoint:human-verify pending)
+Last session: 2026-04-07T18:55:11.473Z
+Stopped at: Completed 22-01-PLAN.md
 Resume file: None

@@ -315,7 +315,7 @@ Plans:
   7. Light exposure recommendations based on shift type linked to sunrise/sunset
 **Plans**: 1 plan
 Plans:
-- [ ] 22-01-PLAN.md — Prediction engine (14-day scanner), prediction store, CircadianForecastCard
+- [x] 22-01-PLAN.md — Prediction engine (14-day scanner), prediction store, CircadianForecastCard
 **Rationale**: This is the killer feature. Nobody else predicts circadian stress from calendar data.
 **Science anchor**: Eastman & Burgess 2009, Crowley et al. 2003
 **UI hint**: yes
@@ -586,10 +586,10 @@ Plans:
 | 16. Feedback Validation Sprint | v1.2 | 0/1 | Blocked (30d data) | - |
 | 17. Growth Engine | v1.2 | 1/1 | Complete    | 2026-04-07 |
 | 18. RevenueCat Hard Gating | v1.2 | 1/1 | Complete    | 2026-04-07 |
-| 19. AI Coaching Research | v1.3 | 1/1 | Complete   | 2026-04-07 |
+| 19. AI Coaching Research | v1.3 | 1/1 | Complete    | 2026-04-07 |
 | 20. Claude Weekly Brief | v1.3 | 1/1 | Complete | 2026-04-07 |
-| 21. Predictive Scheduling Research | v1.3 | 0/1 | Planned    |  |
-| 22. Predictive Calendar Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
+| 21. Predictive Scheduling Research | v1.3 | 0/1 | Complete    | 2026-04-07 |
+| 22. Predictive Calendar Engine | v1.3 | 1/2 | In Progress|  |
 | 23. Pattern Recognition Engine | v1.3 | 1/1 | Complete | 2026-04-07 |
 | 24. Intelligence Validation Sprint | v1.3 | 0/1 | Blocked (90d data) | - |
 | 25. Intelligence Polish | v1.3 | 1/1 | Complete | 2026-04-07 |

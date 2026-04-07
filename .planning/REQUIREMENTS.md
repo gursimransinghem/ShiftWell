@@ -119,15 +119,15 @@
 
 ### Predictive Calendar Engine (Phase 22)
 
-- [ ] **PRED-01**: 14-day calendar lookahead identifies transition stress points
-- [ ] **PRED-02**: Pre-adaptation protocol generated 3-5 days before high-stress transitions
-- [ ] **PRED-03**: Circadian Forecast card on Today screen
+- [x] **PRED-01**: 14-day calendar lookahead identifies transition stress points
+- [x] **PRED-02**: Pre-adaptation protocol generated 3-5 days before high-stress transitions
+- [x] **PRED-03**: Circadian Forecast card on Today screen
 
 ### Behavioral Prescriptions (Phase 22)
 
-- [ ] **BEH-01**: Pre-shift nap protocol — 90-min nap reminder 5h before shift with melatonin timing (0.5-1mg, 30 min before)
-- [ ] **BEH-02**: Caffeine cutoff UI — auto-calculated cutoff time based on planned sleep time + half-life model
-- [ ] **BEH-03**: Light exposure recommendations — bright light timing based on shift type and sunrise/sunset times
+- [x] **BEH-01**: Pre-shift nap protocol — 90-min nap reminder 5h before shift with melatonin timing (0.5-1mg, 30 min before)
+- [x] **BEH-02**: Caffeine cutoff UI — auto-calculated cutoff time based on planned sleep time + half-life model
+- [x] **BEH-03**: Light exposure recommendations — bright light timing based on shift type and sunrise/sunset times
 
 ### Pattern Recognition (Phase 23)
 
