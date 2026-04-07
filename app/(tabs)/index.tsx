@@ -146,6 +146,10 @@ export default function TodayScreen() {
   const { context: adaptiveContext, changes: adaptiveChanges } = useAdaptivePlan();
   const undoPlan = usePlanStore((s) => s.undoPlan);
   const dismissChanges = usePlanStore((s) => s.dismissChanges);
+  const debtContext = usePlanStore((s) => s.adaptiveContext?.debt);
+  const showDebtCard = debtContext
+    ? (debtContext.severity !== 'none' || debtContext.bankHours > 0)
+    : true; // fallback: show when no context yet
 
   // Recovery score data
   const recovery = useRecoveryScore();
@@ -519,9 +523,11 @@ export default function TodayScreen() {
                 )}
 
                 {/* Sleep Debt Tracker (Feature 1) */}
-                <View style={styles.section}>
-                  <SleepDebtCard />
-                </View>
+                {showDebtCard && (
+                  <View style={styles.section}>
+                    <SleepDebtCard />
+                  </View>
+                )}
 
                 {/* Countdown Row */}
                 {recoveryCells.length > 0 && (
