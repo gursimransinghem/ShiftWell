@@ -4,6 +4,7 @@ import { startSleepActivity, endSleepActivity } from '@/src/lib/adherence/live-a
 import { usePlanStore } from '@/src/store/plan-store';
 import { useNotificationStore } from '@/src/store/notification-store';
 import { useUserStore } from '@/src/store/user-store';
+import { useScoreStore } from '@/src/store/score-store';
 
 // ---------------------------------------------------------------------------
 // Return shape
@@ -137,6 +138,8 @@ export function useNightSkyMode(): NightSkyModeData {
   useEffect(() => {
     if (data.isActive && !prevIsActive.current) {
       // Transitioning to active — start Live Activity
+      // Read today's recovery score imperatively (Zustand pattern for useEffect) — BUG-06 fix
+      const scoreValue = useScoreStore.getState().todayScore();
       startSleepActivity({
         phase: 'wind-down',
         countdownMinutes: data.minutesUntilSleep > 0 ? Math.round(data.minutesUntilSleep) : undefined,
@@ -145,6 +148,7 @@ export function useNightSkyMode(): NightSkyModeData {
           : 'Time to wind down',
         bedtimeISO: data.alarmTime?.toISOString(),
         wakeTimeISO: data.latestWakeTime?.toISOString(),
+        score: scoreValue ?? undefined,
       }).catch((e) => console.warn('[useNightSkyMode] Live Activity start failed:', e));
     } else if (!data.isActive && prevIsActive.current) {
       // Transitioning to inactive — end Live Activity
