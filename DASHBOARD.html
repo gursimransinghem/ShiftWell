@@ -173,8 +173,10 @@
     width: 0;
     transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  .pf-green { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
-  .pf-red { background: linear-gradient(90deg, #FF6B6B, #FF8A8A); }
+  .pf-green  { background: linear-gradient(90deg, #4CAF50, #66BB6A); }
+  .pf-yellow { background: linear-gradient(90deg, #FFD93D, #FFE57F); }
+  .pf-red    { background: linear-gradient(90deg, #FF6B6B, #FF8A8A); }
+  .pf-blue   { background: linear-gradient(90deg, #42A5F5, #64B5F6); }
 
   /* --- Checklist --- */
   .checklist-item {
@@ -246,6 +248,7 @@
     border: 3px solid #0A0E1A;
     background: #4CAF50;
   }
+  .tl-dot.future { background: #2A2F45; }
   .tl-title { font-weight: 600; font-size: 0.92rem; color: #EAEAEA; }
   .tl-date { font-size: 0.78rem; color: #6C63FF; margin-bottom: 2px; }
   .tl-desc { font-size: 0.82rem; color: #8E92A4; margin-top: 2px; }
@@ -307,7 +310,7 @@
 <div class="header">
   <h1><span class="brand">ShiftWell</span> Project Dashboard</h1>
   <p class="subtitle">Circadian rhythm optimization for shift workers</p>
-  <div class="status-badge">MVP Complete &mdash; Pre-Launch</div>
+  <div class="status-badge">v1.1 Complete &mdash; Awaiting TestFlight</div>
 </div>
 
 <div class="container">
@@ -316,28 +319,28 @@
   <div class="section-title fade-in">Key Metrics</div>
   <div class="grid-6 fade-in">
     <div class="card metric-card">
-      <div class="metric-value">83</div>
+      <div class="metric-value">377</div>
       <div class="metric-label">Tests Passing</div>
     </div>
     <div class="card metric-card">
-      <div class="metric-value">25+</div>
+      <div class="metric-value">40+</div>
       <div class="metric-label">Components</div>
     </div>
     <div class="card metric-card">
-      <div class="metric-value">8</div>
+      <div class="metric-value">17</div>
       <div class="metric-label">Algorithm Modules</div>
     </div>
     <div class="card metric-card">
-      <div class="metric-value">11</div>
+      <div class="metric-value">20+</div>
       <div class="metric-label">Screens</div>
     </div>
     <div class="card metric-card">
-      <div class="metric-value">12</div>
-      <div class="metric-label">Docs</div>
+      <div class="metric-value">95</div>
+      <div class="metric-label">Requirements</div>
     </div>
     <div class="card metric-card">
-      <div class="metric-value">6</div>
-      <div class="metric-label">Sessions</div>
+      <div class="metric-value">38</div>
+      <div class="metric-label">Phases</div>
     </div>
   </div>
 
@@ -347,19 +350,23 @@
     <div class="card">
       <h2><span class="icon">&#9790;</span> Project Overview</h2>
       <div class="overview-status">
-        <span class="badge badge-primary">v1.0.0</span>
-        <span class="badge badge-warning">MVP Complete &mdash; Pre-Launch</span>
+        <span class="badge badge-primary">v1.1</span>
+        <span class="badge badge-warning">v1.1 Complete &mdash; Awaiting TestFlight</span>
       </div>
       <div class="overview-meta">
         <p><strong>App:</strong> ShiftWell &mdash; AI-powered circadian rhythm optimization</p>
         <p><strong>Target:</strong> Shift workers (nurses, physicians, first responders)</p>
         <p><strong>Platform:</strong> iOS-first (Expo / React Native)</p>
+        <p><strong>Status:</strong> Code complete; legal blockers (LLC, Apple Developer)</p>
+        <p><strong>Roadmap:</strong> 5 milestones planned through v2.0</p>
       </div>
       <div class="tech-stack">
-        <span class="tag">Expo</span>
-        <span class="tag">React Native</span>
-        <span class="tag">TypeScript</span>
+        <span class="tag">Expo SDK 55</span>
+        <span class="tag">React Native 0.83</span>
+        <span class="tag">TypeScript 5.9</span>
         <span class="tag">Zustand</span>
+        <span class="tag">HealthKit</span>
+        <span class="tag">Claude API</span>
       </div>
     </div>
 
@@ -367,27 +374,35 @@
     <div class="card">
       <h2><span class="icon">&#9881;</span> Progress Tracker</h2>
       <div class="progress-item">
-        <div class="progress-label"><span>Algorithm Engine</span><span class="detail">100% &middot; 8 modules</span></div>
+        <div class="progress-label"><span>Algorithm Engine</span><span class="detail">100% &middot; 17 modules</span></div>
         <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>UI Components</span><span class="detail">100% &middot; 25+ built</span></div>
+        <div class="progress-label"><span>UI Components</span><span class="detail">100% &middot; 40+ built</span></div>
         <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Tests</span><span class="detail">100% &middot; 83 passing</span></div>
+        <div class="progress-label"><span>Tests</span><span class="detail">100% &middot; 377 passing</span></div>
         <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>App Store Prep</span><span class="detail">100% &middot; all docs ready</span></div>
+        <div class="progress-label"><span>Adaptive Brain</span><span class="detail">100% &middot; 6 modules wired</span></div>
         <div class="progress-track"><div class="progress-fill pf-green" data-width="100"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Business Setup</span><span class="detail">0% &middot; founder action items</span></div>
-        <div class="progress-track"><div class="progress-fill pf-red" data-width="0"></div></div>
+        <div class="progress-label"><span>App Store Prep</span><span class="detail">80% &middot; code complete, awaiting Connect</span></div>
+        <div class="progress-track"><div class="progress-fill pf-yellow" data-width="80"></div></div>
       </div>
       <div class="progress-item">
-        <div class="progress-label"><span>Beta Testing</span><span class="detail">0% &middot; not started</span></div>
+        <div class="progress-label"><span>HealthKit Integration</span><span class="detail">30% &middot; Phase 13 research complete</span></div>
+        <div class="progress-track"><div class="progress-fill pf-blue" data-width="30"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Business Setup</span><span class="detail">10% &middot; LLC pending</span></div>
+        <div class="progress-track"><div class="progress-fill pf-red" data-width="10"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Beta Testing</span><span class="detail">0% &middot; awaiting TestFlight</span></div>
         <div class="progress-track"><div class="progress-fill pf-red" data-width="0"></div></div>
       </div>
     </div>
@@ -408,39 +423,39 @@
       <div class="timeline">
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 1</div>
-          <div class="tl-title">Foundation</div>
-          <div class="tl-desc">Project scaffolding, circadian algorithm core, shift classification engine</div>
+          <div class="tl-date">Apr 2</div>
+          <div class="tl-title">v1.0 Foundation</div>
+          <div class="tl-desc">6 phases complete &mdash; design system, calendar sync, circadian algorithm, core UI</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 2</div>
-          <div class="tl-title">Algorithm Suite</div>
-          <div class="tl-desc">Sleep windows, nap engine, caffeine timing, meal scheduler, light protocols</div>
+          <div class="tl-date">Apr 6</div>
+          <div class="tl-title">v1.0 Shipped</div>
+          <div class="tl-desc">Night Sky Mode, Live Activities, Premium freemium tier, Settings screens</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 3</div>
-          <div class="tl-title">Calendar + Tips</div>
-          <div class="tl-desc">ICS import/export, shift auto-detection, evidence-based tips library</div>
+          <div class="tl-date">Apr 7</div>
+          <div class="tl-title">v1.1 Bug Fixes</div>
+          <div class="tl-desc">6 critical bugs resolved, TypeScript clean across 152 files</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 4</div>
-          <div class="tl-title">UI Build</div>
-          <div class="tl-desc">25+ components, 11 screens, dark-mode-first design system</div>
+          <div class="tl-date">Apr 7</div>
+          <div class="tl-title">v1.1 Adaptive Brain</div>
+          <div class="tl-desc">Morning trigger, sleep debt module, change logger, daily debounce &mdash; 6 modules wired</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 5</div>
-          <div class="tl-title">Testing</div>
-          <div class="tl-desc">83 tests across 7 test files, full algorithm coverage</div>
+          <div class="tl-date">Apr 7</div>
+          <div class="tl-title">v1.1 Phases 9&ndash;11</div>
+          <div class="tl-desc">Circadian protocols expanded, TestFlight prep complete, App Store prep 80%</div>
         </div>
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-date">Session 6</div>
-          <div class="tl-title">Launch Prep</div>
-          <div class="tl-desc">Business plan, privacy policy, disclaimers, App Store listing, deployment guide</div>
+          <div class="tl-date">Apr 7</div>
+          <div class="tl-title">Roadmap Expanded</div>
+          <div class="tl-desc">38 phases, 95 requirements, 5 milestones charted through v2.0</div>
         </div>
       </div>
     </div>
@@ -459,27 +474,30 @@
   'use strict';
 
   // ===== CHECKLIST =====
-  var checklistItems = [
-    'Form LLC',
-    'Get EIN',
-    'Apple Developer Program',
-    'Generate app icon',
-    'Test on physical iPhone',
-    'Set up TestFlight',
-    'Recruit beta testers',
-    'Beta test (2 weeks)',
-    'Submit to App Store',
-    'App Store approval'
+  var checklistData = [
+    { label: 'Form LLC',                    defaultChecked: false },
+    { label: 'Get EIN',                     defaultChecked: false },
+    { label: 'Apple Developer Program',     defaultChecked: false },
+    { label: 'D-U-N-S Number',              defaultChecked: false },
+    { label: 'Generate app icon',           defaultChecked: true  },
+    { label: 'EAS Production Build',        defaultChecked: true  },
+    { label: 'Privacy Manifest',            defaultChecked: true  },
+    { label: 'Account Deletion Flow',       defaultChecked: true  },
+    { label: 'Medical Disclaimer',          defaultChecked: true  },
+    { label: 'TestFlight Upload',           defaultChecked: false },
+    { label: 'Recruit beta testers',        defaultChecked: false },
+    { label: 'Beta test (2 weeks)',         defaultChecked: false },
+    { label: 'Submit to App Store',         defaultChecked: false }
   ];
 
-  var STORAGE_KEY = 'shiftwell_checklist';
+  var STORAGE_KEY = 'shiftwell_checklist_v2';
 
   function loadChecklist() {
     try {
       var data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : {};
+      return data ? JSON.parse(data) : null;
     } catch (e) {
-      return {};
+      return null;
     }
   }
 
@@ -494,33 +512,43 @@
   function renderChecklist() {
     var container = document.getElementById('checklist');
     if (!container) return;
-    var state = loadChecklist();
+
+    var saved = loadChecklist();
+    // Build state: use saved if present, otherwise fall back to defaults
+    var state = {};
+    for (var i = 0; i < checklistData.length; i++) {
+      state[i] = (saved !== null && saved[i] !== undefined) ? saved[i] : checklistData[i].defaultChecked;
+    }
+
     var html = '';
     var done = 0;
-    for (var i = 0; i < checklistItems.length; i++) {
-      var checked = !!state[i];
+    for (var j = 0; j < checklistData.length; j++) {
+      var checked = !!state[j];
       if (checked) done++;
-      html += '<div class="checklist-item' + (checked ? ' checked' : '') + '" data-index="' + i + '">';
+      html += '<div class="checklist-item' + (checked ? ' checked' : '') + '" data-index="' + j + '">';
       html += '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div>';
-      html += '<span class="check-label">' + checklistItems[i] + '</span>';
+      html += '<span class="check-label">' + checklistData[j].label + '</span>';
       html += '</div>';
     }
     container.innerHTML = html;
 
     var progressEl = document.getElementById('checklist-progress');
     if (progressEl) {
-      progressEl.textContent = done + ' of ' + checklistItems.length + ' complete';
+      progressEl.textContent = done + ' of ' + checklistData.length + ' complete';
     }
 
-    // Attach click handlers via event delegation
+    // Save current state (captures defaults on first load)
+    saveChecklist(state);
+
+    // Attach click handler via event delegation
     container.onclick = function(e) {
       var item = e.target;
-      while (item && !item.getAttribute('data-index') && item !== container) {
+      while (item && item.getAttribute('data-index') === null && item !== container) {
         item = item.parentElement;
       }
       if (!item || item === container) return;
       var idx = parseInt(item.getAttribute('data-index'), 10);
-      var currentState = loadChecklist();
+      var currentState = loadChecklist() || {};
       currentState[idx] = !currentState[idx];
       saveChecklist(currentState);
       renderChecklist();
@@ -533,53 +561,108 @@
   var fileData = [
     {
       title: 'Algorithm (src/lib/circadian/)',
-      count: 8,
-      files: ['types.ts', 'classify-shifts.ts', 'sleep-windows.ts', 'nap-engine.ts', 'caffeine.ts', 'meals.ts', 'light-protocol.ts', 'index.ts']
+      count: 11,
+      files: [
+        'types.ts', 'classify-shifts.ts', 'sleep-windows.ts', 'nap-engine.ts',
+        'caffeine.ts', 'meals.ts', 'light-protocol.ts', 'circadian-protocols.ts',
+        'recovery-score.ts', 'fatigue-model.ts', 'index.ts'
+      ]
     },
     {
-      title: 'Calendar (src/lib/calendar/)',
+      title: 'Adaptive Brain (src/lib/adaptive/)',
+      count: 6,
+      files: [
+        'morning-trigger.ts', 'sleep-debt.ts', 'change-logger.ts',
+        'daily-debounce.ts', 'pattern-detector.ts', 'index.ts'
+      ]
+    },
+    {
+      title: 'HealthKit (src/lib/healthkit/)',
       count: 3,
-      files: ['ics-parser.ts', 'ics-generator.ts', 'shift-detector.ts']
-    },
-    {
-      title: 'Tips (src/lib/tips/)',
-      count: 1,
-      files: ['tips library module']
+      files: ['healthkit-bridge.ts', 'sleep-import.ts', 'heart-rate.ts']
     },
     {
       title: 'Stores (src/store/)',
-      count: 4,
-      files: ['schedule-store.ts', 'settings-store.ts', 'recommendations-store.ts', 'onboarding-store.ts']
+      count: 8,
+      files: [
+        'plan-store.ts', 'score-store.ts', 'premium-store.ts', 'user-store.ts',
+        'shifts-store.ts', 'calendar-store.ts', 'auth-store.ts', 'pattern-store.ts'
+      ]
     },
     {
-      title: 'Components - UI (src/components/ui/)',
-      count: 7,
-      files: ['Button.tsx', 'Card.tsx', 'Header.tsx', 'ProgressBar.tsx', 'Badge.tsx', 'TabBar.tsx', 'TimelineItem.tsx']
+      title: 'Hooks (src/hooks/)',
+      count: 4,
+      files: ['useCircadian.ts', 'useShifts.ts', 'usePremium.ts', 'useHealthKit.ts']
     },
     {
       title: 'Components - Today (src/components/today/)',
-      count: 5,
-      files: ['SleepCard.tsx', 'CaffeineCard.tsx', 'MealCard.tsx', 'LightCard.tsx', 'NapCard.tsx']
+      count: 18,
+      files: [
+        'SleepCard.tsx', 'CaffeineCard.tsx', 'MealCard.tsx', 'LightCard.tsx',
+        'NapCard.tsx', 'RecoveryScore.tsx', 'AdaptiveTip.tsx', 'ShiftCountdown.tsx',
+        'ProgressRing.tsx', 'SleepDebtBadge.tsx', 'CircadianPhase.tsx',
+        'DailyPlan.tsx', 'ActionItem.tsx', 'TimelineStrip.tsx', 'FatigueAlert.tsx',
+        'PremiumTeaser.tsx', 'LiveActivityBanner.tsx', 'index.ts'
+      ]
     },
     {
-      title: 'Components - Calendar (src/components/calendar/)',
-      count: 3,
-      files: ['CalendarView.tsx', 'ShiftCard.tsx', 'ImportModal.tsx']
+      title: 'Components - UI (src/components/)',
+      count: 15,
+      files: [
+        'Button.tsx', 'Card.tsx', 'Header.tsx', 'ProgressBar.tsx', 'Badge.tsx',
+        'TabBar.tsx', 'TimelineItem.tsx', 'Modal.tsx', 'Switch.tsx', 'Slider.tsx',
+        'Avatar.tsx', 'EmptyState.tsx', 'LoadingSpinner.tsx', 'Tooltip.tsx', 'index.ts'
+      ]
     },
     {
       title: 'Screens (app/)',
-      count: 11,
-      files: ['_layout.tsx', 'index.tsx', 'today.tsx', 'calendar.tsx', 'settings.tsx', 'onboarding/step1.tsx', 'onboarding/step2.tsx', 'onboarding/step3.tsx', 'onboarding/step4.tsx', 'onboarding/review.tsx', 'tips.tsx']
+      count: 20,
+      files: [
+        '_layout.tsx', 'index.tsx', 'today.tsx', 'calendar.tsx', 'settings.tsx',
+        'premium.tsx', 'tips.tsx', 'profile.tsx', 'notifications.tsx',
+        'onboarding/step1.tsx', 'onboarding/step2.tsx', 'onboarding/step3.tsx',
+        'onboarding/step4.tsx', 'onboarding/review.tsx',
+        'shift/add.tsx', 'shift/edit.tsx', 'shift/detail.tsx',
+        'auth/login.tsx', 'auth/signup.tsx', 'auth/delete-account.tsx'
+      ]
     },
     {
-      title: 'Tests',
-      count: 7,
-      files: ['classify-shifts.test.ts', 'sleep-windows.test.ts', 'nap-engine.test.ts', 'caffeine.test.ts', 'meals.test.ts', 'light-protocol.test.ts', 'integration.test.ts']
+      title: 'Tests (__tests__/)',
+      count: 28,
+      files: [
+        'classify-shifts.test.ts', 'sleep-windows.test.ts', 'nap-engine.test.ts',
+        'caffeine.test.ts', 'meals.test.ts', 'light-protocol.test.ts',
+        'circadian-protocols.test.ts', 'recovery-score.test.ts', 'fatigue-model.test.ts',
+        'morning-trigger.test.ts', 'sleep-debt.test.ts', 'change-logger.test.ts',
+        'daily-debounce.test.ts', 'pattern-detector.test.ts',
+        'plan-store.test.ts', 'score-store.test.ts', 'premium-store.test.ts',
+        'user-store.test.ts', 'shifts-store.test.ts', 'calendar-store.test.ts',
+        'useCircadian.test.ts', 'useShifts.test.ts', 'usePremium.test.ts',
+        'integration.test.ts', 'e2e-onboarding.test.ts', 'e2e-today.test.ts',
+        'e2e-premium.test.ts', 'snapshot.test.ts'
+      ]
     },
     {
-      title: 'Documentation',
-      count: 12,
-      files: ['BUSINESS_PLAN.md', 'PRIVACY_POLICY.md', 'HEALTH_DISCLAIMERS.md', 'APP_ICON_GUIDE.md', 'APP_STORE_LISTING.md', 'DEPLOYMENT_GUIDE.md', 'FOUNDER_ACTION_GUIDE.md', 'VISUAL_ROADMAP.md', 'PROJECT_CONTEXT.md', 'IMPLEMENTATION_PLAN.md', 'ACTIVITY_LOG.md', 'DASHBOARD.html']
+      title: 'Docs (docs/)',
+      count: 30,
+      files: [
+        'business/BUSINESS-PLAN-V2.md', 'business/MARKETING-PLAN.md',
+        'business/COMPETITIVE_ANALYSIS.md', 'business/COMPETITIVE_EDGE_LOG.md',
+        'business/FINANCIAL_TRACKER.md',
+        'launch/LAUNCH_CHECKLIST.md', 'launch/APP_STORE_LISTING.md',
+        'launch/PRIVACY_POLICY.md', 'launch/HEALTH_DISCLAIMERS.md',
+        'launch/APP_ICON_SPEC.md',
+        'marketing/SOCIAL_MEDIA_STRATEGY.md', 'marketing/DESIGN_ASSETS_CATALOG.md',
+        'vision/MANIFESTO.md', 'vision/VISUAL_ROADMAP.md',
+        'research/RECOVERY_ALGORITHM_SCIENCE.md', 'research/SLEEP-SCIENCE-DATABASE.md',
+        'dev/IMPLEMENTATION_PLAN.md', 'dev/PHASE_2_ARCHITECTURE.md',
+        'design/ (active specs)', 'superpowers/ADAPTIVE_BRAIN_DESIGN.md',
+        'superpowers/PLANNING_SYNC_DESIGN.md',
+        'tasks/todo.md', 'tasks/lessons.md', 'tasks/RESUME-PROMPT.md',
+        'logs/ACTIVITY_LOG.md',
+        'CLAUDE.md', 'DASHBOARD.html', 'README.md',
+        '+ science specs', '+ legal templates'
+      ]
     }
   ];
 
@@ -605,7 +688,7 @@
     // Event delegation for collapsible sections
     inv.onclick = function(e) {
       var header = e.target;
-      while (header && !header.getAttribute('data-section') && header !== inv) {
+      while (header && header.getAttribute('data-section') === null && header !== inv) {
         header = header.parentElement;
       }
       if (!header || header === inv) return;

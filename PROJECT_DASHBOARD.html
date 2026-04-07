@@ -117,7 +117,7 @@
   .hero-sub {
     color: var(--text-secondary);
     font-size: 16px;
-    max-width: 600px;
+    max-width: 680px;
     margin: 0 auto 16px;
   }
   .hero-meta {
@@ -166,6 +166,7 @@
   }
 
   /* Grid layouts */
+  .grid-6 { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
   .grid-4 { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
   .grid-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
   .grid-2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
@@ -181,6 +182,10 @@
   }
   .phase-card.green::before { background: var(--green); }
   .phase-card.amber::before { background: var(--amber); }
+  .phase-card.red::before { background: var(--red); }
+  .phase-card.gray::before { background: var(--gray); }
+  .phase-card.blue::before { background: var(--blue-shift); }
+  .phase-card.purple::before { background: var(--purple-sleep); }
 
   .phase-label {
     display: inline-block;
@@ -194,6 +199,10 @@
   }
   .label-green { background: var(--green-dim); color: var(--green); }
   .label-amber { background: var(--amber-dim); color: var(--amber); }
+  .label-red { background: var(--red-dim); color: var(--red); }
+  .label-gray { background: var(--gray-dim); color: var(--gray); }
+  .label-blue { background: rgba(96, 165, 250, 0.15); color: var(--blue-shift); }
+  .label-purple { background: rgba(167, 139, 250, 0.15); color: var(--purple-sleep); }
 
   .phase-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
   .phase-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
@@ -208,6 +217,7 @@
   }
   .phase-card li .check { color: var(--green); font-weight: 700; }
   .phase-card li .pending { color: var(--amber); font-weight: 700; }
+  .phase-card li .blocked { color: var(--red); font-weight: 700; }
 
   /* Stats row */
   .stat-number {
@@ -219,6 +229,30 @@
     line-height: 1.1;
   }
   .stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Progress bars */
+  .milestone-progress {
+    margin-bottom: 20px;
+  }
+  .mp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .mp-title { font-size: 14px; font-weight: 600; }
+  .mp-meta { font-size: 12px; color: var(--text-dim); }
+  .mp-bar-bg {
+    height: 8px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .mp-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 1s ease-out;
+  }
 
   /* Architecture diagram */
   .arch-diagram {
@@ -264,6 +298,7 @@
   .tl-node.fix { background: var(--red); }
   .tl-node.docs { background: var(--amber); }
   .tl-node.other { background: var(--text-dim); }
+  .tl-node.milestone { background: var(--green); width: 18px; height: 18px; }
   .tl-tooltip {
     display: none;
     position: absolute;
@@ -318,15 +353,7 @@
   }
   .sev-critical { background: var(--red-dim); color: var(--red); }
   .sev-high { background: var(--amber-dim); color: var(--amber); }
-
-  /* Feature matrix */
-  .matrix-table th:first-child, .matrix-table td:first-child { text-align: left; font-weight: 600; }
-  .matrix-table th { text-align: center; }
-  .matrix-table td { text-align: center; }
-  .matrix-check { color: var(--green); font-size: 16px; }
-  .matrix-x { color: rgba(107, 114, 128, 0.4); font-size: 14px; }
-  .matrix-partial { color: var(--amber); font-size: 14px; }
-  .matrix-highlight { background: rgba(108, 99, 255, 0.06); }
+  .sev-blocker { background: rgba(239, 68, 68, 0.25); color: var(--red); }
 
   /* Module inventory */
   .module-group { margin-bottom: 16px; }
@@ -374,6 +401,7 @@
 
   /* Chart containers */
   .chart-container { position: relative; height: 280px; width: 100%; }
+  .chart-container-tall { position: relative; height: 340px; width: 100%; }
 
   /* What's next */
   .next-item {
@@ -410,6 +438,36 @@
     border: 1px solid var(--border-glass);
   }
 
+  /* Citation pills */
+  .citation-pill {
+    display: inline-block;
+    background: rgba(108, 99, 255, 0.12);
+    border: 1px solid rgba(108, 99, 255, 0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--accent-secondary);
+    margin: 3px;
+    font-family: var(--font-mono);
+  }
+
+  /* Stack badges */
+  .stack-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px;
+  }
+  .stack-badge.active { border-color: rgba(34, 197, 94, 0.3); color: var(--green); }
+  .stack-badge.planned { border-color: rgba(245, 158, 11, 0.3); color: var(--amber); }
+  .stack-badge.future { border-color: rgba(107, 114, 128, 0.3); color: var(--gray); }
+
   /* Footer */
   .footer {
     text-align: center;
@@ -421,7 +479,7 @@
   /* Responsive */
   @media (max-width: 768px) {
     .container { padding: 0 16px; }
-    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .grid-6, .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
     .hero { padding: 40px 0 24px; }
     .section-title { font-size: 18px; margin: 36px 0 16px; }
   }
@@ -433,6 +491,7 @@
   .stagger > *:nth-child(3) { animation-delay: 0.15s; }
   .stagger > *:nth-child(4) { animation-delay: 0.2s; }
   .stagger > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.3s; }
 </style>
 </head>
 <body>
@@ -442,115 +501,784 @@
   <header class="hero">
     <div class="hero-badge">
       <span class="dot"></span>
-      MVP Complete - Pre-TestFlight
+      v1.1 In Progress &mdash; 38-Phase Roadmap Active
     </div>
     <h1>ShiftWell Project Command Center</h1>
-    <p class="hero-sub">AI-powered circadian rhythm optimization for 700M+ shift workers worldwide. Built by an ER physician who lives the problem.</p>
+    <p class="hero-sub">AI-powered circadian rhythm optimization for 700M+ shift workers worldwide. Built by an ER physician who lives the problem. Science-first, deterministic, peer-reviewed.</p>
     <div class="hero-meta">
-      <span>v1.0.0</span>
+      <span>v1.1 (Milestones 1-2)</span>
       <span>|</span>
-      <span>83 Tests Passing</span>
+      <span>377 Tests Passing</span>
       <span>|</span>
-      <span>9,755 Lines of Code</span>
+      <span>~20K Lines of Code</span>
       <span>|</span>
-      <span>65 Source Files</span>
+      <span>152 Source Files</span>
       <span>|</span>
-      <span>52 Commits</span>
+      <span>38 Phases / 5 Milestones</span>
     </div>
   </header>
 
-  <!-- ========== 1. PROGRESS OVERVIEW ========== -->
-  <div class="section-title"><span class="section-num">1</span> Progress Overview</div>
-  <div class="grid-4 stagger">
-
-    <div class="glass phase-card green">
-      <span class="phase-label label-green">Complete</span>
-      <h3>Phase 1: MVP Core</h3>
-      <p>Full algorithm engine + UI + import/export</p>
-      <ul>
-        <li><span class="check">&#10003;</span> Circadian algorithm (7 modules)</li>
-        <li><span class="check">&#10003;</span> ICS import/export</li>
-        <li><span class="check">&#10003;</span> Onboarding flow (6 screens)</li>
-        <li><span class="check">&#10003;</span> Today screen + countdowns</li>
-        <li><span class="check">&#10003;</span> Schedule view + shift entry</li>
-        <li><span class="check">&#10003;</span> Settings + tips engine</li>
-        <li><span class="check">&#10003;</span> 83 unit tests</li>
-      </ul>
-    </div>
-
-    <div class="glass phase-card amber">
-      <span class="phase-label label-amber">Partial</span>
-      <h3>Phase 2: Infrastructure</h3>
-      <p>Backend services scaffolded, not yet live</p>
-      <ul>
-        <li><span class="check">&#10003;</span> Supabase client + auth store</li>
-        <li><span class="check">&#10003;</span> HealthKit service + types</li>
-        <li><span class="check">&#10003;</span> Premium entitlements</li>
-        <li><span class="check">&#10003;</span> Notification service</li>
-        <li><span class="check">&#10003;</span> Sync engine + migrations</li>
-        <li><span class="check">&#10003;</span> Borbely energy model</li>
-        <li><span class="pending">&#9679;</span> Google Calendar OAuth</li>
-        <li><span class="pending">&#9679;</span> RevenueCat integration</li>
-        <li><span class="pending">&#9679;</span> Push notification wiring</li>
-      </ul>
-    </div>
-
-    <div class="glass phase-card amber">
-      <span class="phase-label label-amber">Partial</span>
-      <h3>Phase 3: UI Wiring</h3>
-      <p>Infrastructure connected to screens</p>
-      <ul>
-        <li><span class="check">&#10003;</span> Recovery score dashboard</li>
-        <li><span class="check">&#10003;</span> Auth screens (sign-in/up)</li>
-        <li><span class="check">&#10003;</span> Paywall screen</li>
-        <li><span class="check">&#10003;</span> Weekly trend charts</li>
-        <li><span class="pending">&#9679;</span> Live Activities / Dynamic Island</li>
-        <li><span class="pending">&#9679;</span> Home Screen widgets</li>
-        <li><span class="pending">&#9679;</span> Apple Watch companion</li>
-      </ul>
-    </div>
-
-    <div class="glass phase-card green">
-      <span class="phase-label label-green">Ready</span>
-      <h3>TestFlight Readiness</h3>
-      <p>All code blockers resolved</p>
-      <ul>
-        <li><span class="check">&#10003;</span> Bundle ID: com.shiftwell.app</li>
-        <li><span class="check">&#10003;</span> App icon 1024x1024</li>
-        <li><span class="check">&#10003;</span> Privacy policy complete</li>
-        <li><span class="check">&#10003;</span> Health disclaimer in app</li>
-        <li><span class="check">&#10003;</span> Plan error handling</li>
-        <li><span class="check">&#10003;</span> Stale closure fixed</li>
-        <li><span class="pending">&#9679;</span> Apple Dev enrollment (Sim)</li>
-        <li><span class="pending">&#9679;</span> EAS build + submit</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Quick stats row -->
-  <div class="grid-4 stagger" style="margin-top: 16px;">
+  <!-- ========== 1. KEY STATS ROW ========== -->
+  <div class="section-title"><span class="section-num">1</span> Project Vitals</div>
+  <div class="grid-6 stagger">
     <div class="glass" style="text-align:center;">
-      <div class="stat-number">83</div>
+      <div class="stat-number">377</div>
       <div class="stat-label">Tests Passing</div>
     </div>
     <div class="glass" style="text-align:center;">
-      <div class="stat-number">10</div>
-      <div class="stat-label">Test Files</div>
+      <div class="stat-number">152</div>
+      <div class="stat-label">TS/TSX Files</div>
     </div>
     <div class="glass" style="text-align:center;">
-      <div class="stat-number">20</div>
-      <div class="stat-label">App Screens</div>
+      <div class="stat-number">20K</div>
+      <div class="stat-label">Lines of Code</div>
     </div>
     <div class="glass" style="text-align:center;">
-      <div class="stat-number">15</div>
-      <div class="stat-label">Scientific Papers Cited</div>
+      <div class="stat-number">95</div>
+      <div class="stat-label">Requirements</div>
+    </div>
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">38</div>
+      <div class="stat-label">Roadmap Phases</div>
+    </div>
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">50+</div>
+      <div class="stat-label">Peer-Reviewed Citations</div>
+    </div>
+  </div>
+  <div class="grid-4 stagger" style="margin-top:16px;">
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">28</div>
+      <div class="stat-label">Test Suites</div>
+    </div>
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">17</div>
+      <div class="stat-label">Algorithm + Brain Modules</div>
+    </div>
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">19</div>
+      <div class="stat-label">Requirements Complete</div>
+    </div>
+    <div class="glass" style="text-align:center;">
+      <div class="stat-number">~$7K</div>
+      <div class="stat-label">18-Month Budget</div>
     </div>
   </div>
 
-  <!-- ========== 2. ARCHITECTURE DIAGRAM ========== -->
-  <div class="section-title"><span class="section-num">2</span> Architecture Diagram</div>
+  <!-- ========== 2. MILESTONE PROGRESS ========== -->
+  <div class="section-title"><span class="section-num">2</span> Milestone Progress</div>
+  <div class="grid-2">
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:20px;">Overall Milestone Status</h3>
+      <div class="chart-container-tall"><canvas id="chartMilestones"></canvas></div>
+    </div>
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:20px;">Requirements by Milestone</h3>
+      <div class="chart-container-tall"><canvas id="chartRequirements"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Progress bars detail -->
+  <div class="glass" style="margin-top:16px;">
+    <h3 style="font-size:15px; margin-bottom:20px;">Phase Completion by Milestone</h3>
+
+    <div class="milestone-progress">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--green);">v1.0 — Foundation &amp; MVP Core</span>
+        <span class="mp-meta">6/6 phases complete &middot; SHIPPED 2026-04-06</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:100%; background: linear-gradient(90deg, #22C55E, #4ADE80);"></div>
+      </div>
+    </div>
+
+    <div class="milestone-progress">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--amber);">v1.1 — Polish, Distribution &amp; Feedback</span>
+        <span class="mp-meta">5/6 phases complete &middot; Phase 12 blocked on Apple Dev</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:83%; background: linear-gradient(90deg, #F59E0B, #FBBF24);"></div>
+      </div>
+    </div>
+
+    <div class="milestone-progress">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--blue-shift);">v1.2 — HealthKit Closed Loop</span>
+        <span class="mp-meta">1/6 phases complete &middot; Phase 13 research done</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:17%; background: linear-gradient(90deg, #60A5FA, #93C5FD);"></div>
+      </div>
+    </div>
+
+    <div class="milestone-progress">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--purple-sleep);">v1.3 — AI Intelligence Layer</span>
+        <span class="mp-meta">0/7 phases started &middot; Planned post-v1.2</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:0%; background: linear-gradient(90deg, #A78BFA, #C4B5FD);"></div>
+      </div>
+    </div>
+
+    <div class="milestone-progress">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--gray);">v1.4 — Platform &amp; Enterprise</span>
+        <span class="mp-meta">0/6 phases started &middot; Planned post-v1.3</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:0%; background: linear-gradient(90deg, #6B7280, #9CA3AF);"></div>
+      </div>
+    </div>
+
+    <div class="milestone-progress" style="margin-bottom:0;">
+      <div class="mp-header">
+        <span class="mp-title" style="color:var(--orange-shift);">v2.0 — Advanced Intelligence</span>
+        <span class="mp-meta">0/7 phases started &middot; Long-range vision</span>
+      </div>
+      <div class="mp-bar-bg">
+        <div class="mp-bar-fill" style="width:0%; background: linear-gradient(90deg, #FB923C, #FDBA74);"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 3. PHASE STATUS GRID ========== -->
+  <div class="section-title"><span class="section-num">3</span> Phase Status Grid</div>
+
+  <!-- v1.0 -->
+  <div style="margin-bottom:8px; font-size:13px; font-weight:700; color:var(--green); text-transform:uppercase; letter-spacing:0.5px;">
+    v1.0 &mdash; Foundation &amp; MVP Core (Phases 1&ndash;6) &mdash; COMPLETE
+  </div>
+  <div class="grid-4 stagger" style="margin-bottom:24px;">
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 1: Project Setup</h3>
+      <p>Expo SDK 55, React Native 0.83, TypeScript 5.9, EAS, bundle ID com.shiftwell.app</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Expo + RN + TS scaffold</li>
+        <li><span class="check">&#10003;</span> Navigation (Expo Router)</li>
+        <li><span class="check">&#10003;</span> Dark theme design system</li>
+        <li><span class="check">&#10003;</span> Zustand stores</li>
+        <li><span class="check">&#10003;</span> EAS build config</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 2: Algorithm Engine</h3>
+      <p>Core circadian algorithm — deterministic, science-backed, 11 modules</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Two-Process Model</li>
+        <li><span class="check">&#10003;</span> Sleep windows + nap engine</li>
+        <li><span class="check">&#10003;</span> Caffeine + meal + light</li>
+        <li><span class="check">&#10003;</span> ICS import/export</li>
+        <li><span class="check">&#10003;</span> Energy model (Borbely)</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 3: Core UI</h3>
+      <p>Onboarding, Today screen, Schedule view, Settings</p>
+      <ul>
+        <li><span class="check">&#10003;</span> 6-screen onboarding flow</li>
+        <li><span class="check">&#10003;</span> Today screen + countdowns</li>
+        <li><span class="check">&#10003;</span> MonthView + DayDetail</li>
+        <li><span class="check">&#10003;</span> Settings + tips engine</li>
+        <li><span class="check">&#10003;</span> Glass morphism UI kit</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 4: Infrastructure</h3>
+      <p>Supabase, HealthKit, notifications, sync, premium</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Supabase auth + DB</li>
+        <li><span class="check">&#10003;</span> HealthKit service</li>
+        <li><span class="check">&#10003;</span> Push notifications</li>
+        <li><span class="check">&#10003;</span> RevenueCat scaffold</li>
+        <li><span class="check">&#10003;</span> Sync engine + migrations</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 5: UI Wiring</h3>
+      <p>Auth screens, paywall, recovery dashboard, trends</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Auth screens (sign-in/up)</li>
+        <li><span class="check">&#10003;</span> Paywall screen</li>
+        <li><span class="check">&#10003;</span> Recovery score dashboard</li>
+        <li><span class="check">&#10003;</span> Weekly trend charts</li>
+        <li><span class="check">&#10003;</span> Critical bug fixes</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 6: Pre-Launch Hardening</h3>
+      <p>Testing, legal, TestFlight prep — code complete</p>
+      <ul>
+        <li><span class="check">&#10003;</span> 83 tests (original suite)</li>
+        <li><span class="check">&#10003;</span> Privacy policy + disclaimers</li>
+        <li><span class="check">&#10003;</span> App icon 1024x1024</li>
+        <li><span class="check">&#10003;</span> Landing page live</li>
+        <li><span class="check">&#10003;</span> Bundle ID locked</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v1.1 -->
+  <div style="margin-bottom:8px; font-size:13px; font-weight:700; color:var(--amber); text-transform:uppercase; letter-spacing:0.5px;">
+    v1.1 &mdash; Polish, Distribution &amp; Feedback (Phases 7&ndash;12) &mdash; IN PROGRESS
+  </div>
+  <div class="grid-4 stagger" style="margin-bottom:24px;">
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 7: Test Expansion</h3>
+      <p>377 tests across 28 suites — 4.5x growth</p>
+      <ul>
+        <li><span class="check">&#10003;</span> 294 new tests added</li>
+        <li><span class="check">&#10003;</span> Adaptive brain modules</li>
+        <li><span class="check">&#10003;</span> Edge case coverage</li>
+        <li><span class="check">&#10003;</span> Integration tests</li>
+        <li><span class="check">&#10003;</span> All 28 suites passing</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 8: Adaptive Brain</h3>
+      <p>6 intelligent adaptation modules</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Chronotype adaptation</li>
+        <li><span class="check">&#10003;</span> Pattern learning</li>
+        <li><span class="check">&#10003;</span> Schedule awareness</li>
+        <li><span class="check">&#10003;</span> Recovery optimization</li>
+        <li><span class="check">&#10003;</span> Sleep debt tracker</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 9: Research Foundation</h3>
+      <p>50+ peer-reviewed citations formalized</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Sleep science database</li>
+        <li><span class="check">&#10003;</span> Citation management</li>
+        <li><span class="check">&#10003;</span> Algorithm research docs</li>
+        <li><span class="check">&#10003;</span> AASM guidelines mapped</li>
+        <li><span class="check">&#10003;</span> Science-to-code tracing</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 10: Requirements Mapping</h3>
+      <p>95 requirements across 5 milestones</p>
+      <ul>
+        <li><span class="check">&#10003;</span> 95 requirements defined</li>
+        <li><span class="check">&#10003;</span> 19 marked complete</li>
+        <li><span class="check">&#10003;</span> Milestone traceability</li>
+        <li><span class="check">&#10003;</span> Phase gap analysis</li>
+        <li><span class="check">&#10003;</span> Roadmap expanded to v2.0</li>
+      </ul>
+    </div>
+    <div class="glass phase-card green">
+      <span class="phase-label label-green">Complete</span>
+      <h3>Phase 11: CEO Loop</h3>
+      <p>Company operations initialized</p>
+      <ul>
+        <li><span class="check">&#10003;</span> 5 active departments</li>
+        <li><span class="check">&#10003;</span> 5 dormant departments</li>
+        <li><span class="check">&#10003;</span> Budget: ~$7K / 18 months</li>
+        <li><span class="check">&#10003;</span> Operations framework</li>
+        <li><span class="check">&#10003;</span> Company name TBD</li>
+      </ul>
+    </div>
+    <div class="glass phase-card red">
+      <span class="phase-label label-red">Blocked</span>
+      <h3>Phase 12: TestFlight Distribution</h3>
+      <p>Waiting on external legal/business gates</p>
+      <ul>
+        <li><span class="blocked">&#9679;</span> LLC filing required</li>
+        <li><span class="blocked">&#9679;</span> Apple Developer ($99/yr)</li>
+        <li><span class="blocked">&#9679;</span> D-U-N-S number (~5 wks)</li>
+        <li><span class="pending">&#9679;</span> EAS build + submit</li>
+        <li><span class="pending">&#9679;</span> TestFlight beta</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v1.2 -->
+  <div style="margin-bottom:8px; font-size:13px; font-weight:700; color:var(--blue-shift); text-transform:uppercase; letter-spacing:0.5px;">
+    v1.2 &mdash; HealthKit Closed Loop (Phases 13&ndash;18) &mdash; RESEARCH PHASE
+  </div>
+  <div class="grid-4 stagger" style="margin-bottom:24px;">
+    <div class="glass phase-card blue">
+      <span class="phase-label label-blue">Research Done</span>
+      <h3>Phase 13: HealthKit Integration</h3>
+      <p>Deep Apple HealthKit bidirectional data flow</p>
+      <ul>
+        <li><span class="check">&#10003;</span> Architecture researched</li>
+        <li><span class="pending">&#9679;</span> Live HK data ingestion</li>
+        <li><span class="pending">&#9679;</span> Plan vs actual comparison</li>
+        <li><span class="pending">&#9679;</span> Accuracy score engine</li>
+        <li><span class="pending">&#9679;</span> HK write permissions</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>Phase 14: Adaptive Feedback Loop</h3>
+      <p>Algorithm updates from real sleep data</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Sleep debt accumulation</li>
+        <li><span class="pending">&#9679;</span> Recovery score v2</li>
+        <li><span class="pending">&#9679;</span> Plan accuracy dashboard</li>
+        <li><span class="pending">&#9679;</span> Trend analysis</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>Phase 15: Push Notifications</h3>
+      <p>Smart reminders wired to live plan</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Onboarding permission flow</li>
+        <li><span class="pending">&#9679;</span> Sleep window alerts</li>
+        <li><span class="pending">&#9679;</span> Caffeine cutoff reminders</li>
+        <li><span class="pending">&#9679;</span> Pre-shift nap alerts</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>Phase 16: Google Calendar Sync</h3>
+      <p>Live OAuth sync, no more manual ICS</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> OAuth 2.0 flow</li>
+        <li><span class="pending">&#9679;</span> Bidirectional sync</li>
+        <li><span class="pending">&#9679;</span> Conflict resolution</li>
+        <li><span class="pending">&#9679;</span> Auto-export to GCal</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>Phase 17: RevenueCat + Freemium</h3>
+      <p>$29.99/yr subscription with 7-day trial</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> RevenueCat API keys</li>
+        <li><span class="pending">&#9679;</span> Premium entitlements live</li>
+        <li><span class="pending">&#9679;</span> Paywall A/B testing</li>
+        <li><span class="pending">&#9679;</span> Restore purchases</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>Phase 18: App Store Submission</h3>
+      <p>iOS App Store public launch</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Screenshots + metadata</li>
+        <li><span class="pending">&#9679;</span> App Review submission</li>
+        <li><span class="pending">&#9679;</span> Analytics SDK live</li>
+        <li><span class="pending">&#9679;</span> Launch marketing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- v1.3+ summary -->
+  <div class="grid-3 stagger">
+    <div class="glass phase-card purple">
+      <span class="phase-label label-purple">Planned</span>
+      <h3>v1.3 &mdash; AI Intelligence Layer</h3>
+      <p style="margin-bottom:10px;">Phases 19&ndash;25 &middot; Claude API + conversational coaching</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Phase 19: Claude API integration</li>
+        <li><span class="pending">&#9679;</span> Phase 20: Conversational sleep coach</li>
+        <li><span class="pending">&#9679;</span> Phase 21: Apple Watch companion</li>
+        <li><span class="pending">&#9679;</span> Phase 22: Live Activities / Dynamic Island</li>
+        <li><span class="pending">&#9679;</span> Phase 23: WidgetKit home screen</li>
+        <li><span class="pending">&#9679;</span> Phase 24: Android / cross-platform</li>
+        <li><span class="pending">&#9679;</span> Phase 25: AI personalization v2</li>
+      </ul>
+    </div>
+    <div class="glass phase-card gray">
+      <span class="phase-label label-gray">Planned</span>
+      <h3>v1.4 &mdash; Platform &amp; Enterprise</h3>
+      <p style="margin-bottom:10px;">Phases 26&ndash;31 &middot; B2B, API, hospital integration</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Phase 26: Enterprise API</li>
+        <li><span class="pending">&#9679;</span> Phase 27: Team dashboards</li>
+        <li><span class="pending">&#9679;</span> Phase 28: Hospital fatigue risk</li>
+        <li><span class="pending">&#9679;</span> Phase 29: Audience expansion modes</li>
+        <li><span class="pending">&#9679;</span> Phase 30: Scheduling platform integration</li>
+        <li><span class="pending">&#9679;</span> Phase 31: HIPAA compliance</li>
+      </ul>
+    </div>
+    <div class="glass phase-card" style="--card-color:var(--orange-shift);">
+      <span class="phase-label" style="background:rgba(251,146,60,0.15); color:var(--orange-shift);">Long Range</span>
+      <h3>v2.0 &mdash; Advanced Intelligence</h3>
+      <p style="margin-bottom:10px;">Phases 32&ndash;38 &middot; Predictive, population-scale</p>
+      <ul>
+        <li><span class="pending">&#9679;</span> Phase 32: Predictive shift modeling</li>
+        <li><span class="pending">&#9679;</span> Phase 33: Population-level analytics</li>
+        <li><span class="pending">&#9679;</span> Phase 34: Research partnership API</li>
+        <li><span class="pending">&#9679;</span> Phase 35: Wearable expansion</li>
+        <li><span class="pending">&#9679;</span> Phase 36: Clinical trial support</li>
+        <li><span class="pending">&#9679;</span> Phase 37: Regulatory pathways</li>
+        <li><span class="pending">&#9679;</span> Phase 38: Platform ecosystem</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ========== 4. SCIENCE FOUNDATION ========== -->
+  <div class="section-title"><span class="section-num">4</span> Science Foundation</div>
+  <div class="grid-2">
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:16px;">Algorithm Modules</h3>
+      <div class="module-group">
+        <div class="module-group-title">Core Circadian (11 modules)</div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/sleep-windows.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">THE BRAIN: Optimal sleep blocks using anchor sleep (NIOSH/CDC), Two-Process Model, gradual delay protocol. Borbely 1982, Eastman &amp; Burgess 2009.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/nap-engine.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Strategic nap placement: pre-shift 90-min cycles for nights, 25-min power naps. Milner &amp; Cote 2009, Ruggiero &amp; Redeker 2014.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/caffeine.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Personalized cutoff: sleepOnset - (halfLife x 1.67). Drake et al. 2013 caffeine timing research.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/meals.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Time-restricted eating, front-loaded calories, circadian-aligned timing. Manoogian et al. 2022, Chellappa et al. 2021.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/light-protocol.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Light exposure/avoidance scheduling for phase shifting. Czeisler et al. 1990, Eastman &amp; Burgess 2009.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">circadian/energy-model.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Borbely two-process model: Process S (homeostatic pressure) + Process C (circadian pacemaker). Predicts fatigue through shift transitions.</div>
+        </div>
+      </div>
+      <div class="module-group">
+        <div class="module-group-title">Adaptive Brain (6 modules)</div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">adaptive/chronotype-adapter.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Adjusts recommendations based on chronotype (morning/evening/intermediate). Horne &amp; Ostberg 1976, individualized offsets.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">adaptive/sleep-debt-tracker.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Cumulative sleep debt calculation and recovery recommendations across multi-day shift patterns. Gander et al. 2011.</div>
+        </div>
+        <div class="module-card" onclick="this.classList.toggle('expanded')">
+          <div class="module-header">
+            <span class="module-name">adaptive/pattern-learning.ts</span>
+            <span class="module-status" style="background:var(--green-dim);color:var(--green);">Built</span>
+          </div>
+          <div class="module-detail">Identifies recurring shift patterns and pre-optimizes plans before shifts begin. HealthKit feedback loop ready.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:16px;">Key Citations (50+ total)</h3>
+      <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">Every algorithm decision traces to peer-reviewed research. Partial list:</p>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px; font-weight:700; color:var(--accent-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Sleep Science Core</div>
+        <div>
+          <span class="citation-pill">Borbely 1982 — Two-Process Model</span>
+          <span class="citation-pill">AASM 2015/2023 — Guidelines</span>
+          <span class="citation-pill">Czeisler 1990 — Bright Light Phase</span>
+          <span class="citation-pill">Eastman &amp; Burgess 2009 — Circadian Shifting</span>
+          <span class="citation-pill">St. Hilaire 2017 — Math Modeling</span>
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px; font-weight:700; color:var(--accent-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Shift Work Specific</div>
+        <div>
+          <span class="citation-pill">Drake 2004 — SWSD Prevalence</span>
+          <span class="citation-pill">Boivin &amp; Boudreau 2014 — Interventions</span>
+          <span class="citation-pill">Gander 2011 — Fatigue Risk</span>
+          <span class="citation-pill">NIOSH CDC — Anchor Sleep Protocol</span>
+          <span class="citation-pill">AHA 2025 — Circadian Disruption</span>
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px; font-weight:700; color:var(--accent-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Napping &amp; Nutrition</div>
+        <div>
+          <span class="citation-pill">Milner &amp; Cote 2009 — Strategic Naps</span>
+          <span class="citation-pill">Ruggiero &amp; Redeker 2014 — Nap/Shift</span>
+          <span class="citation-pill">Drake 2013 — Caffeine Timing</span>
+          <span class="citation-pill">Manoogian 2022 — Time-Restricted Eating</span>
+          <span class="citation-pill">Chellappa 2021 — Daytime Eating</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:var(--accent-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Chronobiology</div>
+        <div>
+          <span class="citation-pill">Horne &amp; Ostberg 1976 — Chronotype</span>
+          <span class="citation-pill">Wright 2013 — Circadian Misalignment</span>
+          <span class="citation-pill">Lockley 2004 — Melatonin Timing</span>
+          <span class="citation-pill">Czeisler 2013 — Alertness/Performance</span>
+          <span class="citation-pill">+35 additional citations</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 5. TIMELINE ========== -->
+  <div class="section-title"><span class="section-num">5</span> Development Timeline</div>
+  <div class="glass">
+    <h3 style="font-size:15px; margin-bottom:16px;">Key Milestones &amp; Events</h3>
+    <div class="scroll-wrap" style="background:transparent; border:none;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Event</th>
+            <th>Status</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap;">2026-03-14</td>
+            <td style="color:var(--text-primary);">Project inception (NightShift &rarr; ShiftWell)</td>
+            <td><span style="color:var(--green)">&#10003; Done</span></td>
+            <td>Expo scaffold, algorithm engine, full UI, 83 tests</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap;">2026-03-16</td>
+            <td style="color:var(--text-primary);">Phase 2-3 infrastructure + UI wiring</td>
+            <td><span style="color:var(--green)">&#10003; Done</span></td>
+            <td>Supabase, HealthKit, auth screens, recovery dashboard</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap;">2026-03-24</td>
+            <td style="color:var(--text-primary);">Borbely energy model + critical bug fixes</td>
+            <td><span style="color:var(--green)">&#10003; Done</span></td>
+            <td>Two-process model ported, 10 critical/high bugs fixed</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap;">2026-04-05</td>
+            <td style="color:var(--text-primary);">CLAUDE.md refactor + docs restructure</td>
+            <td><span style="color:var(--green)">&#10003; Done</span></td>
+            <td>7-workflow loading protocol, file map, science references</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--green);">2026-04-06</td>
+            <td style="color:var(--green); font-weight:700;">v1.0 CODE SHIPPED &mdash; Phases 1&ndash;6 complete</td>
+            <td><span style="color:var(--green); font-weight:700;">&#10003; SHIPPED</span></td>
+            <td>All 6 v1.0 phases done; TestFlight blocked on Apple Dev enrollment</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--amber);">2026-04-07</td>
+            <td style="color:var(--amber); font-weight:700;">v1.1 Phases 7&ndash;11 complete; roadmap expanded</td>
+            <td><span style="color:var(--amber); font-weight:700;">&#9679; In Progress</span></td>
+            <td>377 tests, adaptive brain, 95 reqs, 38 phases, CEO loop initialized</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-dim);">~2026-05 (est.)</td>
+            <td style="color:var(--text-secondary);">Phase 12: TestFlight distribution</td>
+            <td><span style="color:var(--red)">&#9679; Blocked</span></td>
+            <td>LLC &rarr; Apple Dev enrollment &rarr; D-U-N-S (~5 weeks from filing)</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-dim);">~2026-Q3 (est.)</td>
+            <td style="color:var(--text-secondary);">v1.2: HealthKit closed loop + App Store</td>
+            <td><span style="color:var(--gray)">&#9679; Planned</span></td>
+            <td>Phases 13-18: real HK data, push notifications, RevenueCat live</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-dim);">~2026-Q4 (est.)</td>
+            <td style="color:var(--text-secondary);">v1.3: AI Intelligence Layer</td>
+            <td><span style="color:var(--gray)">&#9679; Planned</span></td>
+            <td>Phases 19-25: Claude API, conversational coach, Apple Watch, Android</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-dim);">~2027-Q1 (est.)</td>
+            <td style="color:var(--text-secondary);">v1.4: Platform &amp; Enterprise</td>
+            <td><span style="color:var(--gray)">&#9679; Planned</span></td>
+            <td>Phases 26-31: B2B API, hospital integration, team dashboards</td>
+          </tr>
+          <tr>
+            <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-dim);">~2027+ (est.)</td>
+            <td style="color:var(--text-secondary);">v2.0: Advanced Intelligence</td>
+            <td><span style="color:var(--gray)">&#9679; Long Range</span></td>
+            <td>Phases 32-38: predictive modeling, population analytics, clinical trials</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 6. BLOCKERS & EXTERNAL GATES ========== -->
+  <div class="section-title"><span class="section-num">6</span> Blockers &amp; External Gates</div>
+  <div class="grid-3">
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:12px; color:var(--red);">Critical Path to TestFlight</h3>
+      <div class="next-item">
+        <div class="next-icon blocker">1</div>
+        <div>
+          <div class="next-title">LLC Formation (Sim Action)</div>
+          <div class="next-desc">File in FL (~$125, 30 min online). Required before Organization Apple Developer enrollment. Top name picks: Circadian Labs, Vigil Health.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon blocker">2</div>
+        <div>
+          <div class="next-title">D-U-N-S Number Request</div>
+          <div class="next-desc">Free via Apple or Dun &amp; Bradstreet. Takes ~5 business weeks. Request immediately after LLC is filed — longest lead time on the critical path.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon blocker">3</div>
+        <div>
+          <div class="next-title">Apple Developer Enrollment</div>
+          <div class="next-desc">$99/yr Organization enrollment at developer.apple.com. Requires LLC EIN + D-U-N-S. Unlocks TestFlight + App Store submission.</div>
+        </div>
+      </div>
+      <div class="next-item" style="border-bottom:none;">
+        <div class="next-icon" style="background:var(--amber-dim); color:var(--amber);">4</div>
+        <div>
+          <div class="next-title">Privacy Policy URL (Sim Action)</div>
+          <div class="next-desc">Content ready in PRIVACY_POLICY.md. Push to GitHub Pages or domain. Required in App Store listing.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:12px; color:var(--accent-secondary);">Phase 12 Unblocked Tasks</h3>
+      <div class="next-item">
+        <div class="next-icon task">&#9642;</div>
+        <div>
+          <div class="next-title">EAS Build Configuration</div>
+          <div class="next-desc">eas.json already configured. Run <code style="font-family:var(--font-mono); font-size:11px; background:rgba(99,102,241,0.1); padding:1px 4px; border-radius:3px;">eas build --platform ios</code> once enrolled.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon task">&#9642;</div>
+        <div>
+          <div class="next-title">App Store Listing Metadata</div>
+          <div class="next-desc">Screenshots (6.5", 5.5"), description, keywords ready in APP_STORE_LISTING.md. Needs final screenshots from device.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon task">&#9642;</div>
+        <div>
+          <div class="next-title">Analytics SDK (PostHog)</div>
+          <div class="next-desc">Add PostHog or TelemetryDeck within 48h of first TestFlight build. Required for feedback loop data.</div>
+        </div>
+      </div>
+      <div class="next-item" style="border-bottom:none;">
+        <div class="next-icon task">&#9642;</div>
+        <div>
+          <div class="next-title">Beta Tester Recruitment</div>
+          <div class="next-desc">Target: 10 shift workers from ED colleagues. Feedback template in LAUNCH_CHECKLIST.md.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass">
+      <h3 style="font-size:15px; margin-bottom:12px; color:var(--text-dim);">v1.2 Work Queue (Post-TestFlight)</h3>
+      <div class="next-item">
+        <div class="next-icon roadmap">HK</div>
+        <div>
+          <div class="next-title">HealthKit Live Data (Phase 13-14)</div>
+          <div class="next-desc">Architecture researched. Live HK ingestion, accuracy score, adaptive feedback loop. Biggest value driver post-launch.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon roadmap">NX</div>
+        <div>
+          <div class="next-title">Push Notifications (Phase 15)</div>
+          <div class="next-desc">Service scaffolded. Wire permission flow in onboarding, schedule alerts from live plan.</div>
+        </div>
+      </div>
+      <div class="next-item">
+        <div class="next-icon roadmap">GC</div>
+        <div>
+          <div class="next-title">Google Calendar OAuth (Phase 16)</div>
+          <div class="next-desc">Live sync replaces manual ICS import. #1 friction point in current onboarding.</div>
+        </div>
+      </div>
+      <div class="next-item" style="border-bottom:none;">
+        <div class="next-icon roadmap">RC</div>
+        <div>
+          <div class="next-title">RevenueCat + Freemium (Phase 17)</div>
+          <div class="next-desc">$29.99/yr, 7-day trial. Premium store scaffolded. Needs API keys + final paywall design.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 7. ARCHITECTURE OVERVIEW ========== -->
+  <div class="section-title"><span class="section-num">7</span> Architecture Overview</div>
+  <div class="glass" style="margin-bottom:16px;">
+    <h3 style="font-size:15px; margin-bottom:16px;">Technology Stack</h3>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px; font-weight:700; color:var(--green); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Active (Built)</div>
+      <div>
+        <span class="stack-badge active">Expo SDK 55</span>
+        <span class="stack-badge active">React Native 0.83</span>
+        <span class="stack-badge active">React 19</span>
+        <span class="stack-badge active">TypeScript 5.9</span>
+        <span class="stack-badge active">Zustand</span>
+        <span class="stack-badge active">Expo Router</span>
+        <span class="stack-badge active">EAS Build</span>
+        <span class="stack-badge active">Jest + Testing Lib</span>
+        <span class="stack-badge active">Supabase</span>
+        <span class="stack-badge active">HealthKit (scaffolded)</span>
+        <span class="stack-badge active">ICS Parser/Generator</span>
+        <span class="stack-badge active">RevenueCat (scaffolded)</span>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px; font-weight:700; color:var(--amber); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Planned (v1.2&ndash;v1.3)</div>
+      <div>
+        <span class="stack-badge planned">Claude API (v1.3)</span>
+        <span class="stack-badge planned">Google Calendar OAuth (v1.2)</span>
+        <span class="stack-badge planned">PostHog Analytics</span>
+        <span class="stack-badge planned">WidgetKit</span>
+        <span class="stack-badge planned">Live Activities</span>
+        <span class="stack-badge planned">Apple Watch WatchKit</span>
+        <span class="stack-badge planned">Push Notifications (APNs)</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:12px; font-weight:700; color:var(--gray); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">Future (v1.4&ndash;v2.0)</div>
+      <div>
+        <span class="stack-badge future">Enterprise API</span>
+        <span class="stack-badge future">Android / Expo Go</span>
+        <span class="stack-badge future">HIPAA Compliance</span>
+        <span class="stack-badge future">Hospital EMR Integration</span>
+        <span class="stack-badge future">Population Analytics</span>
+        <span class="stack-badge future">Research API</span>
+      </div>
+    </div>
+  </div>
+
   <div class="arch-diagram">
-    <svg class="arch-svg" viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg">
+    <svg class="arch-svg" viewBox="0 0 1100 580" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" style="stop-color:#22C55E;stop-opacity:0.15"/>
@@ -564,504 +1292,205 @@
           <stop offset="0%" style="stop-color:#6C63FF;stop-opacity:0.2"/>
           <stop offset="100%" style="stop-color:#6C63FF;stop-opacity:0.05"/>
         </linearGradient>
+        <linearGradient id="gBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:0.15"/>
+          <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:0.05"/>
+        </linearGradient>
+        <linearGradient id="gGray" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#6B7280;stop-opacity:0.15"/>
+          <stop offset="100%" style="stop-color:#6B7280;stop-opacity:0.05"/>
+        </linearGradient>
         <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#818CF8" fill-opacity="0.6"/>
         </marker>
       </defs>
 
       <!-- Layer labels -->
-      <text x="16" y="30" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">INPUT LAYER</text>
-      <text x="16" y="190" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">ALGORITHM ENGINE</text>
-      <text x="16" y="350" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">OUTPUT / UI LAYER</text>
-      <text x="750" y="30" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">INFRASTRUCTURE</text>
+      <text x="16" y="26" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">INPUT LAYER</text>
+      <text x="16" y="186" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">ALGORITHM ENGINE (11 MODULES)</text>
+      <text x="16" y="336" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">ADAPTIVE BRAIN (6 MODULES)</text>
+      <text x="16" y="456" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">OUTPUT / UI LAYER</text>
+      <text x="790" y="26" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">INFRASTRUCTURE</text>
+      <text x="790" y="336" fill="#6B7280" font-size="11" font-weight="700" letter-spacing="1">PLANNED (v1.2-v1.3)</text>
 
       <!-- INPUT BOXES -->
-      <rect x="16" y="44" width="160" height="56" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="96" y="68" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">ICS Import</text>
-      <text x="96" y="84" fill="#9CA3AF" font-size="10" text-anchor="middle">iCal / QGenda / Google</text>
+      <rect x="16" y="36" width="140" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="86" y="58" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">ICS Import</text>
+      <text x="86" y="74" fill="#9CA3AF" font-size="10" text-anchor="middle">iCal / QGenda / Google</text>
 
-      <rect x="196" y="44" width="160" height="56" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="276" y="68" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">Shift Detector</text>
-      <text x="276" y="84" fill="#9CA3AF" font-size="10" text-anchor="middle">Keywords + Duration</text>
+      <rect x="170" y="36" width="140" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="240" y="58" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">Shift Detector</text>
+      <text x="240" y="74" fill="#9CA3AF" font-size="10" text-anchor="middle">Keywords + Duration</text>
 
-      <rect x="376" y="44" width="160" height="56" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="456" y="68" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">User Profile</text>
-      <text x="456" y="84" fill="#9CA3AF" font-size="10" text-anchor="middle">Chronotype + Prefs</text>
+      <rect x="324" y="36" width="140" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="394" y="58" fill="#22C55E" font-size="12" font-weight="700" text-anchor="middle">User Profile</text>
+      <text x="394" y="74" fill="#9CA3AF" font-size="10" text-anchor="middle">Chronotype + Prefs</text>
 
-      <rect x="556" y="44" width="160" height="56" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="636" y="68" fill="#F59E0B" font-size="12" font-weight="700" text-anchor="middle">HealthKit</text>
-      <text x="636" y="84" fill="#9CA3AF" font-size="10" text-anchor="middle">Sleep + Activity Data</text>
+      <rect x="478" y="36" width="140" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="548" y="58" fill="#F59E0B" font-size="12" font-weight="700" text-anchor="middle">HealthKit</text>
+      <text x="548" y="74" fill="#9CA3AF" font-size="10" text-anchor="middle">Sleep + Activity Data</text>
+
+      <rect x="632" y="36" width="140" height="52" rx="10" fill="url(#gGray)" stroke="#6B7280" stroke-opacity="0.4" stroke-dasharray="4"/>
+      <text x="702" y="58" fill="#9CA3AF" font-size="12" font-weight="700" text-anchor="middle">Google Cal</text>
+      <text x="702" y="74" fill="#6B7280" font-size="10" text-anchor="middle">OAuth v1.2</text>
 
       <!-- Arrows: input to algorithm -->
-      <line x1="96" y1="100" x2="96" y2="200" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="276" y1="100" x2="276" y2="200" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="456" y1="100" x2="350" y2="200" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="636" y1="100" x2="500" y2="200" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <line x1="86" y1="88" x2="86" y2="196" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <line x1="240" y1="88" x2="240" y2="196" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <line x1="394" y1="88" x2="320" y2="196" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <line x1="548" y1="88" x2="490" y2="196" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
 
       <!-- ALGORITHM ENGINE -->
-      <rect x="16" y="200" width="130" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="81" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Classify Shifts</text>
-      <text x="81" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">Day/Night/Extended</text>
+      <rect x="16" y="196" width="108" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="70" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Classify</text>
+      <text x="70" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Day/Night/Ext</text>
 
-      <rect x="162" y="200" width="130" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="227" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Sleep Windows</text>
-      <text x="227" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">Two-Process Model</text>
+      <rect x="136" y="196" width="108" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="190" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Sleep Windows</text>
+      <text x="190" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Two-Process Model</text>
 
-      <rect x="308" y="200" width="115" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="365" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Nap Engine</text>
-      <text x="365" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">Strategic Naps</text>
+      <rect x="256" y="196" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="306" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Nap Engine</text>
+      <text x="306" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Milner &amp; Cote</text>
 
-      <rect x="438" y="200" width="115" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="496" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Caffeine</text>
-      <text x="496" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">Drake et al. 2013</text>
+      <rect x="368" y="196" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="418" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Caffeine</text>
+      <text x="418" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Drake 2013</text>
 
-      <rect x="568" y="200" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="618" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Meals</text>
-      <text x="618" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">TRE Protocol</text>
+      <rect x="480" y="196" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="530" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Meals / TRE</text>
+      <text x="530" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Manoogian 2022</text>
 
-      <rect x="683" y="200" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="733" y="222" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Light</text>
-      <text x="733" y="238" fill="#9CA3AF" font-size="9" text-anchor="middle">Czeisler 1990</text>
+      <rect x="592" y="196" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="642" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Light Protocol</text>
+      <text x="642" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Czeisler 1990</text>
 
-      <!-- Arrows: algorithm to output -->
-      <line x1="81" y1="252" x2="150" y2="360" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="227" y1="252" x2="250" y2="360" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="365" y1="252" x2="350" y2="360" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
-      <line x1="496" y1="252" x2="450" y2="360" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <rect x="704" y="196" width="100" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="754" y="218" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Energy Model</text>
+      <text x="754" y="234" fill="#9CA3AF" font-size="9" text-anchor="middle">Borbely 1982</text>
+
+      <!-- ADAPTIVE BRAIN -->
+      <rect x="16" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="73" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Chronotype</text>
+      <text x="73" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">Horne &amp; Ostberg</text>
+
+      <rect x="144" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="201" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Sleep Debt</text>
+      <text x="201" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">Gander 2011</text>
+
+      <rect x="272" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="329" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Pattern Learn</text>
+      <text x="329" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">HK Feedback</text>
+
+      <rect x="400" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="457" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Recovery Opt</text>
+      <text x="457" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">Adaptive</text>
+
+      <rect x="528" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="585" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Schedule Aware</text>
+      <text x="585" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">Calendar-Based</text>
+
+      <rect x="656" y="346" width="115" height="52" rx="10" fill="url(#gBlue)" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="713" y="368" fill="#93C5FD" font-size="11" font-weight="700" text-anchor="middle">Accuracy Score</text>
+      <text x="713" y="384" fill="#9CA3AF" font-size="9" text-anchor="middle">Plan vs Actual</text>
+
+      <!-- Arrows: algorithm to adaptive brain -->
+      <line x1="350" y1="248" x2="350" y2="346" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
 
       <!-- OUTPUT / UI -->
-      <rect x="16" y="360" width="150" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="91" y="382" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">Today Screen</text>
-      <text x="91" y="398" fill="#9CA3AF" font-size="9" text-anchor="middle">Timeline + Countdowns</text>
+      <rect x="16" y="466" width="148" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="90" y="488" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">Today Screen</text>
+      <text x="90" y="504" fill="#9CA3AF" font-size="9" text-anchor="middle">Timeline + Countdowns</text>
 
-      <rect x="182" y="360" width="150" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="257" y="382" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">Schedule View</text>
-      <text x="257" y="398" fill="#9CA3AF" font-size="9" text-anchor="middle">MonthView + DayDetail</text>
+      <rect x="178" y="466" width="148" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="252" y="488" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">Schedule View</text>
+      <text x="252" y="504" fill="#9CA3AF" font-size="9" text-anchor="middle">MonthView + DayDetail</text>
 
-      <rect x="348" y="360" width="150" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
-      <text x="423" y="382" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">ICS Export</text>
-      <text x="423" y="398" fill="#9CA3AF" font-size="9" text-anchor="middle">One-Click to Calendar</text>
+      <rect x="340" y="466" width="148" height="52" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.4"/>
+      <text x="414" y="488" fill="#22C55E" font-size="11" font-weight="700" text-anchor="middle">ICS Export</text>
+      <text x="414" y="504" fill="#9CA3AF" font-size="9" text-anchor="middle">One-Click to Calendar</text>
 
-      <rect x="514" y="360" width="150" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="589" y="382" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Recovery Dashboard</text>
-      <text x="589" y="398" fill="#9CA3AF" font-size="9" text-anchor="middle">Trends + Scores</text>
+      <rect x="502" y="466" width="148" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="576" y="488" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Recovery Dashboard</text>
+      <text x="576" y="504" fill="#9CA3AF" font-size="9" text-anchor="middle">Trends + Scores</text>
+
+      <rect x="664" y="466" width="148" height="52" rx="10" fill="url(#gGray)" stroke="#6B7280" stroke-opacity="0.4" stroke-dasharray="4"/>
+      <text x="738" y="488" fill="#9CA3AF" font-size="11" font-weight="700" text-anchor="middle">Apple Watch</text>
+      <text x="738" y="504" fill="#6B7280" font-size="9" text-anchor="middle">v1.3 WatchKit</text>
+
+      <!-- Arrows: adaptive to output -->
+      <line x1="200" y1="398" x2="200" y2="466" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+      <line x1="457" y1="398" x2="457" y2="466" stroke="#818CF8" stroke-opacity="0.3" stroke-dasharray="4" marker-end="url(#arrow)"/>
 
       <!-- INFRASTRUCTURE (right column) -->
-      <rect x="820" y="44" width="260" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="950" y="68" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Supabase Backend</text>
-      <text x="950" y="84" fill="#9CA3AF" font-size="10" text-anchor="middle">Auth + DB + Cloud Sync</text>
+      <rect x="800" y="36" width="280" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="940" y="60" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Supabase Backend</text>
+      <text x="940" y="76" fill="#9CA3AF" font-size="10" text-anchor="middle">Auth + DB + Cloud Sync</text>
 
-      <rect x="820" y="112" width="260" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="950" y="136" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Premium / RevenueCat</text>
-      <text x="950" y="152" fill="#9CA3AF" font-size="10" text-anchor="middle">Subscriptions (v1: free)</text>
+      <rect x="800" y="100" width="280" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="940" y="124" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">RevenueCat (scaffolded)</text>
+      <text x="940" y="140" fill="#9CA3AF" font-size="10" text-anchor="middle">$29.99/yr + 7-day trial — v1.2</text>
 
-      <rect x="820" y="180" width="260" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="950" y="204" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Notifications</text>
-      <text x="950" y="220" fill="#9CA3AF" font-size="10" text-anchor="middle">Sleep reminders + cutoffs</text>
+      <rect x="800" y="164" width="280" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="940" y="188" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Notifications (APNs)</text>
+      <text x="940" y="204" fill="#9CA3AF" font-size="10" text-anchor="middle">Sleep reminders + cutoffs — v1.2</text>
 
-      <rect x="820" y="248" width="260" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
-      <text x="950" y="272" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Sync Engine</text>
-      <text x="950" y="288" fill="#9CA3AF" font-size="10" text-anchor="middle">Data Migration + Conflict Res</text>
+      <rect x="800" y="228" width="280" height="52" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.4"/>
+      <text x="940" y="252" fill="#F59E0B" font-size="11" font-weight="700" text-anchor="middle">Sync Engine + EAS</text>
+      <text x="940" y="268" fill="#9CA3AF" font-size="10" text-anchor="middle">Migration + Conflict Resolution</text>
 
-      <rect x="820" y="316" width="260" height="52" rx="10" fill="url(#gPurple)" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="950" y="340" fill="#A78BFA" font-size="11" font-weight="700" text-anchor="middle">Borbely Energy Model</text>
-      <text x="950" y="356" fill="#9CA3AF" font-size="10" text-anchor="middle">Process S + Process C</text>
+      <!-- PLANNED -->
+      <rect x="800" y="346" width="280" height="52" rx="10" fill="url(#gGray)" stroke="#6B7280" stroke-opacity="0.4" stroke-dasharray="4"/>
+      <text x="940" y="370" fill="#9CA3AF" font-size="11" font-weight="700" text-anchor="middle">Claude API (v1.3)</text>
+      <text x="940" y="386" fill="#6B7280" font-size="10" text-anchor="middle">Conversational sleep coach</text>
 
-      <!-- STORES -->
-      <rect x="820" y="400" width="125" height="48" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.3"/>
-      <text x="882" y="420" fill="#22C55E" font-size="10" font-weight="700" text-anchor="middle">user-store</text>
-      <text x="882" y="434" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
+      <rect x="800" y="410" width="280" height="52" rx="10" fill="url(#gGray)" stroke="#6B7280" stroke-opacity="0.4" stroke-dasharray="4"/>
+      <text x="940" y="434" fill="#9CA3AF" font-size="11" font-weight="700" text-anchor="middle">Enterprise API (v1.4)</text>
+      <text x="940" y="450" fill="#6B7280" font-size="10" text-anchor="middle">Hospital + Team dashboards</text>
 
-      <rect x="955" y="400" width="125" height="48" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.3"/>
-      <text x="1017" y="420" fill="#22C55E" font-size="10" font-weight="700" text-anchor="middle">shifts-store</text>
-      <text x="1017" y="434" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
+      <!-- Zustand stores -->
+      <rect x="800" y="474" width="130" height="48" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.3"/>
+      <text x="865" y="494" fill="#22C55E" font-size="10" font-weight="700" text-anchor="middle">user-store</text>
+      <text x="865" y="508" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
 
-      <rect x="820" y="458" width="125" height="48" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.3"/>
-      <text x="882" y="478" fill="#22C55E" font-size="10" font-weight="700" text-anchor="middle">plan-store</text>
-      <text x="882" y="492" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
-
-      <rect x="955" y="458" width="125" height="48" rx="10" fill="url(#gAmber)" stroke="#F59E0B" stroke-opacity="0.3"/>
-      <text x="1017" y="478" fill="#F59E0B" font-size="10" font-weight="700" text-anchor="middle">auth-store</text>
-      <text x="1017" y="492" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
+      <rect x="940" y="474" width="140" height="48" rx="10" fill="url(#gGreen)" stroke="#22C55E" stroke-opacity="0.3"/>
+      <text x="1010" y="494" fill="#22C55E" font-size="10" font-weight="700" text-anchor="middle">shifts + plan stores</text>
+      <text x="1010" y="508" fill="#9CA3AF" font-size="9" text-anchor="middle">Zustand</text>
 
       <!-- Legend -->
-      <rect x="16" y="470" width="12" height="12" rx="3" fill="#22C55E" fill-opacity="0.3" stroke="#22C55E" stroke-opacity="0.5"/>
-      <text x="34" y="481" fill="#9CA3AF" font-size="10">Built</text>
-      <rect x="80" y="470" width="12" height="12" rx="3" fill="#F59E0B" fill-opacity="0.3" stroke="#F59E0B" stroke-opacity="0.5"/>
-      <text x="98" y="481" fill="#9CA3AF" font-size="10">Partial</text>
-      <rect x="156" y="470" width="12" height="12" rx="3" fill="#6C63FF" fill-opacity="0.3" stroke="#6C63FF" stroke-opacity="0.5"/>
-      <text x="174" y="481" fill="#9CA3AF" font-size="10">Core Algorithm</text>
-      <rect x="268" y="470" width="12" height="12" rx="3" fill="#6B7280" fill-opacity="0.3" stroke="#6B7280" stroke-opacity="0.5"/>
-      <text x="286" y="481" fill="#9CA3AF" font-size="10">Planned</text>
+      <rect x="16" y="536" width="12" height="12" rx="3" fill="#22C55E" fill-opacity="0.3" stroke="#22C55E" stroke-opacity="0.5"/>
+      <text x="34" y="547" fill="#9CA3AF" font-size="10">Built</text>
+      <rect x="76" y="536" width="12" height="12" rx="3" fill="#F59E0B" fill-opacity="0.3" stroke="#F59E0B" stroke-opacity="0.5"/>
+      <text x="94" y="547" fill="#9CA3AF" font-size="10">Partial/Scaffolded</text>
+      <rect x="200" y="536" width="12" height="12" rx="3" fill="#6C63FF" fill-opacity="0.3" stroke="#6C63FF" stroke-opacity="0.5"/>
+      <text x="218" y="547" fill="#9CA3AF" font-size="10">Core Algorithm</text>
+      <rect x="310" y="536" width="12" height="12" rx="3" fill="#60A5FA" fill-opacity="0.3" stroke="#60A5FA" stroke-opacity="0.5"/>
+      <text x="328" y="547" fill="#9CA3AF" font-size="10">Adaptive Brain</text>
+      <rect x="410" y="536" width="12" height="12" rx="3" fill="#6B7280" fill-opacity="0.3" stroke="#6B7280" stroke-opacity="0.5" stroke-dasharray="3"/>
+      <text x="428" y="547" fill="#9CA3AF" font-size="10">Planned</text>
     </svg>
   </div>
 
-  <!-- ========== 3. CODEBASE STATS ========== -->
-  <div class="section-title"><span class="section-num">3</span> Codebase Statistics</div>
+  <!-- ========== 8. CHARTS ========== -->
+  <div class="section-title"><span class="section-num">8</span> Data &amp; Charts</div>
   <div class="grid-2">
     <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:16px;">Lines of Code by Module</h3>
-      <div class="chart-container"><canvas id="chartLOC"></canvas></div>
+      <h3 style="font-size:15px; margin-bottom:16px;">Phase Completion Timeline</h3>
+      <div class="chart-container-tall"><canvas id="chartTimeline"></canvas></div>
     </div>
     <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:16px;">File Distribution</h3>
-      <div class="chart-container"><canvas id="chartFiles"></canvas></div>
+      <h3 style="font-size:15px; margin-bottom:16px;">Requirements Distribution</h3>
+      <div class="chart-container-tall"><canvas id="chartReqDist"></canvas></div>
     </div>
   </div>
   <div class="grid-2" style="margin-top:16px;">
     <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:16px;">Code Volume by Category</h3>
-      <div class="chart-container"><canvas id="chartCategory"></canvas></div>
+      <h3 style="font-size:15px; margin-bottom:16px;">Test Suite Growth</h3>
+      <div class="chart-container"><canvas id="chartTestGrowth"></canvas></div>
     </div>
     <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:16px;">Test Coverage by Module</h3>
-      <div class="chart-container"><canvas id="chartTests"></canvas></div>
-    </div>
-  </div>
-
-  <!-- ========== 4. GIT TIMELINE ========== -->
-  <div class="section-title"><span class="section-num">4</span> Git Timeline <span style="font-size:13px; color:var(--text-dim); font-weight:400; margin-left:8px;">52 commits across 11 days</span></div>
-  <div class="glass" style="padding: 32px 24px 48px;">
-    <div style="display:flex; gap:16px; margin-bottom:16px;">
-      <span style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim);">
-        <span style="width:10px;height:10px;border-radius:50%;background:var(--accent-primary);display:inline-block;"></span> feat
-      </span>
-      <span style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim);">
-        <span style="width:10px;height:10px;border-radius:50%;background:var(--red);display:inline-block;"></span> fix
-      </span>
-      <span style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim);">
-        <span style="width:10px;height:10px;border-radius:50%;background:var(--amber);display:inline-block;"></span> docs
-      </span>
-      <span style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim);">
-        <span style="width:10px;height:10px;border-radius:50%;background:var(--text-dim);display:inline-block;"></span> other
-      </span>
-    </div>
-    <div class="timeline-wrap">
-      <div class="timeline" id="timeline"></div>
-    </div>
-  </div>
-
-  <!-- ========== 5. ISSUES & FIXES LOG ========== -->
-  <div class="section-title"><span class="section-num">5</span> Issues &amp; Fixes Log</div>
-  <div class="scroll-wrap">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Issue</th>
-          <th>Severity</th>
-          <th>Status</th>
-          <th>What Was Fixed</th>
-          <th>Commit</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="color:var(--text-primary)">Bundle ID: com.nightshift.app</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Changed to com.shiftwell.app (permanent on App Store)</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Privacy policy placeholder names</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Real name + email in PRIVACY_POLICY.md</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Health disclaimer missing from app</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Added to welcome onboarding screen</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">useTodayPlan stale closure bug</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Added tick to useMemo deps (1-line fix)</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Silent plan generation errors</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Error banner + retry button on Today screen</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Non-functional paywall buttons</td>
-          <td><span class="severity sev-critical">Critical</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Alert.alert() with "100% free" messaging; v1 is free</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">138b572</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">ICS parser crash on malformed events</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Per-event try/catch + null/isNaN guards</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">138b572</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">hasPets data silently discarded</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Night-shift sleep end capped 30 min earlier with pets</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">138b572</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Schedule screen empty state missing</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--green)">&#10003; Fixed</span></td>
-          <td>Empty state CTA added to schedule tab</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">b0e6d99</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Shift deletion -- no confirmation</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--amber)">Pending</span></td>
-          <td>Needs Alert.alert confirmation dialog</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">--</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Auth screens hardcoded hex colors</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--amber)">Pending</span></td>
-          <td>Needs theme token refactor</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">--</td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Supabase client empty credential crash</td>
-          <td><span class="severity sev-high">High</span></td>
-          <td><span style="color:var(--amber)">Pending</span></td>
-          <td>Needs startup env var validation</td>
-          <td style="font-family:var(--font-mono);font-size:11px;">--</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- ========== 6. FEATURE MATRIX ========== -->
-  <div class="section-title"><span class="section-num">6</span> Competitive Feature Matrix</div>
-  <div class="scroll-wrap" style="padding: 0;">
-    <table class="data-table matrix-table">
-      <thead>
-        <tr>
-          <th style="min-width:200px">Feature</th>
-          <th class="matrix-highlight" style="min-width:100px">ShiftWell</th>
-          <th style="min-width:100px">Timeshifter</th>
-          <th style="min-width:100px">Arcashift</th>
-          <th style="min-width:100px">Rise</th>
-          <th style="min-width:100px">Sleep Cycle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="color:var(--text-primary)">Calendar Import (iCal/Google)</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-partial">~</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Science-Backed Schedule Generation</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Personal Calendar Awareness</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">One-Click Calendar Export</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Strategic Nap Placement</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-partial">~</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Meal Timing Optimization</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Caffeine Cutoff Timing</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Light Exposure Protocol</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Apple HealthKit Adaptation</td>
-          <td class="matrix-highlight"><span class="matrix-partial">~</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-partial">~</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Household-Aware (kids, pets)</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Shift Worker Specific</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Built by a Physician</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)">Offline / On-Device</td>
-          <td class="matrix-highlight"><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-          <td><span class="matrix-x">&#10005;</span></td>
-          <td><span class="matrix-check">&#10003;</span></td>
-        </tr>
-        <tr>
-          <td style="color:var(--text-primary)"><strong>Price</strong></td>
-          <td class="matrix-highlight" style="color:var(--green);font-weight:700;">FREE</td>
-          <td style="color:var(--text-secondary)">$10/mo</td>
-          <td style="color:var(--text-secondary)">Freemium</td>
-          <td style="color:var(--text-secondary)">$7/mo</td>
-          <td style="color:var(--text-secondary)">$3/mo</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- ========== 7. MODULE INVENTORY ========== -->
-  <div class="section-title"><span class="section-num">7</span> Module Inventory <span style="font-size:13px; color:var(--text-dim); font-weight:400; margin-left:8px;">Click to expand</span></div>
-  <div class="grid-2" id="moduleInventory"></div>
-
-  <!-- ========== 8. WHAT'S NEXT ========== -->
-  <div class="section-title"><span class="section-num">8</span> What's Next</div>
-  <div class="grid-3">
-
-    <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:12px; color:var(--red);">Blockers (Sim's Action)</h3>
-      <div class="next-item">
-        <div class="next-icon blocker">!</div>
-        <div>
-          <div class="next-title">Apple Developer Enrollment</div>
-          <div class="next-desc">$99/yr at developer.apple.com - required before any TestFlight build. Organization enrollment needs D-U-N-S number (1-5 business days).</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon blocker">!</div>
-        <div>
-          <div class="next-title">LLC Formation</div>
-          <div class="next-desc">File in home state (~$100-200, 30 min). Needed for Organization enrollment and business bank account.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon blocker">!</div>
-        <div>
-          <div class="next-title">Host Privacy Policy URL</div>
-          <div class="next-desc">Content is ready in PRIVACY_POLICY.md. Push to GitHub Pages or host on domain.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:12px; color:var(--accent-secondary);">Remaining Phase 2 Items</h3>
-      <div class="next-item">
-        <div class="next-icon task">&#9642;</div>
-        <div>
-          <div class="next-title">Google Calendar OAuth</div>
-          <div class="next-desc">Live sync instead of manual ICS import. #1 post-launch feature per committee.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon task">&#9642;</div>
-        <div>
-          <div class="next-title">Push Notification Wiring</div>
-          <div class="next-desc">Service exists. Needs permission flow in onboarding + actual scheduling.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon task">&#9642;</div>
-        <div>
-          <div class="next-title">RevenueCat Integration</div>
-          <div class="next-desc">For v1.2 freemium. Premium store scaffolded, needs real API keys.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon task">&#9642;</div>
-        <div>
-          <div class="next-title">Analytics SDK</div>
-          <div class="next-desc">PostHog or TelemetryDeck. Add within 2 weeks of launch.</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="glass">
-      <h3 style="font-size:15px; margin-bottom:12px; color:var(--text-dim);">Roadmap (Phases 3-5)</h3>
-      <div class="next-item">
-        <div class="next-icon roadmap">3</div>
-        <div>
-          <div class="next-title">iOS Power Features (Months 4-6)</div>
-          <div class="next-desc">Live Activities, Dynamic Island, WidgetKit, Apple Watch, Sleep Focus automation.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon roadmap">4</div>
-        <div>
-          <div class="next-title">Audience Expansion (Months 6+)</div>
-          <div class="next-desc">Jet Lag Mode, On-Call Mode, New Parent Mode, Gig/Nightlife Mode.</div>
-        </div>
-      </div>
-      <div class="next-item">
-        <div class="next-icon roadmap">5</div>
-        <div>
-          <div class="next-title">AI Agent + B2B (Month 8+)</div>
-          <div class="next-desc">Conversational AI sleep coach, team dashboards, hospital fatigue risk scoring.</div>
-        </div>
-      </div>
+      <h3 style="font-size:15px; margin-bottom:16px;">Codebase Distribution</h3>
+      <div class="chart-container"><canvas id="chartCodebase"></canvas></div>
     </div>
   </div>
 
@@ -1069,7 +1498,7 @@
   <div class="footer">
     <p style="margin-bottom:6px;">ShiftWell Project Command Center</p>
     <p>Last generated: <span id="timestamp"></span></p>
-    <p style="margin-top:8px;">Built by Dr. Gursimran Singh, Emergency Medicine Physician</p>
+    <p style="margin-top:8px;">Built by Dr. Gursimran Singh, Emergency Medicine Physician &mdash; 700M shift workers worldwide</p>
   </div>
 </div>
 
@@ -1085,308 +1514,228 @@ Chart.defaults.color = '#9CA3AF';
 Chart.defaults.borderColor = 'rgba(99, 102, 241, 0.08)';
 Chart.defaults.font.family = "'Inter', -apple-system, system-ui, sans-serif";
 
-// Chart 1: Lines of Code by Module
-new Chart(document.getElementById('chartLOC'), {
+// Chart 1: Milestone horizontal bar
+new Chart(document.getElementById('chartMilestones'), {
   type: 'bar',
   data: {
-    labels: ['Circadian', 'HealthKit', 'Today UI', 'Calendar UI', 'Store', 'Supabase', 'UI Kit', 'Calendar Lib', 'Tips', 'Hooks', 'Sync', 'Theme', 'Premium', 'Notify', 'Recovery'],
-    datasets: [{
-      label: 'Lines of Code',
-      data: [2376, 957, 987, 639, 633, 500, 553, 465, 447, 425, 376, 296, 246, 242, 542],
-      backgroundColor: [
-        'rgba(108,99,255,0.6)','rgba(245,158,11,0.6)','rgba(34,197,94,0.6)','rgba(34,197,94,0.6)',
-        'rgba(34,197,94,0.6)','rgba(245,158,11,0.6)','rgba(34,197,94,0.6)','rgba(34,197,94,0.6)',
-        'rgba(34,197,94,0.6)','rgba(34,197,94,0.6)','rgba(245,158,11,0.6)','rgba(34,197,94,0.6)',
-        'rgba(245,158,11,0.6)','rgba(245,158,11,0.6)','rgba(245,158,11,0.6)'
-      ],
-      borderColor: [
-        '#6C63FF','#F59E0B','#22C55E','#22C55E','#22C55E','#F59E0B','#22C55E','#22C55E',
-        '#22C55E','#22C55E','#F59E0B','#22C55E','#F59E0B','#F59E0B','#F59E0B'
-      ],
-      borderWidth: 1,
-      borderRadius: 6,
-    }]
+    labels: ['v1.0 Foundation', 'v1.1 Polish', 'v1.2 HealthKit', 'v1.3 AI Layer', 'v1.4 Platform', 'v2.0 Advanced'],
+    datasets: [
+      {
+        label: 'Complete',
+        data: [6, 5, 1, 0, 0, 0],
+        backgroundColor: 'rgba(34, 197, 94, 0.7)',
+        borderColor: '#22C55E',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+      {
+        label: 'Blocked',
+        data: [0, 1, 0, 0, 0, 0],
+        backgroundColor: 'rgba(239, 68, 68, 0.6)',
+        borderColor: '#EF4444',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+      {
+        label: 'Planned',
+        data: [0, 0, 5, 7, 6, 7],
+        backgroundColor: 'rgba(107, 114, 128, 0.35)',
+        borderColor: 'rgba(107, 114, 128, 0.5)',
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    ]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } }
+    },
     scales: {
-      x: { ticks: { font: { size: 10 }, maxRotation: 45 } },
-      y: { beginAtZero: true, ticks: { font: { size: 10 } } }
+      x: { stacked: true, beginAtZero: true, max: 8, ticks: { font: { size: 10 }, stepSize: 2 }, grid: { color: 'rgba(99,102,241,0.08)' } },
+      y: { stacked: true, ticks: { font: { size: 11 } } }
     }
   }
 });
 
-// Chart 2: File Distribution
-new Chart(document.getElementById('chartFiles'), {
+// Chart 2: Requirements doughnut
+new Chart(document.getElementById('chartRequirements'), {
   type: 'doughnut',
   data: {
-    labels: ['Algorithm (10)', 'Calendar (3)', 'HealthKit (4)', 'Supabase (5)', 'Components (19)', 'Stores (6)', 'Hooks (4)', 'Theme (4)', 'Services (10)', 'Screens (20)', 'Tests (10)'],
+    labels: ['v1.0 Complete (19)', 'v1.1 Pending (10)', 'v1.2 Pending (18)', 'v1.3 Pending (20)', 'v1.4 Pending (15)', 'v2.0 Pending (13)'],
     datasets: [{
-      data: [10, 3, 4, 5, 19, 6, 4, 4, 10, 20, 10],
+      data: [19, 10, 18, 20, 15, 13],
       backgroundColor: [
-        'rgba(108,99,255,0.8)','rgba(129,140,248,0.8)','rgba(245,158,11,0.8)','rgba(251,146,60,0.8)',
-        'rgba(34,197,94,0.8)','rgba(74,222,128,0.8)','rgba(96,165,250,0.8)','rgba(167,139,250,0.8)',
-        'rgba(248,113,113,0.8)','rgba(52,211,153,0.8)','rgba(251,191,36,0.8)'
+        'rgba(34, 197, 94, 0.8)',
+        'rgba(245, 158, 11, 0.7)',
+        'rgba(96, 165, 250, 0.7)',
+        'rgba(167, 139, 250, 0.7)',
+        'rgba(107, 114, 128, 0.6)',
+        'rgba(251, 146, 60, 0.7)',
       ],
       borderWidth: 0,
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { position: 'right', labels: { font: { size: 11 }, padding: 8, usePointStyle: true, pointStyleWidth: 8 } }
     }
   }
 });
 
-// Chart 3: Code Volume by Category
-new Chart(document.getElementById('chartCategory'), {
+// Chart 3: Phase completion timeline (line)
+new Chart(document.getElementById('chartTimeline'), {
+  type: 'line',
+  data: {
+    labels: ['Mar 14', 'Mar 16', 'Mar 24', 'Apr 05', 'Apr 06\nv1.0', 'Apr 07\nv1.1', 'May\n(est)', 'Q3\n(est)', 'Q4\n(est)'],
+    datasets: [
+      {
+        label: 'Phases Complete',
+        data: [3, 5, 6, 6, 6, 11, 12, 18, 25],
+        borderColor: '#22C55E',
+        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: ['#6C63FF','#6C63FF','#6C63FF','#6C63FF','#22C55E','#F59E0B','#6B7280','#6B7280','#6B7280'],
+        pointRadius: [4,4,4,4,8,8,5,5,5],
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      },
+      {
+        label: 'Tests Passing',
+        data: [null, null, 83, 83, 83, 377, null, null, null],
+        borderColor: '#818CF8',
+        backgroundColor: 'rgba(129, 140, 248, 0.05)',
+        fill: false,
+        tension: 0.4,
+        yAxisID: 'y2',
+        pointBackgroundColor: '#818CF8',
+        pointRadius: 5,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } },
+      annotation: {}
+    },
+    scales: {
+      x: { ticks: { font: { size: 10 } }, grid: { color: 'rgba(99,102,241,0.06)' } },
+      y: {
+        beginAtZero: true, max: 38,
+        title: { display: true, text: 'Phases', font: { size: 10 }, color: '#6B7280' },
+        ticks: { font: { size: 10 }, stepSize: 5 },
+        grid: { color: 'rgba(99,102,241,0.06)' }
+      },
+      y2: {
+        position: 'right',
+        beginAtZero: true,
+        title: { display: true, text: 'Tests', font: { size: 10 }, color: '#6B7280' },
+        ticks: { font: { size: 10 }, stepSize: 100 },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// Chart 4: Requirements distribution bar
+new Chart(document.getElementById('chartReqDist'), {
   type: 'bar',
   data: {
-    labels: ['Algorithm Engine', 'UI Components', 'App Screens', 'Infrastructure', 'State Mgmt', 'Tests'],
+    labels: ['v1.0', 'v1.1', 'v1.2', 'v1.3', 'v1.4', 'v2.0'],
+    datasets: [
+      {
+        label: 'Complete',
+        data: [19, 0, 0, 0, 0, 0],
+        backgroundColor: 'rgba(34, 197, 94, 0.7)',
+        borderColor: '#22C55E',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+      {
+        label: 'Pending',
+        data: [0, 10, 18, 20, 15, 13],
+        backgroundColor: ['rgba(245,158,11,0.5)','rgba(96,165,250,0.5)','rgba(167,139,250,0.5)','rgba(107,114,128,0.4)','rgba(251,146,60,0.5)'],
+        borderColor: ['#F59E0B','#60A5FA','#A78BFA','#6B7280','#FB923C'],
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12, usePointStyle: true, pointStyleWidth: 8 } }
+    },
+    scales: {
+      x: { stacked: true, ticks: { font: { size: 11 } } },
+      y: { stacked: true, beginAtZero: true, ticks: { font: { size: 10 } }, grid: { color: 'rgba(99,102,241,0.06)' } }
+    }
+  }
+});
+
+// Chart 5: Test growth
+new Chart(document.getElementById('chartTestGrowth'), {
+  type: 'bar',
+  data: {
+    labels: ['Phase 1-4\n(Mar 14)', 'Phase 5-6\n(Mar 24)', 'v1.0 Ship\n(Apr 6)', 'v1.1 Phase 7\n(Apr 7)'],
     datasets: [{
-      label: 'Lines',
-      data: [2841, 2721, 4882, 2321, 1058, 2908],
-      backgroundColor: ['rgba(108,99,255,0.6)','rgba(34,197,94,0.6)','rgba(52,211,153,0.6)','rgba(245,158,11,0.6)','rgba(96,165,250,0.6)','rgba(251,191,36,0.6)'],
-      borderColor: ['#6C63FF','#22C55E','#34D399','#F59E0B','#60A5FA','#FBBF24'],
+      label: 'Tests Passing',
+      data: [40, 83, 83, 377],
+      backgroundColor: ['rgba(108,99,255,0.5)','rgba(108,99,255,0.6)','rgba(34,197,94,0.6)','rgba(34,197,94,0.8)'],
+      borderColor: ['#6C63FF','#6C63FF','#22C55E','#22C55E'],
       borderWidth: 1,
       borderRadius: 6,
     }]
   },
   options: {
-    indexAxis: 'y',
-    responsive: true, maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales: {
-      x: { beginAtZero: true, ticks: { font: { size: 10 } } },
-      y: { ticks: { font: { size: 11 } } }
+      x: { ticks: { font: { size: 10 } } },
+      y: { beginAtZero: true, ticks: { font: { size: 10 } }, grid: { color: 'rgba(99,102,241,0.06)' } }
     }
   }
 });
 
-// Chart 4: Test Coverage by Module
-new Chart(document.getElementById('chartTests'), {
-  type: 'radar',
+// Chart 6: Codebase doughnut
+new Chart(document.getElementById('chartCodebase'), {
+  type: 'doughnut',
   data: {
-    labels: ['Sleep Windows', 'Classify Shifts', 'Nap Engine', 'Caffeine', 'Meals', 'ICS Parser', 'Edge Cases', 'Energy Model', 'Sync Engine', 'Accuracy'],
+    labels: ['Algorithm Engine (11)', 'Adaptive Brain (6)', 'App Screens (25+)', 'UI Components (30+)', 'Infrastructure (20+)', 'Stores + Hooks (15)', 'Tests (28 suites)', 'Config + Types (15)'],
     datasets: [{
-      label: 'Test Coverage',
-      data: [95, 90, 85, 90, 85, 80, 95, 75, 70, 70],
-      backgroundColor: 'rgba(108, 99, 255, 0.15)',
-      borderColor: '#6C63FF',
-      pointBackgroundColor: '#6C63FF',
-      pointBorderColor: '#fff',
-      pointRadius: 3,
+      data: [11, 6, 25, 30, 20, 15, 28, 17],
+      backgroundColor: [
+        'rgba(108,99,255,0.8)',
+        'rgba(96,165,250,0.8)',
+        'rgba(34,197,94,0.8)',
+        'rgba(74,222,128,0.7)',
+        'rgba(245,158,11,0.8)',
+        'rgba(167,139,250,0.7)',
+        'rgba(251,191,36,0.8)',
+        'rgba(107,114,128,0.6)',
+      ],
+      borderWidth: 0,
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      r: {
-        beginAtZero: true, max: 100,
-        ticks: { font: { size: 9 }, backdropColor: 'transparent' },
-        pointLabels: { font: { size: 10 } },
-        grid: { color: 'rgba(99, 102, 241, 0.1)' },
-        angleLines: { color: 'rgba(99, 102, 241, 0.1)' }
-      }
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 10 }, padding: 6, usePointStyle: true, pointStyleWidth: 7 } }
     }
   }
 });
-
-// Git Timeline - build nodes using DOM methods (no innerHTML)
-(function() {
-  var commits = [
-    {hash:'359c3c5',msg:'Add NightShift app: Expo + circadian algorithm + tests',date:'2026-03-14',type:'feat'},
-    {hash:'0e894ed',msg:'Add implementation plan and project context',date:'2026-03-14',type:'docs'},
-    {hash:'db86842',msg:'Add subagent policy to project context',date:'2026-03-14',type:'docs'},
-    {hash:'fba5815',msg:'Add CLAUDE.md global instructions',date:'2026-03-14',type:'docs'},
-    {hash:'05caf57',msg:'Reorganize repo: trim doc overlap, fix imports',date:'2026-03-14',type:'fix'},
-    {hash:'ae65dde',msg:'Add dark theme design system + user store',date:'2026-03-14',type:'feat'},
-    {hash:'e3f8027',msg:'Add Zustand stores, UI components, Colors.ts',date:'2026-03-14',type:'feat'},
-    {hash:'9258015',msg:'Add TimeRangePicker component',date:'2026-03-14',type:'feat'},
-    {hash:'8bab826',msg:'Update root layout for onboarding routing',date:'2026-03-14',type:'fix'},
-    {hash:'7135438',msg:'Add onboarding, calendar view, shift entry, tabs',date:'2026-03-14',type:'feat'},
-    {hash:'bb45125',msg:'Update activity log: Week 2 session',date:'2026-03-14',type:'docs'},
-    {hash:'d8c7515',msg:'Update project docs: mark Week 2 complete',date:'2026-03-14',type:'docs'},
-    {hash:'231a4d0',msg:'Add Today screen components + import screen',date:'2026-03-14',type:'feat'},
-    {hash:'3443034',msg:'Add Today screen, import/export, settings, tips',date:'2026-03-14',type:'feat'},
-    {hash:'c4b4d3f',msg:'Add tips, animations, EAS config, metadata',date:'2026-03-14',type:'feat'},
-    {hash:'7d895cf',msg:'Integrate tips + insights into Today screen',date:'2026-03-14',type:'feat'},
-    {hash:'4d6cdbd',msg:'Add barrel exports for hooks and tips',date:'2026-03-14',type:'feat'},
-    {hash:'4aab9cd',msg:'Add animations and app icon instructions',date:'2026-03-14',type:'feat'},
-    {hash:'103897f',msg:'Add MonthView animations + edge case tests',date:'2026-03-14',type:'feat'},
-    {hash:'d91989f',msg:'Add test suite + UI press animations',date:'2026-03-14',type:'feat'},
-    {hash:'08754da',msg:'Final docs: Weeks 1-4 complete, MVP ready',date:'2026-03-14',type:'docs'},
-    {hash:'a253677',msg:'Add visual roadmap + architecture diagrams',date:'2026-03-14',type:'docs'},
-    {hash:'e2f2bb2',msg:'Add comprehensive business plan',date:'2026-03-14',type:'docs'},
-    {hash:'dfb652e',msg:'Add privacy policy, disclaimers, icon guide',date:'2026-03-14',type:'docs'},
-    {hash:'af8f37d',msg:'Add polished App Store listing',date:'2026-03-14',type:'docs'},
-    {hash:'3a8c4cb',msg:'Add deployment guide for TestFlight',date:'2026-03-14',type:'docs'},
-    {hash:'4e22dbc',msg:'Update activity log for Session 6',date:'2026-03-14',type:'docs'},
-    {hash:'f5e50d7',msg:'Add founder action guide for launch prep',date:'2026-03-14',type:'docs'},
-    {hash:'f58db6a',msg:'Add interactive project dashboard',date:'2026-03-14',type:'feat'},
-    {hash:'0e53345',msg:'Rename to ShiftWell in app.json',date:'2026-03-14',type:'feat'},
-    {hash:'9ae0229',msg:'Rename NightShift to ShiftWell (batch 1)',date:'2026-03-14',type:'fix'},
-    {hash:'417c2f0',msg:'Rename NightShift to ShiftWell (batch 2)',date:'2026-03-14',type:'fix'},
-    {hash:'f60ee35',msg:'Rename NightShift to ShiftWell (batch 3)',date:'2026-03-14',type:'fix'},
-    {hash:'365f317',msg:'Rename NightShift to ShiftWell (batch 4)',date:'2026-03-14',type:'fix'},
-    {hash:'e46d6c4',msg:'Rename NightShift to ShiftWell (batch 5)',date:'2026-03-14',type:'fix'},
-    {hash:'93b3067',msg:'Rename NightShift to ShiftWell (final)',date:'2026-03-14',type:'fix'},
-    {hash:'201effb',msg:'Add pre-launch landing page',date:'2026-03-14',type:'feat'},
-    {hash:'474bfe9',msg:'Rebuild dashboard HTML',date:'2026-03-14',type:'fix'},
-    {hash:'a37530c',msg:'Add social media guide',date:'2026-03-14',type:'docs'},
-    {hash:'06ee91f',msg:'Add design assets guide',date:'2026-03-14',type:'docs'},
-    {hash:'770aaa7',msg:'Add Phase 2 architecture plan',date:'2026-03-14',type:'docs'},
-    {hash:'619620c',msg:'Fix build: add datetimepicker dep',date:'2026-03-14',type:'fix'},
-    {hash:'c51ff26',msg:'Add Phase 2: Supabase, auth, HealthKit, push',date:'2026-03-16',type:'feat'},
-    {hash:'21dd6c7',msg:'Wire auth + paywall routes into layout',date:'2026-03-16',type:'feat'},
-    {hash:'62644ad',msg:'Phase 3: Wire UI + Recovery Score dashboard',date:'2026-03-16',type:'feat'},
-    {hash:'b5da860',msg:'Redesign landing page (editorial aesthetic)',date:'2026-03-16',type:'feat'},
-    {hash:'b0e6d99',msg:'Fix committee top-10 issues (critical+high)',date:'2026-03-16',type:'fix'},
-    {hash:'1c53cee',msg:'Add comprehensive CLAUDE.md context',date:'2026-03-23',type:'docs'},
-    {hash:'138b572',msg:'Fix ICS parser crash, hasPets, paywall CTA',date:'2026-03-23',type:'fix'},
-    {hash:'1957314',msg:'Add TestFlight readiness checklist',date:'2026-03-23',type:'docs'},
-    {hash:'bde8d92',msg:'Port Borbely two-process energy model',date:'2026-03-24',type:'feat'}
-  ];
-
-  var tl = document.getElementById('timeline');
-  commits.forEach(function(c) {
-    var node = document.createElement('div');
-    node.className = 'tl-node ' + c.type;
-
-    var tooltip = document.createElement('div');
-    tooltip.className = 'tl-tooltip';
-
-    var dateEl = document.createElement('div');
-    dateEl.className = 'tt-date';
-    dateEl.textContent = c.date + ' \u00B7 ' + c.hash.slice(0, 7);
-
-    var msgEl = document.createElement('div');
-    msgEl.className = 'tt-msg';
-    msgEl.textContent = c.msg;
-
-    tooltip.appendChild(dateEl);
-    tooltip.appendChild(msgEl);
-    node.appendChild(tooltip);
-    tl.appendChild(node);
-  });
-})();
-
-// Module Inventory - build with safe DOM methods
-(function() {
-  var modules = {
-    'Algorithm Engine': [
-      {name:'circadian/types.ts', status:'Built', color:'green', desc:'Core type definitions, chronotype offsets (Horne & Ostberg 1976), shift classifications, plan structures.'},
-      {name:'circadian/classify-shifts.ts', status:'Built', color:'green', desc:'Pattern detection: day, night, evening, extended, transition, recovery day classification.'},
-      {name:'circadian/sleep-windows.ts', status:'Built', color:'green', desc:'THE BRAIN: computes optimal sleep blocks using anchor sleep strategy (NIOSH/CDC), Two-Process Model, gradual delay protocol.'},
-      {name:'circadian/nap-engine.ts', status:'Built', color:'green', desc:'Strategic nap placement: pre-shift 90-min cycles for nights, 25-min power naps (Milner & Cote 2009).'},
-      {name:'circadian/caffeine.ts', status:'Built', color:'green', desc:'Personalized cutoff: sleepOnset - (halfLife x 1.67). Based on Drake et al. 2013.'},
-      {name:'circadian/meals.ts', status:'Built', color:'green', desc:'Circadian-aligned timing, time-restricted eating, front-loaded calories (Manoogian 2022).'},
-      {name:'circadian/light-protocol.ts', status:'Built', color:'green', desc:'Light exposure/avoidance scheduling (Czeisler 1990, Eastman & Burgess 2009).'},
-      {name:'circadian/energy-model.ts', status:'Built', color:'green', desc:'Borbely two-process energy model: Process S (homeostatic) + Process C (circadian).'},
-      {name:'circadian/energy-types.ts', status:'Built', color:'green', desc:'Type definitions for the energy model.'},
-      {name:'circadian/index.ts', status:'Built', color:'green', desc:'Public API: generateSleepPlan() entry point.'}
-    ],
-    'Calendar': [
-      {name:'calendar/ics-parser.ts', status:'Built', color:'green', desc:'Parses .ics files with shift detection heuristics. Crash-safe with per-event try/catch.'},
-      {name:'calendar/ics-generator.ts', status:'Built', color:'green', desc:'Generates RFC 5545 .ics with color-coded events, alarms, and categories.'},
-      {name:'calendar/shift-detector.ts', status:'Built', color:'green', desc:'Separates shifts from personal events using duration + keyword matching.'}
-    ],
-    'HealthKit': [
-      {name:'healthkit/healthkit-service.ts', status:'Scaffolded', color:'amber', desc:'Apple HealthKit integration for reading sleep and activity data.'},
-      {name:'healthkit/sleep-comparison.ts', status:'Built', color:'green', desc:'Compares planned vs actual sleep.'},
-      {name:'healthkit/accuracy-score.ts', status:'Built', color:'green', desc:'Calculates plan accuracy from comparison results.'},
-      {name:'healthkit/index.ts', status:'Built', color:'green', desc:'Barrel export.'}
-    ],
-    'Supabase / Cloud': [
-      {name:'supabase/client.ts', status:'Scaffolded', color:'amber', desc:'Supabase client init. Needs env var validation.'},
-      {name:'supabase/auth.ts', status:'Scaffolded', color:'amber', desc:'Auth helpers: sign in, sign up, sign out, session mgmt.'},
-      {name:'supabase/database.types.ts', status:'Built', color:'green', desc:'TypeScript types from Supabase schema.'},
-      {name:'supabase/storage-adapter.ts', status:'Built', color:'green', desc:'Zustand persistence adapter for Supabase storage.'},
-      {name:'supabase/index.ts', status:'Built', color:'green', desc:'Barrel export.'}
-    ],
-    'Premium / Monetization': [
-      {name:'premium/entitlements.ts', status:'Built', color:'green', desc:'Feature entitlements. All features free for v1.'},
-      {name:'premium/premium-service.ts', status:'Scaffolded', color:'amber', desc:'RevenueCat integration. Catch blocks need error handling.'},
-      {name:'premium/index.ts', status:'Built', color:'green', desc:'Barrel export.'}
-    ],
-    'Notifications': [
-      {name:'notifications/notification-service.ts', status:'Scaffolded', color:'amber', desc:'Push notification scheduling. Needs permission flow.'},
-      {name:'notifications/index.ts', status:'Built', color:'green', desc:'Barrel export.'}
-    ],
-    'Sync & Migration': [
-      {name:'sync/sync-engine.ts', status:'Scaffolded', color:'amber', desc:'Data sync between local and Supabase. Conflict resolution.'},
-      {name:'sync/data-migration.ts', status:'Built', color:'green', desc:'Schema migration system for local data.'},
-      {name:'sync/index.ts', status:'Built', color:'green', desc:'Barrel export.'}
-    ],
-    'UI Components': [
-      {name:'components/ui/Button.tsx', status:'Built', color:'green', desc:'Primary/secondary/ghost with press animations.'},
-      {name:'components/ui/Card.tsx', status:'Built', color:'green', desc:'Glass-morphism card component.'},
-      {name:'components/ui/ProgressBar.tsx', status:'Built', color:'green', desc:'Animated progress bar for onboarding.'},
-      {name:'components/ui/OptionCard.tsx', status:'Built', color:'green', desc:'Selectable option card with press feedback.'},
-      {name:'components/ui/AnimatedTransition.tsx', status:'Built', color:'green', desc:'Reusable fade-in/slide-up animation wrapper.'},
-      {name:'components/ui/TimeRangePicker.tsx', status:'Built', color:'green', desc:'Time range selector for shift entry.'},
-      {name:'components/today/*', status:'Built', color:'green', desc:'TimelineEvent, CountdownCard (pulsing glow), InsightBanner, TipCard.'},
-      {name:'components/calendar/*', status:'Built', color:'green', desc:'MonthView with color-coded dots, DayDetail panel.'},
-      {name:'components/recovery/*', status:'Built', color:'green', desc:'WeeklyTrendChart, RecoveryScoreCard, SleepComparisonCard.'}
-    ]
-  };
-
-  var inv = document.getElementById('moduleInventory');
-  Object.keys(modules).forEach(function(group) {
-    var items = modules[group];
-    var col = document.createElement('div');
-    col.className = 'module-group';
-
-    var title = document.createElement('div');
-    title.className = 'module-group-title';
-    title.textContent = group;
-    col.appendChild(title);
-
-    items.forEach(function(m) {
-      var card = document.createElement('div');
-      card.className = 'module-card';
-
-      var header = document.createElement('div');
-      header.className = 'module-header';
-
-      var nameEl = document.createElement('span');
-      nameEl.className = 'module-name';
-      nameEl.textContent = m.name;
-
-      var statusEl = document.createElement('span');
-      statusEl.className = 'module-status';
-      statusEl.textContent = m.status;
-      if (m.color === 'green') {
-        statusEl.style.background = 'var(--green-dim)';
-        statusEl.style.color = 'var(--green)';
-      } else {
-        statusEl.style.background = 'var(--amber-dim)';
-        statusEl.style.color = 'var(--amber)';
-      }
-
-      header.appendChild(nameEl);
-      header.appendChild(statusEl);
-
-      var detail = document.createElement('div');
-      detail.className = 'module-detail';
-      detail.textContent = m.desc;
-
-      card.appendChild(header);
-      card.appendChild(detail);
-
-      card.addEventListener('click', function() {
-        card.classList.toggle('expanded');
-      });
-
-      col.appendChild(card);
-    });
-
-    inv.appendChild(col);
-  });
-})();
 </script>
 </body>
 </html>
