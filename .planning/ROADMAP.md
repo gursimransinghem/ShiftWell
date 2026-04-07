@@ -38,48 +38,48 @@ Full archive: `.planning/milestones/v1.0-ROADMAP.md`
 - [x] **Phase 11: App Store Prep** — Account deletion, medical disclaimer, screenshots, privacy labels (completed 2026-04-07)
 - [ ] **Phase 12: ActivityKit Integration** — Real Dynamic Island transitions (BLOCKED: requires Apple Developer enrollment, D-U-N-S ~5 weeks)
 
-### ⏳ v1.2 HealthKit Closed Loop
+### ✅ v1.2 HealthKit Closed Loop
 
 **Goal:** The algorithm stops guessing and starts learning from the user's actual sleep. HealthKit data feeds back into plan generation, creating a closed-loop system that converges on optimal sleep windows within 7 nights.
 
-- [ ] **Phase 13: Sleep Feedback Research** — Literature review: HealthKit accuracy, wearable validation, feedback loop architectures
-- [ ] **Phase 14: HealthKit Sleep Ingestion** — Read actual sleep/wake from HealthKit, compare plan vs reality, store discrepancy history
-- [ ] **Phase 15: Algorithm Feedback Engine** — Feed discrepancies back into algorithm, auto-adjust sleep windows based on real behavior
-- [ ] **Phase 16: Feedback Validation Sprint** — Analyze 30 days of real user data, produce convergence report
-- [ ] **Phase 17: Growth Engine** — Referral deep links, onboarding A/B, paywall optimization, re-engagement
-- [ ] **Phase 18: RevenueCat Hard Gating** — Adaptive Brain behind paywall, grandfathering for early users
+- [x] **Phase 13: Sleep Feedback Research** — Literature review: HealthKit accuracy, wearable validation, feedback loop architectures (completed 2026-04-07)
+- [x] **Phase 14: HealthKit Sleep Ingestion** — Read actual sleep/wake from HealthKit, compare plan vs reality, store discrepancy history (completed 2026-04-07)
+- [x] **Phase 15: Algorithm Feedback Engine** — Feed discrepancies back into algorithm, auto-adjust sleep windows based on real behavior (completed 2026-04-07)
+- [ ] **Phase 16: Feedback Validation Sprint** — BLOCKED: needs 30 days of real user data from 20+ users
+- [x] **Phase 17: Growth Engine** — Referral deep links, onboarding A/B, paywall optimization, re-engagement (completed 2026-04-07)
+- [x] **Phase 18: RevenueCat Hard Gating** — Adaptive Brain behind paywall, grandfathering for early users (completed 2026-04-07)
 
-### ⏳ v1.3 AI Intelligence Layer
+### ✅ v1.3 AI Intelligence Layer
 
 **Goal:** Claude API brings the science to life in human language. Predictive scheduling anticipates circadian stress before it happens. Pattern recognition surfaces multi-week trends.
 
-- [ ] **Phase 19: AI Coaching Research** — Literature review: AI in sleep coaching, conversational health interventions, LLM safety
-- [ ] **Phase 20: Claude Weekly Brief** — AI-generated personalized sleep summary every Monday
-- [ ] **Phase 21: Predictive Scheduling Research** — Literature review: circadian prediction models, fatigue risk systems (FAID, SAFTE)
-- [ ] **Phase 22: Predictive Calendar Engine** — Scan next 14 days, identify transition stress, generate pre-adaptation protocols
-- [ ] **Phase 23: Pattern Recognition Engine** — Multi-week pattern detection with natural language alerts
-- [ ] **Phase 24: Intelligence Validation Sprint** — Analyze 90 days of AI coaching data, produce outcome report
-- [ ] **Phase 25: Intelligence Polish** — Refine prompts, add feedback loops, build personal outcome dashboard
+- [x] **Phase 19: AI Coaching Research** — Literature review: AI in sleep coaching, conversational health interventions, LLM safety (completed 2026-04-07)
+- [x] **Phase 20: Claude Weekly Brief** — AI-generated personalized sleep summary every Monday (completed 2026-04-07)
+- [x] **Phase 21: Predictive Scheduling Research** — Literature review: circadian prediction models, fatigue risk systems (FAID, SAFTE) (completed 2026-04-07)
+- [x] **Phase 22: Predictive Calendar Engine** — Scan next 14 days, identify transition stress, generate pre-adaptation protocols (completed 2026-04-07)
+- [x] **Phase 23: Pattern Recognition Engine** — Multi-week pattern detection with natural language alerts (completed 2026-04-07)
+- [ ] **Phase 24: Intelligence Validation Sprint** — BLOCKED: needs 90 days of AI coaching data from 50+ users
+- [x] **Phase 25: Intelligence Polish** — Refine prompts, add feedback loops, build personal outcome dashboard (completed 2026-04-07)
 
-### ⏳ v1.4 Platform & Enterprise
+### 🚧 v1.4 Platform & Enterprise
 
 **Goal:** From app to platform. Individual data becomes organizational intelligence. First enterprise pilots signed.
 
-- [ ] **Phase 26: Enterprise Research** — Literature review: shift worker wellness programs, employer outcome metrics, HIPAA assessment
-- [ ] **Phase 27: Outcome Data Pipeline** — Anonymized, HIPAA-aware data export with differential privacy
-- [ ] **Phase 28: Employer Dashboard** — Web dashboard: cohort trends, schedule impact analysis, ROI calculator
-- [ ] **Phase 29: API Layer** — REST API for third-party integrations (hospital scheduling systems)
-- [ ] **Phase 30: Enterprise Sales Kit** — Case studies, ROI calculator, pitch deck, compliance docs
-- [ ] **Phase 31: App Store Optimization** — Screenshots refresh, ASO keywords, localization (Spanish first)
+- [x] **Phase 26: Enterprise Research** — Literature review: shift worker wellness programs, employer outcome metrics, HIPAA assessment (completed 2026-04-07)
+- [x] **Phase 27: Outcome Data Pipeline** — Anonymized, HIPAA-aware data export with differential privacy (completed 2026-04-07)
+- [ ] **Phase 28: Employer Dashboard** — DEFERRED: Next.js web app, separate repo when enterprise customers exist
+- [x] **Phase 29: API Layer** — REST API types, schedule importer for Kronos/QGenda (completed 2026-04-07)
+- [x] **Phase 30: Enterprise Sales Kit** — Case studies, ROI calculator, pitch deck, compliance docs (completed 2026-04-07)
+- [ ] **Phase 31: App Store Optimization** — In progress: i18n skeleton, ASO keyword strategy
 
-### ⏳ v2.0 Advanced Intelligence
+### 🚧 v2.0 Advanced Intelligence
 
 **Goal:** The moat deepens. Apple Watch biometrics, full autopilot mode, published validation study, Android launch.
 
-- [ ] **Phase 32: HRV + Wearable Research** — Literature review: HRV as recovery proxy, Apple Watch vs polysomnography
-- [ ] **Phase 33: Apple Watch Integration** — HRV data -> recovery score refinement, real-time monitoring, complication
-- [ ] **Phase 34: 30-Day Autopilot** — Algorithm makes autonomous changes after 30-day baseline, transparency log
-- [ ] **Phase 35: Validation Study Design** — Publishable study protocol: methodology, IRB, outcome measures, stats plan
+- [x] **Phase 32: HRV + Wearable Research** — Literature review: HRV as recovery proxy, Apple Watch vs polysomnography (completed 2026-04-07)
+- [x] **Phase 33: Apple Watch Integration** — HRV data -> recovery score refinement, real-time monitoring, complication (completed 2026-04-07)
+- [x] **Phase 34: 30-Day Autopilot** — Algorithm makes autonomous changes after 30-day baseline, transparency log (completed 2026-04-07)
+- [x] **Phase 35: Validation Study Design** — Publishable study protocol: methodology, IRB, outcome measures, stats plan (completed 2026-04-07)
 - [ ] **Phase 36: Validation Study Execution** — Run study, collect 90-day data, draft manuscript for peer review
 - [ ] **Phase 37: Android Launch** — React Native -> Android, Play Store, Google Health Connect integration
 - [ ] **Phase 38: Advanced Platform Features** — Multi-facility enterprise, manager alerts, schedule optimization
