@@ -60,6 +60,12 @@ export interface AdaptiveBrainDeps {
   autopilotState?: AutopilotState;
   /** Append an autonomous change to the transparency log (Phase 34) */
   addTransparencyEntry?: (entry: import('../lib/adaptive/transparency-log').TransparencyEntry) => void;
+  /** Phase 15: current discrepancy history from plan-store (feeds feedback engine) */
+  discrepancyHistory?: import('../lib/healthkit/sleep-comparison').SleepComparison[];
+  /** Phase 15: last persisted feedback offset from plan-store */
+  feedbackOffset?: { bedtimeMinutes: number; wakeMinutes: number };
+  /** Phase 15: persist the feedback offset after the engine runs */
+  setFeedbackOffset?: (offset: { bedtimeMinutes: number; wakeMinutes: number }) => void;
 }
 
 /**
@@ -79,6 +85,9 @@ export async function runAdaptiveBrain(deps: AdaptiveBrainDeps): Promise<void> {
     setDiscrepancyHistory,
     autopilotState,
     addTransparencyEntry,
+    discrepancyHistory,
+    feedbackOffset,
+    setFeedbackOffset,
   } = deps;
 
   // ── Daily debounce gate ──────────────────────────────────────────────────
@@ -96,13 +105,17 @@ export async function runAdaptiveBrain(deps: AdaptiveBrainDeps): Promise<void> {
       history = await getSleepHistory(subDays(today, 14), today);
     }
 
-    // Assemble the 4-factor adaptive context
+    // Assemble the 4-factor adaptive context (Phase 15: includes feedback engine)
     const context = buildAdaptiveContext({
       shifts,
       personalEvents,
       profile,
       history,
       today,
+      discrepancyHistory: discrepancyHistory ?? [],
+      previousOffset: feedbackOffset,
+      // hrvContext: undefined — HRV baseline not yet wired from store (Phase 15)
+      // When Phase 15 HRV store fields are added, pass them here.
     });
 
     // ── Feedback Engine (Phase 15) ───────────────────────────────────────────
@@ -186,6 +199,17 @@ export async function runAdaptiveBrain(deps: AdaptiveBrainDeps): Promise<void> {
     }
     // ─────────────────────────────────────────────────────────────────────────
 
+    // ── Phase 15: Persist feedback offset ────────────────────────────────────
+    // If the feedback engine produced an active result, persist the new offset.
+    // Frozen when feedbackActive=false (protocol, insufficient data, data gap).
+    if (context.feedbackResult?.feedbackActive && setFeedbackOffset) {
+      setFeedbackOffset({
+        bedtimeMinutes: context.feedbackResult.adjustedBedtimeOffsetMinutes,
+        wakeMinutes: context.feedbackResult.adjustedWakeOffsetMinutes,
+      });
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     // ── Discrepancy history for feedback engine (HK-01, HK-02, HK-03) ─────────
     // Fetch 30-night history to populate the plan-store discrepancyHistory.
     // This is read by the Phase 15 feedback engine to compute EMA adjustments.
@@ -244,11 +268,14 @@ export function useAdaptivePlan(): AdaptivePlanData {
     setAdaptiveContext,
     setFeedbackAdjustment,
     setDiscrepancyHistory,
+    setFeedbackOffset,
     plan: currentPlan,
     pendingChanges,
     planSnapshot,
     autopilot: autopilotState,
     addTransparencyEntry,
+    discrepancyHistory,
+    feedbackOffset,
   } = usePlanStore();
   const { shifts, personalEvents } = useShiftsStore();
   const { profile } = useUserStore();
@@ -276,6 +303,9 @@ export function useAdaptivePlan(): AdaptivePlanData {
           setDiscrepancyHistory,
           autopilotState,
           addTransparencyEntry,
+          discrepancyHistory,
+          feedbackOffset,
+          setFeedbackOffset,
         });
       } catch (err) {
         // Adaptive brain is enhancement only — never crash the app

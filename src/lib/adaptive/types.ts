@@ -121,6 +121,8 @@ export interface AdaptiveContext {
     daysTracked: number;
     lastUpdated: Date;
   };
+  /** Feedback engine result from the last adaptive run (null before first run) */
+  feedbackResult: FeedbackResult | null;
 }
 
 // ─── Feedback Engine ──────────────────────────────────────────────────────────

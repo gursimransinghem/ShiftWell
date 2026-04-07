@@ -54,6 +54,15 @@ export interface PlanState {
   /** Append a single comparison to the history (auto-trims to 30) */
   appendDiscrepancy: (comparison: SleepComparison) => void;
 
+  // ── Feedback Offset (Phase 15) ────────────────────────────────────────────
+  /**
+   * Cumulative EMA-computed offset applied to the sleep window.
+   * Persisted across sessions so the plan stays calibrated on restart.
+   */
+  feedbackOffset: { bedtimeMinutes: number; wakeMinutes: number };
+  /** Update the feedback offset (called by useAdaptivePlan after each run) */
+  setFeedbackOffset: (offset: { bedtimeMinutes: number; wakeMinutes: number }) => void;
+
   regeneratePlan: (opts?: { isCircadianReset?: boolean }) => Promise<void>;
   clearError: () => void;
   setDateRange: (start: Date, end: Date) => void;
@@ -110,6 +119,9 @@ export const usePlanStore = create<PlanState>()(
       // Discrepancy history initial state (Phase 14)
       discrepancyHistory: [],
 
+      // Feedback offset initial state (Phase 15)
+      feedbackOffset: { bedtimeMinutes: 0, wakeMinutes: 0 },
+
       clearError: () => set({ error: null }),
 
       setDiscrepancyHistory: (history) =>
@@ -119,6 +131,8 @@ export const usePlanStore = create<PlanState>()(
         set((state) => ({
           discrepancyHistory: [...state.discrepancyHistory, comparison].slice(-30),
         })),
+
+      setFeedbackOffset: (offset) => set({ feedbackOffset: offset }),
 
       regeneratePlan: async (opts) => {
         const { dateRange, adaptiveContext, plan: existingPlan } = get();
@@ -253,6 +267,7 @@ export const usePlanStore = create<PlanState>()(
         autopilot: s.autopilot,
         transparencyLog: s.transparencyLog,
         discrepancyHistory: s.discrepancyHistory,
+        feedbackOffset: s.feedbackOffset,
       }),
     },
   ),

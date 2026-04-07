@@ -13,10 +13,12 @@ import type { SleepRecord } from '../healthkit/healthkit-service';
 import { computeDebtLedger } from './sleep-debt-engine';
 import { detectTransition, buildProtocol } from './circadian-protocols';
 import { computeRecoveryScore, scoreToZone } from './recovery-calculator';
+import { computeFeedbackOffset } from './feedback-engine';
 import type {
   AdaptiveContext,
   PatternAlert,
   TransitionType,
+  FeedbackResult,
 } from './types';
 
 // ─── Pattern Alert Helpers ────────────────────────────────────────────────────
@@ -118,11 +120,14 @@ function findCalendarConflicts(
  * This is the single entry point for the adaptive brain's morning assembly.
  * Called once per day (or on demand) before generating the sleep plan.
  *
- * @param deps.shifts        - All upcoming shift events (full calendar range)
- * @param deps.personalEvents - Non-shift calendar events
- * @param deps.profile       - User profile (chronotype, sleepNeed, etc.)
- * @param deps.history       - Pre-fetched 14-night HealthKit sleep records
- * @param deps.today         - Reference date (typically new Date())
+ * @param deps.shifts           - All upcoming shift events (full calendar range)
+ * @param deps.personalEvents   - Non-shift calendar events
+ * @param deps.profile          - User profile (chronotype, sleepNeed, etc.)
+ * @param deps.history          - Pre-fetched 14-night HealthKit sleep records
+ * @param deps.today            - Reference date (typically new Date())
+ * @param deps.discrepancyHistory - Last 30 nights of planned-vs-actual (Phase 15)
+ * @param deps.previousOffset   - Last persisted feedback offset (Phase 15)
+ * @param deps.hrvContext       - Tonight's HRV vs. user baseline (Phase 15 / HK-11)
  */
 export function buildAdaptiveContext(deps: {
   shifts: ShiftEvent[];
@@ -130,8 +135,20 @@ export function buildAdaptiveContext(deps: {
   profile: UserProfile;
   history: SleepRecord[];
   today: Date;
+  discrepancyHistory?: import('../healthkit/sleep-comparison').SleepComparison[];
+  previousOffset?: { bedtimeMinutes: number; wakeMinutes: number };
+  hrvContext?: import('./types').HRVFeedbackContext;
 }): AdaptiveContext {
-  const { shifts, personalEvents, profile, history, today } = deps;
+  const {
+    shifts,
+    personalEvents,
+    profile,
+    history,
+    today,
+    discrepancyHistory,
+    previousOffset,
+    hrvContext,
+  } = deps;
 
   // ── 1. Circadian transition detection ───────────────────────────────────────
   const transition = detectTransition(shifts, today);
@@ -175,10 +192,23 @@ export function buildAdaptiveContext(deps: {
   const targetDates = protocol.dailyTargets.map((t) => t.date);
   const calendarConflicts = findCalendarConflicts(personalEvents, targetDates);
 
-  // ── 7. Assemble ──────────────────────────────────────────────────────────────
+  // ── 7. Feedback Engine (Phase 15 — HK-04, HK-05, HK-11) ─────────────────────
+  // computeFeedbackOffset is a pure function: no side effects, no store access.
+  // discrepancyHistory, previousOffset, and hrvContext are passed in by the caller
+  // (useAdaptivePlan reads them from plan-store and passes them here).
+  // When discrepancyHistory is empty/undefined, feedback is inactive — safe default.
+  const activeProtocol = protocol.dailyTargets.length > 0 ? protocol : null;
+  const feedbackResult: FeedbackResult = computeFeedbackOffset(
+    discrepancyHistory ?? [],
+    activeProtocol,
+    previousOffset,
+    hrvContext,
+  );
+
+  // ── 8. Assemble ──────────────────────────────────────────────────────────────
   return {
     circadian: {
-      protocol: protocol.dailyTargets.length > 0 ? protocol : null,
+      protocol: activeProtocol,
       phaseOffsetMinutes,
       maintenanceMode,
     },
@@ -204,5 +234,6 @@ export function buildAdaptiveContext(deps: {
       daysTracked,
       lastUpdated: today,
     },
+    feedbackResult,
   };
 }
