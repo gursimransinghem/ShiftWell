@@ -40,6 +40,7 @@ import {
 } from '@/src/theme';
 import Button from '@/src/components/ui/Button';
 import Card from '@/src/components/ui/Card';
+import { WeeklyBriefToggle } from '@/src/components/settings/WeeklyBriefToggle';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -544,6 +545,12 @@ export default function SettingsScreen() {
               )}
             </>
           )}
+        </Card>
+
+        {/* ---- AI Coaching Section ---- */}
+        <SectionHeader title="AI COACHING" />
+        <Card style={styles.card}>
+          <WeeklyBriefToggle />
         </Card>
 
         {/* ---- Profile Section ---- */}

@@ -8,10 +8,12 @@ export interface UserState {
   profile: UserProfile;
   onboardingComplete: boolean;
   healthkitConnected: boolean;
+  weeklyBriefEnabled: boolean;
   setProfile: (profile: Partial<UserProfile>) => void;
   setHealthkitConnected: (connected: boolean) => void;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
+  setWeeklyBriefEnabled: (v: boolean) => void;
 }
 
 export const useUserStore = create<UserState>()(
@@ -20,6 +22,7 @@ export const useUserStore = create<UserState>()(
       profile: { ...DEFAULT_PROFILE },
       onboardingComplete: false,
       healthkitConnected: false,
+      weeklyBriefEnabled: true,
 
       setProfile: (updates) =>
         set((state) => ({
@@ -36,7 +39,10 @@ export const useUserStore = create<UserState>()(
           profile: { ...DEFAULT_PROFILE },
           onboardingComplete: false,
           healthkitConnected: false,
+          weeklyBriefEnabled: true,
         }),
+
+      setWeeklyBriefEnabled: (v: boolean) => set({ weeklyBriefEnabled: v }),
     }),
     {
       name: 'nightshift-user',
