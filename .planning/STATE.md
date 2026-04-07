@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
 status: completed
-stopped_at: Completed 31-01-PLAN.md
-last_updated: "2026-04-07T19:41:53.572Z"
+stopped_at: Completed 32-01-PLAN.md
+last_updated: "2026-04-07T19:43:23.392Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 38
-  completed_phases: 21
+  completed_phases: 22
   total_plans: 56
-  completed_plans: 38
+  completed_plans: 39
   percent: 64
 ---
 
@@ -80,6 +80,7 @@ Progress: [██████░░░░] 64% (36/56 plans complete)
 | Phase 29-api-layer P01 | 6min | 2 tasks | 10 files |
 | Phase 30-enterprise-sales-kit P01 | 8min | 2 tasks | 2 files |
 | Phase 31-app-store-optimization P01 | 4min | 2 tasks | 6 files |
+| Phase 32-hrv-wearable-research P01 | 6min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -185,6 +186,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 30-enterprise-sales-kit]: Enterprise pricing confirmed: Standard $5/seat/month, Professional $10/seat/month, Enterprise $15/seat/month with volume discounts at 500/1000/2000+ seats
 - [Phase 31-app-store-optimization]: i18n provider uses expo-localization getLocales() with startsWith('es') — covers all Spanish variants; English fallback in t() prevents blank UI for partial translations
 - [Phase 31-app-store-optimization]: Review solicitation triggers after first adherent day (recovery >60) at Day 3-7, max once per 90 days — compliant with Apple guideline 1.1.7 (no pre-prompt)
+- [Phase 32-hrv-wearable-research]: Use SDNN from HealthKit (not RMSSD) — Apple Watch background HRV is SDNN-based; % deviation algorithm is metric-agnostic so SDNN works identically
+- [Phase 32-hrv-wearable-research]: Personal 30-day rolling baseline over population norms — shift workers have systematically 8-15% lower HRV; population thresholds would incorrectly penalize them
+- [Phase 32-hrv-wearable-research]: HRV weight capped at 25% — meaningful signal but imperfect PPG sensor (MAE 3-8ms overnight); redistribute to 40/30/25/5 when available vs 55/40/5 baseline
 
 ### Pending Todos
 
@@ -199,6 +203,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T19:41:53.563Z
-Stopped at: Completed 31-01-PLAN.md
+Last session: 2026-04-07T19:43:16.678Z
+Stopped at: Completed 32-01-PLAN.md
 Resume file: None

@@ -469,7 +469,7 @@ Plans:
   4. Recommendation for real-time vs batch processing with justification
 **Plans**: 1 plan
 Plans:
-- [ ] 32-01-PLAN.md — HRV literature review, Apple Watch accuracy assessment, biometric algorithm spec
+- [x] 32-01-PLAN.md — HRV literature review, Apple Watch accuracy assessment, biometric algorithm spec
 **Rationale**: Apple Watch HRV is the next frontier. Research prevents building on inaccurate signals.
 **Science anchor**: Shaffer & Ginsberg 2017, de Zambotti et al. 2019, Natale et al. 2021
 
@@ -599,7 +599,7 @@ Plans:
 | 29. API Layer | v1.4 | 1/1 | Complete    | 2026-04-07 |
 | 30. Enterprise Sales Kit | v1.4 | 1/1 | Complete   | 2026-04-07 |
 | 31. App Store Optimization | v1.4 | 1/1 | Complete   | 2026-04-07 |
-| 32. HRV + Wearable Research | v2.0 | 1/1 | Complete | 2026-04-07 |
+| 32. HRV + Wearable Research | v2.0 | 1/1 | Complete   | 2026-04-07 |
 | 33. Apple Watch Integration | v2.0 | 1/1 | Complete | 2026-04-07 |
 | 34. 30-Day Autopilot | v2.0 | 1/1 | Complete | 2026-04-07 |
 | 35. Validation Study Design | v2.0 | 1/1 | Complete | 2026-04-07 |

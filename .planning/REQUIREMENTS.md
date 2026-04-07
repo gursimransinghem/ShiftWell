@@ -192,9 +192,9 @@
 
 ### Research: HRV + Wearables (Phase 32)
 
-- [ ] **RES-16**: HRV literature review (15+ sources on HRV and recovery)
-- [ ] **RES-17**: Wearable accuracy assessment (Apple Watch vs clinical)
-- [ ] **RES-18**: Biometric algorithm spec for HRV-modified recovery score
+- [x] **RES-16**: HRV literature review (15+ sources on HRV and recovery)
+- [x] **RES-17**: Wearable accuracy assessment (Apple Watch vs clinical)
+- [x] **RES-18**: Biometric algorithm spec for HRV-modified recovery score
 
 ### Apple Watch (Phase 33)
 
