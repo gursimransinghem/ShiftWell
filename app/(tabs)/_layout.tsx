@@ -42,6 +42,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="outcomes"
+        options={{
+          title: 'Outcomes',
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           href: null,
