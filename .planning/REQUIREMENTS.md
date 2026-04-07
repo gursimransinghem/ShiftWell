@@ -177,8 +177,8 @@
 
 ### Enterprise Sales Kit (Phase 30)
 
-- [ ] **ENT-07**: Case studies, ROI calculator, pitch deck, compliance docs
-- [ ] **ENT-08**: Pricing model ($5-15/seat/month with volume discounts)
+- [x] **ENT-07**: Case studies, ROI calculator, pitch deck, compliance docs
+- [x] **ENT-08**: Pricing model ($5-15/seat/month with volume discounts)
 
 ### App Store Optimization (Phase 31)
 
