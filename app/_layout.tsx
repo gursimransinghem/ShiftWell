@@ -161,6 +161,13 @@ function RootLayoutNav() {
             }}
           />
           <Stack.Screen name="downgrade" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="autopilot-log"
+            options={{
+              presentation: 'modal',
+              headerShown: false,
+            }}
+          />
         </Stack>
       </AdaptiveColorProvider>
     </ThemeProvider>
