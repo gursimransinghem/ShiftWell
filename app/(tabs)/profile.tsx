@@ -112,7 +112,9 @@ export default function ProfileScreen() {
     ?? recovery.adherenceScore
     ?? null;
   const streak = recovery.weeklyAccuracy?.streakDays ?? 0;
-  const avgSleep = recovery.lastNight?.actual?.totalHours ?? profile.sleepNeed ?? 7.5;
+  const avgSleep = recovery.lastNight?.actual
+    ? recovery.lastNight.actual.durationMinutes / 60
+    : (profile.sleepNeed ?? 7.5);
 
   // Count enabled notifications
   const notifCount = [windDownEnabled, caffeineCutoffEnabled, morningBriefEnabled].filter(Boolean).length;
@@ -208,7 +210,7 @@ export default function ProfileScreen() {
             <CardDivider />
             <CardRow
               label="Edit preferences"
-              onPress={() => router.push('/(onboarding)')}
+              onPress={() => router.push('/(onboarding)' as any)}
             />
           </GlassCard>
 

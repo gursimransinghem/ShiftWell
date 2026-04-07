@@ -14,6 +14,7 @@ import { useUserStore } from '@/src/store/user-store';
 import { usePlanStore } from '@/src/store/plan-store';
 import { LightProtocolArc } from '@/src/components/circadian/LightProtocolArc';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
+import type { ShiftEvent } from '@/src/lib/circadian/types';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -137,12 +138,12 @@ interface WeekShiftSummary {
   adviceColor: string;
 }
 
-function useAdjustmentRoadmap(shifts: ReturnType<typeof useShiftsStore>['shifts']): WeekShiftSummary[] {
+function useAdjustmentRoadmap(shifts: ShiftEvent[]): WeekShiftSummary[] {
   return useMemo(() => {
     const now = new Date();
 
     function shiftsInRange(start: Date, end: Date) {
-      return shifts.filter((s) =>
+      return shifts.filter((s: ShiftEvent) =>
         isWithinInterval(s.start, { start, end }) ||
         isWithinInterval(s.end, { start, end }),
       );
@@ -166,12 +167,12 @@ function useAdjustmentRoadmap(shifts: ReturnType<typeof useShiftsStore>['shifts'
         };
       }
 
-      const types = [...new Set(weekShifts.map((s) => s.shiftType ?? 'day'))];
+      const types = [...new Set(weekShifts.map((s: ShiftEvent) => s.shiftType ?? 'day'))];
       const mixed = types.length > 1;
 
       const lines = weekShifts
-        .sort((a, b) => a.start.getTime() - b.start.getTime())
-        .map((s) => `${format(s.start, 'EEE')}: ${shiftTypeLabel(s.shiftType ?? 'day')}`);
+        .sort((a: ShiftEvent, b: ShiftEvent) => a.start.getTime() - b.start.getTime())
+        .map((s: ShiftEvent) => `${format(s.start, 'EEE')}: ${shiftTypeLabel(s.shiftType ?? 'day')}`);
 
       const hasNight = types.includes('night');
       const advice = mixed

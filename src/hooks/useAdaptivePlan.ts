@@ -27,7 +27,7 @@ export interface AdaptivePlanData {
 export function useAdaptivePlan(): AdaptivePlanData {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setAdaptiveContext, plan: currentPlan, pendingChanges } = usePlanStore();
+  const { setAdaptiveContext, plan: currentPlan, pendingChanges, planSnapshot } = usePlanStore();
   const { shifts, personalEvents } = useShiftsStore();
   const { profile } = useUserStore();
   const adaptiveContext = usePlanStore((s) => s.adaptiveContext);
@@ -60,8 +60,9 @@ export function useAdaptivePlan(): AdaptivePlanData {
 
         // Compute what will change vs current plan (for the InsightCard)
         // The actual plan regeneration happens inside setAdaptiveContext
+        // Use planSnapshot as the "old" plan to show real before/after differences (BUG-05 fix)
         const changes = currentPlan
-          ? computeDelta(currentPlan, currentPlan, context)
+          ? computeDelta(planSnapshot ?? currentPlan, currentPlan, context)
           : [];
 
         setAdaptiveContext(context, changes);
