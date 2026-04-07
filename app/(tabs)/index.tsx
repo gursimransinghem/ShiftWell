@@ -41,6 +41,7 @@ import {
   AdaptiveInsightCard,
   WeeklyBriefCard,
   CircadianForecastCard,
+  BehavioralChecklist,
 } from '@/src/components/today';
 import { useBriefStore } from '@/src/store/brief-store';
 import { useWeeklyBrief } from '@/src/hooks/useWeeklyBrief';
@@ -661,6 +662,21 @@ export default function TodayScreen() {
                 {/* Circadian Forecast Card (Phase 22) — upcoming transitions */}
                 <View style={styles.section}>
                   <CircadianForecastCard />
+                </View>
+
+                {/* Behavioral Checklist (Phase 22) — nap, caffeine, light */}
+                <View style={styles.section}>
+                  <BehavioralChecklist
+                    nextShift={shifts.find((s) => s.start > now) ?? null}
+                    plannedSleepISO={
+                      futureBlocks.find((b) => b.type === 'main-sleep')?.start.toISOString() ?? null
+                    }
+                    shiftType={
+                      currentShift
+                        ? (currentShift.shiftType === 'extended' ? 'night' : currentShift.shiftType) as 'day' | 'evening' | 'night'
+                        : 'day'
+                    }
+                  />
                 </View>
 
                 {/* Countdown Row */}

@@ -17,3 +17,4 @@ export { PatternAlertCard } from './PatternAlertCard';
 export { AdaptiveInsightCard } from './AdaptiveInsightCard';
 export { WeeklyBriefCard } from './WeeklyBriefCard';
 export { CircadianForecastCard } from './CircadianForecastCard';
+export { BehavioralChecklist } from './BehavioralChecklist';
