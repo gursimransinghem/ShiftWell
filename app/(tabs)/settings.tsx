@@ -3,6 +3,7 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -12,7 +13,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/user-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useAuthStore } from '@/src/store/auth-store';
+import { useBriefStore } from '@/src/store/brief-store';
+import { usePlanStore } from '@/src/store/plan-store';
+import { useFeatureGate } from '@/src/lib/premium/feature-gate';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
+import ReferralCard from '@/src/components/ui/ReferralCard';
 
 // ---------------------------------------------------------------------------
 // Section header
@@ -94,6 +100,10 @@ function LinkRow({ label, value, onPress, destructive }: {
 export default function SettingsScreen() {
   const { profile, setProfile } = useUserStore();
   const { isPremium, isInTrial, trialDaysLeft, plan } = usePremiumStore();
+  const deleteAccount = useAuthStore((s) => s.deleteAccount);
+  const { enabled: briefEnabled, toggleEnabled: toggleBrief } = useBriefStore();
+  const { autopilot, transparencyLog, setAutopilotEnabled } = usePlanStore();
+  const { available: adaptiveBrainAvailable } = useFeatureGate('adaptive-brain');
 
   const [sleepNeed, setSleepNeed] = useState(profile.sleepNeed ?? 7.5);
   const [caffeineHalfLife, setCaffeineHalfLife] = useState(profile.caffeineHalfLife ?? 5);
@@ -102,6 +112,7 @@ export default function SettingsScreen() {
     typeof profile.napPreference === 'number' ? profile.napPreference : 20,
   );
   const [saved, setSaved] = useState(false);
+  const [showTransparencyLog, setShowTransparencyLog] = useState(false);
 
   function handleSave() {
     setProfile({ sleepNeed, caffeineHalfLife, commuteDuration: commuteMinutes, napPreference: napMinutes > 0 });
@@ -109,13 +120,20 @@ export default function SettingsScreen() {
     setTimeout(() => setSaved(false), 2000);
   }
 
-  function handleReferral() {
+  function handleDeleteAccount() {
     Alert.alert(
-      'Spread the Sleep \uD83C\uDF19',
-      'Share ShiftWell with a colleague who works shifts. Every shift worker deserves better sleep.',
+      'Delete Account',
+      'This will permanently delete your account and all data. This action cannot be undone.',
       [
-        { text: 'Copy Link', onPress: () => {} },
-        { text: 'Done', style: 'cancel' },
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete Account',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteAccount();
+            router.replace('/(onboarding)/welcome');
+          },
+        },
       ],
     );
   }
@@ -161,11 +179,95 @@ export default function SettingsScreen() {
           <Text style={styles.saveBtnText}>{saved ? '\u2713 Saved' : 'Save Changes'}</Text>
         </TouchableOpacity>
 
+        {/* AI Features */}
+        <SectionHeader title="AI FEATURES" />
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.toggleLabelCol}>
+              <Text style={styles.rowLabel}>Weekly Sleep Brief</Text>
+              <Text style={styles.toggleSubtitle}>
+                Every Monday — AI summary of your sleep week
+              </Text>
+            </View>
+            <Switch
+              value={briefEnabled}
+              onValueChange={toggleBrief}
+              trackColor={{ false: COLORS.background.elevated, true: COLORS.accent.primary }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+
+          {/* Autopilot toggle (adaptive-brain gated) */}
+          {adaptiveBrainAvailable && (
+            <>
+              <View style={styles.divider} />
+              <View style={styles.row}>
+                <View style={styles.autopilotLabelBlock}>
+                  <Text style={styles.rowLabel}>Autopilot Mode</Text>
+                  <Text style={styles.autopilotSubLabel}>
+                    {autopilot.eligible
+                      ? autopilot.enabled
+                        ? `${autopilot.autonomousChanges} change${autopilot.autonomousChanges !== 1 ? 's' : ''} made automatically`
+                        : 'Eligible — small changes applied silently'
+                      : 'Available after 30 days of tracking'}
+                  </Text>
+                </View>
+                <Switch
+                  value={autopilot.enabled}
+                  onValueChange={(val) => {
+                    if (!autopilot.eligible) return;
+                    setAutopilotEnabled(val);
+                  }}
+                  disabled={!autopilot.eligible}
+                  trackColor={{ false: COLORS.border.default, true: COLORS.accent.primary }}
+                  thumbColor="#FFFFFF"
+                />
+              </View>
+
+              {/* Transparency log (shown when autopilot is on and has entries) */}
+              {autopilot.enabled && transparencyLog.length > 0 && (
+                <>
+                  <View style={styles.divider} />
+                  <TouchableOpacity
+                    style={styles.row}
+                    onPress={() => setShowTransparencyLog((v) => !v)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.rowLabel}>Autopilot History</Text>
+                    <View style={styles.rowRight}>
+                      <Text style={styles.rowValue}>{transparencyLog.length} entries</Text>
+                      <Ionicons
+                        name={showTransparencyLog ? 'chevron-up' : 'chevron-down'}
+                        size={16}
+                        color={COLORS.text.muted}
+                      />
+                    </View>
+                  </TouchableOpacity>
+
+                  {showTransparencyLog && (
+                    <View style={styles.transparencyBlock}>
+                      {transparencyLog.slice(-10).reverse().map((entry, i) => (
+                        <View key={i} style={styles.transparencyEntry}>
+                          <Text style={styles.transparencyDate}>{entry.dateISO}</Text>
+                          <Text style={styles.transparencyReason}>{entry.reason}</Text>
+                        </View>
+                      ))}
+                      {transparencyLog.length > 10 && (
+                        <Text style={styles.transparencyMore}>
+                          +{transparencyLog.length - 10} older entries
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </View>
+
         {/* Community */}
         <SectionHeader title="COMMUNITY" />
-        <View style={styles.card}>
-          <LinkRow label={'Spread the Sleep \uD83C\uDF19'} value="Refer a colleague" onPress={handleReferral} />
-        </View>
+        <ReferralCard />
 
         {/* About */}
         <SectionHeader title="ABOUT" />
@@ -178,6 +280,30 @@ export default function SettingsScreen() {
           <LinkRow label="Privacy Policy" onPress={() => {}} />
           <View style={styles.divider} />
           <LinkRow label="Terms of Service" onPress={() => {}} />
+        </View>
+
+        {/* Medical Disclaimer */}
+        <SectionHeader title="MEDICAL DISCLAIMER" />
+        <View style={styles.card}>
+          <View style={styles.disclaimerRow}>
+            <Ionicons name="medical" size={16} color={COLORS.text.muted} style={styles.disclaimerIcon} />
+            <Text style={styles.disclaimerText}>
+              ShiftWell provides general wellness information based on circadian science research.
+              It is not a substitute for medical advice. Consult your physician before making
+              changes to your sleep, diet, or work schedule — especially if you have a medical
+              condition or take medications.
+            </Text>
+          </View>
+        </View>
+
+        {/* Account */}
+        <SectionHeader title="ACCOUNT" />
+        <View style={styles.card}>
+          <LinkRow
+            label="Delete Account"
+            onPress={handleDeleteAccount}
+            destructive
+          />
         </View>
 
         <Text style={styles.legal}>
@@ -300,6 +426,71 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#0B0D16',
+  },
+
+  // Disclaimer
+  disclaimerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  disclaimerIcon: {
+    marginTop: 1,
+    marginRight: 10,
+  },
+  disclaimerText: {
+    flex: 1,
+    fontSize: 12,
+    color: COLORS.text.secondary,
+    lineHeight: 18,
+  },
+
+  // Toggle row
+  toggleLabelCol: {
+    flex: 1,
+    gap: 2,
+    paddingRight: SPACING.md,
+  },
+  toggleSubtitle: {
+    fontSize: 12,
+    color: COLORS.text.muted,
+  },
+
+  // Autopilot
+  autopilotLabelBlock: {
+    flex: 1,
+    gap: 2,
+    paddingRight: SPACING.md,
+  },
+  autopilotSubLabel: {
+    fontSize: 12,
+    color: COLORS.text.muted,
+    lineHeight: 16,
+  },
+  transparencyBlock: {
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    gap: 8,
+  },
+  transparencyEntry: {
+    gap: 2,
+  },
+  transparencyDate: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: COLORS.text.muted,
+    letterSpacing: 0.5,
+  },
+  transparencyReason: {
+    fontSize: 13,
+    color: COLORS.text.secondary,
+    lineHeight: 18,
+  },
+  transparencyMore: {
+    fontSize: 12,
+    color: COLORS.text.muted,
+    fontStyle: 'italic',
   },
 
   // Legal

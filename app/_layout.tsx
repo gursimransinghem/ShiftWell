@@ -20,6 +20,7 @@ import { registerCalendarBackgroundSync } from '@/src/lib/calendar/background-sy
 import { runCalendarSync } from '@/src/lib/calendar/calendar-service';
 // Side-effect import: registers SHIFTWELL_CALENDAR_SYNC task via TaskManager.defineTask at module scope
 import '@/src/lib/calendar/background-sync';
+import { handleAppOpen, scheduleReengagementSequence } from '@/src/lib/growth/reengagement';
 
 // Register foreground notification handler — SDK 55 API (shouldShowBanner replaces shouldShowAlert)
 Notifications.setNotificationHandler({
@@ -111,6 +112,12 @@ function RootLayoutNav() {
           (b) => b.type === 'main-sleep'
         ) ?? false;
         scoreState.finalizeDay(today, hasSleepBlock);
+        // Re-engagement: cancel pending sequence and record open (GRO-03)
+        handleAppOpen().catch(() => {});
+      }
+      if (lastState === 'active' && (next === 'background' || next === 'inactive')) {
+        // Schedule re-engagement sequence when app goes to background (GRO-03)
+        scheduleReengagementSequence().catch(() => {});
       }
       lastState = next;
     });

@@ -9,6 +9,9 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useUserStore } from '@/src/store/user-store';
+import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
+import { logExposure } from '@/src/lib/growth/ab-testing';
 import { COLORS, SPACING, RADIUS } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -238,10 +241,30 @@ function PlanCard({
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
   const { purchase, restore, isLoading } = usePremiumStore();
+  const profile = useUserStore((s) => s.profile);
 
-  const currentPlan = PLANS.find((p) => p.key === selectedPlan)!;
+  // Paywall pricing A/B experiment (GRO-04)
+  const paywallVariant = getPaywallVariant(profile.id ?? '');
+
+  // Override annual plan pricing based on experiment variant
+  const experimentPlans: Plan[] = PLANS.map((p) => {
+    if (p.key === 'annual') {
+      return {
+        ...p,
+        price: paywallVariant.annualPrice,
+        perMonth: paywallVariant.monthlyEquivalent,
+      };
+    }
+    return p;
+  });
+
+  const currentPlan = experimentPlans.find((p) => p.key === selectedPlan)!;
 
   async function handleStartTrial() {
+    // Log paywall impression for experiment tracking
+    if (profile.id) {
+      logExposure('paywall-pricing-v1', paywallVariant.variantId === 'control' ? 'A' : 'B', profile.id).catch(() => {});
+    }
     await purchase(currentPlan);
     router.back();
   }
@@ -329,7 +352,7 @@ export default function PaywallScreen() {
         {/* ── Pricing ──────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
         <View style={styles.planRow}>
-          {PLANS.map((plan) => (
+          {experimentPlans.map((plan) => (
             <PlanCard
               key={plan.key}
               plan={plan}
