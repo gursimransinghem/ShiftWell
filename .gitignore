@@ -44,3 +44,6 @@ yarn-error.*
 /android
 .superpowers/
 ios/
+
+# CEO Loop logs (keep directory, ignore log files)
+logs/ceo-loop/*.log
