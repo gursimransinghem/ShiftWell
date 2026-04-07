@@ -243,7 +243,9 @@ Plans:
   2. SAFETY-GUARDRAILS.md defines prohibited outputs (medical advice, diagnosis, drug recommendations)
   3. Literature review cites 10+ sources on AI health interventions and FDA digital health guidance
   4. Test suite of 50+ edge case prompts with expected pass/fail outcomes
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 19-01-PLAN.md — Literature review, AI coaching framework, safety guardrails, edge case test suite
 **Rationale**: LLM safety in health context is non-negotiable. Research before building prevents liability.
 **Science anchor**: Luxton et al. 2016, FDA digital health guidance 2023, Torous et al. 2021
 
@@ -257,7 +259,9 @@ Plans:
   3. Tone is "coach, not doctor" — no medical advice, no diagnosis language
   4. Brief passes all safety guardrail tests from Phase 19
   5. User can disable weekly briefs in Settings
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 20-01-PLAN.md — Claude API client, brief generator pipeline, Settings toggle and scheduling
 **Rationale**: First AI-visible feature. Sets the tone for the intelligence layer.
 
 ### Phase 21: Predictive Scheduling Research
@@ -270,7 +274,9 @@ Plans:
   2. PREDICTION-ALGORITHM-SPEC.md defines the lookahead algorithm with inputs, outputs, and thresholds
   3. Literature review cites 10+ sources on circadian prediction and fatigue risk
   4. Recommendation for which model to implement with scientific justification
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 21-01-PLAN.md — Fatigue model comparison (FAID/SAFTE/CAS) and prediction algorithm specification
 **Rationale**: Predictive scheduling is the hardest AI feature. Research prevents building the wrong model.
 **Science anchor**: Gander et al. 2011, Hursh et al. 2004 (SAFTE), Dawson & McCulloch 2005, Folkard & Lombardi 2006
 
@@ -283,7 +289,9 @@ Plans:
   2. Transition stress points identified with severity score (low/medium/high/critical)
   3. Pre-adaptation protocol generated 3-5 days before high-stress transitions
   4. "Circadian Forecast" card appears on Today screen showing upcoming transitions
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 22-01-PLAN.md — Prediction engine (14-day scanner), prediction store, CircadianForecastCard
 **Rationale**: This is the killer feature. Nobody else predicts circadian stress from calendar data.
 **Science anchor**: Eastman & Burgess 2009, Crowley et al. 2003
 **UI hint**: yes
@@ -298,7 +306,9 @@ Plans:
   3. Weekend compensation pattern detection
   4. Natural language alerts generated (e.g., "Your recovery drops every time you work 3+ consecutive nights")
   5. Alerts pass safety guardrail tests
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 23-01-PLAN.md — Pattern detector (3 algorithms), NL alert generator, PatternAlertCard
 **Rationale**: Pattern recognition makes the invisible visible. Shift workers don't know their patterns until they see them.
 
 ### Phase 24: Intelligence Validation Sprint
@@ -311,7 +321,9 @@ Plans:
   2. Pre/post comparison: adherence rates, sleep quality scores, recovery times
   3. Predictive scheduling efficacy: transition recovery time with vs without pre-adaptation
   4. AI recommendation follow-through rate and correlation with outcomes
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 24-01-PLAN.md — Data analysis pipeline specification and 90-day intelligence report template
 **Rationale**: Validate intelligence layer before enterprise pitch. Outcome data becomes the sales deck.
 
 ### Phase 25: Intelligence Polish
@@ -323,7 +335,9 @@ Plans:
   2. Personal outcome dashboard: "Your sleep improved 23% since you started using ShiftWell"
   3. AI prompt refinements deployed based on validation findings
   4. Weekly brief engagement rate > 70%
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 25-01-PLAN.md — Brief feedback UI (thumbs up/down) and personal outcome dashboard
 **Rationale**: Polish phase uses validation data to optimize the intelligence layer before enterprise.
 **UI hint**: yes
 
@@ -517,13 +531,13 @@ Plans:
 | 16. Feedback Validation Sprint | v1.2 | TBD | Not started | - |
 | 17. Growth Engine | v1.2 | TBD | Not started | - |
 | 18. RevenueCat Hard Gating | v1.2 | TBD | Not started | - |
-| 19. AI Coaching Research | v1.3 | TBD | Not started | - |
-| 20. Claude Weekly Brief | v1.3 | TBD | Not started | - |
-| 21. Predictive Scheduling Research | v1.3 | TBD | Not started | - |
-| 22. Predictive Calendar Engine | v1.3 | TBD | Not started | - |
-| 23. Pattern Recognition Engine | v1.3 | TBD | Not started | - |
-| 24. Intelligence Validation Sprint | v1.3 | TBD | Not started | - |
-| 25. Intelligence Polish | v1.3 | TBD | Not started | - |
+| 19. AI Coaching Research | v1.3 | 0/1 | Not started | - |
+| 20. Claude Weekly Brief | v1.3 | 0/1 | Not started | - |
+| 21. Predictive Scheduling Research | v1.3 | 0/1 | Not started | - |
+| 22. Predictive Calendar Engine | v1.3 | 0/1 | Not started | - |
+| 23. Pattern Recognition Engine | v1.3 | 0/1 | Not started | - |
+| 24. Intelligence Validation Sprint | v1.3 | 0/1 | Not started | - |
+| 25. Intelligence Polish | v1.3 | 0/1 | Not started | - |
 | 26. Enterprise Research | v1.4 | TBD | Not started | - |
 | 27. Outcome Data Pipeline | v1.4 | TBD | Not started | - |
 | 28. Employer Dashboard | v1.4 | TBD | Not started | - |
