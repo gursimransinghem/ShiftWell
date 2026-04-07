@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: TestFlight Launch & Adaptive Brain
-status: executing
-stopped_at: Completed 08-01-PLAN.md
-last_updated: "2026-04-07T04:13:27.894Z"
+status: verifying
+stopped_at: Completed 08-02-PLAN.md
+last_updated: "2026-04-07T04:19:45.034Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-04-06)
 
 Phase: 08 (adaptive-brain-core) — EXECUTING
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-04-07
 
 Progress: [░░░░░░░░░░] 0% (requirements in progress)
@@ -65,6 +65,7 @@ Progress: [░░░░░░░░░░] 0% (requirements in progress)
 | Phase 05-live-activities-recovery-score P02 | 2min | 2 tasks | 2 files |
 | Phase 07 P02 | 18min | 2 tasks | 8 files |
 | Phase 08-adaptive-brain-core P01 | 5 | 2 tasks | 5 files |
+| Phase 08-adaptive-brain-core P02 | 20 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,9 @@ Decisions logged in PROJECT.md Key Decisions table.
 - [Phase 08-01]: plan-store partialize persists only changeLog, daysUntilTransition, snapshotTimestamp — never SleepPlan objects (too large, non-serializable Dates)
 - [Phase 08-01]: X/Accept buttons call onDismiss() before setDismissed(true) — onDismiss triggers dismissChanges in store, setDismissed for immediate UI feedback
 - [Phase 08-01]: AdaptiveInsightCard component tests use source-analysis pattern (fs.readFileSync + regex) — node test env cannot render RN components; source inspection sufficient for callback wiring verification
+- [Phase 08-02]: runAdaptiveBrain extracted as exported async function — hooks cannot be tested in node env (renderHook requires jsdom)
+- [Phase 08-02]: AsyncStorage setItem called AFTER setAdaptiveContext succeeds — failures retry on next foreground
+- [Phase 08-02]: showDebtCard fallback is true when adaptiveContext is null — card visible on first launch before HealthKit runs
 
 ### Pending Todos
 
@@ -132,6 +136,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T04:13:27.891Z
-Stopped at: Completed 08-01-PLAN.md
+Last session: 2026-04-07T04:19:45.031Z
+Stopped at: Completed 08-02-PLAN.md
 Resume file: None

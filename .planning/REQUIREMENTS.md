@@ -23,8 +23,8 @@ Three integration pipes are broken in production. These must be fixed before any
 
 Formalize and wire the partial Adaptive Brain implementation to production.
 
-- [ ] **BRAIN-01**: Morning recalculation runs once per day on app foreground — AppState background→active trigger with AsyncStorage daily debounce, no expo-background-task
-- [ ] **BRAIN-02**: Sleep debt engine operational — rolling 14-night debt tracker with banking protocol (extra sleep on off-days reduces upcoming debt)
+- [x] **BRAIN-01**: Morning recalculation runs once per day on app foreground — AppState background→active trigger with AsyncStorage daily debounce, no expo-background-task
+- [x] **BRAIN-02**: Sleep debt engine operational — rolling 14-night debt tracker with banking protocol (extra sleep on off-days reduces upcoming debt)
 - [ ] **BRAIN-03**: Circadian transition protocols fire correctly — 5 transition types (pre-shift, post-shift, rotating, recovery, off-sequence) route to correct protocol handler
 - [x] **BRAIN-04**: AdaptiveInsightCard renders on Today screen when plan changes — shows what changed, which factors drove it, with undo action
 - [ ] **BRAIN-05**: SleepDebtCard shows dual-meter visualization — current debt (minutes) vs banked credit on same gauge
@@ -109,8 +109,8 @@ Populated during roadmap creation.
 | BUG-04 | Phase 7 | Complete |
 | BUG-05 | Phase 7 | Complete |
 | BUG-06 | Phase 7 | Complete |
-| BRAIN-01 | Phase 8 | Pending |
-| BRAIN-02 | Phase 8 | Pending |
+| BRAIN-01 | Phase 8 | Complete |
+| BRAIN-02 | Phase 8 | Complete |
 | BRAIN-03 | Phase 9 | Pending |
 | BRAIN-04 | Phase 8 | Complete |
 | BRAIN-05 | Phase 9 | Pending |
