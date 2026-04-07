@@ -57,10 +57,18 @@ export interface SleepRecord {
  */
 export async function requestAuthorization(): Promise<boolean> {
   try {
+    // Phase 14: Added biometric data types (HK-06 through HK-09)
+    // Availability note: appleSleepingWristTemperature requires iOS 16+ and
+    // Apple Watch Series 8+. Older devices will simply return no data for that
+    // type — the authorization request succeeds regardless of device support.
     const result = await HealthKit.requestAuthorization(
       [
         HKCategoryTypeIdentifier.sleepAnalysis,
         HKQuantityTypeIdentifier.heartRate,
+        HKQuantityTypeIdentifier.heartRateVariabilitySDNN,
+        HKQuantityTypeIdentifier.restingHeartRate,
+        HKQuantityTypeIdentifier.appleSleepingWristTemperature,
+        HKQuantityTypeIdentifier.stepCount,
       ],
       [HKCategoryTypeIdentifier.sleepAnalysis],
     );

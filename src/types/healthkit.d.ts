@@ -21,6 +21,11 @@ declare module '@kingstinct/react-native-healthkit' {
 
   export enum QuantityTypeIdentifier {
     heartRate = 'HKQuantityTypeIdentifierHeartRate',
+    heartRateVariabilitySDNN = 'HKQuantityTypeIdentifierHeartRateVariabilitySDNN',
+    // Phase 14 biometric readers (HK-06 through HK-09)
+    restingHeartRate = 'HKQuantityTypeIdentifierRestingHeartRate',
+    appleSleepingWristTemperature = 'HKQuantityTypeIdentifierAppleSleepingWristTemperature',
+    stepCount = 'HKQuantityTypeIdentifierStepCount',
   }
 
   export enum StatisticsOptions {
@@ -39,6 +44,13 @@ declare module '@kingstinct/react-native-healthkit' {
     sourceRevision?: { source?: { name?: string } };
   }
 
+  interface QuantitySample {
+    startDate: string | Date;
+    endDate: string | Date;
+    quantity: number;
+    sourceRevision?: { source?: { name?: string } };
+  }
+
   interface StatisticsResult {
     averageQuantity?: { quantity: number };
   }
@@ -53,6 +65,10 @@ declare module '@kingstinct/react-native-healthkit' {
       identifier: string,
       options: QueryOptions,
     ): Promise<CategorySample[]>;
+    queryQuantitySamples(
+      identifier: string,
+      options: QueryOptions,
+    ): Promise<QuantitySample[]>;
     saveCategorySample(
       identifier: string,
       value: number,
