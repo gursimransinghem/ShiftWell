@@ -2,17 +2,17 @@
 
 **Last updated:** 2026-04-07
 **CEO Loop version:** 1.0
-**Cycle count:** 0
+**Cycle count:** 1
 
 ## Department Status
 
 | # | Department | Status | Last Run | Trigger State | Notes |
 |---|-----------|--------|----------|---------------|-------|
-| 1 | Product | Active | -- | Awaiting first cycle | Phase 7 executing in GSD |
-| 2 | Engineering | Active | -- | Awaiting first cycle | Phase 7 bug fixes in progress |
-| 3 | Marketing | Active | -- | Awaiting first cycle | Pre-launch ASO research needed |
-| 4 | Operations | Active | -- | Awaiting first cycle | LLC formation pending |
-| 5 | Strategy & Planning | Active | -- | Awaiting first cycle | v1.1 roadmap defined |
+| 1 | Product | Active | 2026-04-07 | Next: phase completion or feedback | Updated VISUAL_ROADMAP.md — phases 7-11 complete, Phase 12 blocked |
+| 2 | Engineering | Active | 2026-04-07 | Next: STATE.md change or test failure | 383 tests passing, 0 TS errors; npm test script missing |
+| 3 | Marketing | Active | -- | First cycle skipped (cost); trigger at next cycle | WebSearch deferred; no urgent competitive intel |
+| 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
+| 5 | Strategy & Planning | Active | 2026-04-07 | Next: phase completion or monthly | Updated BUSINESS_PLAN.md pricing; Individual dev enrollment flagged |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
 | 7 | Social Media | Dormant | -- | Activates: TestFlight launch | -- |
 | 8 | Customer Success | Dormant | -- | Activates: TestFlight launch | -- |
@@ -21,11 +21,30 @@
 
 ## Pending Approvals
 
-_None yet._
+| # | Item | Department | Priority | Decision Needed |
+|---|------|-----------|----------|-----------------|
+| 1 | LLC company name: Circadian Labs vs Vigil Health vs ShiftWell | Strategy/Ops | CRITICAL | Name decision starts 5-week Apple Dev clock |
+| 2 | Individual vs Organization Apple Developer enrollment | Strategy | HIGH | Individual = instant TestFlight; Org = full brand but 5+ weeks |
+| 3 | Trademark clearance search + filing | Operations | HIGH | Can parallelize with LLC; protect name before marketing spend |
+| 4 | Add `"test": "jest"` to package.json scripts | Engineering | LOW | One-line fix; unblocks CEO Loop test checks |
+| 5 | Commit and push Phase 10/11 staged changes | Engineering | MEDIUM | 11 modified files + 1 new test; should be committed before TestFlight build |
 
 ## Recent Activity
 
-_CEO Loop not yet started._
+### Cycle 1 — 2026-04-07 (Morning)
+**Departments dispatched:** Engineering, Product, Operations, Strategy & Planning
+**Marketing:** Skipped (WebSearch cost; no urgent intel)
+
+**Key findings:**
+- `npm test` broken — no script in package.json; actual command is `npx jest` (383 tests pass)
+- CLAUDE.md documents "116 tests" — outdated (383 actual)
+- STATE.md progress counters stale (shows 2 phases; ROADMAP shows 5 complete)
+- 11 files with uncommitted Phase 10/11 changes; branch 165 commits ahead, never pushed
+- BUSINESS_PLAN.md had wrong pricing ($4.99/mo) — corrected to $6.99/mo
+- Google OAuth uses placeholder client ID — must replace before any user testing
+- Expo SDK 55.0.6 is 5 patches behind (55.0.11 available)
+
+**Artifacts committed:** VISUAL_ROADMAP.md, BUSINESS_PLAN.md
 
 ## Activation Triggers
 
