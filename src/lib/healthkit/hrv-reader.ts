@@ -22,6 +22,48 @@ import HealthKit, {
 } from '@kingstinct/react-native-healthkit';
 import { subDays, format } from 'date-fns';
 
+// ─── fetchOvernightHRV ────────────────────────────────────────────────────────
+
+/**
+ * Fetch mean overnight HRV (SDNN) for an explicit sleep window.
+ *
+ * Phase 33 entry point: called by score-store.finalizeDay with the actual
+ * sleep window from plan-store. Returns the mean SDNN across all HealthKit
+ * samples in the window.
+ *
+ * Returns null when:
+ * - No Apple Watch paired or HealthKit permission denied
+ * - Fewer than 3 samples in the window (outlier rejection per BIOMETRIC-ALGORITHM-SPEC §5.3)
+ * - HealthKit query fails for any reason
+ *
+ * Never throws — all errors are caught and return null.
+ *
+ * @param sleepWindowStart - When the user fell asleep
+ * @param sleepWindowEnd - When the user woke up
+ */
+export async function fetchOvernightHRV(
+  sleepWindowStart: Date,
+  sleepWindowEnd: Date,
+): Promise<number | null> {
+  try {
+    const samples = await HealthKit.queryQuantitySamples(
+      HKQuantityTypeIdentifier.heartRateVariabilitySDNN,
+      { from: sleepWindowStart, to: sleepWindowEnd },
+    );
+
+    if (!samples || samples.length < 3) {
+      // Fewer than 3 samples = insufficient data (BIOMETRIC-ALGORITHM-SPEC §5.3)
+      return null;
+    }
+
+    const sum = samples.reduce((acc: number, s: { quantity: number }) => acc + s.quantity, 0);
+    const mean = sum / samples.length;
+    return Math.round(mean * 10) / 10;
+  } catch {
+    return null;
+  }
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface HRVReading {
