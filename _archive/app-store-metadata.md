@@ -76,3 +76,9 @@ Initial release -- import your shifts, get personalized sleep plans, export to y
 
 ## Price
 Free
+
+---
+Created: 2026-03-24
+Last Reviewed: 2026-03-24
+Last Edited: 2026-03-24
+Review Notes: Freshness footer added during comprehensive audit.

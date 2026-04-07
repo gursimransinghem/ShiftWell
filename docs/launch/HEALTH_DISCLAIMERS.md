@@ -134,3 +134,9 @@ Use this reference table when writing marketing copy, App Store descriptions, in
 - **Avoid superlatives** like "best," "most effective," or "only" when describing health outcomes.
 - **Do reference the science** — ShiftWell's foundation in peer-reviewed research (Borbely, 1982; Eastman & Burgess, 2009; Drake et al., 2013) is a genuine differentiator, as long as claims remain proportionate.
 - When in doubt, use language that **empowers the user** ("helps you," "supports," "tools for") rather than language that **promises outcomes** ("fixes," "cures," "guarantees").
+
+---
+Created: 2026-03-24
+Last Reviewed: 2026-03-24
+Last Edited: 2026-03-24
+Review Notes: Freshness footer added during comprehensive audit.

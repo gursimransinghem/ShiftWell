@@ -105,6 +105,7 @@ function makeContextWithProtocol(targetDate: Date): AdaptiveContext {
       zone: null,
       baselineMature: false,
     },
+    feedbackResult: null,
     meta: {
       learningPhase: true,
       daysTracked: 5,
@@ -147,6 +148,7 @@ function makeContextWithDebt(rollingHours: number): AdaptiveContext {
       zone: null,
       baselineMature: false,
     },
+    feedbackResult: null,
     meta: {
       learningPhase: true,
       daysTracked: 5,
@@ -180,6 +182,7 @@ function makeContextWithBanking(extraMins: number): AdaptiveContext {
       zone: null,
       baselineMature: false,
     },
+    feedbackResult: null,
     meta: {
       learningPhase: true,
       daysTracked: 5,

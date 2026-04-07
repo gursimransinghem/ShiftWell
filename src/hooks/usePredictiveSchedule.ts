@@ -12,7 +12,7 @@
  * Call once at app root (same level as useAdaptivePlan).
  */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BETA_MODE, isFeatureAvailable } from '../lib/premium/feature-gate';
 import { useShiftsStore } from '../store/shifts-store';

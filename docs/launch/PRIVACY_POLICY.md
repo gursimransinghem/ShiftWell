@@ -140,3 +140,9 @@ Email: **shiftwell.app@gmail.com**
 ---
 
 *This privacy policy is written in plain language to help you understand exactly how ShiftWell handles your data. The short version: your data stays on your device, and we never see it.*
+
+---
+Created: 2026-03-24
+Last Reviewed: 2026-03-24
+Last Edited: 2026-03-24
+Review Notes: Freshness footer added during comprehensive audit.

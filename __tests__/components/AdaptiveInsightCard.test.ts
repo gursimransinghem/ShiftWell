@@ -43,6 +43,7 @@ const learningContext: AdaptiveContext = {
     bankingWindowOpen: false,
   },
   recovery: { score: null, zone: null, baselineMature: false },
+  feedbackResult: null,
   meta: { learningPhase: true, daysTracked: 5, lastUpdated: new Date() },
 };
 
