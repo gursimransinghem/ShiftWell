@@ -162,8 +162,8 @@
 
 ### Outcome Data Pipeline (Phase 27)
 
-- [ ] **ENT-01**: Anonymized data export with differential privacy (cohorts < 50)
-- [ ] **ENT-02**: Aggregate metrics matching enterprise outcomes framework
+- [x] **ENT-01**: Anonymized data export with differential privacy (cohorts < 50)
+- [x] **ENT-02**: Aggregate metrics matching enterprise outcomes framework
 
 ### Employer Dashboard (Phase 28)
 
