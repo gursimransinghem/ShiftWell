@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-08 (Morning)
+**Last updated:** 2026-04-08 (Midday)
 **CEO Loop version:** 1.0
-**Cycle count:** 4
+**Cycle count:** 5
 
 ## Department Status
 
@@ -27,7 +27,7 @@
 | 2 | Individual vs Organization Apple Developer enrollment | Strategy | HIGH | Individual = instant TestFlight; Org = full brand but 5+ weeks |
 | 3 | Trademark clearance search + filing | Operations | HIGH | Can parallelize with LLC; protect name before marketing spend |
 | 5 | Commit and push Phase 10/11 staged changes | Engineering | MEDIUM | 11 modified files + 1 new test; should be committed before TestFlight build |
-| 11 | Resolve merge conflict in `app/(tabs)/settings.tsx` | Engineering | CRITICAL | 14 TS errors block EAS builds; choose HEAD vs worktree-agent-a211ed4f (lines 16-46, 336-384) |
+| 11 | Resolve merge conflict in `app/(tabs)/settings.tsx` | Engineering | CRITICAL | Recommendation: **keep WORKTREE version**. Phase A archives ReferralCard (HEAD's `src/lib/growth/`); worktree adds WeeklyBriefToggle (marked "must stay active" in Phase A plan). Accept worktree, remove markers, commit. |
 | 12 | Add investor summary line to BUSINESS-PLAN-V2.md | Strategy | LOW | "Enterprise module staged in v2 archive, reintroduced on first hospital inquiry" — protects enterprise story in pre-seed pitch |
 | 6 | Record 60-second app walkthrough (screen capture) | Marketing | HIGH | Single highest-value pre-launch asset; app is ready now |
 | 7 | Build waitlist landing page (shiftwell.com) | Marketing | HIGH | Email capture pre-launch; every week delayed = fewer Day 1 users |
@@ -36,6 +36,25 @@
 | 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
 
 ## Recent Activity
+
+### Cycle 5 — 2026-04-08 (Midday)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fix:** Updated C11 status to `done` in Code pipeline (npm test script confirmed fixed Cycle 4).
+
+**Trigger evaluation:**
+- Engineering: settings.tsx merge conflict unchanged; STATE.md last updated 2026-04-07 — no new activity. No re-dispatch value.
+- Product: No commits since Cycle 4, no STATE.md change, no customer feedback.
+- Marketing: 1 day since last run (threshold >3 days, triggers Apr 10).
+- Operations: FINANCIAL_TRACKER last modified Apr 2 — no change.
+- Strategy: No phase completed, not first of month.
+
+**Key intel — settings.tsx conflict resolution recommendation:**
+Deep analysis of both conflict sides against Phase A plan reveals the worktree version is the correct choice:
+- **Conflict 1 (lines 16-46 imports):** Worktree removes ReferralCard import (growth module being archived in Phase A) and adds WeeklyBriefToggle (explicitly marked "must stay active" in Phase A plan). Worktree is correct.
+- **Conflict 2 (lines 336-384 UI sections):** Worktree replaces "COMMUNITY" (ReferralCard) with "AI COACHING" (WeeklyBriefToggle) + "PROFILE" (user preferences editor). Both are functional, non-premature features. Worktree is correct.
+- **Action for Sim:** In settings.tsx, remove `<<<<<<< HEAD` through `=======` (keep worktree content), remove `>>>>>>> worktree-agent-a211ed4f` markers, commit. Both conflict sections: accept worktree.
+
+**Status:** Critical path unchanged — LLC filing is sole unblocked action. Code will be TestFlight-ready before Apple Dev enrollment completes.
 
 ### Cycle 4 — 2026-04-08 (Morning)
 **Departments dispatched:** None (quiet cycle — no triggers met)
@@ -150,7 +169,7 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | C8 | HealthKit entitlements | ready | -- | `grep "healthkit.background-delivery" app.json` | TF-02 |
 | C9 | EAS production profile | ready | -- | `grep '"production"' eas.json` | TF-04 |
 | C10 | Google OAuth real ID | ready | -- | No "placeholder" in OAuth config | CEO Cycle 1 finding |
-| C11 | npm test script | ready | -- | `grep '"test"' package.json` | CEO Cycle 1 finding |
+| C11 | npm test script | done | -- | `grep '"test"' package.json` | Fixed Cycle 4 — `"test": "jest"` added to package.json |
 | C12 | installedAt timestamp | ready | -- | `grep "installedAt" src/` in onboarding completion | TF-05 |
 
 ### Track 3: Assets (gates App Store submission)
@@ -171,9 +190,9 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | Track | Total | Done | In Progress | Ready | Blocked |
 |-------|-------|------|-------------|-------|---------|
 | Legal | 7 | 0 | 0 | 0 | 7 |
-| Code | 12 | 2 | 4 | 6 | 0 |
+| Code | 12 | 3 | 4 | 5 | 0 |
 | Assets | 8 | 0 | 0 | 5 | 3 |
-| **Total** | **27** | **2** | **4** | **11** | **10** |
+| **Total** | **27** | **3** | **4** | **10** | **10** |
 
 ### Critical Path
 
