@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-08 (Midday)
+**Last updated:** 2026-04-08 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 5
+**Cycle count:** 6
 
 ## Department Status
 
@@ -34,8 +34,29 @@
 | 8 | LinkedIn founder story in Sim's voice | Marketing | HIGH | Medical audience trusts MD voice; Claude can draft structure, Sim must write it |
 | 9 | Claim social handles (@shiftwell_sleep) | Marketing | MEDIUM | Name squatting risk; claim now before marketing spend |
 | 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
+| 13 | Google iOS client ID for app.json | Engineering | HIGH | Replace PLACEHOLDER_CLIENT_ID in app.json:92 iosUrlScheme — need real client ID from Google Cloud Console (create project → OAuth 2.0 iOS credential → client ID) |
 
 ## Recent Activity
+
+### Cycle 6 — 2026-04-08 (Evening)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fix:** C10 status corrected from `ready` → `blocked` — PLACEHOLDER_CLIENT_ID found in `app.json:92` (iosUrlScheme). Previous check only scanned `src/`. Added PA #13 for Sim.
+
+**Pipeline verification (auto-checks run):**
+- C7 (privacyManifests): ✅ CONFIRMED — `privacyManifests` key present in app.json
+- C8 (HealthKit entitlements): ✅ CONFIRMED — `healthkit.background-delivery` present in app.json
+- C9 (EAS production profile): ✅ CONFIRMED — `"production"` profile present in eas.json
+- C10 (Google OAuth): ❌ CORRECTED — `PLACEHOLDER_CLIENT_ID` in `app.json:92` iosUrlScheme
+- C12 (installedAt): ✅ CONFIRMED — `AsyncStorage.setItem('installedAt', ...)` in `app/(onboarding)/calendar.tsx`
+
+**Trigger evaluation:**
+- Engineering: settings.tsx merge conflict unchanged; no STATE.md activity. Re-dispatch adds no value — fix is Sim's 5-min action.
+- Product: No new commits, no STATE.md change, no customer feedback.
+- Marketing: 1 day since last run (threshold >3 days, triggers Apr 10). Skip.
+- Operations: FINANCIAL_TRACKER unchanged; no hard project deadlines. Skip.
+- Strategy: No phase completed, not first of month. Skip.
+
+**New Pending Approval:** PA #13 — Google iOS client ID (app.json:92 PLACEHOLDER_CLIENT_ID)
 
 ### Cycle 5 — 2026-04-08 (Midday)
 **Departments dispatched:** None (quiet cycle — no triggers met)
@@ -168,7 +189,7 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | C7 | Privacy manifest | ready | -- | `grep "privacyManifests" app.json` | TF-01, 15-min config |
 | C8 | HealthKit entitlements | ready | -- | `grep "healthkit.background-delivery" app.json` | TF-02 |
 | C9 | EAS production profile | ready | -- | `grep '"production"' eas.json` | TF-04 |
-| C10 | Google OAuth real ID | ready | -- | No "placeholder" in OAuth config | CEO Cycle 1 finding |
+| C10 | Google OAuth real ID | blocked | -- | No "placeholder" in OAuth config | PLACEHOLDER_CLIENT_ID in app.json:92 (`iosUrlScheme`) — must replace with real Google iOS client ID (Cycle 6 finding) |
 | C11 | npm test script | done | -- | `grep '"test"' package.json` | Fixed Cycle 4 — `"test": "jest"` added to package.json |
 | C12 | installedAt timestamp | ready | -- | `grep "installedAt" src/` in onboarding completion | TF-05 |
 
@@ -190,9 +211,9 @@ Three parallel tracks to App Store. Operations department auto-checks each step 
 | Track | Total | Done | In Progress | Ready | Blocked |
 |-------|-------|------|-------------|-------|---------|
 | Legal | 7 | 0 | 0 | 0 | 7 |
-| Code | 12 | 3 | 4 | 5 | 0 |
+| Code | 12 | 3 | 4 | 4 | 1 |
 | Assets | 8 | 0 | 0 | 5 | 3 |
-| **Total** | **27** | **3** | **4** | **10** | **10** |
+| **Total** | **27** | **3** | **4** | **9** | **11** |
 
 ### Critical Path
 
