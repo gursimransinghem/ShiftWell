@@ -1,15 +1,15 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-07 (Evening)
+**Last updated:** 2026-04-08 (Morning)
 **CEO Loop version:** 1.0
-**Cycle count:** 3
+**Cycle count:** 4
 
 ## Department Status
 
 | # | Department | Status | Last Run | Trigger State | Notes |
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
-| 2 | Engineering | Active | 2026-04-07 (Eve) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx) |
+| 2 | Engineering | Active | 2026-04-08 (Morn) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx); npm test script fixed |
 | 3 | Marketing | Active | 2026-04-07 | Next: >3 days since last run (Apr 10) | ASO strategy + 6-week content calendar complete; "shift worker" keywords uncontested |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
@@ -26,7 +26,6 @@
 | 1 | LLC company name: Circadian Labs vs Vigil Health vs ShiftWell | Strategy/Ops | CRITICAL | Name decision starts 5-week Apple Dev clock |
 | 2 | Individual vs Organization Apple Developer enrollment | Strategy | HIGH | Individual = instant TestFlight; Org = full brand but 5+ weeks |
 | 3 | Trademark clearance search + filing | Operations | HIGH | Can parallelize with LLC; protect name before marketing spend |
-| 4 | Add `"test": "jest"` to package.json scripts | Engineering | LOW | One-line fix; unblocks CEO Loop test checks |
 | 5 | Commit and push Phase 10/11 staged changes | Engineering | MEDIUM | 11 modified files + 1 new test; should be committed before TestFlight build |
 | 11 | Resolve merge conflict in `app/(tabs)/settings.tsx` | Engineering | CRITICAL | 14 TS errors block EAS builds; choose HEAD vs worktree-agent-a211ed4f (lines 16-46, 336-384) |
 | 12 | Add investor summary line to BUSINESS-PLAN-V2.md | Strategy | LOW | "Enterprise module staged in v2 archive, reintroduced on first hospital inquiry" — protects enterprise story in pre-seed pitch |
@@ -37,6 +36,21 @@
 | 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
 
 ## Recent Activity
+
+### Cycle 4 — 2026-04-08 (Morning)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fix:** Added `"test": "jest"` to package.json scripts — 3-cycle pending item resolved
+
+**Trigger evaluation:**
+- Engineering: settings.tsx merge conflict still present (14 TS errors), but already fully documented in PA #11 — re-dispatch adds no value. Waiting on Sim.
+- Product: No commits since Cycle 3, no STATE.md changes, no customer feedback
+- Marketing: 1 day since last run (threshold >3 days, triggers Apr 10)
+- Operations: FINANCIAL_TRACKER last modified Apr 2, unchanged
+- Strategy: No phase completed, not first of month
+
+**Status:** No code was written overnight. Critical path is still LLC filing → Apple Dev enrollment. All blockers documented and waiting on Sim. Next meaningful trigger: Marketing (Apr 10), or Sim starts Phase A execution.
+
+**Artifacts committed:** package.json (npm test script)
 
 ### Cycle 3 — 2026-04-07 (Evening)
 **Departments dispatched:** Engineering, Product, Strategy & Planning

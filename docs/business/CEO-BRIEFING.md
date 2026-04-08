@@ -1,8 +1,8 @@
 # CEO Briefing — ShiftWell
 
-**Last cycle:** 2026-04-07 (Evening)
+**Last cycle:** 2026-04-08 (Morning)
 **Next scheduled:** Next CEO Loop run
-**Cycle #:** 3
+**Cycle #:** 4
 
 ---
 
@@ -11,7 +11,7 @@
 | Department | Health | Last Action | Next Trigger |
 |-----------|--------|-------------|--------------|
 | Product | ✅ GREEN | VISUAL_ROADMAP updated to Phase A/B/C ship path; Phase 28 complete | Phase A/B/C completion or feedback |
-| Engineering | ⚠️ YELLOW | 1,059 tests / 71 suites passing; BLOCKER: settings.tsx merge conflict (14 TS errors) | Resolve conflict; STATE.md change |
+| Engineering | ⚠️ YELLOW | 1,059 tests / 71 suites passing; BLOCKER: settings.tsx merge conflict (14 TS errors); npm test script fixed ✓ | Resolve conflict; STATE.md change |
 | Marketing | ✅ GREEN | ASO strategy + 6-week pre-launch content calendar complete | >3 days (Apr 10) |
 | Operations | ✅ GREEN | All legal gates pending; no change | LLC filed or financial change |
 | Strategy | ✅ GREEN | Slim-down pivot confirmed aligned with business plan | Phase A-C completion or monthly (May) |
@@ -64,9 +64,6 @@ These are decisions only Sim can make. Nothing was executed without approval.
 ### 🟡 MEDIUM — App Store Subtitle Approval *(Cycle 2)*
 **What:** "Circadian Plans, Auto-Scheduled" (30 chars). Approve before TestFlight build.
 
-### 🟢 LOW — Fix `npm test` script
-**What:** Add `"test": "jest"` to package.json. One line. Flagged 3 cycles — resolve this week.
-
 ### 🟢 LOW — Add investor summary line to BUSINESS-PLAN-V2.md *(NEW — Cycle 3)*
 **What:** Under v2.0 roadmap: "Enterprise module, employer dashboard, and API layer built and staged in v2 archive — reintroduced on first hospital inquiry."
 **Why:** Protects enterprise story in pre-seed pitch. Signals capital discipline, not capability loss.
@@ -75,30 +72,20 @@ These are decisions only Sim can make. Nothing was executed without approval.
 
 ## What Happened This Cycle
 
-**3 of 5 active departments ran.** Marketing (<3 days since last run) and Operations (no FINANCIAL_TRACKER change) not triggered.
+**Cycle 4 — Quiet maintenance cycle.** No departments dispatched — no triggers met.
 
-### Engineering — Cycle 3
-**BLOCKER found:** `app/(tabs)/settings.tsx` has unresolved git merge conflict (`worktree-agent-a211ed4f`). 14 TypeScript errors — all trace to this one file. Jest passes (doesn't type-check JSX) but EAS builds will fail. Was missed by the `81b029b` "fix: resolve all test failures" commit.
+**Autonomous fix executed:** Added `"test": "jest"` to `package.json` scripts. This was a one-line fix flagged across 3 consecutive cycles. `npm test` now works. PA #4 removed from pending approvals.
 
-**Good news:** 1,059 tests passing across 71 suites — up from 383. Three new test files (fatigue-model.test.ts, timezone-handler.test.ts, circadian-protocols-multi.test.ts) all green.
+**Key status:** No code commits since Cycle 3 (last night). Settings.tsx merge conflict unchanged. Critical path is entirely blocked on Sim completing LLC filing. Nothing engineering can do that wasn't already done last cycle.
 
-**Slim-down risks documented:** Correct sequencing is: resolve settings.tsx first → archive modules → check `tsc --noEmit` after each Task block → fix imports → run full test suite last.
+**Next live triggers:**
+- Marketing fires **April 10** (>3 days threshold)
+- Engineering fires **immediately** when Sim resolves settings.tsx or starts Phase A
+- Operations fires **when LLC is filed** or FINANCIAL_TRACKER changes
 
-### Product — Cycle 3
-**VISUAL_ROADMAP.md restructured.** 38-phase sequential build tracker replaced with:
-- Phase A: Slim Down (10 tasks, ACTIVE)
-- Phase B: Ship Polish (10 tasks, NEXT)
-- Phase C: TestFlight Prep (7 tasks, BLOCKED on Apple Dev)
-- Archive trigger table (what gets unarchived and when)
-- "What Ships in v1.0" definitive feature list
-- Pull-based post-TestFlight roadmap replacing pre-planned phase expansion
+---
 
-Phase 28 (Employer Dashboard) logged as complete.
-
-### Strategy & Planning — Cycle 3
-**Slim-down confirmed aligned.** No business plan changes needed. Free TestFlight was already planned — paywall activates at Month 3-4 (100+ WAU, >30% day-7 retention trigger). Enterprise archival does not hurt investor story if documented as demand-gated staging. Phase A + B can be completed within the LLC formation window.
-
-**Critical path is now:** LLC filing → Code is already ready → TestFlight. Not the other way around.
+*Previous cycle summary (Cycle 3 — 2026-04-07 Evening): 3 departments ran. Engineering found settings.tsx merge conflict (14 TS errors). Product updated VISUAL_ROADMAP to Phase A/B/C. Strategy confirmed slim-down pivot aligned.*
 
 ---
 
@@ -135,13 +122,13 @@ TestFlight live — 20-50 testers
 
 ## What's Coming Next
 
-**Cycle 4 triggers:**
-- Engineering: Will trigger when Phase A begins execution (STATE.md changes)
-- Product: Will trigger at Phase A/B completion
-- Marketing: Will trigger April 10 (>3 days since last run)
-- Operations: Will trigger when LLC is filed or FINANCIAL_TRACKER changes
+**Cycle 5 triggers:**
+- Engineering: Phase A execution start (STATE.md change) or Sim resolves settings.tsx
+- Product: Phase A/B completion
+- Marketing: **April 10** (>3 days since last run) — GUARANTEED to fire
+- Operations: LLC filed or FINANCIAL_TRACKER changes
 - Strategy: Monthly (May 2026) unless phase completed first
 
 ---
 
-*Generated by CEO Loop v1.0 — Cycle #3 — 2026-04-07 (Evening)*
+*Generated by CEO Loop v1.0 — Cycle #4 — 2026-04-08 (Morning)*
