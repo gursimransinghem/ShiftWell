@@ -8,7 +8,7 @@ workflows: [all]
 
 ## What This Is
 Expo/React Native circadian sleep optimization app for shift workers.
-Phase 1-3 complete. 116 tests passing. Pre-TestFlight stage.
+Phase 1-3 complete. 1,059 tests passing (71 suites). Pre-TestFlight stage.
 Monetization: Freemium + $29.99/yr annual sub with 7-day premium trial.
 
 ## The Problem
@@ -19,13 +19,13 @@ AI-powered circadian rhythm optimization: import shift schedule, read personal c
 
 ## Quick Start
 ```bash
-npm test              # Run all 116 tests (must pass before any commit)
+npm test              # Run all 1,059 tests (must pass before any commit)
 npx expo start        # Test on device/simulator
 eas build --platform ios  # EAS build for TestFlight
 ```
 
 ## Project Rules
-- Run `npm test` before any commit — 116 tests must pass
+- Run `npm test` before any commit — 1,059 tests must pass
 - Expo/React Native stack — `npx expo start` to test on device/simulator
 - EAS builds for TestFlight: `eas build --platform ios`
 - Keep bundle ID and EAS profiles per Phase 02 config
