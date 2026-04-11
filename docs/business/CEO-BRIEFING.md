@@ -1,8 +1,8 @@
 # CEO Briefing — ShiftWell
 
-**Last cycle:** 2026-04-09 (Midday)
+**Last cycle:** 2026-04-11 (Evening)
 **Next scheduled:** Next CEO Loop run
-**Cycle #:** 8
+**Cycle #:** 9
 
 ---
 
@@ -12,7 +12,7 @@
 |-----------|--------|-------------|--------------|
 | Product | ✅ GREEN | VISUAL_ROADMAP updated to Phase A/B/C ship path; Phase 28 complete | Phase A/B/C completion or feedback |
 | Engineering | ⚠️ YELLOW | 1,059 tests / 71 suites passing; BLOCKER: settings.tsx merge conflict (14 TS errors); C10 pipeline corrected (OAuth placeholder in app.json:92) | Resolve conflict; Google client ID |
-| Marketing | ✅ GREEN | ASO strategy + 6-week pre-launch content calendar complete | >3 days (Apr 10) |
+| Marketing | ⚠️ WATCH | Arcashift threat upgraded to MEDIUM-HIGH (jet lag expansion); Rise Science Apple Best App 2026; NEW competitor AfterShift (naming overlap); copy gap flagged | >3 days (Apr 14) |
 | Operations | ✅ GREEN | All legal gates pending; no change | LLC filed or financial change |
 | Strategy | ✅ GREEN | Slim-down pivot confirmed aligned with business plan | Phase A-C completion or monthly (May) |
 | Design | 💤 Dormant | — | TestFlight launch |
@@ -81,6 +81,16 @@ These are decisions only Sim can make. Nothing was executed without approval.
 5. Also set `iosClientId` in `app.json` under `expo.android`/`ios` if prompted by Expo
 **Must do before:** TestFlight build — blocks Google Calendar sync.
 
+### 🟠 HIGH — Investigate AfterShift App *(NEW — Cycle 9)*
+**What:** "AfterShift: Sleep & Shift Work App" surfaced in App Store search results. Direct naming and category overlap with ShiftWell.
+**Action (20 minutes):** Search App Store → check ratings, reviews, pricing, feature set. Assess differentiation risk. If they're doing what we're doing, we need to know now.
+**Why now:** Name overlap affects ASO keyword strategy and positioning copy.
+
+### 🟠 HIGH — Update Copy: "Writes Your Plan to Your Calendar" *(NEW — Cycle 9)*
+**What:** Rise Science now has calendar integration (overlay only — reads calendar, shows energy graph). Every ShiftWell asset that says "calendar integration" is now ambiguous.
+**Action (30 minutes):** Replace "calendar integration" with "writes your complete sleep plan to your calendar" across: App Store listing, LinkedIn draft, waitlist page copy, any marketing docs.
+**Why now:** Rise Science won Apple Best App 2026. Their brand credibility means users will compare. Language differentiation is critical.
+
 ### 🟢 LOW — Add investor summary line to BUSINESS-PLAN-V2.md *(NEW — Cycle 3)*
 **What:** Under v2.0 roadmap: "Enterprise module, employer dashboard, and API layer built and staged in v2 archive — reintroduced on first hospital inquiry."
 **Why:** Protects enterprise story in pre-seed pitch. Signals capital discipline, not capability loss.
@@ -89,18 +99,20 @@ These are decisions only Sim can make. Nothing was executed without approval.
 
 ## What Happened This Cycle
 
-**Cycle 8 — Quiet cycle.** No departments dispatched. No autonomous fixes needed. All trigger thresholds still unmet — critical path is still LLC filing and settings.tsx conflict resolution.
+**Cycle 9 — Marketing dispatched.** One department triggered (Marketing, 4 days since last run). New competitive intelligence gathered. Two new pending approvals added.
 
-**Trigger evaluation:** All five departments skipped. Marketing fires Apr 10 (tomorrow, guaranteed — 3 days since Apr 7 last run). All other departments blocked on Sim action (LLC) or monthly cadence (May).
+**Marketing findings:**
+- Arcashift has expanded into jet lag (new Jet Lag Planner feature) — now competing against Timeshifter, Rise Science, AND ShiftWell simultaneously. Thread thin. Bugs likely to worsen.
+- Rise Science won **Apple Best App of 2026** — this is their credibility marker. Their calendar integration is confirmed as overlay-only (does NOT write to calendar). ShiftWell must differentiate clearly.
+- Timeshifter has a CDC Yellow Book 2026 citation and expanded United Airlines partnership — institutional moat in jet lag, not shift work.
+- **AfterShift: Sleep & Shift Work App** — new competitor surfaced in App Store. Direct naming overlap. Needs 20-minute investigation.
+- Week 2 content (Apr 14-18): SWSD explainer + caffeine timing carousel are ready to draft (Claude can execute, Sim reviews for clinical accuracy).
 
-**Next live triggers:**
-- **Marketing fires April 10 (tomorrow) — GUARANTEED**
-- Engineering fires **immediately** when Sim resolves settings.tsx or starts Phase A
-- Operations fires **when LLC is filed** or FINANCIAL_TRACKER changes
+**All other departments skipped** — Engineering conflict still awaiting Sim; Product/Operations/Strategy have no new triggers.
 
 ---
 
-*Previous cycle summary (Cycle 7 — 2026-04-09 Morning): Quiet cycle. Autonomous fix: corrected stale test count ("116 tests" → "1,059 tests / 71 suites") in CLAUDE.md. No departments dispatched.*
+*Previous cycle summary (Cycle 8 — 2026-04-09 Midday): Quiet cycle. No departments dispatched. All triggers unmet.*
 
 ---
 
@@ -137,13 +149,13 @@ TestFlight live — 20-50 testers
 
 ## What's Coming Next
 
-**Cycle 8 triggers:**
-- **Marketing: April 10 (tomorrow) — GUARANTEED**
-- Engineering: Phase A execution start (STATE.md change) or Sim resolves settings.tsx
+**Cycle 10 triggers:**
+- **Marketing: April 14 — GUARANTEED** (>3 days since Apr 11)
+- Engineering: Fires **immediately** when Sim resolves settings.tsx or starts Phase A
 - Product: Phase A/B completion
 - Operations: LLC filed or FINANCIAL_TRACKER changes
 - Strategy: Monthly (May 2026) unless phase completed first
 
 ---
 
-*Generated by CEO Loop v1.0 — Cycle #8 — 2026-04-09 (Midday)*
+*Generated by CEO Loop v1.0 — Cycle #9 — 2026-04-11 (Evening)*

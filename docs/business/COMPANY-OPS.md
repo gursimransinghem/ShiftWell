@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-09 (Midday)
+**Last updated:** 2026-04-11 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 8
+**Cycle count:** 9
 
 ## Department Status
 
@@ -10,7 +10,7 @@
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
 | 2 | Engineering | Active | 2026-04-08 (Morn) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx); npm test script fixed |
-| 3 | Marketing | Active | 2026-04-07 | Next: >3 days since last run (Apr 10) | ASO strategy + 6-week content calendar complete; "shift worker" keywords uncontested |
+| 3 | Marketing | Active | 2026-04-11 (Eve) | Next: >3 days since last run (Apr 14) | Arcashift jet lag expansion (threat ↑ MEDIUM-HIGH); Rise Science Apple Best App 2026; NEW: AfterShift competitor (naming overlap); copy gap: "writes to your calendar" |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
@@ -35,8 +35,34 @@
 | 9 | Claim social handles (@shiftwell_sleep) | Marketing | MEDIUM | Name squatting risk; claim now before marketing spend |
 | 10 | App Store subtitle approval: "Circadian Plans, Auto-Scheduled" | Marketing | MEDIUM | Required for ASO listing; approve before TestFlight build |
 | 13 | Google iOS client ID for app.json | Engineering | HIGH | Replace PLACEHOLDER_CLIENT_ID in app.json:92 iosUrlScheme — need real client ID from Google Cloud Console (create project → OAuth 2.0 iOS credential → client ID) |
+| 14 | Investigate AfterShift app (naming overlap) | Marketing | HIGH | New competitor surfaced in App Store search — "AfterShift: Sleep & Shift Work App" — direct name/category overlap with ShiftWell. 20-min task: check App Store page, pricing, ratings, differentiation. |
+| 15 | Update all ShiftWell copy: "writes your plan to your calendar" | Marketing | HIGH | Rise Science's calendar integration (overlay only) creates confusion with ShiftWell's plan-writing feature. Every asset that says "calendar integration" needs to say "writes your complete sleep plan to your calendar." 30-min task. |
 
 ## Recent Activity
+
+### Cycle 9 — 2026-04-11 (Evening)
+**Departments dispatched:** Marketing (triggered — 4 days since Apr 7 run, threshold >3 days)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 7, today Apr 11 = 4 days. Threshold >3 days — **TRIGGERED** (overdue since Apr 10).
+- Engineering: settings.tsx merge conflict still present (confirmed); STATE.md unchanged since Apr 7. No re-dispatch value.
+- Product: No commits, STATE.md unchanged, no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER unchanged (Apr 2). No LLC filing. Not first of month. Skip.
+- Strategy: No phase completed, not first of month. Skip.
+
+**Marketing key findings:**
+- Arcashift shipped Jet Lag Planner + "Sleep Groove" score + UI refresh. Threat: MEDIUM → MEDIUM-HIGH. Competing in 3 directions = engineering resources thinning.
+- Rise Science won Apple Best App of 2026 — credibility moat. Calendar integration is OVERLAY not plan-writing. Creates brand confusion — all ShiftWell copy needs updating.
+- Timeshifter received CDC Yellow Book 2026 citation + expanded United Airlines partnership. Institutional moat in jet lag niche only.
+- **NEW competitor:** AfterShift: Sleep & Shift Work App — direct naming overlap surfaced in App Store search. Priority investigation needed.
+- Week 2 content (Apr 14-18): SWSD explainer + caffeine timing carousel should be drafted by Claude this week.
+
+**New Pending Approvals:** #14 (AfterShift investigation), #15 (copy update: "writes your plan to your calendar")
+
+**Artifacts committed:** COMPETITOR_LOG.md, MARKETING-CYCLE-REPORT.md
+
+---
 
 ### Cycle 8 — 2026-04-09 (Midday)
 **Departments dispatched:** None (quiet cycle — no triggers met)
