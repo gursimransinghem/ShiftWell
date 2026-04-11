@@ -1,285 +1,227 @@
-# ShiftWell Marketing Cycle Report — Cycle 2
-> **Date:** 2026-04-07 | **Prepared by:** Marketing Department (AI)
-> **Status:** Pre-launch. TestFlight pending LLC → Apple Developer enrollment.
-> **Trigger:** First marketing cycle. Deferred from Cycle 1 for cost.
+# ShiftWell Marketing Cycle Report — Cycle 9
+> **Date:** 2026-04-11 | **Time:** Evening | **Prepared by:** Marketing Department (AI)
+> **Status:** Pre-launch. TestFlight blocked on LLC filing. ~5-6 weeks to TestFlight.
+> **Trigger:** >3 days since last Marketing run (last: 2026-04-07, 4 days ago).
 
 ---
 
-## Executive Summary
+## Marketing Department — Cycle Report
 
-ShiftWell sits in a highly favorable competitive position heading into launch. The two highest-threat competitors (Timeshifter and Rise Science) both have meaningful product gaps that ShiftWell directly solves. The pre-launch window (~5-6 weeks) should be used to seed content, finalize ASO assets, and build the physician-founder narrative — not to acquire users (wrong stage) but to ensure Day 1 launch has credibility and social proof ready to go.
+**Competitor Activity:** Three significant moves since Apr 7. Arcashift shipped new Jet Lag feature + UI refresh + "Sleep Groove" metric. Rise Science calendar integration confirmed as more mature than previously assessed (Apple Best App 2026). Timeshifter CDC Yellow Book 2026 citation confirmed — meaningful credibility moat.
 
-Key finding this cycle: **the "shift worker" keyword cluster is genuinely underowned in the App Store.** Timeshifter dominates jet-lag search. Rise Science dominates "energy" and "sleep debt." Neither owns "night shift sleep," "shift worker sleep," or "nurse sleep" — these are ours to take with a well-optimized listing.
+**ASO Status:** Strategy from Cycle 2 still valid. Keyword field unchanged. One new competitor (AfterShift) surfaced in search results — name overlap with ShiftWell's positioning. Needs investigation.
 
----
-
-## 1. Competitor Activity
-
-### Notable Observations from Existing Data
-
-**Timeshifter** — Charging $69.99/yr (premium relative to us) while offering a fundamentally inferior product for shift workers. Their positioning is "jet lag for travelers and pilots," not shift work. This is not an accident — it's an architectural limitation. Their manual shift entry workflow means they cannot automate what ShiftWell automates. No evidence in the data of a calendar sync roadmap. **Risk is LOW in the short term; MEDIUM if they hire engineering resources to close the gap.**
-
-**Rise Science** — Arguably the greatest threat in terms of brand quality and UI polish. They have Apple Best App recognition and a beautiful product. However, their algorithm is fundamentally built for regular sleepers with predictable sleep debt curves. Shift workers' irregular schedules literally break their predictions. Multiple public user complaints confirm this. Their pricing overlaps ours ($35.99/yr is below us, $69.99/yr is above us). **Risk is HIGH if they add a "shift mode" — they have the engineering capacity to do this.**
-
-**Arcashift** — Direct competitor in the same category with NIH funding and a "digital twin" science narrative. Biggest gap: persistent bugs and crashes documented in user reviews. This is a gift. Their users are actively frustrated and primed to switch. We should monitor their App Store reviews page as a leading indicator of inbound demand. **Recommend: set a monthly calendar reminder to read Arcashift's most recent 1-star reviews for acquisition insight.**
-
-**Sleep Cycle** — Once dominant (40M+ downloads), now declining. Trustpilot 2.1 stars. Price hikes with no feature innovation. They're a tracking app, not a planning app. They don't generate schedules and never will — different product philosophy. **Not a direct threat, but represents the ceiling of what happens when a sleep app stops innovating.**
-
-**Wearables (Oura, WHOOP, Apple Watch)** — None are shift-aware. All produce data without plans. This is a positioning opportunity: "They tell you how you slept. We tell you how to sleep."
-
-### Competitor Pricing Reference Table
-
-| Competitor | Monthly | Annual | Shift-Aware | Calendar Sync |
-|-----------|---------|--------|:-----------:|:-------------:|
-| Timeshifter | $6.99/mo | $69.99/yr | Partial | No |
-| Rise Science | ~$3/mo | $35.99-69.99/yr | No | No |
-| Arcashift | — | ~$49-69/yr | Yes | Buggy |
-| Sleep Cycle | — | $39.99-59.99/yr | No | No |
-| **ShiftWell** | **$6.99/mo** | **$49.99/yr** | **Yes** | **Yes** |
+**Growth Channels:** LinkedIn (physician-founder) rates highest for current LLC waiting window. Reddit is high-ROI but requires genuine community presence first. Pre-launch landing page is the single highest-leverage action not yet completed.
 
 ---
 
-## 2. ASO Status
+### Actions Taken
 
-### Strategy: Own the Niche, Then Compete Upward
-
-The App Store search environment for shift-work sleep is **largely uncontested at the keyword level.** This is unusual for a health app category and represents a genuine first-mover advantage in ASO.
-
-### Primary Keyword Targets (OWN these)
-
-| Priority | Keyword | Intent | Competition | Notes |
-|----------|---------|--------|-------------|-------|
-| 1 | night shift sleep app | Purchase | LOW | No dominant player. Exact ICP language. |
-| 2 | shift worker sleep | Purchase | LOW | Category-defining. Own the name. |
-| 3 | nurse sleep schedule | Purchase | VERY LOW | Highest-value persona. Converts well. |
-| 4 | shift work sleep disorder | Research → Purchase | LOW | Clinical term. Highly motivated users. |
-| 5 | night shift recovery | Research | LOW-MED | Biohacking crossover. Younger audience. |
-| 6 | circadian rhythm app for nurses | Research | VERY LOW | Long-tail. Low volume, high conversion. |
-
-### Secondary Keyword Targets (COMPETE on these)
-
-| Priority | Keyword | Incumbent | ShiftWell Differentiation |
-|----------|---------|-----------|--------------------------|
-| 7 | circadian rhythm app | Timeshifter | We cover all shift patterns, not just jet lag |
-| 8 | sleep schedule optimizer | Rise/Sleep Cycle | Only app that writes to your calendar |
-| 9 | shift work fatigue | No consumer leader | First consumer fatigue management app |
-| 10 | calendar sleep planning | Nobody | Unique feature — own this with screenshots |
-
-### Keywords to Avoid
-
-"Sleep tracker," "sleep app," "meditation sleep," "insomnia" — dominated by apps with 40-100M downloads. Not worth competing on pre-launch or post-launch in Year 1.
-
-### App Store Listing Recommendations
-
-**App Name (30 chars):** `ShiftWell – Night Shift Sleep`
-- Leads with brand, anchors to primary keyword immediately
-- If app name pending final decision: `ShiftWell – Shift Worker Sleep` is alternative
-
-**Subtitle (30 chars):** `Circadian Plans, Auto-Scheduled`
-- Communicates automation (key differentiator)
-- Differentiates from tracking apps
-
-**Keyword Field (100 chars):** `night shift,shift work,circadian,nurse sleep,paramedic,rotation,sleep schedule,fatigue,schedule`
-- Prioritizes owned keywords first
-- Includes persona-specific terms (nurse, paramedic)
-- Does NOT repeat words used in title/subtitle
-
-**Description Opening (critical — this appears in search results):**
-> 32% of nurses report dangerously short sleep. Generic sleep apps don't know you work nights. ShiftWell does.
-> Built by an ER physician. Powered by circadian science. Set up once — sleep on autopilot.
-
-**Screenshot Priority Order:**
-1. Calendar import → sleep plan generation (THE differentiator)
-2. Night Sky Mode (emotional hook — beautiful, dark, calm)
-3. Morning score + what it means
-4. Dynamic rescheduling notification ("Your plan updated because your shift moved")
-5. Circadian Reset overview (flagship feature)
+1. Read and analyzed `COMPETITOR_LOG.md` and `COMPETITIVE_EDGE_LOG.md`
+2. Ran web searches on Arcashift, Rise Science, and Timeshifter for activity since Apr 7
+3. Verified Rise Science calendar integration scope (overlay vs. write-to-calendar distinction)
+4. Identified AfterShift as a new competitor requiring investigation
+5. Evaluated LinkedIn, Reddit, and pre-launch landing page for LLC waiting window ROI
+6. Identified Week 2 content gap based on the Apr 7 content calendar
+7. Updated `COMPETITOR_LOG.md` with Cycle 9 freshness scan section
+8. Wrote this cycle report to `docs/business/MARKETING-CYCLE-REPORT.md`
 
 ---
 
-## 3. Growth Channels — Priority Ranking
+### Market Intelligence
 
-### Pre-Launch (Now → TestFlight, ~5-6 weeks)
+#### Arcashift: Expanding Scope, Chasing Two Competitors at Once
 
-These channels should be active NOW, before a single user downloads the app:
+Arcashift shipped in the past ~4 days (or recent weeks): a Jet Lag Planner, "Sleep Groove" score, editable sleep logs, toggle for caffeine/eating recommendations, UI refresh, updated widgets, and bug fixes.
 
-| Priority | Channel | Action | Why Now |
-|----------|---------|--------|---------|
-| 1 | ASO Asset Creation | Write final listing copy, screenshot brief | Long lead time. Needs to be ready for Day 1. |
-| 2 | Physician-Founder Content | Draft Sim's LinkedIn founder story post | Medical audience trusts MD voice. Seed before launch. |
-| 3 | Waitlist Page | Build shiftwell.com landing page with email capture | Every week of delay = smaller Day 1 email blast |
-| 4 | TestFlight Network Outreach | Sim's ER department: nurses, residents, paramedics | Beta feedback + testimonials needed for launch |
-| 5 | Content Seed Bank | Draft 6-8 blog posts, 12 social posts | Ready to publish on Day 1 without scramble |
-| 6 | Association Research | Identify AACN/ENA contact names, conference dates | Partnership outreach begins Month 2 post-launch |
+**What this means for ShiftWell:**
 
-### Post-Launch (TestFlight → App Store, Months 1-6)
+The "Sleep Groove" score is their answer to Rise Science's clean single-metric simplicity. The Jet Lag Planner is their answer to Timeshifter's market. Arcashift is now competing in three directions — shift work, jet lag, and general sleep — which typically means engineering resources are thin and polish suffers. The UI refresh and bug fixes suggest they're aware of their stability reputation problem, but a reputation takes 12+ months to repair.
 
-| Priority | Channel | Est. % of Year 1 Downloads | Notes |
-|----------|---------|---------------------------|-------|
-| 1 | Clinical Association Partnerships | 30% | AACN, ENA — highest quality users, organic |
-| 2 | App Store Organic (ASO) | 25% | Foundation set in pre-launch. Compounds over time. |
-| 3 | Hospital/Employer Wellness | 20% | Longer sales cycle but high LTV. Start outreach Month 2. |
-| 4 | Social Media / Influencer | 15% | Build following first. Healthcare creators Month 4+. |
-| 5 | Content Marketing / SEO | 10% | Slow burn — 6+ months to see organic search traffic |
-| 6 | Paid Acquisition | Reserve for Month 6+ | Don't spend before retention is proven (D30 data needed) |
+The jet lag expansion specifically: Arcashift is now encroaching on territory ShiftWell plans to address in v2.0 (Travel/Timezone mode — COMPETITIVE_EDGE_LOG item #22). This moves their threat level from MEDIUM to MEDIUM-HIGH. ShiftWell should plan to have clear jet lag capability messaging in the roadmap so early adopters know it's coming.
 
-### Channel NOT Recommended Pre-Launch
-
-- Paid social: Too early. No App Store presence to send traffic to.
-- PR/media outreach: Not worth pitching until App Store is live.
-- Podcast appearances: Timing matters — book for launch week, not before.
+**Arcashift threat update:** MEDIUM → MEDIUM-HIGH.
 
 ---
 
-## 4. Pre-Launch Content Calendar (6 Weeks)
+#### Rise Science: Calendar Integration Is Overlay, Not Planning — But Language Gap Exists
 
-> **Context:** TestFlight waiting on LLC → Apple Developer enrollment (~5-6 weeks).
-> **Principle:** All content is internal drafts until Sim approves. No external publishing.
-> **Goal:** Build seed bank so launch week has 6+ pieces ready to deploy simultaneously.
-> **Format:** Each week has one primary theme. All content is internal drafts only.
+Rise Science's calendar integration is now confirmed. It reads your Apple/Google Calendar and overlays their energy prediction graph on top of your existing events. There is also a "find a time" feature that helps schedule activities by energy need.
 
----
+This is categorically different from ShiftWell's calendar integration, which GENERATES a sleep plan and WRITES it to the calendar as actionable events. But Rise's feature will confuse users who hear "calendar integration" from both apps.
 
-### Week 1 — The Problem (Awareness Foundation)
-**Theme:** Why shift work destroys sleep — and why nothing fixes it
+**Implication for messaging:** The App Store description and screenshots must be unambiguous. The word "integration" is not enough. Language should be: "ShiftWell reads your shift schedule and writes your complete sleep plan — sleep blocks, naps, caffeine windows, meal timing — directly to your calendar as real events." The word "writes" is the differentiator.
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| "Why shift workers never sleep: The science your doctor doesn't tell you" | Blog post (1,500 words) | Blog + Email | Draft |
-| Stat carousel: "32% of nurses. 26% of all shift workers. 38% of night shift workers." | Instagram carousel (5 slides) | Instagram | Draft |
-| Founder LinkedIn post: "I built this app at 2 AM after a 12-hour ER shift" | LinkedIn text post | LinkedIn | Needs Sim voice |
-| TikTok hook draft: "POV: You just found out you work Christmas night shift" | TikTok script | TikTok | Draft |
+**Rise Science won Apple Best App of 2026.** This is a material credibility signal. Their brand polish is the real threat, not their features. ShiftWell's physician founder story and science citations are the credibility counter.
 
-**Notes:** The LinkedIn founder post is highest value. Sim should write in his own voice with Claude assisting. Authenticity > polish here.
+**Rise threat level:** Remains HIGH.
 
 ---
 
-### Week 2 — The Science (Credibility Anchor)
-**Theme:** Circadian rhythm science — accessible, not academic
+#### Timeshifter: CDC Citation Is a Moat — B2B Is Accelerating Away From Our Lane
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| "The Two-Process Model: How your body decides when to sleep" | Blog post (1,200 words) | Blog | Draft |
-| "Caffeine timing for night shift: The exact science" | Instagram carousel | Instagram | Draft |
-| "What is SWSD? (And do you have it?)" | Short explainer article | Blog | Draft |
-| Infographic: Circadian rhythm clock with shift worker overlay | Static graphic | Instagram/LinkedIn | Design needed |
+Timeshifter is now in the CDC Yellow Book 2026 (official CDC travel health guidance) and has a multi-year United Airlines partnership. This is B2B travel health momentum — and it's entirely in the jet lag product, not the shift work product.
 
-**Notes:** The SWSD (Shift Work Sleep Disorder) explainer targets users who are already "diagnosis-aware" — they're the highest-intent buyers. This article should have an email capture CTA.
+**Implication:** Timeshifter is doubling down on the institutional travel market. This is net positive for ShiftWell — it means Timeshifter is not investing in competing for shift workers. The CDC citation also sets a credibility benchmark: ShiftWell should target a clinical association citation (AACN, ENA, or ANA) within 18 months post-launch as a comparable legitimacy signal.
+
+**Pricing clarification logged:** Timeshifter's $9.99/trip and $24.99/yr are for the jet lag app. Their shift work pricing is a separate product. The prior logged $69.99/yr may refer to a bundle or older pricing tier — needs verification. Updating monitoring flag.
 
 ---
 
-### Week 3 — The Solution (Product Introduction)
-**Theme:** There's a better way — introduce ShiftWell's approach
+#### New Competitor Flag: AfterShift
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| "How ShiftWell works: Calendar in, sleep plan out" | Product explainer blog | Blog | Draft |
-| Screen recording walkthrough: Onboarding → plan generation (60 sec) | App demo video | Instagram/TikTok | Needs recording |
-| "Set up once, sleep on autopilot — what that actually means" | LinkedIn article | LinkedIn | Draft |
-| Email draft: "We're almost ready. Here's what we're building." | Email newsletter | Email list | Draft |
-
-**Notes:** The 60-second app demo is the single most important pre-launch asset. It should show: enter shift schedule → app generates sleep plan → export to calendar. Capture this before TestFlight invites go out.
+An app called "AfterShift: Sleep & Shift Work App" surfaced in App Store search results (App Store ID: 6757163182, seen in Irish storefront). Name is a direct positioning overlap with ShiftWell's shift work focus. Developer and pricing unknown. This should be researched before Cycle 10. If it's a quality product with a similar name, it could dilute keyword effectiveness.
 
 ---
 
-### Week 4 — Physician Credibility (Trust Builder)
-**Theme:** Built by a doctor who works the same shifts
+### Pre-Launch Channel Audit: Best Organic ROI During LLC Waiting Window
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| "Why I built a sleep app instead of just writing prescriptions" | Long-form LinkedIn / blog | LinkedIn + Blog | Needs Sim voice |
-| "The research behind ShiftWell's algorithm" | Science reference post | Blog | Draft |
-| Instagram story series: "Day in the life of an ER physician using ShiftWell" | Instagram Stories (5-7 frames) | Instagram | Needs recording |
-| "Questions I get from colleagues about shift work sleep" | Q&A blog post | Blog | Draft |
-
-**Notes:** Week 4 is the highest-trust-building week. Sim's personal voice is irreplaceable here. Claude can draft but Sim must review/edit these pieces. The "Why I built it" narrative is the most shareable piece in the entire pre-launch calendar.
+**Question:** Which of the three channels — LinkedIn, Reddit, pre-launch landing page — gives best organic ROI before LLC is filed and TestFlight is live?
 
 ---
 
-### Week 5 — Social Proof (Community Seed)
-**Theme:** Other shift workers are already sleeping better
+#### Channel 1: LinkedIn (Physician Founder Credibility)
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| TestFlight beta user quote graphics (anonymized) | Instagram static posts | Instagram | Needs beta user data |
-| "What beta testers are saying after 2 weeks" | Email newsletter | Email list | Needs beta user data |
-| TikTok: Nurse reacts to her ShiftWell sleep plan | UGC-style video | TikTok | Needs beta user |
-| "Sleep scores from our first 50 users" | Data post / LinkedIn | LinkedIn | Needs data |
+**Effort:** Medium. Requires Sim's authentic voice — Claude can draft structure, but the posts must read as Sim. 2-3 hours to write, 15 minutes to post.
 
-**Notes:** This week REQUIRES beta user data. If TestFlight launch is delayed, push Week 5 content to post-launch. Do not fabricate testimonials — wait for real beta feedback.
+**Impact:** High. Healthcare professionals are active on LinkedIn. The "physician built this" narrative is genuinely differentiated in the app space — most sleep apps are built by engineers or wellness companies. A single strong founder story post can generate 50-200 organic shares in the medical community, reaching nurses, residents, and hospital admins simultaneously.
 
----
+**Timing advantage:** LinkedIn content does not require an active App Store presence. Posts can go live today with a waitlist link. The audience is pre-sold on the physician credibility angle before they ever see the app.
 
-### Week 6 — Launch Readiness (Anticipation + CTA)
-**Theme:** We're launching — join the waitlist now
+**What to post:** One founder story post (the "I built this at 2 AM" narrative from the content calendar). Then one "science thread" style post (the Two-Process Model explained in 5 bullet points). No product screenshots needed — the story is the product at this stage.
 
-| Asset | Format | Target Platform | Status |
-|-------|--------|-----------------|--------|
-| "ShiftWell is coming to the App Store — here's what's included" | Launch announcement blog | Blog + Email | Draft |
-| Countdown post series (3 posts over the week) | Instagram/TikTok | All socials | Draft |
-| Email: "You're on the waitlist — here's your early access code" | Email blast to waitlist | Email | Draft |
-| LinkedIn: "What 6 months of building taught me about shift worker sleep" | Founder reflection post | LinkedIn | Needs Sim voice |
-
-**Notes:** The waitlist email is highest priority. Every email address captured pre-launch = one guaranteed Day 1 user notification. Target: 500+ email subscribers before App Store submission.
+**ROI score:** HIGH. Best channel for pre-TestFlight credibility building.
 
 ---
 
-## 5. Recommendations for CEO
+#### Channel 2: Reddit (r/nursing, r/medicine, r/shiftwork)
 
-### Immediate (This Week)
+**Effort:** High — and the stakes are higher than LinkedIn. Reddit communities punish overt promotion immediately and permanently. The correct approach is to establish genuine presence first (10-20 substantive comments on existing threads, no promotion) before ever mentioning ShiftWell.
 
-1. **Decide the app name.** ASO listing copy, social handles, and website domain all depend on this. Top candidates: Circawell, ShiftWell. The longer this is unresolved, the more it delays the waitlist page.
+**Impact:** Very high IF done correctly. r/nursing has 1M+ subscribers. Authentic posts from a physician who actually works shifts will resonate. A single post framed as "I'm an ER doc building a sleep app for shift workers — here's what I've learned from the research" can generate hundreds of comments and thousands of upvotes if it provides real value.
 
-2. **Record the 60-second app walkthrough.** This is the single most important pre-launch marketing asset. It shows the product in 60 seconds better than any written description. Capture it now — the app is functionally complete.
+**Timing advantage:** The LLC waiting window is exactly the right time to build Reddit presence authentically — post as a physician researcher/builder, not as a marketer. When the app launches, the community already knows Sim.
 
-3. **Claim social handles.** @shiftwell_sleep on Instagram and TikTok. Do this now even if content posting starts in Week 2. Name squatting is real in competitive app niches.
+**What to do now:** Sim should begin posting in r/nursing and r/shiftwork as himself — not promoting ShiftWell, but sharing clinical knowledge about shift work sleep. Two posts: (1) "The science behind night shift recovery — what the research actually says" and (2) "What ER doctors know about shift work sleep that most apps get wrong." Link to waitlist page only in comments when directly asked.
 
-### Short-Term (Before TestFlight)
-
-4. **Build the waitlist landing page.** shiftwell.com with email capture. Offer: "Get early access + free 30-day premium trial." This is the single highest-leverage pre-launch action. Every week of delay = fewer Day 1 users.
-
-5. **Draft the LinkedIn founder story in your own voice.** Claude can structure it, but it needs to sound like Sim — first-person, clinical, specific. "I told my nurse to go home and sleep after her third night shift. She told me she hadn't slept a full 8 hours in 11 years. That's why I built this."
-
-6. **Begin AACN/ENA contact research.** Identify the VP of Member Engagement at each association. These partnerships take 90+ days from first contact — start the relationship now.
-
-### Launch Timing
-
-7. **The 5-6 week LLC wait is not dead time.** It's the pre-launch content seed window. If the waitlist page, founder story, and 60-second demo are all live before App Store submission, Day 1 will be dramatically stronger than a cold launch.
+**ROI score:** HIGH — but requires patience and authentic engagement. Wrong execution = permanent ban from the most important organic channel.
 
 ---
 
-## 6. Needs Approval
+#### Channel 3: Pre-Launch Landing Page (Waitlist + Email Capture)
 
-| Item | Decision Required | Priority |
-|------|-------------------|----------|
-| **App name finalization** | Circawell vs ShiftWell vs TBD — needed for ASO copy, social handles, domain | CRITICAL |
-| **LinkedIn founder story** | Sim must write/review in his own voice — Claude can draft the structure only | HIGH |
-| **"Why I built it" narrative (Week 4)** | Same as above — physician authenticity required | HIGH |
-| **Waitlist page launch** | Approve shiftwell.com design and email capture offer ("30-day free premium") | HIGH |
-| **Social handle claims** | Approve @shiftwell_sleep or alternate handle format | MEDIUM |
-| **App Store subtitle** | Approve: "Circadian Plans, Auto-Scheduled" vs alternatives | MEDIUM |
-| **Beta testimonials (Week 5 content)** | Real quotes from TestFlight users needed — cannot be generated | MEDIUM |
-| **App demo recording** | Sim records a 60-second walkthrough of the app (no production needed — screen record) | HIGH |
-| **Association outreach list** | Approve target list of AACN/ENA/ANA contacts before any outreach begins | MEDIUM |
-| **Soundscapes decision (COMPETITIVE_EDGE_LOG #9)** | Night Sky Mode ambient audio — build it or defer to Calm/BetterSleep integration? Affects differentiation story. | LOW (can defer) |
+**Effort:** Medium-high. Requires building shiftwell.com (or shiftwell.app) with email capture. Likely 4-8 hours of engineering/design time or 1 hour with a no-code tool (Carrd, Typedream, Webflow).
 
----
+**Impact:** Highest long-term ROI of the three. Every email captured before launch = one guaranteed Day 1 notification. A waitlist of 500 email addresses turns a cold launch into a coordinated launch with an existing audience. This is the single biggest gap in ShiftWell's pre-launch strategy right now.
 
-## Appendix: Key Numbers to Know
+**Timing advantage:** Can be live within 48 hours of decision. Every week this doesn't exist = lost email addresses. This is the only channel where delay has a direct, quantifiable cost.
 
-| Metric | Value | Source |
-|--------|-------|--------|
-| Global shift workers | 700 million | COMPETITIVE_EDGE_LOG |
-| US healthcare shift workers | ~9.6M | MARKETING-PLAN |
-| Shift Work Disorder prevalence | 26.5% all shift workers; 32-44% nurses | COMPETITOR_LOG |
-| Sleep market CAGR | 19% (2025-2035) | COMPETITOR_LOG |
-| Timeshifter price | $69.99/yr | COMPETITOR_LOG |
-| Rise Science price | $35.99-69.99/yr | COMPETITOR_LOG |
-| ShiftWell price | $6.99/mo / $49.99/yr | Decided |
-| Year 1 download target | 10,000 | MARKETING-PLAN |
-| Year 1 MRR target | $5,000-10,000 | MARKETING-PLAN |
+**Recommended offer:** "Join the waitlist — get 30 days of ShiftWell Premium free when we launch." Simple, high-conversion, costs nothing until launch.
+
+**What to do now:** Commission the landing page immediately. Single page: headline, 3-line description, email form, CTA. Link from LinkedIn posts and Reddit bio. No App Store presence required.
+
+**ROI score:** CRITICAL. Technically not a "channel" — it's the infrastructure all other channels point to. Without it, LinkedIn and Reddit traffic goes nowhere.
 
 ---
 
-*Marketing Cycle 2 — 2026-04-07. Next cycle: Cycle 3, scheduled ~2 weeks post-TestFlight launch.*
-*Files updated this cycle: `docs/business/COMPETITOR_LOG.md` (Marketing Analysis section appended), `docs/business/MARKETING-CYCLE-REPORT.md` (new file)*
+#### Channel Priority Ranking (LLC Waiting Window)
+
+| Rank | Channel | Effort | Impact | Status |
+|------|---------|--------|--------|--------|
+| 1 | Pre-launch landing page (waitlist) | Medium | Critical | Not built |
+| 2 | LinkedIn founder story posts | Medium | High | Not started |
+| 3 | Reddit community presence | High | Very High (if authentic) | Not started |
+
+**Verdict:** Build the landing page first (2-3 days). Then post the LinkedIn founder story with the waitlist link. Then begin Reddit presence building as a parallel track that runs for 4+ weeks before any app mention.
+
+---
+
+### Week 2 Content Gap Analysis (Apr 14-18)
+
+The 6-week content calendar was built on Apr 7. Today is Apr 11. **Week 2 starts April 14.**
+
+Week 2 theme from the calendar: **The Science (Circadian Credibility Anchor)**
+
+Four assets were planned:
+1. Blog: "The Two-Process Model: How your body decides when to sleep" — Status: Draft needed
+2. Instagram carousel: "Caffeine timing for night shift: The exact science" — Status: Draft needed
+3. Short explainer: "What is SWSD? (And do you have it?)" — Status: Draft needed
+4. Infographic: Circadian rhythm clock with shift worker overlay — Status: Design needed
+
+Of these four, none are in production yet (we are 3 days into Week 1 with no confirmed production). For Week 2 to be on schedule, the following 2-3 pieces should enter production this week:
+
+---
+
+#### Priority 1: "What is SWSD? And Do You Have It?" — Short Explainer (Blog + Email Capture)
+
+**Why this week:** This is the highest-conversion piece in Week 2. Users who search "shift work sleep disorder" are diagnosis-aware and highly motivated — they've already self-identified the problem. A good SWSD explainer with an email capture CTA ("Get your free shift work sleep assessment") can generate waitlist signups even before the landing page is fully built.
+
+**What to draft:** 600-800 word article. Structure: (1) What SWSD is — clinical definition, not scary, (2) Who gets it — statistics by profession, (3) Self-assessment — 5 symptoms checklist, (4) What you can do — transition into ShiftWell positioning naturally, (5) CTA: join waitlist for personalized plan.
+
+**Format note:** This should also become an Instagram carousel (5 slides: one symptom per slide + CTA on final slide). Two assets from one draft.
+
+---
+
+#### Priority 2: "Caffeine Timing for Night Shift: The Exact Science" — Instagram Carousel
+
+**Why this week:** Caffeine timing is the most shareable science content in the shift worker space. It's actionable, immediately useful, and not covered well by competitors. This carousel will perform organically on Instagram and can be repurposed as a LinkedIn post or thread.
+
+**What to draft:** 6-slide carousel. Slide 1: hook ("You're timing your coffee wrong"). Slides 2-4: the science (adenosine, half-life, circadian interaction). Slide 5: the rule ("Stop caffeine X hours before sleep window — here's how to calculate yours"). Slide 6: CTA (join waitlist for your personalized caffeine cutoff schedule). Include data from the SLEEP-SCIENCE-DATABASE.
+
+**Format note:** Can be designed in Canva with the ShiftWell brand palette once that's defined. Text-only version can be drafted now regardless of design status.
+
+---
+
+#### Priority 3 (Optional): Circadian Rhythm Clock Infographic
+
+**Why optional:** This requires actual design work (not just copy drafting), which is a hard dependency on design assets and brand palette being finalized. Do not block Weeks 1-2 content on this. Move to Week 3 buffer.
+
+**What to do instead:** Write the creative brief for the infographic (what it shows, what data it uses, what labels are needed) so it can be built the moment design capacity is available.
+
+---
+
+#### Week 2 Production Summary
+
+| Asset | Deliverable This Week | Who Does It |
+|-------|----------------------|-------------|
+| SWSD explainer (blog) | Full 600-800 word draft | Claude can draft, Sim reviews |
+| SWSD carousel (Instagram) | 5-slide copy derived from blog | Claude can draft from blog |
+| Caffeine timing carousel | 6-slide copy deck | Claude can draft |
+| Infographic creative brief | 1-page brief (not the infographic itself) | Claude drafts |
+
+All four can be completed by Claude this cycle with Sim approval. None require recording, design tools, or beta users. This week's content is pure copy work — the lowest-friction production window in the entire 6-week calendar.
+
+---
+
+### Recommendations for CEO
+
+1. **Build the waitlist landing page this week.** This is the most urgent pre-launch action. Every day without it is lost email addresses from LinkedIn and Reddit traffic. Use Carrd or Typedream if engineering bandwidth is tight — a working page in 4 hours beats a perfect page in 4 weeks. Offer: 30 days free Premium at launch. URL: shiftwell.app or shiftwell.com.
+
+2. **Arcashift shipped a jet lag feature.** This is the biggest competitive move since last cycle. It does NOT change the v1.0 roadmap, but it means we should proactively list "Travel/Jet Lag mode (coming in v2.0)" in the App Store roadmap section so early adopters know Arcashift's expansion doesn't catch us flat-footed.
+
+3. **Rise Science uses "calendar integration" in their marketing.** ShiftWell must be explicit that our integration WRITES to the calendar, not just reads from it. Audit all copy and screenshot captions to ensure "writes your plan to your calendar" language is clear and prominent. This is a 30-minute copy task with high impact.
+
+4. **Commission the SWSD explainer article this cycle.** It's the highest-converting piece in Week 2 and can be drafted in one session. No beta users, no design, no recording needed — pure copy. The email capture CTA makes it waitlist-building before the landing page even exists.
+
+5. **Research AfterShift before next cycle.** This app surfaced in App Store search results with direct naming overlap. If it's a quality product, it may dilute keyword effectiveness before launch. Takes 20 minutes to review its App Store page.
+
+6. **Timeshifter's CDC Yellow Book citation sets a benchmark.** Clinical legitimacy citations from bodies like AACN or ENA are ShiftWell's equivalent target. Begin identifying the contact pathway to AACN member resources or nursing conference content partnerships. This is an 18-month play but the relationship starts now.
+
+---
+
+### Needs Approval
+
+| Item | Decision Required | Priority | Blocking |
+|------|-------------------|----------|---------|
+| **Waitlist landing page** | Approve domain (shiftwell.app vs .com), offer ("30 days free Premium"), and launch timeline | CRITICAL | LinkedIn/Reddit traffic has nowhere to go without it |
+| **SWSD explainer draft** | Claude drafts this cycle — Sim reviews for clinical accuracy before publishing | HIGH | Week 2 content calendar |
+| **Caffeine timing carousel copy** | Claude drafts this cycle — Sim reviews for accuracy | HIGH | Week 2 content calendar |
+| **AfterShift investigation** | 20-minute research task — new competitor with naming overlap | MEDIUM | ASO keyword strategy |
+| **Rise Science copy update** | Change "calendar integration" language in all ShiftWell copy to "writes to your calendar" | HIGH | Positioning clarity |
+| **Arcashift v2.0 jet lag note** | Add "Jet Lag/Travel mode — v2.0 roadmap" to App Store description once submitted | MEDIUM | Competitive differentiation |
+
+---
+
+*Cycle 9 — 2026-04-11 Evening.*
+*Files updated this cycle: `docs/business/COMPETITOR_LOG.md` (Cycle 9 section appended), `docs/business/MARKETING-CYCLE-REPORT.md` (overwritten with this report).*
+*Next cycle: Cycle 10 — trigger when AfterShift is investigated OR waitlist page is live, whichever comes first.*

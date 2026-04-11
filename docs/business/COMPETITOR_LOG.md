@@ -90,7 +90,78 @@ _Add newly discovered competitors here as they emerge._
 - Shift workers globally: **700 million**
 
 ---
-*Updated: 2026-04-07*
+*Updated: 2026-04-11*
+
+---
+
+## Competitor Freshness Check — Cycle 9 (2026-04-11)
+
+> Scan window: 2026-04-07 to 2026-04-11 (4 days). Sources: App Store search, web search, Google Play listings.
+
+### Arcashift — ALERT: New Feature Shipped
+
+**New:** Arcashift launched a **Jet Lag Planner** feature. This is a direct incursion into Timeshifter's core territory (and into future ShiftWell travel/jet lag positioning). The update also includes:
+- "Sleep Groove" score (new primary metric — likely response to Rise Science's single-number energy score)
+- Editable sleep logs
+- Toggle for caffeine and eating recommendations
+- Refreshed UI / improved design
+- Updated home widgets
+- Bug fixes and performance improvements
+
+**Assessment:** This is the most significant competitor move since the last cycle. Two implications:
+1. Arcashift is expanding scope (shift work → travel/jet lag) — they're trying to take Timeshifter's market *and* ours simultaneously. This means they're spreading engineering resources thin.
+2. The "Sleep Groove" metric and UI refresh suggest they're responding to Rise Science's product polish and single-metric simplicity. They're chasing two competitors at once — a classic startup mistake.
+3. The bug fixes / performance improvements likely address the crash complaints from previous cycles. **Monitor their App Store reviews to see if stability actually improved.**
+
+**Threat level adjustment:** Arcashift moves from MEDIUM to MEDIUM-HIGH. Still has known stability reputation problems but is now actively investing in product.
+
+**Pricing note:** Arcashift pricing listed at ~$49-69/yr — no change observed.
+
+---
+
+### Rise Science — ALERT: Calendar Integration Confirmed (Existing Feature, Now Verified)
+
+**Confirmed:** Rise Science has a **Calendar Integration** feature that syncs energy schedules to the user's Apple/Google Calendar. This is more sophisticated than previously assessed:
+- Reads calendar events and overlays energy predictions on top of existing schedule
+- "Find a time" feature: user writes an activity, picks duration and energy level needed → app finds best time in calendar
+- App was named **Apple Best App of 2026** — significant credibility signal
+
+**Assessment:** Rise's calendar integration is an OVERLAY (reads calendar, shows energy graph on top of events). It does NOT write sleep blocks or generate a circadian plan. ShiftWell's calendar integration WRITES to the calendar as actionable events. This is a fundamentally different and superior capability — but the gap is smaller than previously assumed in messaging. We should be specific: "ShiftWell doesn't just show your schedule. It builds one and puts it in your calendar."
+
+**Threat level adjustment:** Rise Science remains HIGH but the calendar feature narrows our talking points — we need sharper language distinguishing overlay vs. planning.
+
+---
+
+### Timeshifter — B2B Acceleration, Pricing Structure Clarified
+
+**Confirmed:** Timeshifter expanded their United Airlines partnership (announced November 2025, multi-year). United Premier 1K members get complimentary subscriptions; all MileagePlus members earn 500 miles for annual subscribe.
+
+**Pricing clarification:** Timeshifter has a multi-tier structure:
+- $9.99/trip (one-time jet lag plan)
+- $24.99/yr (jet lag unlimited — annual)
+- Shift Work app is a separate product with separate pricing
+
+**CDC Yellow Book 2026 citation** — Timeshifter is now referenced in official CDC travel health guidance. This is a significant credibility moat.
+
+**Assessment:** Timeshifter's B2B momentum (airlines, CDC) is accelerating but it's all in the JET LAG product, not the Shift Work product. Their shift work app remains minimal vs. ShiftWell. The airline partnership reinforces their positioning as the jet lag brand — which actually *helps* ShiftWell own the shift work niche by contrast.
+
+**Threat level:** Remains HIGH in general, but shift-work-specific threat remains MEDIUM. The CDC citation is a credibility benchmark ShiftWell should aim to match via clinical partnerships.
+
+**No evidence of:** New pricing campaigns, feature launches, or shift-work-specific marketing in the past 4 days.
+
+---
+
+### New Competitor to Watch: AfterShift
+
+Search results surfaced a previously untracked app: **AfterShift: Sleep & Shift Work App** (App Store ID: 6757163182, IE storefront). Unknown developer, unknown pricing. Name is very close to our positioning. **Action required: research this app before next cycle.**
+
+| Date | Name | Why It Matters |
+|------|------|----------------|
+| 2026-04-11 | AfterShift: Sleep & Shift Work App | Direct naming overlap, surfaced in App Store search results. Developer and pricing unknown. |
+
+---
+
+*Section updated: 2026-04-11 — Cycle 9 freshness scan*
 
 ---
 
