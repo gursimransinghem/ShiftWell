@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-11 (Evening)
+**Last updated:** 2026-04-12 (Morning)
 **CEO Loop version:** 1.0
-**Cycle count:** 9
+**Cycle count:** 10
 
 ## Department Status
 
@@ -10,7 +10,7 @@
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
 | 2 | Engineering | Active | 2026-04-08 (Morn) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx); npm test script fixed |
-| 3 | Marketing | Active | 2026-04-11 (Eve) | Next: >3 days since last run (Apr 14) | Arcashift jet lag expansion (threat ↑ MEDIUM-HIGH); Rise Science Apple Best App 2026; NEW: AfterShift competitor (naming overlap); copy gap: "writes to your calendar" |
+| 3 | Marketing | Active | 2026-04-11 (Eve) | Next: >3 days since last run (Apr 14) — FIRES TOMORROW | Arcashift jet lag expansion (threat ↑ MEDIUM-HIGH); Rise Science Apple Best App 2026; NEW: AfterShift competitor (naming overlap); copy gap: "writes to your calendar" |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
@@ -39,6 +39,23 @@
 | 15 | Update all ShiftWell copy: "writes your plan to your calendar" | Marketing | HIGH | Rise Science's calendar integration (overlay only) creates confusion with ShiftWell's plan-writing feature. Every asset that says "calendar integration" needs to say "writes your complete sleep plan to your calendar." 30-min task. |
 
 ## Recent Activity
+
+### Cycle 10 — 2026-04-12 (Morning)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 11, today Apr 12 = 1 day. Threshold >3 days — fires Apr 14 (**tomorrow**). Skip.
+- Engineering: settings.tsx conflict still present; no STATE.md activity; no new commits. Re-dispatch adds zero value. Skip.
+- Product: No commits, no STATE.md changes, no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER unchanged (Apr 2). No ShiftWell legal deadlines in PROJECT.md within 14 days. Not first of month. Skip. *(Note: April 15 personal tax deadline flagged in CEO Briefing — outside Operations scope but time-critical.)*
+- Strategy: No phase completed, not first of month. Skip.
+
+**Critical alert — non-ShiftWell:** Sim's **2025 personal tax filing** due April 15 (3 days). Upload W-2 to TurboTax. Unrelated to ShiftWell but flagged in CEO Briefing as urgent.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 9 — 2026-04-11 (Evening)
 **Departments dispatched:** Marketing (triggered — 4 days since Apr 7 run, threshold >3 days)
