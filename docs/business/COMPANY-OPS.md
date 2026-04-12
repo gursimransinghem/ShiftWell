@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-12 (Midday)
+**Last updated:** 2026-04-12 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 11
+**Cycle count:** 12
 
 ## Department Status
 
@@ -39,6 +39,23 @@
 | 15 | Update all ShiftWell copy: "writes your plan to your calendar" | Marketing | HIGH | Rise Science's calendar integration (overlay only) creates confusion with ShiftWell's plan-writing feature. Every asset that says "calendar integration" needs to say "writes your complete sleep plan to your calendar." 30-min task. |
 
 ## Recent Activity
+
+### Cycle 12 — 2026-04-12 (Evening)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 11, today Apr 12 = 1 day. Threshold >3 days — fires Apr 14 (**2 days**). Skip.
+- Engineering: settings.tsx conflict confirmed still present (2 markers). No new commits or STATE.md activity. Skip.
+- Product: No commits, STATE.md unchanged, no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER last modified Apr 2 — no change. No LLC filed. Not first of month. Skip.
+- Strategy: No phase completed, not first of month. Skip.
+
+**⚠️ Tax deadline escalation:** April 15 is **3 days away**. This is the last evening cycle before the deadline. File tonight or tomorrow.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 11 — 2026-04-12 (Midday)
 **Departments dispatched:** None (quiet cycle — no triggers met)
