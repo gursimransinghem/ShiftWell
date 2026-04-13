@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-12 (Evening)
+**Last updated:** 2026-04-13 (Morning)
 **CEO Loop version:** 1.0
-**Cycle count:** 12
+**Cycle count:** 13
 
 ## Department Status
 
@@ -10,7 +10,7 @@
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
 | 2 | Engineering | Active | 2026-04-08 (Morn) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx); npm test script fixed |
-| 3 | Marketing | Active | 2026-04-11 (Eve) | Next: >3 days since last run — FIRES APR 14 (2 days) | Arcashift jet lag expansion (threat ↑ MEDIUM-HIGH); Rise Science Apple Best App 2026; NEW: AfterShift competitor (naming overlap); copy gap: "writes to your calendar" |
+| 3 | Marketing | Active | 2026-04-11 (Eve) | Next: >3 days since last run — FIRES APR 14 (tomorrow) | Arcashift jet lag expansion (threat ↑ MEDIUM-HIGH); Rise Science Apple Best App 2026; NEW: AfterShift competitor (naming overlap); copy gap: "writes to your calendar" |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
@@ -39,6 +39,23 @@
 | 15 | Update all ShiftWell copy: "writes your plan to your calendar" | Marketing | HIGH | Rise Science's calendar integration (overlay only) creates confusion with ShiftWell's plan-writing feature. Every asset that says "calendar integration" needs to say "writes your complete sleep plan to your calendar." 30-min task. |
 
 ## Recent Activity
+
+### Cycle 13 — 2026-04-13 (Morning)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 11, today Apr 13 = 2 days. Threshold >3 days — fires **tomorrow Apr 14**. Skip.
+- Engineering: settings.tsx conflict confirmed still pending (merge conflict markers, 14 TS errors). No new commits or STATE.md activity. Skip.
+- Product: No commits, STATE.md unchanged since Apr 7, no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER last modified Apr 2 — no change. No LLC filed. Not first of month. Skip.
+- Strategy: No phase completed, not first of month. Skip.
+
+**🚨 TAX DEADLINE ESCALATION — FINAL WARNING:** April 15 is **TOMORROW**. Last opportunity to file before deadline. TurboTax: upload W-2 and file tonight. Form 4868 by Apr 15 if extension needed.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 12 — 2026-04-12 (Evening)
 **Departments dispatched:** None (quiet cycle — no triggers met)
