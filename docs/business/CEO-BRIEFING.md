@@ -1,8 +1,8 @@
 # CEO Briefing — ShiftWell
 
-**Last cycle:** 2026-04-13 (Morning)
+**Last cycle:** 2026-04-14 (Evening)
 **Next scheduled:** Next CEO Loop run
-**Cycle #:** 13
+**Cycle #:** 14
 
 ---
 
@@ -12,7 +12,7 @@
 |-----------|--------|-------------|--------------|
 | Product | ✅ GREEN | VISUAL_ROADMAP updated to Phase A/B/C ship path; Phase 28 complete | Phase A/B/C completion or feedback |
 | Engineering | ⚠️ YELLOW | 1,059 tests / 71 suites passing; BLOCKER: settings.tsx merge conflict (14 TS errors); C10 pipeline corrected (OAuth placeholder in app.json:92) | Resolve conflict; Google client ID |
-| Marketing | ⚠️ WATCH | Arcashift threat upgraded to MEDIUM-HIGH (jet lag expansion); Rise Science Apple Best App 2026; NEW competitor AfterShift (naming overlap); copy gap flagged | >3 days — **fires Apr 14 (tomorrow)** |
+| Marketing | ✅ GREEN | AfterShift investigated (LOW-MEDIUM, tracker not planner); calendar copy sharpened; Week 2 content drafted; OffShift flagged for next cycle | >3 days — fires Apr 17 |
 | Operations | ✅ GREEN | All legal gates pending; no change | LLC filed or financial change |
 | Strategy | ✅ GREEN | Slim-down pivot confirmed aligned with business plan | Phase A-C completion or monthly (May) |
 | Design | 💤 Dormant | — | TestFlight launch |
@@ -27,10 +27,10 @@
 
 These are decisions only Sim can make. Nothing was executed without approval.
 
-### 🚨 PERSONAL DEADLINE — 2025 Tax Filing Due April 15 (**TOMORROW — FINAL WARNING**) *(Non-ShiftWell)*
+### 🚨 PERSONAL DEADLINE — 2025 Tax Filing Due April 15 (**TODAY — LAST CHANCE**) *(Non-ShiftWell)*
 **What:** Upload W-2 to TurboTax and file personal taxes.
-**Why flagged here:** Deadline is April 15 — **3 days away**. Do not let this slip while waiting on ShiftWell blockers.
-**Action:** Log in to TurboTax, upload W-2, verify all docs, file. If you need an extension, file Form 4868 by April 15.
+**Why flagged here:** April 15 is TODAY. File tonight. If you can't file, submit Form 4868 (extension) by midnight — this gets you 6 more months.
+**Action:** TurboTax → upload W-2 → file. Or file Form 4868 extension now to avoid penalties.
 
 ### 🔴 CRITICAL — Resolve Merge Conflict in `app/(tabs)/settings.tsx` *(Cycle 3, updated Cycle 5)*
 **What:** Unresolved merge conflict markers at lines 16-46 and 336-384. Causing 14 TypeScript errors that block any EAS production build.
@@ -86,15 +86,17 @@ These are decisions only Sim can make. Nothing was executed without approval.
 5. Also set `iosClientId` in `app.json` under `expo.android`/`ios` if prompted by Expo
 **Must do before:** TestFlight build — blocks Google Calendar sync.
 
-### 🟠 HIGH — Investigate AfterShift App *(NEW — Cycle 9)*
-**What:** "AfterShift: Sleep & Shift Work App" surfaced in App Store search results. Direct naming and category overlap with ShiftWell.
-**Action (20 minutes):** Search App Store → check ratings, reviews, pricing, feature set. Assess differentiation risk. If they're doing what we're doing, we need to know now.
-**Why now:** Name overlap affects ASO keyword strategy and positioning copy.
+### 🟡 MEDIUM — Investigate OffShift App *(NEW — Cycle 14)*
+**What:** "OffShift – Shift Work Sleep" (App Store ID 6756209316) surfaced during AfterShift investigation. Features and pricing unknown.
+**Action (15 minutes):** Marketing will investigate Cycle 15 (Apr 17) automatically. No action needed from Sim now.
+**Why flagged:** Situational awareness — another shift-work sleep app in the same App Store cluster.
 
-### 🟠 HIGH — Update Copy: "Writes Your Plan to Your Calendar" *(NEW — Cycle 9)*
-**What:** Rise Science now has calendar integration (overlay only — reads calendar, shows energy graph). Every ShiftWell asset that says "calendar integration" is now ambiguous.
-**Action (30 minutes):** Replace "calendar integration" with "writes your complete sleep plan to your calendar" across: App Store listing, LinkedIn draft, waitlist page copy, any marketing docs.
-**Why now:** Rise Science won Apple Best App 2026. Their brand credibility means users will compare. Language differentiation is critical.
+### 🟠 HIGH — Review and Approve Week 2 Content Drafts *(NEW — Cycle 14)*
+**What:** Two content pieces ready for your review in `docs/marketing/CONTENT-WEEK2-APR14.md`:
+1. **SWSD Explainer Post** (~240 words, LinkedIn/Instagram) — explains SWSD, cites 10-38% prevalence, positions ShiftWell. Please verify clinical accuracy of the statistics and mechanism description.
+2. **Caffeine Timing Carousel** (7 slides) — adenosine mechanics → half-life math → shift worker cutoff rules. Slide 5 cites Drake et al. 2013. Please verify accuracy of caffeine science slides.
+**Action (20 minutes):** Read the file, approve or redline. These are ready to hand to a designer as soon as you approve.
+**Why now:** Week 2 content window is now (Apr 14-18). The carousel in particular is high-shareability — best posted Thursday/Friday.
 
 ### 🟢 LOW — Add investor summary line to BUSINESS-PLAN-V2.md *(NEW — Cycle 3)*
 **What:** Under v2.0 roadmap: "Enterprise module, employer dashboard, and API layer built and staged in v2 archive — reintroduced on first hospital inquiry."
@@ -104,20 +106,25 @@ These are decisions only Sim can make. Nothing was executed without approval.
 
 ## What Happened This Cycle
 
-**Cycle 13 — Quiet cycle. No departments dispatched.**
+**Cycle 14 — Marketing dispatched. Two pending actions closed. Two new ones opened.**
 
-All trigger conditions evaluated; none met:
-- **Marketing:** 2 days since last run (Apr 11). Fires **tomorrow Apr 14**. Skip.
-- **Engineering:** settings.tsx merge conflict still present. No new commits or STATE.md activity. Skip.
-- **Product/Strategy/Operations:** No financial changes, no new phases, not first of month. Skip.
+### Marketing Run — 2026-04-14
 
-**Autonomous fixes:** None needed.
+**AfterShift (PA #14) — CLOSED ✅**
+Investigated and resolved. AfterShift is a sleep tracker, not a planner. Indie dev. No reviews. No calendar output. Threat: LOW-MEDIUM. You don't need to do anything — this is closed. We'll watch for any future update adding plan generation.
 
-**🚨 TAX DEADLINE — FINAL WARNING: April 15 is TOMORROW.** File tonight or first thing tomorrow. TurboTax: upload W-2 and submit. If extension needed: Form 4868 by April 15.
+**Calendar copy (PA #15) — CLOSED ✅ (done autonomously)**
+7 instances updated across MARKETING-PLAN.md and APP_STORE_LISTING.md. Language now explicitly distinguishes ShiftWell from Rise Science: "Not an overlay. Not suggestions. Actual sleep blocks." This copy can go live when the landing page and App Store listing are finalized.
+
+**Week 2 content — drafted, needs your review**
+Two pieces ready in `docs/marketing/CONTENT-WEEK2-APR14.md`. SWSD explainer and caffeine carousel — both science-backed, physician voice. Requires clinical accuracy review from you before posting (PA #17).
+
+**New competitor: OffShift**
+Surfaced during AfterShift research. Marketing will investigate Apr 17 automatically (PA #16). Low urgency.
 
 ---
 
-*Previous cycle (Cycle 12 — 2026-04-12 Evening): Quiet cycle. No departments dispatched. Tax deadline escalated (3 days).*
+*Previous cycle (Cycle 13 — 2026-04-13 Morning): Quiet cycle. No departments dispatched. Tax deadline escalated (final warning).*
 
 ---
 
@@ -154,13 +161,13 @@ TestFlight live — 20-50 testers
 
 ## What's Coming Next
 
-**Cycle 14 triggers:**
-- **Marketing: April 14 — GUARANTEED** (>3 days since Apr 11 — fires tomorrow)
-- Engineering: Fires **immediately** when Sim resolves settings.tsx or starts Phase A
-- Product: Phase A/B completion
-- Operations: LLC filed or FINANCIAL_TRACKER changes
-- Strategy: Monthly (May 2026) unless phase completed first
+**Cycle 15 triggers:**
+- **Marketing: April 17** (>3 days since Apr 14 — fires guaranteed)
+- **Engineering:** Fires **immediately** when Sim resolves settings.tsx or starts Phase A
+- **Product:** Phase A/B completion
+- **Operations:** LLC filed or FINANCIAL_TRACKER changes
+- **Strategy:** Monthly (May 2026) unless phase completed first
 
 ---
 
-*Generated by CEO Loop v1.0 — Cycle #13 — 2026-04-13 (Morning)*
+*Generated by CEO Loop v1.0 — Cycle #14 — 2026-04-14 (Evening)*
