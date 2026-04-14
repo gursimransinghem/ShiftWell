@@ -134,7 +134,7 @@ Acquire 10,000 shift worker users in Year 1 through a multi-channel strategy com
 - **Primary keyword:** "Sleep for shift workers"
 - **Secondary keywords:** "Circadian rhythm," "Night shift sleep," "Nurse sleep app," "Sleep schedule optimizer"
 - **App icon:** Medical-grade design (Night Sky Mode aesthetic, dark blue circadian wave)
-- **Screenshots:** Before/after sleep quality, calendar integration, personalized plan workflow
+- **Screenshots:** Before/after sleep quality, ShiftWell writing your complete sleep plan to your calendar, personalized plan workflow
 - **Description:** Lead with problem (32% of healthcare workers lack sleep), solution (ShiftWell), and results (14+ hours recovery per week)
 - **Rating optimization:** Day 1-7 email requesting review from engaged users (7+ app opens)
 
@@ -304,7 +304,7 @@ Target healthcare creators with 50K-500K followers:
 **Website/Landing Page:**
 - Single-page landing site (shiftwell.com) highlighting:
   - Problem statement (32% of healthcare workers lack sleep)
-  - Solution (calendar-aware, science-backed, personalized)
+  - Solution (builds your complete sleep plan and writes it to your calendar — not an overlay, actual scheduled events)
   - Social proof (user testimonials, clinical credentials)
   - CTA buttons: "Join TestFlight," "Join Waitlist," "App Store"
 
@@ -394,8 +394,8 @@ Shift workers are ignored by generic sleep apps. ShiftWell is built by an ER phy
 - Real sleep data feeds back into smarter plans
 
 **Supporting Evidence:**
-- Only app that syncs your calendar and creates personalized plans
-- Export plans directly to your calendar (no manual copying)
+- Only app that builds your complete sleep plan and writes it directly to your calendar as scheduled events — not an overlay, not suggestions
+- One tap: your entire sleep schedule, naps, and recovery windows appear in Apple or Google Calendar
 - Simple, dark-mode UI designed for tired brains
 - Free version includes basic planning; premium adds AI coaching
 
@@ -422,7 +422,7 @@ Shift workers are ignored by generic sleep apps. ShiftWell is built by an ER phy
 |------|--------------|-------|----------|----------|------|
 | 1 | Blog post | "ShiftWell launches: Sleep science for shift workers" | Blog + Email | General | Launch announcement |
 | 1 | Press kit | Press release + media kit | Tech media + nursing media | Media | Coverage |
-| 1 | Social video | Product walkthrough: Calendar sync to sleep plan (60 sec) | Instagram/TikTok | Nurses | Demo/education |
+| 1 | Social video | Product walkthrough: ShiftWell writes your sleep plan to your calendar (60 sec) | Instagram/TikTok | Nurses | Demo/education |
 | 2 | Case study | Hospital pilot results (sleep improvement, engagement) | Blog + Linked In + Sales kit | Enterprise | Enterprise leads |
 | 2 | Blog post | "Emergency department sleep crisis: New data" | Blog | Healthcare | Blog traffic |
 | 3 | Webinar | "Circadian optimization for shift workers: Sim's master class" | Zoom + Email + YouTube | Nurses | Email capture |
@@ -782,7 +782,7 @@ Shift workers are ignored by generic sleep apps. ShiftWell is built by an ER phy
 | Dimension | ShiftWell | Timeshifter | Winner |
 |-----------|-----------|-------------|--------|
 | **Founder Credibility** | ED physician, lives the problem | Sleep scientists (not practitioners) | ShiftWell |
-| **Calendar Sync** | Native iOS calendar integration | Manual shift entry only | ShiftWell |
+| **Calendar Output** | Writes your complete sleep plan to your calendar as scheduled events | Manual shift entry only — no calendar output | ShiftWell |
 | **Personal Schedule Awareness** | Reads personal calendar + work shifts | Only work shifts | ShiftWell |
 | **Pricing** | $6.99/mo, $49.99/yr, $149.99 lifetime | $9.99/mo, $69.99/yr | ShiftWell (cheaper annually) |
 | **Algorithm Base** | Two-Process + NIOSH protocols | Proprietary circadian model | Tie (both science-backed) |

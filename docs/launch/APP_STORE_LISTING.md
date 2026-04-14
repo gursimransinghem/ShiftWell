@@ -42,7 +42,7 @@ HOW IT WORKS
 
 2. Get your personalized plan — Based on your shifts, chronotype, and circadian science, ShiftWell generates optimized sleep windows, nap strategies, and transition protocols.
 
-3. Export to your calendar — Your entire sleep plan appears alongside your shifts in Apple Calendar, Google Calendar, or any ICS-compatible app. One tap.
+3. Your plan is written to your calendar — ShiftWell doesn't just show you an energy overlay. It writes your complete sleep schedule as real, scheduled events — sleep windows, naps, and recovery blocks — directly into Apple Calendar, Google Calendar, or any ICS-compatible app. One tap.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -54,7 +54,7 @@ FEATURES
 • Strategic Nap Placement — Pre-shift and mid-gap naps timed for maximum benefit.
 • Caffeine Cutoff Alerts — Know exactly when to stop caffeine so it never sabotages your rest.
 • Meal Timing Guidance — Circadian-aligned eating windows to support metabolic health on any schedule.
-• Calendar Export — Export your full plan to any calendar app with one tap.
+• Calendar Plan Writing — ShiftWell builds your complete sleep plan and writes it to your calendar as real events. Not an overlay. Not suggestions. Actual sleep blocks, naps, and recovery windows scheduled in Apple Calendar or Google Calendar.
 • Dark Mode Default — Designed for 3am. Easy on the eyes when everyone else is sleeping.
 • Works Offline — All data stays on your device. No account required. No tracking.
 
@@ -135,7 +135,7 @@ Welcome to ShiftWell — sleep optimization built for shift workers.
 • Import your shift schedule from any ICS calendar file
 • Get personalized sleep windows, nap strategies, and caffeine cutoffs
 • Take the chronotype quiz to match plans to your biology
-• Export your complete sleep plan to Apple Calendar or Google Calendar
+• Your complete sleep plan written directly to Apple Calendar or Google Calendar as scheduled events — not an overlay, real sleep blocks
 • Evidence-based recommendations from 15+ peer-reviewed studies
 
 Built by an ER physician. Made for everyone who works while the world sleeps.

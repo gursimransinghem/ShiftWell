@@ -11,13 +11,14 @@
 | # | Name | Developer | Platform | Pricing | Rating | Status | Threat Level |
 |---|------|-----------|----------|---------|--------|--------|:---:|
 | 1 | **Timeshifter** | Timeshifter Inc. (Copenhagen/NYC) | iOS, Android | $6.99/mo or $69.99/yr | 4.7★ | Active | HIGH |
-| 2 | **Arcashift** | Arcascope Inc. (Arlington, VA) — $2.85M seed + $2M NIH | iOS, Android | ~$49-69/yr | 4.3★ | Active | MEDIUM |
+| 2 | **Arcashift** | Arcascope Inc. (Arlington, VA) — $2.85M seed + $2M NIH | iOS, Android | ~$49-69/yr | 4.3★ | Active | MEDIUM-HIGH |
 | 3 | **SleepSync** | Monash University Turner Institute | iOS, Android (research) | Free | N/A | Research only | LOW |
 | 4 | **ShiftSleep** | Indie | iOS | Freemium | Limited | Active | LOW |
 | 5 | **ShiftWell (BCEHS)** | BC Emergency Health Services | iOS, Android | Free (employer) | Low | Abandoned (2021) | LOW |
 | 6 | **Circadian: Your Natural Rhythm** | CrestCoder | iOS, Android | $1.99-2.99/mo, $12.99-19.99/yr | 4.5★ | Active | LOW |
 | 7 | **SleepSpace** | SleepSpace Inc. (NYC) — $3.5M NIH grants | iOS, Android | $59.99/yr | 4.2★ | Active | MEDIUM |
 | 8 | **Propeaq Shiftwork** | Chrono Eyewear BV (Netherlands) | iOS, Android | Free app + $299 glasses | Limited | Active | LOW |
+| 9 | **AfterShift** | Antti Aittamaa (indie, Finland/IE storefront) | iOS only | Freemium (premium pricing unknown — no reviews yet) | Not yet rated (insufficient reviews) | Active — early stage | LOW-MEDIUM |
 
 ## Adjacent Competitors (General Sleep Apps)
 
@@ -77,7 +78,69 @@ _Add newly discovered competitors here as they emerge._
 
 | Date | Name | Why It Matters |
 |------|------|----------------|
-| | | |
+| 2026-04-11 | AfterShift: Sleep & Shift Work App | Direct naming overlap, surfaced in App Store search results. Developer and pricing unknown. |
+| 2026-04-14 | AfterShift — INVESTIGATED (see full write-up below) | Indie iOS app by Antti Aittamaa. Freemium, recovery-focused tracker. No calendar output. LOW-MEDIUM threat. |
+
+---
+
+## AfterShift — Full Investigation Report (Cycle 14, 2026-04-14)
+
+**App Store ID:** 6757163182 (IE storefront — Ireland)
+**Developer:** Antti Aittamaa — indie solo developer (Finland/Ireland storefront)
+**Platform:** iOS only (no Android found)
+**Launch:** Late 2025 (exact date unclear; not yet rated — insufficient review count)
+**Pricing:** Freemium — exact premium price not publicly listed in search results; premium tier exists but pricing page not surfaced
+
+### What AfterShift Does
+
+AfterShift is a **sleep tracking and recovery analytics** app for shift workers. It reads Apple Health sleep data and contextualizes it around shift schedules. Key features:
+
+**Free tier:**
+- Total sleep & time in bed, sleep stages (Awake, Core, Deep, REM)
+- Recovery windows between shifts
+- Nap tracking (treated as first-class sleep)
+- Clean summaries
+
+**Premium tier:**
+- Shift Recovery Score (0-100, based on sleep length, continuity, and next shift timing)
+- Continuity and fragmentation insights
+- Caffeine timing analysis
+- AI pattern insights
+- Professional export summaries
+- Trend analysis (cycle-to-cycle, not just calendar days)
+
+**Privacy:** On-device only. No ads. No data sold. No account required.
+
+**Target users:** Nurses, factory workers, firefighters, police, first responders.
+
+### Differentiation Assessment
+
+| Dimension | AfterShift | ShiftWell | Winner |
+|-----------|-----------|-----------|--------|
+| **Core function** | Tracks & analyzes sleep after shifts | Generates and writes a full sleep plan to your calendar | ShiftWell — fundamentally different |
+| **Calendar output** | None — analytics only | Writes sleep events to Apple/Google Calendar | ShiftWell |
+| **Plan generation** | No — reactive (what happened) | Yes — proactive (what to do next) | ShiftWell |
+| **Schedule import** | Unknown | ICS import from any scheduling system | ShiftWell |
+| **Science basis** | Recovery score algorithm (proprietary) | Two-Process Model, NIOSH protocols, peer-reviewed | ShiftWell |
+| **Founder** | Indie developer (not a clinician) | ED physician (Dr. Gursimran Singh) | ShiftWell |
+| **Pricing** | Freemium (premium price unknown) | Freemium + $29.99/yr ($6.99/mo) | Unknown until AfterShift pricing confirmed |
+| **Reviews** | None yet | Pre-launch | N/A |
+| **Platform** | iOS only | iOS (Android planned) | Tie |
+
+### Naming Overlap Assessment
+
+The "AfterShift" name does **not** directly compete with "ShiftWell" from a trademark standpoint — they are distinct names. However, both apps target shift workers and may appear together in App Store search results for "shift work sleep." The naming similarity is in category, not in brand. **Low trademark risk; medium discovery-collision risk** in App Store search.
+
+### Threat Level: LOW-MEDIUM
+
+**Rationale:**
+- AfterShift is a **tracker**, not a **planner**. It answers "how did I sleep?" — ShiftWell answers "when should I sleep?" This is a fundamentally different product category.
+- No calendar output means AfterShift cannot claim ShiftWell's core differentiation.
+- Indie developer, no evident funding, no press coverage found.
+- Zero reviews indicates very early stage — not yet market-proven.
+- However: the app is philosophically aligned (shift-aware, recovery-focused, privacy-first) and could expand into planning features over time.
+
+**Watch for:** Any AfterShift update mentioning calendar output, plan generation, or sleep scheduling. If they add proactive planning, threat level rises to MEDIUM.
 
 ---
 
@@ -151,17 +214,13 @@ _Add newly discovered competitors here as they emerge._
 
 ---
 
-### New Competitor to Watch: AfterShift
+### New Competitor to Watch: AfterShift — RESOLVED Cycle 14
 
-Search results surfaced a previously untracked app: **AfterShift: Sleep & Shift Work App** (App Store ID: 6757163182, IE storefront). Unknown developer, unknown pricing. Name is very close to our positioning. **Action required: research this app before next cycle.**
-
-| Date | Name | Why It Matters |
-|------|------|----------------|
-| 2026-04-11 | AfterShift: Sleep & Shift Work App | Direct naming overlap, surfaced in App Store search results. Developer and pricing unknown. |
+Surfaced in Cycle 9. Fully investigated in Cycle 14 (2026-04-14). See "AfterShift — Full Investigation Report" section above for complete write-up. Threat level assigned: **LOW-MEDIUM**. Primary action: monitor for future plan-generation or calendar-writing features.
 
 ---
 
-*Section updated: 2026-04-11 — Cycle 9 freshness scan*
+*Section updated: 2026-04-14 — Cycle 14 AfterShift investigation*
 
 ---
 
