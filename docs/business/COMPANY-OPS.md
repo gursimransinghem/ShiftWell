@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-14 (Evening)
+**Last updated:** 2026-04-15 (Morning)
 **CEO Loop version:** 1.0
-**Cycle count:** 14
+**Cycle count:** 15
 
 ## Department Status
 
@@ -10,7 +10,7 @@
 |---|-----------|--------|----------|---------------|-------|
 | 1 | Product | Active | 2026-04-07 (Eve) | Next: Phase A/B/C completion or feedback | Updated VISUAL_ROADMAP.md — Phase A/B/C ship path active; Phase 28 complete |
 | 2 | Engineering | Active | 2026-04-08 (Morn) | Next: STATE.md change or test failure | 1,059 tests / 71 suites — YELLOW: 14 TS errors (merge conflict settings.tsx); npm test script fixed |
-| 3 | Marketing | Active | 2026-04-14 (Eve) | Next: >3 days since last run — fires Apr 17 | AfterShift investigated (LOW-MEDIUM, tracker not planner, PA #14 closed); calendar copy sharpened across docs; Week 2 content drafted; OffShift app flagged for Cycle 15 |
+| 3 | Marketing | Active | 2026-04-14 (Eve) | Next: >3 days since last run — fires Apr 17 | AfterShift investigated (LOW-MEDIUM, tracker not planner, PA #14 closed); calendar copy sharpened across docs; Week 2 content drafted; OffShift app investigation scheduled for Cycle 16 (Apr 17) |
 | 4 | Operations | Active | 2026-04-07 | Next: financial change or LLC filed | All 5 legal gates pending; Expo SDK 5 patches behind |
 | 5 | Strategy & Planning | Active | 2026-04-07 (Eve) | Next: Phase A-C completion or monthly | Slim-down pivot confirmed aligned; no business plan changes needed |
 | 6 | Design | Dormant | -- | Activates: TestFlight launch | -- |
@@ -39,6 +39,23 @@
 | 17 | Review + approve Week 2 content drafts | Marketing | HIGH | SWSD explainer post + caffeine timing carousel drafted in `docs/marketing/CONTENT-WEEK2-APR14.md`. Both require Sim clinical accuracy review before posting. |
 
 ## Recent Activity
+
+### Cycle 15 — 2026-04-15 (Morning)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 14, today Apr 15 = 1 day. Threshold >3 days — fires **Apr 17**. Skip.
+- Engineering: settings.tsx conflict unchanged (14 TS errors); no STATE.md or commit activity since Cycle 14. Skip.
+- Product: No commits, STATE.md unchanged (Apr 7), no customer feedback file exists. Skip.
+- Operations: FINANCIAL_TRACKER unchanged (Apr 2). No ShiftWell hard legal deadlines within 14 days. Not first of month. Skip.
+- Strategy: No phase completed, not first of month. Skip.
+
+**🚨 PERSONAL — 2025 TAX FILING DUE TODAY:** April 15 is the federal tax deadline. File via TurboTax immediately or submit Form 4868 (extension) by midnight to avoid penalties.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 14 — 2026-04-14 (Evening)
 **Departments dispatched:** Marketing (triggered — 3 days since Apr 11 run)
