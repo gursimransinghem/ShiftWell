@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-15 (Midday)
+**Last updated:** 2026-04-15 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 16
+**Cycle count:** 17
 
 ## Department Status
 
@@ -39,6 +39,23 @@
 | 17 | Review + approve Week 2 content drafts | Marketing | HIGH | SWSD explainer post + caffeine timing carousel drafted in `docs/marketing/CONTENT-WEEK2-APR14.md`. Both require Sim clinical accuracy review before posting. |
 
 ## Recent Activity
+
+### Cycle 17 — 2026-04-15 (Evening)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 14, today Apr 15 = 1 day. Threshold >3 days — fires **Apr 17**. Skip.
+- Engineering: settings.tsx conflict unchanged (2 markers confirmed). No code commits or STATE.md activity since Cycle 14. Skip.
+- Product: No commits, STATE.md unchanged (Apr 7), no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER unchanged (Apr 2). No LLC filed. Not first of month. Skip.
+- Strategy: No phase completed. Not first of month (May 2026). Skip.
+
+**🚨 PERSONAL — 2025 TAX DEADLINE: TONIGHT.** April 15 is today. Federal deadline is midnight. File via TurboTax or submit Form 4868 at IRS.gov NOW. Do not let this pass midnight.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 16 — 2026-04-15 (Midday)
 **Departments dispatched:** None (quiet cycle — no triggers met)
