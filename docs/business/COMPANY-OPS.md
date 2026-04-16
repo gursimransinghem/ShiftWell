@@ -1,8 +1,8 @@
 # ShiftWell Company Operations
 
-**Last updated:** 2026-04-16 (Midday)
+**Last updated:** 2026-04-16 (Evening)
 **CEO Loop version:** 1.0
-**Cycle count:** 19
+**Cycle count:** 20
 
 ## Department Status
 
@@ -39,6 +39,21 @@
 | 17 | Review + approve Week 2 content drafts | Marketing | HIGH | SWSD explainer post + caffeine timing carousel drafted in `docs/marketing/CONTENT-WEEK2-APR14.md`. Both require Sim clinical accuracy review before posting. |
 
 ## Recent Activity
+
+### Cycle 20 — 2026-04-16 (Evening)
+**Departments dispatched:** None (quiet cycle — no triggers met)
+**Autonomous fixes:** None needed.
+
+**Trigger evaluation:**
+- Marketing: Last run Apr 14, today Apr 16 = 2 days. Threshold ≥3 days — fires **Apr 17 (tomorrow)**. Skip.
+- Engineering: settings.tsx conflict still pending Sim. No code commits since Cycle 14. STATE.md unchanged (Apr 7). Skip.
+- Product: No commits, STATE.md unchanged (Apr 7), no customer feedback. Skip.
+- Operations: FINANCIAL_TRACKER unchanged (Apr 2). No LLC filed. Not first of month. Skip.
+- Strategy: No phase completed. Monthly trigger fires May 2026. Skip.
+
+**No artifacts committed this cycle.**
+
+---
 
 ### Cycle 19 — 2026-04-16 (Midday)
 **Departments dispatched:** None (quiet cycle — no triggers met)
