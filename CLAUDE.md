@@ -6,6 +6,8 @@ workflows: [all]
 
 # ShiftWell
 
+> Extends `~/.claude/CLAUDE.md` (global). This file adds project-specific rules only.
+
 ## What This Is
 Expo/React Native circadian sleep optimization app for shift workers.
 Phase 1-3 complete. 1,059 tests passing (71 suites). Pre-TestFlight stage.
