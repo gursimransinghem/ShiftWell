@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,14 +10,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useUserStore } from '@/src/store/user-store';
-import { COLORS, SPACING } from '@/src/theme';
+import { COLORS, SPACING, PURPLE } from '@/src/theme';
+import { Text } from '@/src/components/ui';
 import type { AdaptiveContext } from '@/src/lib/adaptive/types';
 import type { UserProfile } from '@/src/lib/circadian/types';
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const GOLD = '#C8A84B';
-const BADGE_PURPLE = '#7B61FF';
 
 // ─── Science data ─────────────────────────────────────────────────────────────
 
@@ -140,17 +135,17 @@ function getSituationSubtitle(
 function NumberBadge({ n }: { n: number }) {
   return (
     <View style={styles.badge}>
-      <Text style={styles.badgeText}>{n}</Text>
+      <Text variant="caption" weight="700" style={styles.badgeText}>{n}</Text>
     </View>
   );
 }
 
-function Card({ children, style }: { children: React.ReactNode; style?: object }) {
+function BriefCard({ children, style }: { children: React.ReactNode; style?: object }) {
   return <View style={[styles.card, style]}>{children}</View>;
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <Text style={styles.sectionTitle}>{children}</Text>;
+  return <Text variant="label" weight="700" color="primary">{children}</Text>;
 }
 
 // ─── All-Clear screen ─────────────────────────────────────────────────────────
@@ -163,15 +158,15 @@ function AllClearScreen({
   return (
     <View style={styles.allClearContainer}>
       <View style={styles.checkCircle}>
-        <Ionicons name="checkmark" size={40} color="#22C55E" />
+        <Ionicons name="checkmark" size={40} color={COLORS.semantic.success} />
       </View>
-      <Text style={styles.allClearTitle}>All Clear</Text>
+      <Text variant="h3" weight="700" color="primary" style={styles.allClearTitle}>All Clear</Text>
       {adaptiveContext === null ? (
-        <Text style={styles.allClearSubtitle}>
+        <Text variant="body" color="secondary" align="center" style={styles.allClearSubtitle}>
           Building your sleep profile… Come back after a few days of use.
         </Text>
       ) : (
-        <Text style={styles.allClearSubtitle}>
+        <Text variant="body" color="secondary" align="center" style={styles.allClearSubtitle}>
           Your plan is optimized for your current rotation.
         </Text>
       )}
@@ -184,10 +179,10 @@ function AllClearScreen({
               value={adaptiveContext.recovery.zone.toUpperCase()}
               color={
                 adaptiveContext.recovery.zone === 'green'
-                  ? '#22C55E'
+                  ? COLORS.semantic.success
                   : adaptiveContext.recovery.zone === 'yellow'
-                    ? '#EAB308'
-                    : '#EF4444'
+                    ? COLORS.semantic.warning
+                    : COLORS.semantic.error
               }
             />
           )}
@@ -200,16 +195,16 @@ function AllClearScreen({
             }
             color={
               adaptiveContext.debt.severity === 'none'
-                ? '#22C55E'
+                ? COLORS.semantic.success
                 : adaptiveContext.debt.severity === 'mild'
-                  ? '#EAB308'
-                  : '#EF4444'
+                  ? COLORS.semantic.warning
+                  : COLORS.semantic.error
             }
           />
           <MetricPill
             label="Days tracked"
             value={String(adaptiveContext.meta.daysTracked)}
-            color={GOLD}
+            color={COLORS.accent.primary}
           />
         </View>
       )}
@@ -228,8 +223,8 @@ function MetricPill({
 }) {
   return (
     <View style={styles.metricPill}>
-      <Text style={[styles.metricValue, { color }]}>{value}</Text>
-      <Text style={styles.metricLabel}>{label}</Text>
+      <Text variant="body" weight="700" style={[styles.metricValue, { color }]}>{value}</Text>
+      <Text variant="caption" color="muted">{label}</Text>
     </View>
   );
 }
@@ -269,37 +264,37 @@ function FullBrief({
   return (
     <>
       {/* Part 1: The Situation */}
-      <Card style={styles.situationCard}>
-        <Text style={styles.briefTitle}>Your Brief</Text>
-        <Text style={styles.situationSubtitle}>
+      <BriefCard style={styles.situationCard}>
+        <Text variant="h3" weight="700" color="primary" style={styles.briefTitle}>Your Brief</Text>
+        <Text variant="bodySmall" color="secondaryBright" style={styles.situationSubtitle}>
           {getSituationSubtitle(transitionType, daysUntilTransition)}
         </Text>
         {bankingWindowOpen && (
           <View style={styles.bankingPill}>
-            <Text style={styles.bankingPillText}>
+            <Text variant="caption" weight="600" style={styles.bankingPillText}>
               Banking window open — extend sleep tonight
             </Text>
           </View>
         )}
-      </Card>
+      </BriefCard>
 
       {/* Part 2: Personalized Brief */}
-      <Card>
+      <BriefCard>
         <View style={styles.cardHeader}>
           <NumberBadge n={2} />
           <SectionTitle>Personalized Brief</SectionTitle>
         </View>
-        <Text style={styles.narrativeText}>{narrative}</Text>
-      </Card>
+        <Text variant="bodySmall" color="secondaryBright" style={styles.narrativeText}>{narrative}</Text>
+      </BriefCard>
 
       {/* Part 3: Sleep Schedule */}
-      <Card>
+      <BriefCard>
         <View style={styles.cardHeader}>
           <NumberBadge n={3} />
           <SectionTitle>Sleep Schedule</SectionTitle>
         </View>
         {dailyTargets.length === 0 ? (
-          <Text style={styles.bodyText}>
+          <Text variant="bodySmall" color="secondaryBright" style={styles.lineHeight}>
             Your sleep windows are already optimized for this transition.
           </Text>
         ) : (
@@ -314,35 +309,36 @@ function FullBrief({
             return (
               <View key={i} style={styles.scheduleRow}>
                 <View style={styles.scheduleRowTop}>
-                  <Text style={styles.scheduleDate}>{dateStr}</Text>
+                  <Text variant="label" weight="600" color="primary">{dateStr}</Text>
                   <Text
-                    style={[
-                      styles.scheduleAdjust,
-                      {
-                        color:
-                          target.bedtimeAdjustMinutes === 0
-                            ? '#6B7280'
-                            : GOLD,
-                      },
-                    ]}
+                    variant="label"
+                    weight="600"
+                    style={{
+                      color:
+                        target.bedtimeAdjustMinutes === 0
+                          ? COLORS.text.muted
+                          : COLORS.accent.primary,
+                    }}
                   >
                     {adjustStr}
                   </Text>
                 </View>
-                <Text style={styles.scheduleGuidance}>
+                <Text variant="caption" color="secondary" style={styles.scheduleGuidanceText}>
                   {target.lightGuidance}
                 </Text>
                 {target.napGuidance && (
-                  <Text style={styles.scheduleNap}>{target.napGuidance}</Text>
+                  <Text variant="caption" style={[styles.scheduleNapText, { color: PURPLE }]}>
+                    {target.napGuidance}
+                  </Text>
                 )}
               </View>
             );
           })
         )}
-      </Card>
+      </BriefCard>
 
       {/* Part 4: Household Prep Checklist */}
-      <Card>
+      <BriefCard>
         <View style={styles.cardHeader}>
           <NumberBadge n={4} />
           <SectionTitle>Household Prep</SectionTitle>
@@ -355,36 +351,37 @@ function FullBrief({
             activeOpacity={0.7}
           >
             {checked[i] ? (
-              <Ionicons name="checkmark-circle" size={22} color="#22C55E" />
+              <Ionicons name="checkmark-circle" size={22} color={COLORS.semantic.success} />
             ) : (
               <Ionicons
                 name="ellipse-outline"
                 size={22}
-                color="#4B5563"
+                color={COLORS.text.dim}
               />
             )}
             <Text
-              style={[
-                styles.checklistText,
-                checked[i] && styles.checklistTextChecked,
-              ]}
+              variant="bodySmall"
+              color={checked[i] ? 'muted' : 'secondaryBright'}
+              style={[styles.checklistTextBase, checked[i] && styles.checklistTextChecked]}
             >
               {item}
             </Text>
           </TouchableOpacity>
         ))}
-      </Card>
+      </BriefCard>
 
       {/* Part 5: The Science */}
-      <Card>
+      <BriefCard>
         <View style={styles.cardHeader}>
           <NumberBadge n={5} />
           <SectionTitle>The Science</SectionTitle>
         </View>
-        <Text style={styles.scienceStat}>{science.stat}</Text>
-        <Text style={styles.bodyText}>{science.finding}</Text>
-        <Text style={styles.scienceCitation}>{science.citation}</Text>
-      </Card>
+        <Text variant="h2" weight="700" style={{ color: COLORS.accent.primary, marginBottom: 8 }}>
+          {science.stat}
+        </Text>
+        <Text variant="bodySmall" color="secondaryBright" style={styles.lineHeight}>{science.finding}</Text>
+        <Text variant="caption" color="muted" style={styles.scienceCitation}>{science.citation}</Text>
+      </BriefCard>
     </>
   );
 }
@@ -406,7 +403,9 @@ export default function BriefScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.screenHeader}>Pre-Shift Brief</Text>
+        <Text variant="h3" weight="700" style={[styles.screenHeader, { color: COLORS.accent.primary }]}>
+          Pre-Shift Brief
+        </Text>
 
         {showBrief ? (
           <FullBrief adaptiveContext={adaptiveContext} profile={profile} />
@@ -433,9 +432,6 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   screenHeader: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: GOLD,
     marginBottom: 16,
     marginTop: 4,
   },
@@ -453,25 +449,18 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 10,
   },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
 
   // Badge
   badge: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: BADGE_PURPLE,
+    backgroundColor: PURPLE,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badgeText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
   },
 
   // Part 1 — Situation
@@ -481,14 +470,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(200,168,75,0.18)',
   },
   briefTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: GOLD,
     marginBottom: 6,
   },
   situationSubtitle: {
-    fontSize: 14,
-    color: '#D1D5DB',
     lineHeight: 20,
   },
   bankingPill: {
@@ -500,15 +484,11 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   bankingPillText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: GOLD,
+    color: COLORS.accent.primary,
   },
 
   // Part 2 — Narrative
   narrativeText: {
-    fontSize: 14,
-    color: '#D1D5DB',
     lineHeight: 22,
   },
 
@@ -525,23 +505,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  scheduleDate: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  scheduleAdjust: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  scheduleGuidance: {
-    fontSize: 12,
-    color: '#9CA3AF',
+  scheduleGuidanceText: {
     lineHeight: 18,
   },
-  scheduleNap: {
-    fontSize: 12,
-    color: '#7B61FF',
+  scheduleNapText: {
     marginTop: 3,
     fontStyle: 'italic',
   },
@@ -553,34 +520,21 @@ const styles = StyleSheet.create({
     gap: 10,
     marginBottom: 10,
   },
-  checklistText: {
+  checklistTextBase: {
     flex: 1,
-    fontSize: 14,
-    color: '#D1D5DB',
     lineHeight: 20,
     paddingTop: 1,
   },
   checklistTextChecked: {
     textDecorationLine: 'line-through',
-    color: '#6B7280',
   },
 
   // Part 5 — Science
-  scienceStat: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: GOLD,
-    marginBottom: 8,
-  },
   scienceCitation: {
-    fontSize: 11,
-    color: '#6B7280',
     fontStyle: 'italic',
     marginTop: 6,
   },
-  bodyText: {
-    fontSize: 14,
-    color: '#D1D5DB',
+  lineHeight: {
     lineHeight: 21,
   },
 
@@ -600,15 +554,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   allClearTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: GOLD,
     marginBottom: 10,
   },
   allClearSubtitle: {
-    fontSize: 15,
-    color: '#9CA3AF',
-    textAlign: 'center',
     lineHeight: 22,
     marginBottom: 28,
   },
@@ -625,12 +573,6 @@ const styles = StyleSheet.create({
     minWidth: 80,
   },
   metricValue: {
-    fontSize: 15,
-    fontWeight: '700',
     marginBottom: 2,
-  },
-  metricLabel: {
-    fontSize: 11,
-    color: '#6B7280',
   },
 });

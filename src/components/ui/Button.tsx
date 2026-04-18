@@ -15,9 +15,11 @@ import Animated, {
 import { COLORS, ACCENT, PURPLE } from '@/src/theme';
 
 interface ButtonProps {
-  title: string;
+  /** Text label — kept for backwards compat; prefer children when possible */
+  title?: string;
+  children?: React.ReactNode;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
@@ -33,6 +35,7 @@ const SIZE_CONFIG: Record<string, { height: number; paddingHorizontal: number; f
 
 export default function Button({
   title,
+  children,
   onPress,
   variant = 'primary',
   size = 'md',
@@ -73,6 +76,8 @@ export default function Button({
     containerStyle.push(styles.primaryBg);
   } else if (variant === 'secondary') {
     containerStyle.push(styles.secondaryBg);
+  } else if (variant === 'danger') {
+    containerStyle.push(styles.dangerBg);
   }
   // ghost has no background or border
 
@@ -91,6 +96,8 @@ export default function Button({
 
   if (variant === 'primary') {
     textStyle.push(styles.primaryText);
+  } else if (variant === 'danger') {
+    textStyle.push(styles.dangerText);
   } else {
     textStyle.push(styles.secondaryText);
   }
@@ -99,7 +106,7 @@ export default function Button({
     textStyle.push(styles.disabledText);
   }
 
-  const indicatorColor = variant === 'primary' ? COLORS.text.primary : PURPLE;
+  const indicatorColor = variant === 'primary' || variant === 'danger' ? COLORS.text.primary : PURPLE;
 
   return (
     <Animated.View style={animatedStyle}>
@@ -118,7 +125,7 @@ export default function Button({
           <>
             {icon && <>{icon}</>}
             <Text style={[...textStyle, icon ? styles.iconSpacing : undefined]}>
-              {title}
+              {children ?? title}
             </Text>
           </>
         )}
@@ -143,6 +150,9 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: PURPLE,
   },
+  dangerBg: {
+    backgroundColor: COLORS.semantic.error,
+  },
   fullWidth: {
     width: '100%',
   },
@@ -159,6 +169,9 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: PURPLE,
+  },
+  dangerText: {
+    color: COLORS.text.primary,
   },
   disabledText: {
     color: COLORS.text.tertiary,
