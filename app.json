@@ -90,7 +90,15 @@
       "expo-task-manager",
       ["@react-native-google-signin/google-signin", {
         "iosUrlScheme": "com.googleusercontent.apps.PLACEHOLDER_CLIENT_ID"
-      }]
+      }],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "shiftwell",
+          "organization": "YOUR_ORG_SLUG"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
