@@ -25,6 +25,7 @@ import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
 import { useAdaptivePlan } from '@/src/hooks/useAdaptivePlan';
 import { useSleepFeedback } from '@/src/hooks/useSleepFeedback';
 import { useNotificationStore } from '@/src/store/notification-store';
+import { useScreenTracking } from '@/src/lib/analytics/hooks';
 import {
   StatusPill,
   HeroScore,
@@ -57,6 +58,7 @@ import {
   RADIUS,
   TYPOGRAPHY,
   TEXT as TEXT_COLORS,
+  PURPLE,
 } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -181,7 +183,7 @@ const gateStyles = StyleSheet.create({
   ctaText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#0A0A0F',
+    color: COLORS.text.inverse,
   },
 });
 
@@ -190,6 +192,7 @@ const gateStyles = StyleSheet.create({
 // ---------------------------------------------------------------------------
 
 export default function TodayScreen() {
+  useScreenTracking('home');
   const router = useRouter();
   const scrollRef = useRef<Animated.ScrollView>(null);
   const scrollY = useSharedValue(0);
@@ -388,7 +391,7 @@ export default function TodayScreen() {
         emoji: '\u{23F1}',
         value: formatCountdownValue(currentShift.end),
         label: 'Shift ends',
-        color: '#FF9F43',
+        color: BLOCK_COLORS.shiftNight,
       },
     ];
 
@@ -397,13 +400,13 @@ export default function TodayScreen() {
     const napWindowEnd = new Date(napWindowStart.getTime() + 20 * 60 * 1000);
     if (napWindowEnd > now && napWindowStart < currentShift.end) {
       if (napWindowStart <= now && now <= napWindowEnd) {
-        cells.push({ emoji: '\u{1F4A4}', value: 'NOW', label: 'Nap window', color: '#34D399' });
+        cells.push({ emoji: '\u{1F4A4}', value: 'NOW', label: 'Nap window', color: COLORS.semantic.success });
       } else if (napWindowStart > now) {
         cells.push({
           emoji: '\u{1F4A4}',
           value: formatCountdownValue(napWindowStart),
           label: 'Nap window',
-          color: '#A78BFA',
+          color: BLOCK_COLORS.nap,
         });
       }
     }
@@ -415,7 +418,7 @@ export default function TodayScreen() {
         emoji: '\u2615',
         value: formatCountdownValue(caffeineEnd),
         label: 'Last caffeine',
-        color: '#FB923C',
+        color: BLOCK_COLORS.shiftNight,
       });
     } else if (sleepBlock) {
       cells.push({
@@ -441,7 +444,7 @@ export default function TodayScreen() {
         emoji: '\u{1F37D}\u{FE0F}', // 🍽️
         value: formatCountdownValue(mealBlock.end),
         label: 'Kitchen closes',
-        color: '#F59E0B',
+        color: COLORS.accent.highlight,
       };
     }
     // Fallback: 3h before main sleep (circadian TRE standard — Manoogian et al. 2022)
@@ -453,7 +456,7 @@ export default function TodayScreen() {
       emoji: '\u{1F37D}\u{FE0F}', // 🍽️
       value: formatCountdownValue(kitchenClose),
       label: 'Kitchen closes',
-      color: '#F59E0B',
+      color: COLORS.accent.highlight,
     };
   }, [futureBlocks]);
 
@@ -962,14 +965,14 @@ const styles = StyleSheet.create({
     marginBottom: SPACING['2xl'],
   },
   gradientButton: {
-    backgroundColor: '#7B61FF',
+    backgroundColor: PURPLE,
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 14,
     marginBottom: SPACING.lg,
   },
   gradientButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.text.primary,
     fontSize: 15,
     fontWeight: '600',
   },

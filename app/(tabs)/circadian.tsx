@@ -13,8 +13,9 @@ import { useShiftsStore } from '@/src/store/shifts-store';
 import { useUserStore } from '@/src/store/user-store';
 import { usePlanStore } from '@/src/store/plan-store';
 import { LightProtocolArc } from '@/src/components/circadian/LightProtocolArc';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
+import { COLORS, SPACING, RADIUS, TYPOGRAPHY, BLOCK_COLORS } from '@/src/theme';
 import type { ShiftEvent } from '@/src/lib/circadian/types';
+import { useScreenTracking } from '@/src/lib/analytics/hooks';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -44,10 +45,10 @@ function stdDev(arr: number[]): number {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 85) return '#34D399';
-  if (score >= 70) return '#C8A84B';
-  if (score >= 55) return '#FB923C';
-  return '#FF6B6B';
+  if (score >= 85) return COLORS.semantic.success;
+  if (score >= 70) return COLORS.accent.primary;
+  if (score >= 55) return BLOCK_COLORS.shiftNight;
+  return COLORS.semantic.error;
 }
 
 function scoreGrade(score: number): string {
@@ -163,7 +164,7 @@ function useAdjustmentRoadmap(shifts: ShiftEvent[]): WeekShiftSummary[] {
           label: weekLabel,
           shifts: [],
           advice: 'No shifts — ideal for circadian recovery. Keep sleep consistent.',
-          adviceColor: '#34D399',
+          adviceColor: COLORS.semantic.success,
         };
       }
 
@@ -181,7 +182,11 @@ function useAdjustmentRoadmap(shifts: ShiftEvent[]): WeekShiftSummary[] {
         ? 'Night shifts — wear blue-blockers after 8 PM and seek bright light at start of shift.'
         : 'Day shifts — maintain consistent wake time ± 30 min on days off.';
 
-      const adviceColor = mixed ? '#FB923C' : hasNight ? '#A78BFA' : '#C8A84B';
+      const adviceColor = mixed
+        ? BLOCK_COLORS.shiftNight
+        : hasNight
+        ? BLOCK_COLORS.nap
+        : COLORS.accent.primary;
 
       return { label: weekLabel, shifts: lines, advice, adviceColor };
     }
@@ -198,6 +203,7 @@ function useAdjustmentRoadmap(shifts: ShiftEvent[]): WeekShiftSummary[] {
 // ---------------------------------------------------------------------------
 
 export default function CircadianScreen() {
+  useScreenTracking('circadian');
   const { dailyHistory } = useScoreStore();
   const { shifts } = useShiftsStore();
   const { profile } = useUserStore();
@@ -306,9 +312,9 @@ export default function CircadianScreen() {
                 <Ionicons
                   name={trendUp ? 'trending-up' : 'trending-down'}
                   size={14}
-                  color={trendUp ? '#34D399' : '#FB923C'}
+                  color={trendUp ? COLORS.semantic.success : BLOCK_COLORS.shiftNight}
                 />
-                <Text style={[styles.trendText, { color: trendUp ? '#34D399' : '#FB923C' }]}>
+                <Text style={[styles.trendText, { color: trendUp ? COLORS.semantic.success : BLOCK_COLORS.shiftNight }]}>
                   {trendUp ? 'Improving week-over-week' : 'Slight dip — stay consistent'}
                 </Text>
               </View>
@@ -320,13 +326,13 @@ export default function CircadianScreen() {
         <SectionLabel title="OPTIMAL SLEEP WINDOW" />
         <Card>
           <View style={styles.windowHeader}>
-            <Ionicons name="moon" size={18} color="#A78BFA" />
+            <Ionicons name="moon" size={18} color={BLOCK_COLORS.nap} />
             <Text style={styles.windowTitle}>Your perfect window right now</Text>
           </View>
           <View style={styles.windowRow}>
             <View style={styles.windowTime}>
               <Text style={styles.windowTimeLabel}>Bedtime</Text>
-              <Text style={[styles.windowTimeValue, { color: '#A78BFA' }]}>{bedtimeStr}</Text>
+              <Text style={[styles.windowTimeValue, { color: BLOCK_COLORS.nap }]}>{bedtimeStr}</Text>
             </View>
             <View style={styles.windowArrow}>
               <View style={styles.windowLine} />
@@ -335,7 +341,7 @@ export default function CircadianScreen() {
             </View>
             <View style={styles.windowTime}>
               <Text style={styles.windowTimeLabel}>Wake</Text>
-              <Text style={[styles.windowTimeValue, { color: '#34D399' }]}>{wakeStr}</Text>
+              <Text style={[styles.windowTimeValue, { color: COLORS.semantic.success }]}>{wakeStr}</Text>
             </View>
           </View>
           <Text style={styles.windowNote}>
@@ -386,21 +392,21 @@ export default function CircadianScreen() {
             icon="bed-outline"
             value={`+${extraHours}h`}
             label="Extra Sleep Banked"
-            color="#34D399"
+            color={COLORS.semantic.success}
             sub="vs. unplanned baseline"
           />
           <StatCell
             icon="pulse-outline"
             value={`${whiplashReduction}%`}
             label="Whiplash Reduced"
-            color="#A78BFA"
+            color={BLOCK_COLORS.nap}
             sub="circadian disruption cut"
           />
           <StatCell
             icon="checkmark-circle-outline"
             value={`${daysTracked}`}
             label="Days Tracked"
-            color="#60A5FA"
+            color={COLORS.accent.blue}
             sub="this month"
           />
           <StatCell
