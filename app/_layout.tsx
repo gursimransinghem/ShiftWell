@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack, router } from 'expo-router';
+import { Stack, router, useNavigationContainerRef } from 'expo-router';
 import { format } from 'date-fns';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -21,6 +21,11 @@ import { runCalendarSync } from '@/src/lib/calendar/calendar-service';
 // Side-effect import: registers SHIFTWELL_CALENDAR_SYNC task via TaskManager.defineTask at module scope
 import '@/src/lib/calendar/background-sync';
 import { handleAppOpen, scheduleReengagementSequence } from '@/src/lib/growth/reengagement';
+import { AnalyticsProvider } from '@/src/lib/analytics/posthog';
+import { initSentry, navigationIntegration, Sentry } from '@/src/lib/monitoring/sentry';
+import { ShiftWellErrorBoundary } from '@/src/components/ErrorBoundary';
+
+initSentry();
 
 // Register foreground notification handler — SDK 55 API (shouldShowBanner replaces shouldShowAlert)
 Notifications.setNotificationHandler({
@@ -44,7 +49,8 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function RootLayout() {
+  const ref = useNavigationContainerRef();
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -57,15 +63,24 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      if (ref?.current) {
+        navigationIntegration.registerNavigationContainer(ref);
+      }
     }
-  }, [loaded]);
+  }, [loaded, ref]);
 
   if (!loaded) {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <ShiftWellErrorBoundary section="root">
+      <RootLayoutNav />
+    </ShiftWellErrorBoundary>
+  );
 }
+
+export default Sentry.wrap(RootLayout);
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
@@ -132,6 +147,7 @@ function RootLayoutNav() {
   }, [trialStartedAt, isInTrial, isPremium]);
 
   return (
+    <AnalyticsProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AdaptiveColorProvider>
         <Stack screenOptions={{ headerShown: false }}>
@@ -171,5 +187,6 @@ function RootLayoutNav() {
         </Stack>
       </AdaptiveColorProvider>
     </ThemeProvider>
+    </AnalyticsProvider>
   );
 }
