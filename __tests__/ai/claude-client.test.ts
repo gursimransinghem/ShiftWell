@@ -1,12 +1,31 @@
 /**
- * claude-client tests (Phase 20)
+ * claude-client tests
  *
- * Mocks fetch — never calls the real Claude API.
- * Tests: prompt construction, JSON parsing, timeout, fallback behavior.
+ * Mocks supabase.functions.invoke — never calls the real Edge Function or Claude API.
+ * Tests: prompt construction, JSON parsing, fallback behavior, auth gating.
  */
 
 import { generateWeeklyBrief, FALLBACK_BRIEF } from '../../src/lib/ai/claude-client';
 import type { BriefRequest } from '../../src/lib/ai/claude-client';
+import { supabase } from '../../src/lib/supabase/client';
+
+// ---------------------------------------------------------------------------
+// Mock the supabase client
+// ---------------------------------------------------------------------------
+
+jest.mock('../../src/lib/supabase/client', () => ({
+  supabase: {
+    auth: {
+      getSession: jest.fn(),
+    },
+    functions: {
+      invoke: jest.fn(),
+    },
+  },
+}));
+
+const mockGetSession = supabase.auth.getSession as jest.Mock;
+const mockInvoke = supabase.functions.invoke as jest.Mock;
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -33,37 +52,29 @@ const VALID_RESPONSE = {
 // Setup
 // ---------------------------------------------------------------------------
 
-const originalEnv = process.env;
-
 beforeEach(() => {
-  jest.resetModules();
-  process.env = { ...originalEnv, EXPO_PUBLIC_CLAUDE_API_KEY: 'test-key-123' };
-  global.fetch = jest.fn();
-});
-
-afterEach(() => {
-  process.env = originalEnv;
-  jest.restoreAllMocks();
+  jest.clearAllMocks();
+  // Default: authenticated session
+  mockGetSession.mockResolvedValue({
+    data: { session: { access_token: 'test-jwt-123' } },
+  });
 });
 
 // ---------------------------------------------------------------------------
-// Helper
+// Helpers
 // ---------------------------------------------------------------------------
 
-function mockFetchOk(body: object) {
-  (global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: true,
-    json: async () => ({
-      content: [{ text: JSON.stringify(body) }],
-    }),
+function mockInvokeOk(body: object) {
+  mockInvoke.mockResolvedValueOnce({
+    data: { text: JSON.stringify(body), tokensUsed: 50 },
+    error: null,
   });
 }
 
-function mockFetchError(status: number) {
-  (global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: false,
-    status,
-    json: async () => ({}),
+function mockInvokeError(status: number, message: string) {
+  mockInvoke.mockResolvedValueOnce({
+    data: null,
+    error: { status, message },
   });
 }
 
@@ -73,7 +84,7 @@ function mockFetchError(status: number) {
 
 describe('generateWeeklyBrief', () => {
   it('returns parsed response on success', async () => {
-    mockFetchOk(VALID_RESPONSE);
+    mockInvokeOk(VALID_RESPONSE);
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result.summary).toBe(VALID_RESPONSE.summary);
     expect(result.trend).toBe('improving');
@@ -81,92 +92,87 @@ describe('generateWeeklyBrief', () => {
     expect(result.encouragement).toBe(VALID_RESPONSE.encouragement);
   });
 
-  it('sends correct headers to Anthropic API', async () => {
-    mockFetchOk(VALID_RESPONSE);
+  it('calls Edge Function with correct body fields', async () => {
+    mockInvokeOk(VALID_RESPONSE);
     await generateWeeklyBrief(MINIMAL_REQUEST);
 
-    const [url, options] = (global.fetch as jest.Mock).mock.calls[0];
-    expect(url).toBe('https://api.anthropic.com/v1/messages');
-    expect(options.headers['x-api-key']).toBe('test-key-123');
-    expect(options.headers['anthropic-version']).toBe('2023-06-01');
-    expect(options.headers['Content-Type']).toBe('application/json');
+    expect(mockInvoke).toHaveBeenCalledTimes(1);
+    const [functionName, options] = mockInvoke.mock.calls[0];
+    expect(functionName).toBe('claude-proxy');
+    expect(options.body.systemPrompt).toContain('NOT a doctor');
+    expect(options.body.systemPrompt).toContain('Never diagnose');
+    expect(options.body.userMessage).toBeTruthy();
   });
 
   it('includes sleep history and debt data in prompt', async () => {
-    mockFetchOk(VALID_RESPONSE);
+    mockInvokeOk(VALID_RESPONSE);
     await generateWeeklyBrief(MINIMAL_REQUEST);
 
-    const [, options] = (global.fetch as jest.Mock).mock.calls[0];
-    const body = JSON.parse(options.body);
-    const userMessage: string = body.messages[0].content;
-
+    const [, options] = mockInvoke.mock.calls[0];
+    const userMessage: string = options.body.userMessage;
     expect(userMessage).toContain('2026-01-05');
     expect(userMessage).toContain('day-to-night');
-    expect(userMessage).toContain('streakDays' in MINIMAL_REQUEST ? '4' : '');
+    expect(userMessage).toContain('4');
     expect(userMessage).toContain('1.5');
   });
 
   it('includes safety system prompt', async () => {
-    mockFetchOk(VALID_RESPONSE);
+    mockInvokeOk(VALID_RESPONSE);
     await generateWeeklyBrief(MINIMAL_REQUEST);
 
-    const [, options] = (global.fetch as jest.Mock).mock.calls[0];
-    const body = JSON.parse(options.body);
-    expect(body.system).toContain('NOT a doctor');
-    expect(body.system).toContain('Never diagnose');
+    const [, options] = mockInvoke.mock.calls[0];
+    expect(options.body.systemPrompt).toContain('NOT a doctor');
+    expect(options.body.systemPrompt).toContain('Never diagnose');
   });
 
-  it('returns fallback when API key is missing', async () => {
-    delete process.env.EXPO_PUBLIC_CLAUDE_API_KEY;
+  it('returns fallback when user is not authenticated', async () => {
+    mockGetSession.mockResolvedValueOnce({ data: { session: null } });
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
-    expect(global.fetch).not.toHaveBeenCalled();
+    expect(mockInvoke).not.toHaveBeenCalled();
   });
 
-  it('returns fallback on non-OK HTTP response', async () => {
-    mockFetchError(500);
+  it('returns fallback on Edge Function error', async () => {
+    mockInvokeError(500, 'Internal server error');
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
 
   it('returns fallback when response has no JSON block', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ content: [{ text: 'Sorry, I cannot help.' }] }),
+    mockInvoke.mockResolvedValueOnce({
+      data: { text: 'Sorry, I cannot help.', tokensUsed: 10 },
+      error: null,
     });
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
 
   it('returns fallback when JSON has invalid trend', async () => {
-    mockFetchOk({ ...VALID_RESPONSE, trend: 'unknown-trend' });
+    mockInvokeOk({ ...VALID_RESPONSE, trend: 'unknown-trend' });
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
 
   it('returns fallback when JSON is missing fields', async () => {
-    mockFetchOk({ summary: 'Only summary' });
+    mockInvokeOk({ summary: 'Only summary' });
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
 
   it('strips markdown fences from response text', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        content: [
-          {
-            text: '```json\n' + JSON.stringify(VALID_RESPONSE) + '\n```',
-          },
-        ],
-      }),
+    mockInvoke.mockResolvedValueOnce({
+      data: {
+        text: '```json\n' + JSON.stringify(VALID_RESPONSE) + '\n```',
+        tokensUsed: 50,
+      },
+      error: null,
     });
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result.trend).toBe('improving');
   });
 
-  it('returns fallback on network error (fetch throws)', async () => {
-    (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+  it('returns fallback on network error (invoke throws)', async () => {
+    mockInvoke.mockRejectedValueOnce(new Error('Network error'));
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
@@ -174,13 +180,13 @@ describe('generateWeeklyBrief', () => {
   it('returns fallback on AbortError (timeout)', async () => {
     const abortError = new Error('Aborted');
     abortError.name = 'AbortError';
-    (global.fetch as jest.Mock).mockRejectedValueOnce(abortError);
+    mockInvoke.mockRejectedValueOnce(abortError);
     const result = await generateWeeklyBrief(MINIMAL_REQUEST);
     expect(result).toEqual(FALLBACK_BRIEF);
   });
 
   it('works with empty sleep history', async () => {
-    mockFetchOk(VALID_RESPONSE);
+    mockInvokeOk(VALID_RESPONSE);
     const request: BriefRequest = {
       ...MINIMAL_REQUEST,
       sleepHistory: [],
