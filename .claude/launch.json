@@ -1,0 +1,41 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Expo Dev Server (LAN — iPhone on same WiFi)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--host", "lan"],
+      "port": 8081
+    },
+    {
+      "name": "Expo Dev Server (Tunnel — iPhone on any network)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--tunnel"],
+      "port": 8081
+    },
+    {
+      "name": "Expo Dev Server (Localhost only — simulator)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--host", "localhost"],
+      "port": 8081
+    },
+    {
+      "name": "Expo Web",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["expo", "start", "--web"],
+      "port": 8081
+    },
+    {
+      "name": "Jest — Full Test Suite",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["jest"],
+      "port": 0
+    },
+    {
+      "name": "Jest — Watch Mode",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["jest", "--watch"],
+      "port": 0
+    }
+  ]
+}
