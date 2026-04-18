@@ -1,42 +1,67 @@
-import { useState } from 'react';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/src/components/ui/Button';
-import Card from '@/src/components/ui/Card';
 import ProgressBar from '@/src/components/ui/ProgressBar';
+import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
+import { useOnboardingStore } from '@/src/store/onboarding-store';
 import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
+import {
+  trackOnboardingScreenViewed,
+  trackOnboardingScreenCompleted,
+  trackOnboardingScreenSkipped,
+} from '@/src/lib/analytics/onboarding-events';
 
-const MIN_HOUSEHOLD = 1;
-const MAX_HOUSEHOLD = 8;
+const CHIPS: { id: string; emoji: string; label: string }[] = [
+  { id: 'kids', emoji: '\u{1F476}', label: 'Young kids' },
+  { id: 'pets', emoji: '\u{1F436}', label: 'Pets' },
+  { id: 'commute', emoji: '\u{1F697}', label: 'Long commute' },
+];
 
 export default function HouseholdScreen() {
+  const screenStart = useRef(Date.now());
+  const { onboardingStartedAt } = useOnboardingStore();
   const setProfile = useUserStore((s) => s.setProfile);
 
-  const [householdSize, setHouseholdSize] = useState(1);
-  const [hasYoungChildren, setHasYoungChildren] = useState(false);
-  const [hasPets, setHasPets] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  function increment() {
-    setHouseholdSize((prev) => Math.min(prev + 1, MAX_HOUSEHOLD));
-  }
+  useEffect(() => {
+    trackOnboardingScreenViewed('household', onboardingStartedAt ?? Date.now());
+  }, [onboardingStartedAt]);
 
-  function decrement() {
-    setHouseholdSize((prev) => Math.max(prev - 1, MIN_HOUSEHOLD));
+  function toggle(id: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
   }
 
   function handleContinue() {
-    setProfile({ householdSize, hasYoungChildren, hasPets });
-    router.push('/(onboarding)/preferences');
+    setProfile({
+      hasYoungChildren: selected.has('kids'),
+      hasPets: selected.has('pets'),
+      commuteDuration: selected.has('commute') ? 45 : 30,
+    });
+    trackOnboardingScreenCompleted('household', Date.now() - screenStart.current);
+    router.push('/(onboarding)/shifts');
+  }
+
+  function handleSkip() {
+    setProfile({ hasYoungChildren: false, hasPets: false, commuteDuration: 30 });
+    trackOnboardingScreenSkipped('household');
+    router.push('/(onboarding)/shifts');
+  }
+
+  function handleBack() {
+    router.back();
   }
 
   return (
@@ -46,118 +71,64 @@ export default function HouseholdScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <ProgressBar currentStep={ONBOARDING_STEPS.household} totalSteps={ONBOARDING_TOTAL_STEPS} />
+          <Pressable onPress={handleBack} style={styles.navButton} accessibilityRole="button">
+            <Text style={styles.navText}>{'\u2190'} Back</Text>
+          </Pressable>
+          <Pressable onPress={handleSkip} style={styles.navButton} accessibilityRole="button">
+            <Text style={styles.navText}>Skip {'\u2192'}</Text>
+          </Pressable>
         </View>
 
-        <Text style={styles.title}>Tell us about your household</Text>
-        <Text style={styles.subtitle}>
-          This helps us create realistic sleep windows for your situation
-        </Text>
-
-        {/* Household size */}
-        <Card style={styles.card}>
-          <Text style={styles.cardLabel}>
-            How many people in your household?
-          </Text>
-          <View style={styles.counterRow}>
-            <Pressable
-              onPress={decrement}
-              style={[
-                styles.counterButton,
-                householdSize <= MIN_HOUSEHOLD && styles.counterButtonDisabled,
-              ]}
-              disabled={householdSize <= MIN_HOUSEHOLD}
-              accessibilityRole="button"
-              accessibilityLabel="Decrease household size"
-            >
-              <Text
-                style={[
-                  styles.counterButtonText,
-                  householdSize <= MIN_HOUSEHOLD &&
-                    styles.counterButtonTextDisabled,
-                ]}
-              >
-                \u2212
-              </Text>
-            </Pressable>
-            <Text style={styles.counterValue}>{householdSize}</Text>
-            <Pressable
-              onPress={increment}
-              style={[
-                styles.counterButton,
-                householdSize >= MAX_HOUSEHOLD && styles.counterButtonDisabled,
-              ]}
-              disabled={householdSize >= MAX_HOUSEHOLD}
-              accessibilityRole="button"
-              accessibilityLabel="Increase household size"
-            >
-              <Text
-                style={[
-                  styles.counterButtonText,
-                  householdSize >= MAX_HOUSEHOLD &&
-                    styles.counterButtonTextDisabled,
-                ]}
-              >
-                +
-              </Text>
-            </Pressable>
-          </View>
-        </Card>
-
-        {/* Young children toggle */}
-        <Card style={styles.card}>
-          <View style={styles.toggleRow}>
-            <View style={styles.toggleLabel}>
-              <Text style={styles.cardLabel}>
-                Do you have children under 6?
-              </Text>
-              <Text style={styles.cardHint}>
-                Young children may interrupt sleep
-              </Text>
-            </View>
-            <Switch
-              value={hasYoungChildren}
-              onValueChange={setHasYoungChildren}
-              trackColor={{
-                false: COLORS.background.elevated,
-                true: COLORS.accent.primary,
-              }}
-              thumbColor={COLORS.text.primary}
-            />
-          </View>
-        </Card>
-
-        {/* Pets toggle */}
-        <Card style={styles.card}>
-          <View style={styles.toggleRow}>
-            <View style={styles.toggleLabel}>
-              <Text style={styles.cardLabel}>
-                Do you have pets that may wake you?
-              </Text>
-              <Text style={styles.cardHint}>
-                Early morning pet needs can affect sleep
-              </Text>
-            </View>
-            <Switch
-              value={hasPets}
-              onValueChange={setHasPets}
-              trackColor={{
-                false: COLORS.background.elevated,
-                true: COLORS.accent.primary,
-              }}
-              thumbColor={COLORS.text.primary}
-            />
-          </View>
-        </Card>
-
-        <View style={styles.footer}>
-          <Button
-            title="Continue"
-            onPress={handleContinue}
-            size="lg"
-            fullWidth
+        <View style={styles.progressWrapper}>
+          <ProgressBar
+            currentStep={ONBOARDING_STEPS.household}
+            totalSteps={ONBOARDING_TOTAL_STEPS}
           />
         </View>
+
+        <AnimatedTransition delay={0} duration={250}>
+          <Text style={styles.headline}>What's your situation at home?</Text>
+          <Text style={styles.body}>
+            Select everything that might eat into your sleep time.
+          </Text>
+        </AnimatedTransition>
+
+        <AnimatedTransition delay={100} duration={250}>
+          <View style={styles.chips}>
+            {CHIPS.map((chip) => {
+              const active = selected.has(chip.id);
+              return (
+                <Pressable
+                  key={chip.id}
+                  onPress={() => toggle(chip.id)}
+                  style={({ pressed }) => [
+                    styles.chip,
+                    active && styles.chipActive,
+                    pressed && styles.chipPressed,
+                  ]}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: active }}
+                >
+                  <Text style={styles.chipEmoji}>{chip.emoji}</Text>
+                  <Text style={[styles.chipLabel, active && styles.chipLabelActive]}>
+                    {chip.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </AnimatedTransition>
+
+        <AnimatedTransition delay={200} duration={250}>
+          <View style={styles.footer}>
+            <Button
+              title="Continue"
+              onPress={handleContinue}
+              size="lg"
+              fullWidth
+            />
+          </View>
+        </AnimatedTransition>
       </ScrollView>
     </SafeAreaView>
   );
@@ -174,77 +145,74 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING['3xl'],
   },
   header: {
-    marginTop: SPACING.lg,
-    marginBottom: SPACING['3xl'],
-  },
-  title: {
-    ...TYPOGRAPHY.heading2,
-    color: COLORS.text.primary,
-    marginBottom: SPACING.sm,
-  },
-  subtitle: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.secondary,
-    marginBottom: SPACING['3xl'],
-    lineHeight: 22,
-  },
-  card: {
-    marginBottom: SPACING.lg,
-  },
-  cardLabel: {
-    ...TYPOGRAPHY.body,
-    color: COLORS.text.primary,
-    fontWeight: '600',
-  },
-  cardHint: {
-    ...TYPOGRAPHY.bodySmall,
-    color: COLORS.text.secondary,
-    marginTop: SPACING.xs,
-  },
-  counterRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: SPACING.lg,
-    gap: SPACING['2xl'],
-  },
-  counterButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: COLORS.background.elevated,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: 44,
-  },
-  counterButtonDisabled: {
-    opacity: 0.3,
-  },
-  counterButtonText: {
-    color: COLORS.text.primary,
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  counterButtonTextDisabled: {
-    color: COLORS.text.tertiary,
-  },
-  counterValue: {
-    ...TYPOGRAPHY.heading1,
-    color: COLORS.accent.primary,
-    minWidth: 48,
-    textAlign: 'center',
-  },
-  toggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: SPACING.lg,
+    marginBottom: SPACING.md,
   },
-  toggleLabel: {
-    flex: 1,
-    marginRight: SPACING.lg,
+  navButton: {
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.sm,
+    minHeight: 44,
+    justifyContent: 'center',
+  },
+  navText: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+  },
+  progressWrapper: {
+    marginBottom: SPACING['3xl'],
+  },
+  headline: {
+    ...TYPOGRAPHY.heading2,
+    color: COLORS.text.primary,
+    marginBottom: SPACING.md,
+  },
+  body: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+    lineHeight: 24,
+    marginBottom: SPACING['2xl'],
+  },
+  chips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.md,
+    marginBottom: SPACING['3xl'],
+  },
+  chip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.sm,
+    backgroundColor: COLORS.background.surface,
+    borderWidth: 1,
+    borderColor: COLORS.border.default,
+    borderRadius: 32,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    minHeight: 48,
+  },
+  chipActive: {
+    backgroundColor: 'rgba(123,97,255,0.12)',
+    borderColor: '#7B61FF',
+  },
+  chipPressed: {
+    opacity: 0.75,
+  },
+  chipEmoji: {
+    fontSize: 18,
+  },
+  chipLabel: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+    fontWeight: '500',
+  },
+  chipLabelActive: {
+    color: '#7B61FF',
+    fontWeight: '700',
   },
   footer: {
     marginTop: 'auto',
-    paddingTop: SPACING['3xl'],
   },
 });

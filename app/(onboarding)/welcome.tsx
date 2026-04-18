@@ -11,13 +11,16 @@ import Animated, {
   withDelay,
 } from 'react-native-reanimated';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
-import { COLORS, SPACING } from '@/src/theme';
+import Button from '@/src/components/ui/Button';
+import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { useOnboardingStore } from '@/src/store/onboarding-store';
+import { useUserStore } from '@/src/store/user-store';
+import { trackOnboardingScreenViewed, trackOnboardingSkipped } from '@/src/lib/analytics/onboarding-events';
 
 // ---------------------------------------------------------------------------
 // Star field
 // ---------------------------------------------------------------------------
 
-// Pre-generated so positions stay stable across renders
 const STARS = [
   { id: 0, x: 8, y: 6, size: 1.5, delay: 0, dur: 2200 },
   { id: 1, x: 22, y: 14, size: 1, delay: 400, dur: 1800 },
@@ -83,62 +86,35 @@ function TwinkleStar({ star }: { star: typeof STARS[0] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Feature cards
+// Trust badges
 // ---------------------------------------------------------------------------
 
-const FEATURES = [
-  {
-    emoji: '\u{1F4A4}',
-    bgColor: 'rgba(129,140,248,0.12)',
-    title: 'Sleep on autopilot',
-    description: 'Set it and forget it',
-  },
-  {
-    emoji: '\u{1F4C5}',
-    bgColor: 'rgba(52,211,153,0.12)',
-    title: 'Calendar-aware',
-    description: 'Syncs with your shift schedule',
-  },
-  {
-    emoji: '\u{2728}',
-    bgColor: 'rgba(200,168,75,0.12)',
-    title: 'Science-backed',
-    description: 'Plans that adapt to your life',
-  },
-  {
-    emoji: '\u{1F37D}\u{FE0F}',
-    bgColor: 'rgba(52,211,153,0.12)',
-    title: 'Eat with your clock',
-    description: 'Timed meals shown to cut cardiovascular risk in shift workers',
-  },
-  {
-    emoji: '\u{1FA7A}',
-    bgColor: 'rgba(239,68,68,0.12)',
-    title: 'Developed by an ER Physician',
-    description: 'Built for the front lines, by someone on them',
-  },
+const TRUST_BADGES = [
+  { label: 'ER Physician' },
+  { label: 'Circadian Science' },
+  { label: '700M Workers' },
 ] as const;
-
-// ---------------------------------------------------------------------------
-// Dot indicators
-// ---------------------------------------------------------------------------
-
-function DotIndicators() {
-  return (
-    <View style={styles.dotsRow}>
-      <View style={styles.dotActive} />
-      {[1, 2, 3, 4, 5].map((i) => (
-        <View key={i} style={styles.dotInactive} />
-      ))}
-    </View>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Screen
 // ---------------------------------------------------------------------------
 
 export default function WelcomeScreen() {
+  const { startOnboarding, onboardingStartedAt } = useOnboardingStore();
+  const { completeOnboarding } = useUserStore();
+
+  useEffect(() => {
+    startOnboarding();
+    trackOnboardingScreenViewed('welcome', onboardingStartedAt ?? Date.now());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleSkip() {
+    trackOnboardingSkipped();
+    completeOnboarding();
+    router.replace('/(tabs)');
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* Star field — absolute background */}
@@ -152,83 +128,80 @@ export default function WelcomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Dot indicators */}
-        <View style={styles.header}>
-          <DotIndicators />
+        {/* Skip link */}
+        <View style={styles.skipRow}>
+          <Pressable
+            onPress={handleSkip}
+            style={({ pressed }) => [styles.skipBtn, pressed && { opacity: 0.6 }]}
+            accessibilityRole="button"
+          >
+            <Text style={styles.skipText}>Skip {'\u2192'}</Text>
+          </Pressable>
         </View>
 
         {/* Hero */}
         <AnimatedTransition delay={0} duration={300}>
           <View style={styles.hero}>
             <Text style={styles.moonEmoji}>{'\u{1F319}'}</Text>
-            <Text style={styles.headline}>Sleep on Autopilot</Text>
+            <Text style={styles.headline}>Your sleep fights back.</Text>
             <Text style={styles.tagline}>
               For everyone who works against the clock
             </Text>
           </View>
         </AnimatedTransition>
 
-        {/* Stat hook — research finding */}
-        <AnimatedTransition delay={300} duration={250}>
+        {/* Stat hook */}
+        <AnimatedTransition delay={200} duration={250}>
           <View style={styles.statBlock}>
             <View style={styles.statLeft}>
               <Text style={styles.statNumber}>3%</Text>
-              <Text style={styles.statDivider}></Text>
+              <Text style={styles.statDivider} />
             </View>
             <View style={styles.statRight}>
               <Text style={styles.statHeadline}>
                 of night shift workers ever fully adapt circadianly.
               </Text>
               <Text style={styles.statBody}>
-                Most apps chase that 3%. ShiftWell was built for the other 97% — optimizing recovery within your real schedule, not some impossible ideal.
+                Most apps chase that 3%. ShiftWell was built for the other 97%
+                — optimizing recovery within your real schedule, not some
+                impossible ideal.
               </Text>
             </View>
           </View>
         </AnimatedTransition>
 
-        {/* Feature cards */}
-        <View style={styles.featureCards}>
-          {FEATURES.map((feature, index) => (
-            <AnimatedTransition
-              key={feature.title}
-              delay={index * 150}
-              duration={250}
-            >
-              <View style={styles.featureCard}>
-                <View style={[styles.featureIconCircle, { backgroundColor: feature.bgColor }]}>
-                  <Text style={styles.featureEmoji}>{feature.emoji}</Text>
-                </View>
-                <View style={styles.featureText}>
-                  <Text style={styles.featureTitle}>{feature.title}</Text>
-                  <Text style={styles.featureDesc}>{feature.description}</Text>
-                </View>
+        {/* Trust badges */}
+        <AnimatedTransition delay={350} duration={250}>
+          <View style={styles.badgesRow}>
+            {TRUST_BADGES.map((b) => (
+              <View key={b.label} style={styles.badge}>
+                <Text style={styles.badgeText}>{b.label}</Text>
               </View>
-            </AnimatedTransition>
-          ))}
-        </View>
+            ))}
+          </View>
+        </AnimatedTransition>
 
         {/* CTA */}
-        <AnimatedTransition delay={600} duration={250}>
+        <AnimatedTransition delay={500} duration={250}>
           <View style={styles.footer}>
-            <Pressable
+            <Button
+              title="Let's get started"
               onPress={() => router.push('/(onboarding)/chronotype')}
-              style={({ pressed }) => [styles.ctaButton, pressed && { opacity: 0.85 }]}
-            >
-              <Text style={styles.ctaText}>Get Started</Text>
-            </Pressable>
+              size="lg"
+              fullWidth
+            />
           </View>
         </AnimatedTransition>
 
         {/* Medical disclaimer */}
-        <AnimatedTransition delay={700} duration={200}>
+        <AnimatedTransition delay={600} duration={200}>
           <View style={styles.disclaimerContainer}>
             <Text style={styles.disclaimerLabel}>Medical Disclaimer</Text>
             <Text style={styles.legal}>
               Not a substitute for medical advice. ShiftWell provides general
-              wellness information based on circadian science research.
-              Consult your physician before changing your sleep, diet, or work
-              schedule — especially if you have a health condition or take
-              medications.
+              wellness information based on circadian science research. Consult
+              your physician before changing your sleep, diet, or work schedule
+              — especially if you have a health condition or take medications.
             </Text>
           </View>
         </AnimatedTransition>
@@ -246,8 +219,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background.primary,
   },
-
-  // Star field
   starField: {
     position: 'absolute',
     top: 0,
@@ -259,34 +230,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: '#FFFFFF',
   },
-
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING['3xl'],
   },
-  header: {
-    marginTop: SPACING.lg,
-    alignItems: 'center',
-  },
 
-  /* Dots */
-  dotsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
+  /* Skip */
+  skipRow: {
+    alignItems: 'flex-end',
+    marginTop: SPACING.lg,
   },
-  dotActive: {
-    width: 20,
-    height: 7,
-    borderRadius: 3.5,
-    backgroundColor: '#7B61FF',
+  skipBtn: {
+    paddingVertical: SPACING.sm,
+    paddingHorizontal: SPACING.sm,
+    minHeight: 44,
+    justifyContent: 'center',
   },
-  dotInactive: {
-    width: 7,
-    height: 7,
-    borderRadius: 3.5,
-    backgroundColor: '#1F2937',
+  skipText: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.tertiary,
   },
 
   /* Hero */
@@ -299,18 +262,18 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.lg,
   },
   headline: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: '800',
     color: '#C8A84B',
     textAlign: 'center',
     marginBottom: SPACING.md,
   },
   tagline: {
-    fontSize: 13,
+    ...TYPOGRAPHY.body,
     color: COLORS.text.secondary,
     textAlign: 'center',
     maxWidth: 280,
-    lineHeight: 20,
+    lineHeight: 22,
   },
 
   /* Stat block */
@@ -360,60 +323,31 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
 
-  /* Feature cards */
-  featureCards: {
-    gap: SPACING.md,
-    marginBottom: SPACING['4xl'],
-  },
-  featureCard: {
+  /* Trust badges */
+  badgesRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 14,
-    padding: SPACING.lg,
-    minHeight: 64,
-  },
-  featureIconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: SPACING.sm,
     justifyContent: 'center',
-    marginRight: SPACING.md,
+    marginBottom: SPACING['3xl'],
   },
-  featureEmoji: {
-    fontSize: 18,
+  badge: {
+    backgroundColor: 'rgba(123,97,255,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(123,97,255,0.25)',
+    borderRadius: 20,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 6,
   },
-  featureText: {
-    flex: 1,
-  },
-  featureTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: COLORS.text.primary,
-    marginBottom: 2,
-  },
-  featureDesc: {
-    fontSize: 11,
-    color: COLORS.text.secondary,
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#7B61FF',
   },
 
   /* CTA */
   footer: {
     marginBottom: SPACING.xl,
-  },
-  ctaButton: {
-    backgroundColor: '#7B61FF',
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: 'center',
-  },
-  ctaText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
   },
 
   /* Medical disclaimer */
@@ -432,8 +366,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 4,
   },
-
-  /* Legal */
   legal: {
     fontSize: 9,
     color: COLORS.text.dim,
