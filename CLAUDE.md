@@ -26,6 +26,9 @@ npx expo start        # Test on device/simulator
 eas build --platform ios  # EAS build for TestFlight
 ```
 
+## Known sibling projects (gitignored, tracked independently)
+- `~/Projects/shiftwell-dashboard/` — Next.js admin/analytics dashboard. Separate git repo, separate deployment. Not a submodule. Check that path for admin/ops UI work.
+
 ## Project Rules
 - Run `npm test` before any commit — 1,059 tests must pass
 - Expo/React Native stack — `npx expo start` to test on device/simulator

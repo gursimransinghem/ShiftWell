@@ -53,3 +53,13 @@ logs/ceo-loop/*.log
 
 # Claude Code per-machine settings
 .claude/settings.local.json
+
+# Sibling projects (tracked independently in their own repos)
+shiftwell-dashboard/
+
+# Design reference image drop zones (keep README + written distillations, ignore large PNGs/MP4s)
+docs/design/references/lumi-screenshots/*.png
+docs/design/references/lumi-screenshots/*.jpg
+docs/design/references/lumi-screenshots/*.jpeg
+docs/design/references/lumi-screenshots/*.mp4
+docs/design/references/lumi-screenshots/*.mov
