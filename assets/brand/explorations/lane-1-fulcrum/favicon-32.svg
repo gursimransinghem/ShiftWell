@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Favicon 32×32
+  Reduced version optimized for browser tab legibility.
+
+  At 32px, the gold ring around the center node would collapse.
+  Simplification: three nodes on beam, pivot triangle, no ring.
+  Beam is now 2px stroke (renders as 1 physical pixel on 2× screens).
+  Node radius: 2px — solid dots, readable.
+  Pivot triangle: compact, still gold.
+
+  Geometry (all px, exact):
+    Canvas: 32×32
+    Beam y: 14
+    Left node: x=5, y=14, r=2
+    Center node: x=16, y=14, r=2
+    Right node: x=27, y=14, r=2
+    Beam: x1=5 x2=27 y=14 stroke=1.5
+    Pivot triangle: (12,14) (20,14) (16,21)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  role="img"
+  aria-label="ShiftWell favicon"
+>
+  <title>ShiftWell</title>
+
+  <!-- Dark background for favicon context -->
+  <rect width="32" height="32" fill="#080B14"/>
+
+  <g id="mark">
+
+    <!-- Beam -->
+    <line
+      x1="5" y1="14"
+      x2="27" y2="14"
+      stroke="#FFFFFF"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+
+    <!-- Left node -->
+    <circle cx="5" cy="14" r="2.5" fill="#FFFFFF"/>
+
+    <!-- Center node -->
+    <circle cx="16" cy="14" r="2.5" fill="#FFFFFF"/>
+
+    <!-- Right node -->
+    <circle cx="27" cy="14" r="2.5" fill="#FFFFFF"/>
+
+    <!-- Pivot triangle — gold -->
+    <polygon
+      points="12,14 20,14 16,21"
+      fill="#C8A84B"
+    />
+
+    <!-- Pivot separator -->
+    <line
+      x1="12" y1="14"
+      x2="20" y2="14"
+      stroke="#080B14"
+      stroke-width="1.25"
+    />
+
+  </g>
+
+</svg>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell Lane 4 — 32×32 Monochrome Favicon
+  Möbius strip at minimum viable size.
+
+  At 32px: no gradients, no fills — pure stroke geometry.
+  The twist must read as an over/under crossing, not just a figure-8.
+  Strategy: thicker outer edge strokes, clear gap at crossing (white knockout),
+  single-weight inner edge dashed to suggest depth.
+
+  The crossover is at left center (~x=4, y=16).
+  The open terminus is at right center (~x=28, y=16).
+  The strip width at 32px = 5px rendered (proportional to concept).
+
+  Monochrome: #FFFFFF on #080B14.
+  Also works inverted (dark on light) for favicon on white backgrounds.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 32 32"
+     role="img"
+     aria-label="ShiftWell favicon">
+  <title>ShiftWell</title>
+
+  <!-- Background -->
+  <rect width="32" height="32" fill="#080B14"/>
+
+  <!--
+    At 32px, we use simplified but geometrically correct Möbius curves.
+    The strip is drawn as two parallel curves that cross once.
+    The crossing creates the topological twist.
+
+    Scaling concept proportions to 32×32:
+    - Overall width: 26px (leaving 3px margin each side)
+    - Center: x=16, y=16
+    - Major radius: ~9px
+    - Strip width: ~4.5px (represented as outer/inner edge gap)
+
+    KEY GEOMETRY:
+    Outer boundary of full Möbius edge (single closed curve):
+      Starts at right (28,16), arcs up and left to (4,16),
+      crosses and continues down and right back to (28,16).
+      This is ONE continuous edge — the Möbius single-edge property.
+
+    Rendered as two overlapping arcs with a crossing gap:
+    - Right lobe: open oval on the right, rendered cleanly
+    - Left lobe: slightly smaller oval on left, with crossing visible
+    - The crossing gap (background knockout) makes the over/under explicit
+  -->
+
+  <!-- OUTER EDGE — full Möbius boundary (one continuous stroke) -->
+  <!-- Top arc: right to left (upper half) -->
+  <path
+    d="M 28,16
+       C 28,9 24,5 16,5
+       C 9,5 4,9 4,16"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Bottom arc: left to right (lower half) — but BEHIND the crossing -->
+  <!-- We draw the lower-left portion first (will go behind) -->
+  <path
+    d="M 4,16
+       C 4,23 9,27 16,27
+       C 24,27 28,23 28,16"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- INNER EDGE — the inset boundary, dashed to suggest depth -->
+  <!-- Top inner arc -->
+  <path
+    d="M 25,16
+       C 25,10.5 22,7.5 16,7.5
+       C 11,7.5 7,10.5 7,16"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="1"
+    stroke-linecap="round"
+    stroke-dasharray="2,1.5"
+    opacity="0.45"
+  />
+  <!-- Bottom inner arc -->
+  <path
+    d="M 7,16
+       C 7,21.5 11,24.5 16,24.5
+       C 22,24.5 25,21.5 25,16"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="1"
+    stroke-linecap="round"
+    stroke-dasharray="2,1.5"
+    opacity="0.45"
+  />
+
+  <!--
+    THE TWIST — at the left crossing point (x≈4, y=16)
+    The Möbius twist is represented by:
+    1. A knockout gap (background rect) to break the lower edge
+    2. Then the upper edge continues over it
+    3. Cross-section lines showing the strip thickness
+
+    This creates the visual over/under that signals 3D topology.
+  -->
+
+  <!-- Knockout gap at left crossing — background covers the arc that goes under -->
+  <rect x="2" y="13" width="5" height="6" fill="#080B14"/>
+
+  <!-- Cross-section at left (the twist point) — vertical line showing strip edge -->
+  <line x1="4" y1="11" x2="4" y2="21" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Redraw the FRONT portion of the upper edge over the gap -->
+  <path
+    d="M 2,16
+       C 2,8 9,3 16,3
+       C 24,3 30,8 30,16
+       C 30,24 24,29 16,29
+       C 9,29 2,24 2,16"
+    fill="none"
+    stroke="none"
+  />
+
+  <!-- The key: upper arc passes IN FRONT of the crossing at left -->
+  <path
+    d="M 4,11 C 4,9 5,8 6,8"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M 4,21 C 4,23 5,24 6,24"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Cross-section at right terminus (the untwisted opening) -->
+  <line x1="28" y1="12" x2="28" y2="20" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+  <!-- Inner cross-section at right -->
+  <line x1="25" y1="13.5" x2="25" y2="18.5" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+
+</svg>

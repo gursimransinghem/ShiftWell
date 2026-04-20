@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Tagline + Bioluminescent Logo Lockup (Dark)
+
+  Adapts the canonical tagline-lockup-dark.svg (720×200) replacing the
+  fulcrum divider with the bioluminescent circadian mark as a centered icon.
+
+  The divider becomes the mark itself — a miniaturized version of the
+  circadian curve sits center-stage between the headline and the wordmark.
+  This is compositionally meaningful: the rhythm literally separates the
+  problem statement ("Work. Life. Sleep.") from the solution brand name.
+
+  Layout:
+    Line 1:  "Work. Life. Sleep. Rebalanced."  (Inter 700, 34px, y=52)
+    Mark:    Circadian curve icon centered at y=110 (50px tall, 120px wide)
+    Line 2:  "ShiftWell"  (Inter 600, 28px, y=172)
+
+  Canvas: 720×210 (extends tagline canvas height by 10px to accommodate icon)
+  Mark safe area: x=[300,420], y=[82,138] (120×56 px)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 210"
+  role="img"
+  aria-label="Work. Life. Sleep. Rebalanced. by ShiftWell — circadian rhythm mark"
+>
+  <title>ShiftWell tagline lockup with bioluminescent circadian mark</title>
+
+  <defs>
+    <!-- Mark gradients at tagline scale -->
+    <linearGradient id="tl-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="45%"  stop-color="#7B61FF"/>
+      <stop offset="70%"  stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+    <linearGradient id="tl-glow-out" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="tl-glow-mid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.28"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.28"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.20"/>
+    </linearGradient>
+    <linearGradient id="tl-glow-in" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.60"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.60"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.45"/>
+    </linearGradient>
+    <radialGradient id="tl-node-p" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tl-node-g" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Clip to mark region: x=[300,420], y=[82,138] -->
+    <clipPath id="mark-region">
+      <rect x="295" y="80" width="130" height="60"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background (transparent for embedding; uncomment for standalone preview)
+  <rect width="720" height="210" fill="#080B14"/>
+  -->
+
+  <!-- Line 1: Headline — matches tagline-lockup-dark.svg exactly -->
+  <g font-family="Inter, Georgia, 'Times New Roman', serif" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+    <text x="360" y="52" font-size="34" letter-spacing="0.5">
+      Work. Life. Sleep. <tspan font-style="italic" font-weight="600" fill="#C8A84B">Rebalanced.</tspan>
+    </text>
+  </g>
+
+  <!--
+    Bioluminescent mark as divider
+    Mark canvas: x=[300,420], y=[82,138] (120×56 active)
+    Center: x=360, y=110
+
+    Curve at divider scale:
+    The mark x-span: 304 → 416 (112px)
+    Midline: y=110
+    Night trough: y=88 (amplitude ±22px)
+    Peak alertness: y=132
+    6am inflection: x=332, y=110
+    6pm inflection: x=388, y=110
+
+    Flanking the mark: two thin horizontal rules that extend from the
+    mark endpoints toward the canvas edges — echoing the original fulcrum
+    beam but now anchored to the circadian curve endpoints.
+  -->
+
+  <!-- Left beam: from left edge to mark start -->
+  <line x1="120" y1="110" x2="300" y2="110" stroke="#C8A84B" stroke-width="1.0" stroke-linecap="round" opacity="0.55"/>
+  <!-- Left terminal weight (same as original fulcrum) -->
+  <circle cx="120" cy="110" r="3" fill="#C8A84B" opacity="0.80"/>
+
+  <!-- Right beam: from mark end to right edge -->
+  <line x1="420" y1="110" x2="600" y2="110" stroke="#C8A84B" stroke-width="1.0" stroke-linecap="round" opacity="0.55"/>
+  <!-- Right terminal weight -->
+  <circle cx="600" cy="110" r="3" fill="#C8A84B" opacity="0.80"/>
+
+  <!-- Mark glow outer -->
+  <path
+    d="M 304,88
+       C 304,88 318,88 332,110
+       C 346,132 353,132 360,132
+       C 367,132 374,132 388,110
+       C 402,88 416,88 416,88"
+    fill="none"
+    stroke="url(#tl-glow-out)"
+    stroke-width="22"
+    stroke-linecap="round"
+    clip-path="url(#mark-region)"
+  />
+
+  <!-- Mark glow mid -->
+  <path
+    d="M 304,88
+       C 304,88 318,88 332,110
+       C 346,132 353,132 360,132
+       C 367,132 374,132 388,110
+       C 402,88 416,88 416,88"
+    fill="none"
+    stroke="url(#tl-glow-mid)"
+    stroke-width="9"
+    stroke-linecap="round"
+    clip-path="url(#mark-region)"
+  />
+
+  <!-- Mark glow inner -->
+  <path
+    d="M 304,88
+       C 304,88 318,88 332,110
+       C 346,132 353,132 360,132
+       C 367,132 374,132 388,110
+       C 402,88 416,88 416,88"
+    fill="none"
+    stroke="url(#tl-glow-in)"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    clip-path="url(#mark-region)"
+  />
+
+  <!-- Mark core filament -->
+  <path
+    d="M 304,88
+       C 304,88 318,88 332,110
+       C 346,132 353,132 360,132
+       C 367,132 374,132 388,110
+       C 402,88 416,88 416,88"
+    fill="none"
+    stroke="url(#tl-grad)"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    clip-path="url(#mark-region)"
+  />
+
+  <!-- Inflection nodes at mark scale -->
+  <ellipse cx="332" cy="110" rx="9" ry="9" fill="url(#tl-node-p)" opacity="0.9"/>
+  <circle cx="332" cy="110" r="2" fill="#7B61FF"/>
+
+  <ellipse cx="388" cy="110" rx="9" ry="9" fill="url(#tl-node-g)" opacity="0.85"/>
+  <circle cx="388" cy="110" r="2" fill="#C8A84B"/>
+
+  <!-- Mark endpoint caps — connect to the beam lines -->
+  <circle cx="304" cy="88" r="1.5" fill="#7B61FF" opacity="0.50"/>
+  <circle cx="416" cy="88" r="1.5" fill="#7B61FF" opacity="0.50"/>
+
+  <!-- Line 2: Wordmark — matches tagline-lockup-dark.svg exactly -->
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">
+    <text x="360" y="182" font-size="28" letter-spacing="2.4">ShiftWell</text>
+  </g>
+</svg>

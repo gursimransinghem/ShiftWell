@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — App Icon 1024×1024 (Dark background)
+  iOS-safe: 12% padding on each side = 122.88px → effective mark area: 778×778px
+  Centers the circadian curve mark within safe zone.
+  Conforms to Apple Human Interface Guidelines: no rounded corner mask needed
+  (iOS applies the squircle mask at runtime).
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1024 1024"
+  role="img"
+  aria-label="ShiftWell app icon"
+>
+  <title>ShiftWell App Icon — Dark</title>
+
+  <defs>
+    <!-- Night-to-dawn gradient: load-bearing color data -->
+    <linearGradient id="circadian-g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="45%"  stop-color="#7B61FF"/>
+      <stop offset="70%"  stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+
+    <linearGradient id="glow-outer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.08"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.08"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.06"/>
+    </linearGradient>
+
+    <linearGradient id="glow-mid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.25"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.25"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.20"/>
+    </linearGradient>
+
+    <linearGradient id="glow-inner" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.60"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.60"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.48"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.48"/>
+    </linearGradient>
+
+    <radialGradient id="node-purple-lg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="node-gold-lg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Subtle background radial: deep-space depth, not decorative -->
+    <radialGradient id="bg-depth" cx="50%" cy="40%" r="60%">
+      <stop offset="0%"   stop-color="#0D1120"/>
+      <stop offset="100%" stop-color="#080B14"/>
+    </radialGradient>
+
+    <clipPath id="safe-zone">
+      <rect x="123" y="123" width="778" height="778"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bg-depth)"/>
+
+  <!--
+    Curve geometry scaled to 1024 canvas with 12% (≈123px) padding.
+    Safe zone: x=[123,901], y=[123,901], center=(512,512)
+    Curve maps 24h oscillation:
+      midnight (x=152): y=185  (night trough)
+      6am     (x=387): y=512  (rising inflection)
+      noon    (x=512): y=839  (peak alertness — bottom of canvas, inverted for visual)
+      6pm     (x=637): y=512  (falling inflection)
+      midnight(x=872): y=185  (night trough)
+    Amplitude: ±327px from midline (512)
+    Note: curve inverted vertically — trough is at top (negative space = sky/night),
+    peak descends toward bottom center (mass/gravity = the body's weight during alert day)
+  -->
+
+  <!-- Subtle 6h interval reference marks — nearly invisible, but data-present -->
+  <g opacity="0.05" stroke="#7B61FF" stroke-width="1">
+    <line x1="387" y1="140" x2="387" y2="884"/>
+    <line x1="512" y1="140" x2="512" y2="884"/>
+    <line x1="637" y1="140" x2="637" y2="884"/>
+    <line x1="140" y1="512" x2="884" y2="512"/>
+  </g>
+
+  <!-- Glow layer 1: outermost halo -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#glow-outer)"
+    stroke-width="72"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone)"
+  />
+
+  <!-- Glow layer 2: mid halo -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#glow-mid)"
+    stroke-width="36"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone)"
+  />
+
+  <!-- Glow layer 3: inner halo -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#glow-inner)"
+    stroke-width="13"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone)"
+  />
+
+  <!-- Core filament -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#circadian-g)"
+    stroke-width="5"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone)"
+  />
+
+  <!-- Phase transition nodes -->
+  <!-- 6am rising inflection: melatonin suppression begins, light-gating opens -->
+  <ellipse cx="387" cy="512" rx="46" ry="46" fill="url(#node-purple-lg)" opacity="0.9"/>
+  <circle cx="387" cy="512" r="7" fill="#7B61FF"/>
+
+  <!-- 6pm falling inflection: dim-light melatonin onset (DLMO) zone -->
+  <ellipse cx="637" cy="512" rx="46" ry="46" fill="url(#node-gold-lg)" opacity="0.85"/>
+  <circle cx="637" cy="512" r="7" fill="#C8A84B"/>
+
+  <!-- Midnight caps: cycle continuity, not terminus -->
+  <circle cx="152" cy="185" r="6" fill="#7B61FF" opacity="0.55"/>
+  <circle cx="872" cy="185" r="6" fill="#7B61FF" opacity="0.55"/>
+</svg>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Wordmark Horizontal Lockup
+  Mark (left) + "ShiftWell" wordmark (right)
+
+  Typography: Inter 600, 32px, letter-spacing 2.8px
+  Rationale: Matches the tagline-lockup-dark.svg which uses Inter 600, ls 2.4px.
+  Slightly wider tracking here since the wordmark stands alone without tagline context.
+
+  Canvas: 560×120 (≈4.7:1 aspect ratio)
+  Mark occupies: 80×80 viewport unit square (centered vertically)
+  Text starts: x=112 (mark width 80 + 32px gap)
+  Vertical center: y=60
+
+  Color treatment:
+  - "Shift" → white (#FFFFFF)
+  - "Well"  → gold (#C8A84B) — same as tagline lockup treatment
+  This distinction is load-bearing: "Shift" is the problem, "Well" is the outcome.
+  The gold accent on "Well" creates the micro-narrative in the wordmark itself.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 560 120"
+  role="img"
+  aria-label="ShiftWell — circadian sleep optimization"
+>
+  <title>ShiftWell wordmark — horizontal</title>
+
+  <defs>
+    <!-- Mark gradients — scaled down from concept.svg -->
+    <linearGradient id="mark-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="45%"  stop-color="#7B61FF"/>
+      <stop offset="70%"  stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+    <linearGradient id="mark-glow-mid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.30"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.30"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.22"/>
+    </linearGradient>
+    <linearGradient id="mark-glow-outer" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.08"/>
+    </linearGradient>
+    <radialGradient id="node-p-sm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.80"/>
+      <stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="node-g-sm" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="0.80"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="mark-clip">
+      <rect x="8" y="8" width="84" height="104"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="560" height="120" fill="#080B14"/>
+
+  <!--
+    Mark: circadian curve in 100×120 space (left-aligned with padding)
+    Canvas for mark: x=[8,92], y=[8,112] → 84×104 active area
+    Midline: y=60
+    Night trough: y=18, Peak alertness: y=102
+    Inflections (6am, 6pm): y=60
+    x: start=10, 6am=36, noon=50, 6pm=64, end=90
+  -->
+
+  <!-- Glow outer -->
+  <path
+    d="M 10,18
+       C 10,18 23,18 36,60
+       C 49,102 50,102 50,102
+       C 50,102 51,102 64,60
+       C 77,18 90,18 90,18"
+    fill="none"
+    stroke="url(#mark-glow-outer)"
+    stroke-width="18"
+    stroke-linecap="round"
+    clip-path="url(#mark-clip)"
+  />
+
+  <!-- Glow mid -->
+  <path
+    d="M 10,18
+       C 10,18 23,18 36,60
+       C 49,102 50,102 50,102
+       C 50,102 51,102 64,60
+       C 77,18 90,18 90,18"
+    fill="none"
+    stroke="url(#mark-glow-mid)"
+    stroke-width="8"
+    stroke-linecap="round"
+    clip-path="url(#mark-clip)"
+  />
+
+  <!-- Core filament -->
+  <path
+    d="M 10,18
+       C 10,18 23,18 36,60
+       C 49,102 50,102 50,102
+       C 50,102 51,102 64,60
+       C 77,18 90,18 90,18"
+    fill="none"
+    stroke="url(#mark-grad)"
+    stroke-width="2"
+    stroke-linecap="round"
+    clip-path="url(#mark-clip)"
+  />
+
+  <!-- Inflection nodes -->
+  <ellipse cx="36" cy="60" rx="8" ry="8" fill="url(#node-p-sm)" opacity="0.9"/>
+  <circle cx="36" cy="60" r="2" fill="#7B61FF"/>
+
+  <ellipse cx="64" cy="60" rx="8" ry="8" fill="url(#node-g-sm)" opacity="0.85"/>
+  <circle cx="64" cy="60" r="2" fill="#C8A84B"/>
+
+  <!-- Midnight caps -->
+  <circle cx="10" cy="18" r="1.5" fill="#7B61FF" opacity="0.55"/>
+  <circle cx="90" cy="18" r="1.5" fill="#7B61FF" opacity="0.55"/>
+
+  <!--
+    Wordmark: "Shift" + "Well"
+    Inter 600, 36px, letter-spacing 2.8
+    x=112 aligns after 100px mark + 12px gap
+    y=70 (optical center: baseline sits slightly below geometric center for visual weight)
+  -->
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" font-size="36">
+    <text x="112" y="70" fill="#FFFFFF" letter-spacing="2.8">Shift</text>
+    <text x="234" y="70" fill="#C8A84B" letter-spacing="2.8">Well</text>
+  </g>
+</svg>

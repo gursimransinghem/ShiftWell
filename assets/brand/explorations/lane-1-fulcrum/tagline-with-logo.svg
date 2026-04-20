@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Tagline + Logo Integration
+  Replaces the fulcrum-divider glyph in the existing tagline lockup with
+  the actual Lane 1 mark, demonstrating system coherence.
+
+  Structure (top to bottom):
+    1. Mark — 140px wide, centered, y origin 20
+    2. Headline — "Work. Life. Sleep. Rebalanced." — y=130
+    3. Thin beam divider (from tagline-lockup-dark.svg) — y=155
+       Note: the THREE NODES of our mark now semantically mirror the
+       three words "Work. Life. Sleep." in the headline. Visual echo.
+    4. "ShiftWell" wordmark — y=195
+
+  viewBox: 720×220
+  Background: #080B14
+
+  Mark geometry at this scale:
+    Width: 140, height: 84 (120:72 = 140:84)
+    Scale: 140/120 = 1.1667
+    Beam y in concept: 34 → 34×1.1667 = 39.67≈40 + offset 24 = 64
+    Left x: 20×1.1667+290=23.33+290=313
+    Center x: 60×1.1667+290=70+290=360
+    Right x: 100×1.1667+290=116.67+290=407 (approx; center 360+/-50)
+    Actually: 720/2=360 center. Mark width=140, so x from 360-70=290 to 360+70=430
+    Left: 290, Center: 360, Right: 430
+    Node r: 4×1.1667=4.67≈5
+    Gold ring r: 6.5×1.1667=7.58≈7.5, stroke=1.5×1.1667=1.75
+    Beam stroke: 2×1.1667=2.33≈2.5
+    Triangle: left=353-7=346 (base half=360-346=14... base=28)
+      left: 360-14=346, right: 360+14=374, apex: 360, y=64+16.33=80
+    Pivot separator stroke: 1.25×1.1667=1.46≈1.5
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 220"
+  role="img"
+  aria-label="Work. Life. Sleep. Rebalanced by ShiftWell."
+>
+  <title>ShiftWell — Work. Life. Sleep. Rebalanced.</title>
+  <desc>Full tagline lockup with the Lane 1 fulcrum logo mark sitting above the headline.</desc>
+
+  <!-- Background -->
+  <rect width="720" height="220" fill="#080B14"/>
+
+  <!-- ── MARK (centered, sits above headline) ── -->
+  <g id="logo-mark">
+
+    <!-- Beam -->
+    <line
+      x1="290" y1="44"
+      x2="430" y2="44"
+      stroke="#FFFFFF"
+      stroke-width="2.5"
+      stroke-linecap="round"
+    />
+
+    <!-- Left node — Work -->
+    <circle cx="290" cy="44" r="5" fill="#FFFFFF"/>
+
+    <!-- Center node — Life + gold ring -->
+    <circle cx="360" cy="44" r="5" fill="#FFFFFF"/>
+    <circle cx="360" cy="44" r="7.5" fill="none" stroke="#C8A84B" stroke-width="1.75"/>
+
+    <!-- Right node — Sleep -->
+    <circle cx="430" cy="44" r="5" fill="#FFFFFF"/>
+
+    <!-- Pivot triangle -->
+    <polygon
+      points="346,44 374,44 360,60"
+      fill="#C8A84B"
+    />
+
+    <!-- Pivot separator -->
+    <line
+      x1="346" y1="44"
+      x2="374" y2="44"
+      stroke="#080B14"
+      stroke-width="1.5"
+    />
+
+  </g>
+
+  <!-- ── HEADLINE ── -->
+  <!--
+    "Work. Life. Sleep." nodes on the beam above echo these three words.
+    The semantic connection is structural, not decorative.
+  -->
+  <g
+    font-family="Inter, Georgia, 'Times New Roman', serif"
+    font-weight="700"
+    fill="#FFFFFF"
+    text-anchor="middle"
+  >
+    <text x="360" y="110" font-size="32" letter-spacing="0.5">
+      Work. Life. Sleep. <tspan font-style="italic" font-weight="600" fill="#C8A84B">Rebalanced.</tspan>
+    </text>
+  </g>
+
+  <!-- ── BEAM DIVIDER (from tagline-lockup-dark.svg) ── -->
+  <!--
+    This repeats the existing fulcrum-divider pattern from the lockup.
+    The logo mark above is now the MACRO version; this is the micro echo.
+    Together they create a nested-scale rhythm — the logo, then the rule.
+  -->
+  <g stroke="#C8A84B" stroke-width="1" fill="#C8A84B">
+    <line x1="140" y1="135" x2="580" y2="135" stroke-linecap="round"/>
+    <circle cx="140" cy="135" r="2.5"/>
+    <circle cx="580" cy="135" r="2.5"/>
+    <!-- Micro pivot triangle -->
+    <path d="M 355 135 L 360 142 L 365 135 Z" fill="#C8A84B" stroke="none"/>
+    <circle cx="360" cy="134.5" r="1.25" fill="#080B14" stroke="#C8A84B" stroke-width="0.8"/>
+  </g>
+
+  <!-- ── WORDMARK ── -->
+  <g
+    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-weight="600"
+    fill="#FFFFFF"
+    text-anchor="middle"
+  >
+    <text x="360" y="185" font-size="28" letter-spacing="2.4">ShiftWell</text>
+  </g>
+
+</svg>

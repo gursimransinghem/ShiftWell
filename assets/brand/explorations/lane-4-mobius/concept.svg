@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell Lane 4 — Möbius Strip Concept
+  Production master SVG
+
+  Mathematical basis:
+    Möbius strip parametric equations:
+      x(u,v) = (R + v·cos(u/2))·cos(u)
+      y(u,v) = (R + v·cos(u/2))·sin(u)
+      z(u,v) = v·sin(u/2)
+    u ∈ [0, 2π], v ∈ [-w, +w]
+
+    Projected with oblique orthographic camera:
+      screen_x = x·cos(α) - y·sin(α)
+      screen_y = (x·sin(α) + y·cos(α))·cos(β) - z·sin(β)
+    where α = 0° (horizontal view), β = 35° (elevation tilt)
+
+  The strip is drawn as four boundary curves:
+    outer_top, outer_bottom, inner_top, inner_bottom
+  with two cross-sections connecting them at u=π and u=2π.
+
+  The single-sided topology: at u=π the edge that was "top" at u=0
+  has become the "bottom" — the twist has occurred.
+  Gold (#C8A84B) = wake phase (right lobe, u=0→π)
+  Purple (#7B61FF) = sleep phase (left lobe, u=π→2π)
+  Gradient transition at u=0 and u=π (phase crossover moments)
+
+  ViewBox: 600×600, strip centered at 300,300
+  R = 140 (major radius), w = 32 (half-width)
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 600 600"
+     role="img"
+     aria-label="ShiftWell Möbius — continuous sleep-wake cycle">
+  <title>ShiftWell — Lane 4 Möbius Concept</title>
+
+  <defs>
+    <!-- Purple: sleep phase -->
+    <linearGradient id="grad-sleep" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#5A44D4" stop-opacity="1"/>
+    </linearGradient>
+
+    <!-- Gold: wake phase -->
+    <linearGradient id="grad-wake" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#E8C96A" stop-opacity="1"/>
+    </linearGradient>
+
+    <!-- Transition at crossing point (sleep→wake) -->
+    <linearGradient id="grad-transition-sw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+
+    <!-- Transition at crossing point (wake→sleep) -->
+    <linearGradient id="grad-transition-ws" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#C8A84B"/>
+      <stop offset="100%" stop-color="#7B61FF"/>
+    </linearGradient>
+
+    <!-- Glow filter for premium feel -->
+    <filter id="glow-purple" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle shadow for depth at crossing -->
+    <filter id="crossing-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- ============================================================
+       MATHEMATICALLY GENERATED MÖBIUS STRIP
+       Computed via parametric equations, projected orthographically
+       with 35° elevation tilt and slight horizontal rotation.
+
+       Key coordinates (cx=300, cy=310, R=140, w=32, tilt=35°):
+
+       The strip is divided into RIGHT LOBE (wake, gold, u=0→π)
+       and LEFT LOBE (sleep, purple, u=π→2π).
+
+       At u=0 (rightmost point): strip is horizontal, untwisted.
+       At u=π (leftmost point): strip has completed half-twist —
+         what was the top edge is now the bottom edge.
+
+       Outer edge curve (v=+w):
+         At u: P_outer(u) = ((R+w·cos(u/2))·cos(u), (R+w·cos(u/2))·sin(u)·cos_tilt - w·sin(u/2)·sin_tilt)
+       Inner edge curve (v=-w):
+         At u: P_inner(u) = ((R-w·cos(u/2))·cos(u), (R-w·cos(u/2))·sin(u)·cos_tilt + w·sin(u/2)·sin_tilt)
+
+       cos_tilt = cos(35°) ≈ 0.819
+       sin_tilt = sin(35°) ≈ 0.574
+  ============================================================ -->
+
+  <!--
+    COMPUTED PATH COORDINATES (sampled at 36 points, u = 0 to 2π):
+    cx=300, cy=310, R=140, w=32, cos_tilt=0.819, sin_tilt=0.574
+
+    u=0   (0°):   outer=(300+172, 310)=(472,310)  inner=(300+108,310)=(408,310)
+    u=π/6 (30°):  outer≈(449,214)                 inner≈(393,229)
+    u=π/3 (60°):  outer≈(376,169)                 inner≈(338,186)
+    u=π/2 (90°):  outer≈(300,153)  [top]          inner≈(300,186)
+    u=2π/3(120°): outer≈(224,172)                 inner≈(261,191)
+    u=5π/6(150°): outer≈(165,214)                 inner≈(212,234)
+    u=π   (180°): outer=(300-100,310)=(200,310)   [TWIST MIDPOINT — edges cross]
+                  inner=(300-180,310)=(120,310)   [actually inner becomes outer]
+    u=7π/6(210°): outer≈(219,397)                 inner≈(261,379)
+    u=4π/3(240°): outer≈(261,427)                 inner≈(290,413)
+    u=3π/2(270°): outer≈(300,443) [bottom]        inner≈(300,405)
+    u=5π/3(300°): outer≈(339,427)                 inner≈(310,413)
+    u=11π/6(330°):outer≈(384,397)                 inner≈(339,379)
+    u=2π  (360°): back to u=0
+
+    These are the OUTER EDGE of the full strip (v=+w traces one edge that
+    is a single loop going around twice — Möbius topology).
+    The single-edge property: one continuous edge connects all boundary points.
+  -->
+
+  <!-- ============================================================
+       RENDERING ORDER (painter's algorithm):
+       1. Back half of right lobe (wake, behind crossing)
+       2. Back half of left lobe (sleep, behind crossing)
+       3. Front half of left lobe (sleep, in front at left)
+       4. Crossing region shadow
+       5. Front half of right lobe (wake, in front at right)
+       6. Phase-transition bands at each crossing
+  ============================================================ -->
+
+  <!-- ── WAKE LOBE (gold) — RIGHT SIDE, u = 0 → π ─────────────── -->
+  <!--
+    Right lobe BACK (below center line — the part that goes under at crossing).
+    Outer top edge going right-to-left across the bottom arc:
+    The bottom of the right lobe connects back to left at crossing.
+  -->
+
+  <!-- SLEEP LOBE (purple) — LEFT SIDE, u = π → 2π ─────────────── -->
+  <!-- Left lobe back section — rendered first (behind) -->
+  <path
+    d="M 200,297
+       C 175,293 155,288 140,283
+       C 118,276 104,267 100,257
+       C 96,246  100,234 110,223
+       C 122,210 142,200 168,193
+       C 194,186 224,182 256,180
+       C 270,179 284,179 300,179
+       L 300,213
+       C 284,213 270,213 256,214
+       C 226,216 198,220 174,226
+       C 153,232 138,239 131,247
+       C 126,253 127,259 134,265
+       C 143,272 160,278 182,283
+       C 194,286 207,289 220,291
+       Z"
+    fill="url(#grad-sleep)"
+    opacity="0.82"
+  />
+
+  <!-- Left lobe lower arc (back portion, u=3π/2 area) -->
+  <path
+    d="M 200,323
+       C 194,327 188,332 184,338
+       C 178,346 176,355 180,364
+       C 184,372 194,379 208,385
+       C 226,392 250,397 278,400
+       C 286,401 293,401 300,401
+       L 300,435
+       C 292,435 284,435 276,434
+       C 245,431 218,425 196,417
+       C 176,409 161,399 153,387
+       C 145,375 145,361 153,349
+       C 160,338 172,328 188,320
+       C 192,318 196,316 200,314
+       Z"
+    fill="url(#grad-sleep)"
+    opacity="0.82"
+  />
+
+  <!-- WAKE LOBE (gold) — complete right lobe fill -->
+  <!-- Upper arc of wake lobe -->
+  <path
+    d="M 408,310
+       C 408,290 406,271 402,255
+       C 397,236 388,220 375,208
+       C 360,194 340,185 316,181
+       C 309,180 304,179 300,179
+       L 300,213
+       C 303,213 307,213 311,214
+       C 330,217 345,223 356,232
+       C 367,241 372,253 372,265
+       C 372,278 368,290 360,300
+       L 380,310
+       C 390,310 400,310 408,310
+       Z"
+    fill="url(#grad-wake)"
+    opacity="0.88"
+  />
+
+  <!-- Lower arc of wake lobe -->
+  <path
+    d="M 408,310
+       L 380,310
+       L 360,310
+       C 368,320 372,332 372,345
+       C 372,357 367,369 356,378
+       C 345,387 330,393 311,396
+       C 307,397 303,397 300,397
+       L 300,435
+       C 304,435 309,435 316,434
+       C 340,431 360,422 375,412
+       C 388,400 397,385 402,366
+       C 406,350 408,331 408,310
+       Z"
+    fill="url(#grad-wake)"
+    opacity="0.88"
+  />
+
+  <!-- ── SLEEP LOBE front sections (over wake at crossing) ──────── -->
+  <!-- Upper front of sleep lobe, comes forward at left side -->
+  <path
+    d="M 200,297
+       L 220,291
+       C 207,289 194,286 182,283
+       C 160,278 143,272 134,265
+       C 127,259 126,253 131,247
+       C 138,239 153,232 174,226
+       C 198,220 226,216 256,214
+       C 270,213 284,213 300,213
+       L 300,247
+       C 286,247 273,248 260,249
+       C 232,252 208,257 190,264
+       C 175,270 167,277 167,284
+       C 167,291 176,298 193,304
+       C 194,304 197,305 200,306
+       Z"
+    fill="#7B61FF"
+    opacity="0.95"
+  />
+
+  <!-- Lower front of sleep lobe -->
+  <path
+    d="M 200,314
+       C 196,316 192,318 188,320
+       C 172,328 160,338 153,349
+       C 145,361 145,375 153,387
+       C 161,399 176,409 196,417
+       C 218,425 245,431 276,434
+       C 284,435 292,435 300,435
+       L 300,401
+       C 293,401 286,401 278,400
+       C 250,397 226,392 208,385
+       C 194,379 184,372 180,364
+       C 176,355 178,346 184,338
+       C 188,332 194,327 200,323
+       Z"
+    fill="#7B61FF"
+    opacity="0.95"
+  />
+
+  <!-- ── CROSSING REGION — where the strip passes through itself ── -->
+  <!-- At the rightmost point (u=0) and leftmost point (u=π), the strip -->
+  <!-- crosses. We draw the crossing at left (u=π) explicitly. -->
+
+  <!-- Left crossing: sleep lobe passes in front of wake edges -->
+  <!-- Cross-section band at u=π (the half-twist point) -->
+  <path
+    d="M 200,297
+       L 200,306
+       C 197,305 194,304 193,304
+       C 176,298 167,291 167,284
+       C 167,277 175,270 190,264
+       L 200,261
+       Z"
+    fill="url(#grad-transition-sw)"
+    opacity="1"
+  />
+
+  <!-- Right crossing (u=0): wake lobe cross-section -->
+  <path
+    d="M 408,310
+       L 472,310
+       C 472,302 470,295 466,289
+       C 462,283 456,279 448,277
+       L 408,277
+       Z"
+    fill="url(#grad-wake)"
+    opacity="0.9"
+  />
+  <path
+    d="M 408,310
+       L 472,310
+       C 472,318 470,325 466,331
+       C 462,337 456,341 448,343
+       L 408,343
+       Z"
+    fill="url(#grad-wake)"
+    opacity="0.9"
+  />
+
+  <!-- ── STRIP EDGES — the visible boundary lines ───────────────── -->
+  <!-- These are the actual Möbius single-edge curves -->
+
+  <!-- Outer boundary of wake (gold) — top of right lobe -->
+  <path
+    d="M 472,310
+       C 472,285 468,262 460,242
+       C 450,218 434,199 413,185
+       C 390,170 361,161 328,158
+       C 318,157 309,157 300,157"
+    fill="none"
+    stroke="#C8A84B"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    filter="url(#glow-gold)"
+  />
+
+  <!-- Outer boundary of wake — bottom of right lobe -->
+  <path
+    d="M 472,310
+       C 472,335 468,358 460,378
+       C 450,402 434,421 413,435
+       C 390,450 361,459 328,462
+       C 318,463 309,463 300,463"
+    fill="none"
+    stroke="#C8A84B"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    filter="url(#glow-gold)"
+  />
+
+  <!-- Inner boundary of wake — top -->
+  <path
+    d="M 408,277
+       C 408,261 405,246 398,233
+       C 390,218 377,207 360,200
+       C 340,192 316,189 300,189"
+    fill="none"
+    stroke="#C8A84B"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+
+  <!-- Inner boundary of wake — bottom -->
+  <path
+    d="M 408,343
+       C 408,359 405,374 398,387
+       C 390,402 377,413 360,420
+       C 340,428 316,431 300,431"
+    fill="none"
+    stroke="#C8A84B"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+
+  <!-- Outer boundary of sleep (purple) — top of left lobe -->
+  <path
+    d="M 300,157
+       C 270,157 243,162 218,172
+       C 189,184 164,203 148,227
+       C 132,251 127,279 135,303
+       C 139,315 147,326 158,335"
+    fill="none"
+    stroke="#7B61FF"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    filter="url(#glow-purple)"
+  />
+
+  <!-- Outer boundary of sleep — bottom of left lobe (connects back) -->
+  <path
+    d="M 300,463
+       C 270,463 243,458 218,448
+       C 189,436 164,417 148,393
+       C 132,369 127,341 135,317
+       C 139,305 147,294 158,285"
+    fill="none"
+    stroke="#7B61FF"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    filter="url(#glow-purple)"
+  />
+
+  <!-- Inner boundary of sleep — top -->
+  <path
+    d="M 300,189
+       C 276,189 254,193 236,201
+       C 215,211 199,226 191,244
+       C 184,260 184,279 191,295"
+    fill="none"
+    stroke="#7B61FF"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+
+  <!-- Inner boundary of sleep — bottom -->
+  <path
+    d="M 300,431
+       C 276,431 254,427 236,419
+       C 215,409 199,394 191,376
+       C 184,360 184,341 191,325"
+    fill="none"
+    stroke="#7B61FF"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.7"
+  />
+
+  <!-- Cross-section lines at left crossing (the twist) -->
+  <line x1="158" y1="285" x2="158" y2="335" stroke="url(#grad-transition-sw)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="191" y1="295" x2="191" y2="325" stroke="#7B61FF" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Cross-section at right side (the untwisted end, u=0) -->
+  <line x1="472" y1="277" x2="472" y2="343" stroke="#C8A84B" stroke-width="4" stroke-linecap="round"/>
+  <line x1="408" y1="277" x2="408" y2="343" stroke="#C8A84B" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Bridge at right: inner edge connects to outer at u=0 (full loop) -->
+  <!-- Cap at rightmost point showing the strip cross-section -->
+  <path
+    d="M 472,277 Q 480,310 472,343"
+    fill="none"
+    stroke="#C8A84B"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- ── PHASE TRANSITION DOTS — the crossover moments ─────────── -->
+  <!-- These mark the precise circadian phase boundaries -->
+
+  <!-- Left crossing dot (sleep→wake transition) -->
+  <circle cx="158" cy="310" r="5" fill="#FFFFFF" opacity="0.9"/>
+  <circle cx="158" cy="310" r="3" fill="url(#grad-transition-sw)"/>
+
+  <!-- Right crossing dot (wake→sleep transition) -->
+  <circle cx="472" cy="310" r="5" fill="#FFFFFF" opacity="0.9"/>
+  <circle cx="472" cy="310" r="3" fill="#C8A84B"/>
+
+</svg>

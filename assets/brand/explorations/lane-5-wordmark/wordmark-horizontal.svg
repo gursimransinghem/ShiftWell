@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 — Horizontal Wordmark Lockup
+  SW mark (left) + "ShiftWell" text (right)
+
+  Layout:
+    viewBox: 640×120
+    Mark: 160×80 scaled to 80×40, positioned at (20, 40)
+    Separator: 1px rule at x=116, y=30 to y=90 (60px tall, gold)
+    Text: "ShiftWell" — custom spaced, Inter 700, 52px
+          x=132, y=76 (baseline aligned to mark center)
+
+  Typography:
+    Font: Inter 700 — matches brand system typeface exactly
+    Letter-spacing: 0.08em — tight, premium, not loose
+    "Shift" — white
+    "Well" — white
+    No decorative split, no color on wordmark text.
+    All color lives in the mark.
+
+  The rule:
+    Thin 1px vertical rule in #C8A84B between mark and text.
+    Borrowed from the tagline-lockup-dark.svg fulcrum language.
+    Keeps the system coherent.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 640 120"
+  role="img"
+  aria-label="ShiftWell wordmark"
+>
+  <title>ShiftWell</title>
+
+  <!-- ═══════════════════════════
+       SW MARK — scaled 50% of concept
+       concept viewBox 160×80 → rendered at 80×40
+       translate to center vertically in 120px canvas → y=(120-40)/2 = 40
+       translate(20, 40) scale(0.5)
+  ═══════════════════════════ -->
+  <g transform="translate(20, 40) scale(0.5)">
+
+    <!-- S — upper bowl -->
+    <path
+      d="M 56,12 C 56,4 44,4 40,4 C 28,4 16,12 16,24 C 16,36 28,40 40,40"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- S — lower bowl -->
+    <path
+      d="M 40,40 C 52,40 64,44 64,56 C 64,68 52,76 40,76 C 28,76 16,68 16,60"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Ligature joint — purple -->
+    <line
+      x1="64" y1="56"
+      x2="64" y2="8"
+      stroke="#7B61FF"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <!-- W — four strokes -->
+    <polyline
+      points="64,8 82,72 100,26 118,72 148,8"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+  </g>
+
+  <!-- ═══════════════════════════
+       SEPARATOR — gold vertical rule
+       Sits between mark (ends at x=20+80=100) and text (starts at x=120)
+       Rule at x=110, 30px to 90px
+  ═══════════════════════════ -->
+  <line
+    x1="110" y1="28"
+    x2="110" y2="92"
+    stroke="#C8A84B"
+    stroke-width="1"
+    stroke-linecap="round"
+  />
+
+  <!-- ═══════════════════════════
+       WORDMARK TEXT — "ShiftWell"
+       Inter 700, 52px, letter-spacing 0.08em
+       Baseline at y=76 (visual center of 120px canvas)
+  ═══════════════════════════ -->
+  <text
+    x="124"
+    y="76"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif"
+    font-weight="700"
+    font-size="52"
+    fill="#FFFFFF"
+    letter-spacing="3"
+  >ShiftWell</text>
+
+</svg>

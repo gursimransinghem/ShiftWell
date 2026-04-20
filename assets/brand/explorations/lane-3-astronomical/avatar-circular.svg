@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 3 Astronomical
+  avatar-circular.svg — Circular crop, 400×400
+
+  The circular format is native to this concept — a porthole or telescope eyepiece
+  looking at the night sky. The circle clip reinforces the astronomical frame
+  rather than fighting it.
+
+  Inside: the same moon + S-curve star composition, scaled to fill 400×400
+  with the circle clip and a thin gold ring border (1px, 45% opacity).
+
+  The gold ring around a deep-space interior looks like a mission patch —
+  exactly the NASA/SpaceX engineering-serious reference called for in the brief.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img"
+     aria-label="ShiftWell avatar — circular crop">
+  <title>ShiftWell — Lane 3 Astronomical — circular avatar</title>
+  <defs>
+    <!-- Circular clip -->
+    <clipPath id="circleClip">
+      <circle cx="200" cy="200" r="196"/>
+    </clipPath>
+
+    <radialGradient id="moonAvatarGrad" cx="38%" cy="42%" r="58%" fx="35%" fy="38%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="55%"  stop-color="#E8E4D8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#B8B09A" stop-opacity="0.85"/>
+    </radialGradient>
+
+    <mask id="crescentAvatarMask">
+      <rect width="400" height="400" fill="white"/>
+      <circle cx="226" cy="181" r="76" fill="black"/>
+    </mask>
+
+    <filter id="starGlowAv" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="starGlowAvPrimary" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3.0" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Space depth radial bg gradient -->
+    <radialGradient id="spaceBg" cx="48%" cy="46%" r="65%">
+      <stop offset="0%"   stop-color="#0E1326"/>
+      <stop offset="100%" stop-color="#080B14"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="200" cy="200" r="200" fill="#080B14"/>
+
+  <g clip-path="url(#circleClip)">
+    <!-- Deep space radial gradient -->
+    <circle cx="200" cy="200" r="200" fill="url(#spaceBg)"/>
+
+    <!-- S-spine trace -->
+    <path d="M 196 120 C 256 120, 280 160, 216 200 C 152 240, 176 280, 236 280"
+          fill="none" stroke="#7B61FF" stroke-width="1.4"
+          stroke-opacity="0.11" stroke-dasharray="5 7"/>
+
+    <!-- Moon: cx=191, cy=196, r=72 (scaled from 200×200 by 2×) -->
+    <circle cx="191" cy="196" r="72"
+            fill="url(#moonAvatarGrad)"
+            mask="url(#crescentAvatarMask)"/>
+    <circle cx="191" cy="196" r="72"
+            fill="none" stroke="#FFFFFF" stroke-width="0.6" stroke-opacity="0.20"
+            mask="url(#crescentAvatarMask)"/>
+
+    <!-- S-curve stars (scaled ×2 from 200×200 concept, shifted to center) -->
+    <!-- Star A: cx=114→228, cy=58→116 -->
+    <circle cx="228" cy="116" r="4.4" fill="#C8A84B" filter="url(#starGlowAvPrimary)"/>
+    <!-- Star B: cx=131→262, cy=69→138 -->
+    <circle cx="262" cy="138" r="3.2" fill="#C8A84B" filter="url(#starGlowAv)"/>
+    <!-- Star C: cx=138→276, cy=85→170 -->
+    <circle cx="276" cy="170" r="2.6" fill="#C8A84B" filter="url(#starGlowAv)"/>
+    <!-- Star D: cx=127→254, cy=98→196 -->
+    <circle cx="254" cy="196" r="2.0" fill="#C8A84B" filter="url(#starGlowAv)"/>
+    <!-- Star E: cx=112→224, cy=113→226 -->
+    <circle cx="224" cy="226" r="2.4" fill="#C8A84B" filter="url(#starGlowAv)"/>
+    <!-- Star F: cx=96→192, cy=127→254 -->
+    <circle cx="192" cy="254" r="3.0" fill="#C8A84B" filter="url(#starGlowAv)"/>
+    <!-- Star G: cx=108→216, cy=142→284 -->
+    <circle cx="216" cy="284" r="4.0" fill="#C8A84B" filter="url(#starGlowAvPrimary)"/>
+
+    <!-- Ambient field stars -->
+    <circle cx="104" cy="124" r="1.8" fill="#C8A84B" opacity="0.52" filter="url(#starGlowAv)"/>
+    <circle cx="309" cy="104" r="1.4" fill="#C8A84B" opacity="0.38" filter="url(#starGlowAv)"/>
+    <circle cx="296" cy="296" r="1.6" fill="#C8A84B" opacity="0.40" filter="url(#starGlowAv)"/>
+    <circle cx="88"  cy="276" r="1.2" fill="#C8A84B" opacity="0.30" filter="url(#starGlowAv)"/>
+    <circle cx="128" cy="309" r="1.4" fill="#C8A84B" opacity="0.34" filter="url(#starGlowAv)"/>
+  </g>
+
+  <!-- Outer ring: gold, thin — the mission patch border -->
+  <circle cx="200" cy="200" r="196"
+          fill="none"
+          stroke="#C8A84B"
+          stroke-width="1.2"
+          stroke-opacity="0.48"/>
+
+  <!-- Inner ring: hair-thin white -->
+  <circle cx="200" cy="200" r="191"
+          fill="none"
+          stroke="#FFFFFF"
+          stroke-width="0.5"
+          stroke-opacity="0.10"/>
+</svg>

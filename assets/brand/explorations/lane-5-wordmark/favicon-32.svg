@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 — Favicon 32×32
+  The hardest test: SW ligature must read at 32px.
+
+  32px legibility strategy:
+    - viewBox 0 0 32 32, so 1 SVG unit = 1 pixel exactly at 1x
+    - Stroke width: 2.5px (thin enough to fit both letters, thick enough to render)
+    - S simplified to essential curve — two arcs, no fine terminal tweaks
+    - W nodes: 5 points, center peak lowered to y=9 (relative)
+    - Ligature joint: purple, 2.5px, VERTICAL — reads as a boundary line
+    - Total mark width: 30px, 1px margin each side
+    - Mark height: 28px, 2px top/bottom
+    - This gives ~15px for S and ~15px for W — minimum word-readable
+
+  At 32px, the purple joint IS the letter boundary. The eye reads:
+    left half = S (curved), right half = W (angular) → "SW" instantly.
+  That's the legibility strategy. Not tricks — just geometry.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  role="img"
+  aria-label="SW"
+>
+  <title>SW</title>
+
+  <!-- Background: transparent (browser tab supplies bg) -->
+
+  <!--
+    32px layout:
+      Mark origin: (1, 2), mark size: 30×28
+      S occupies: x=1 to x=15.5 (14.5px wide)
+      Joint at: x=15.5
+      W occupies: x=15.5 to x=31 (15.5px wide)
+
+    S paths in this coordinate space:
+      Upper arc: M 13,3 curve to (1,8) via top-left
+      Midpoint: (8, 16) approx
+      Lower arc: from (8,16) curve to (13, 29)
+
+    W nodes:
+      A: (15.5, 3)
+      B: (19, 29)
+      C: (23, 11)
+      D: (27, 29)
+      E: (31, 3)
+  -->
+
+  <!-- S upper bowl -->
+  <path
+    d="M 13,3 C 13,2 9,2 7,2 C 3,2 1,5 1,9 C 1,13 4,15.5 8,15.5"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- S lower bowl -->
+  <path
+    d="M 8,15.5 C 12,15.5 15.5,17 15.5,21 C 15.5,25 13,29 8,29 C 4,29 1,27 1,24"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Ligature joint — purple -->
+  <line
+    x1="15.5" y1="21"
+    x2="15.5" y2="3"
+    stroke="#7B61FF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+  />
+
+  <!-- W -->
+  <polyline
+    points="15.5,3 19,29 23,11 27,29 31,3"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+</svg>

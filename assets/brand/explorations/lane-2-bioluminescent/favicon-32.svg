@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Favicon 32×32 Monochrome Reduction
+
+  Design constraints at 32×32:
+  - Gradients become noise at this size → single accent color (#7B61FF)
+  - Glow layers collapse into single stroke — combined widths would fill the canvas
+  - The curve path is simplified but remains mathematically correct
+  - Node dots reduced to 1.5px circles (visible but not dominant)
+  - No grid lines (below pixel threshold)
+  - Background is #080B14 with 1px minimum padding
+
+  The mark must be READABLE as a waveform at this size.
+  It should not look like a letter, but not like a random curve either.
+  Target: "looks like a scientific measurement symbol" read at arm's length.
+
+  Scalability proof:
+  The circadian S-curve, stripped to monochrome single stroke, reads clearly
+  because the inflection points create two distinct visual "turns" that register
+  even at 32px. The geometry is preserved. The gradient is collapsed to the
+  single most-meaningful color (purple = night → the brand's dominant hue).
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  role="img"
+  aria-label="ShiftWell favicon"
+>
+  <title>ShiftWell</title>
+
+  <!-- Background -->
+  <rect width="32" height="32" fill="#080B14"/>
+
+  <!--
+    Curve at 32px (2% padding = 0.64px → use 1px padding):
+    Canvas x: [2, 30], y: [2, 30]
+    Midline: y=16
+
+    Midnight: x=2,  y=7   (night trough: above midline → top of canvas)
+    6am:      x=10, y=16  (rising inflection)
+    Noon:     x=16, y=25  (peak alertness: below midline → bottom)
+    6pm:      x=22, y=16  (falling inflection)
+    Midnight: x=30, y=7   (night trough)
+
+    Control points derived from same k=0.5523 bezier approximation,
+    scaled to the 28px horizontal span / 18px amplitude.
+  -->
+
+  <!-- Single monochrome stroke — accent purple, no gradient -->
+  <path
+    d="M 2,7
+       C 2,7 6,7 10,16
+       C 14,25 14,25 16,25
+       C 18,25 18,25 22,16
+       C 26,7 30,7 30,7"
+    fill="none"
+    stroke="#7B61FF"
+    stroke-width="1.75"
+    stroke-linecap="round"
+  />
+
+  <!-- Phase inflection nodes: 1.5px is the minimum readable dot at 32px -->
+  <circle cx="10" cy="16" r="1.5" fill="#7B61FF"/>
+  <circle cx="22" cy="16" r="1.5" fill="#C8A84B"/>
+</svg>

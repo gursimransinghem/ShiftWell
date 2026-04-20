@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 — Circular Social Avatar
+  400×400 circle crop — sized for Twitter/X, LinkedIn, Instagram profile photos.
+
+  Strategy:
+    Dark circle background #080B14.
+    SW mark centered, scaled to fill ~70% of circle diameter (280px effective).
+    No ring or border — the dark bg clips cleanly to any platform's circle mask.
+    Purple joint visible and prominent at this scale.
+
+  Mark scale math:
+    Mark viewBox 160×80. Target fit: 280×140.
+    Scale: 280/160 = 1.75
+    Mark rendered 280w × 140h.
+    Center in 400×400 circle: x=(400-280)/2=60, y=(400-140)/2=130
+    translate(60, 130) scale(1.75)
+
+  Stroke at scale: 8 × 1.75 = 14px — appropriately bold for avatar.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 400"
+  role="img"
+  aria-label="ShiftWell avatar"
+>
+  <title>ShiftWell</title>
+
+  <!-- Clip to circle -->
+  <defs>
+    <clipPath id="circle-crop">
+      <circle cx="200" cy="200" r="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="200" cy="200" r="200" fill="#080B14"/>
+
+  <!-- Mark -->
+  <g transform="translate(60, 130) scale(1.75)" clip-path="url(#circle-crop)">
+
+    <!-- S — upper bowl -->
+    <path
+      d="M 56,12 C 56,4 44,4 40,4 C 28,4 16,12 16,24 C 16,36 28,40 40,40"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- S — lower bowl -->
+    <path
+      d="M 40,40 C 52,40 64,44 64,56 C 64,68 52,76 40,76 C 28,76 16,68 16,60"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Ligature joint — purple -->
+    <line
+      x1="64" y1="56"
+      x2="64" y2="8"
+      stroke="#7B61FF"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <!-- W — four strokes -->
+    <polyline
+      points="64,8 82,72 100,26 118,72 148,8"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+  </g>
+
+</svg>

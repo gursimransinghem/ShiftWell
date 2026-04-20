@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Wordmark Horizontal Lockup
+  Mark (left) + "ShiftWell" wordmark (right)
+
+  Typographic reference: tagline-lockup-dark.svg uses Inter 600, letter-spacing 2.4
+  This wordmark matches that rhythm: Inter 600, tracking 2px.
+
+  Layout:
+    viewBox: 360×72
+    Mark: 96×60, centered vertically at y=6 (mark occupies 0–72 height via transform)
+    Separator: thin 1px vertical rule, gold, x=110
+    Wordmark: "ShiftWell" Inter 600, x=126, y=44 (baseline)
+    Total: 360×72
+
+  Mark is scaled from concept 120×72 → 84×50, translate(6, 11)
+  Scale: 84/120 = 0.7
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 360 72"
+  role="img"
+  aria-label="ShiftWell wordmark"
+>
+  <title>ShiftWell</title>
+
+  <!-- Dark background for preview -->
+  <rect width="360" height="72" fill="#080B14"/>
+
+  <!-- MARK — scaled 0.7× from 120×72 concept, centered in 96×72 zone -->
+  <!--
+    Original concept: beam y=34, nodes at x=20,60,100, triangle base y=34 apex y=48
+    Scaled 0.7: beam y=23.8≈24, left x=14, center x=42, right x=70
+    Triangle: (37.1,24)(46.9,24)(42,33.6) ≈ (37,24)(47,24)(42,34)
+    Node r: 4×0.7=2.8≈3
+    Gold ring r: 6.5×0.7=4.55≈4.5, stroke 1.5×0.7=1.05≈1
+    Beam stroke: 2×0.7=1.4≈1.5
+    Translate: x+8 (left margin), y+24 (vertical center in 72px)
+    Final positions with translate(8,24):
+      beam: (22,48) to (78,48)
+      nodes: (22,48) (50,48) (78,48)
+      triangle: (45,48)(55,48)(50,58)
+  -->
+  <g id="mark" transform="translate(8, 24)">
+
+    <!-- Beam -->
+    <line
+      x1="14" y1="24"
+      x2="78" y2="24"
+      stroke="#FFFFFF"
+      stroke-width="1.5"
+      stroke-linecap="round"
+    />
+
+    <!-- Left node -->
+    <circle cx="14" cy="24" r="3" fill="#FFFFFF"/>
+
+    <!-- Center node + gold ring -->
+    <circle cx="46" cy="24" r="3" fill="#FFFFFF"/>
+    <circle cx="46" cy="24" r="5" fill="none" stroke="#C8A84B" stroke-width="1.25"/>
+
+    <!-- Right node -->
+    <circle cx="78" cy="24" r="3" fill="#FFFFFF"/>
+
+    <!-- Pivot triangle -->
+    <polygon
+      points="39,24 53,24 46,35"
+      fill="#C8A84B"
+    />
+
+    <!-- Pivot separator -->
+    <line
+      x1="39" y1="24"
+      x2="53" y2="24"
+      stroke="#080B14"
+      stroke-width="1"
+    />
+
+  </g>
+
+  <!-- Vertical separator -->
+  <line
+    x1="108" y1="16"
+    x2="108" y2="56"
+    stroke="#C8A84B"
+    stroke-width="0.75"
+    opacity="0.6"
+  />
+
+  <!-- Wordmark: "ShiftWell" — Inter 600, 2px tracking, white -->
+  <text
+    x="122"
+    y="44"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-weight="600"
+    font-size="22"
+    letter-spacing="2"
+    fill="#FFFFFF"
+  >ShiftWell</text>
+
+</svg>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 — Icon 1024×1024 Dark
+  12% iOS-safe padding = 122.88px each side → inner canvas 778×778
+  Mark centered within inner canvas.
+  Background: #080B14 (canonical dark)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1024 1024"
+  role="img"
+  aria-label="ShiftWell app icon — dark"
+>
+  <title>ShiftWell</title>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#080B14"/>
+
+  <!--
+    Inner canvas: x=123, y=123, w=778, h=778
+    Mark viewBox is 160×80 (2:1). To fit in 778×778 with equal margin:
+    Scale to fit width: 778/160 = 4.8625 → mark height = 80×4.8625 = 389
+    Center vertically: y offset = 123 + (778-389)/2 = 123 + 194.5 = 317.5
+    translate(123, 317.5) scale(4.8625)
+
+    Stroke width in concept is 8u. Scaled stroke = 8 × 4.8625 = 38.9px
+    → at 1024px icon, strokes are bold and legible. Correct.
+  -->
+  <g transform="translate(123, 317.5) scale(4.8625)">
+
+    <!-- S — upper bowl -->
+    <path
+      d="M 56,12 C 56,4 44,4 40,4 C 28,4 16,12 16,24 C 16,36 28,40 40,40"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- S — lower bowl -->
+    <path
+      d="M 40,40 C 52,40 64,44 64,56 C 64,68 52,76 40,76 C 28,76 16,68 16,60"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Ligature joint — purple accent -->
+    <line
+      x1="64" y1="56"
+      x2="64" y2="8"
+      stroke="#7B61FF"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <!-- W — four strokes -->
+    <polyline
+      points="64,8 82,72 100,26 118,72 148,8"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+  </g>
+
+</svg>

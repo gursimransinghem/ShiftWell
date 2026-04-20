@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 Geometric Wordmark / SW Ligature
+  Master concept — production master, no embedded raster, palette-locked.
+
+  Design language:
+    A custom SW ligature built on a strict 8-unit geometric grid.
+    The S is constructed from two counter-circles (radius 2u, centers offset by 2u).
+    The W shares cap-height and baseline with the S, built from five nodes on
+    a 10u horizontal span.
+    The ligature joint: the S lower terminal connects directly into W's first
+    upstroke via a shared anchor point — zero gap, single visual mass.
+    The W's center valley peak aligns to the S's optical midline.
+    The joint is rendered in #7B61FF (accent purple) — one pixel of color
+    at the point where day becomes night, awake becomes asleep.
+
+  Geometric constraints:
+    Cap-height:   40u
+    Baseline:      0u
+    Grid unit:     1u = 8px at 96dpi master, scales cleanly to any size
+    S width:      28u (constrained by double-circle construction)
+    W width:      52u
+    Ligature gap:  0u (joint shared at x=28)
+    Total mark:   80u wide × 40u tall
+
+  Palette (strict — no deviation):
+    --bg-dark:    #080B14
+    --text-white: #FFFFFF
+    --gold:       #C8A84B
+    --purple:     #7B61FF
+
+  Monochromatic (#FFFFFF on #080B14) is the canonical form.
+  Purple appears ONLY at the ligature joint — a single counter-shape accent.
+
+  viewBox: 0 0 160 80 (2:1 ratio — icon crop at 80×80 center, full mark 160×80)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 160 80"
+  role="img"
+  aria-label="ShiftWell SW ligature mark"
+>
+  <title>ShiftWell</title>
+  <desc>Custom SW ligature: the S and W merge at a shared upstroke, with a single purple accent at the joint where they connect. The W's four strokes form a precise geometric waveform at cap-height.</desc>
+
+  <!--
+    ═══════════════════════════════════════════════════════
+    CONSTRUCTION NOTES (for construction-grid.svg reference)
+
+    Grid: 8×8 units, each unit = 10px in this viewBox
+    S construction:
+      Upper arc: center (40, 20), r=20 → arc from (20,20) to (60,20)
+        Sweeps upper-left to upper-right, forms top bowl
+      Lower arc: center (40, 60), r=20 → arc from (20,60) to (60,60)
+        Sweeps lower-right to lower-left, forms bottom bowl
+      Spine: the two arcs join at optical midline y=40
+        Upper arc bottom-right terminal: (60, 40)
+        Lower arc top-left terminal:     (20, 40)
+        These create the S's characteristic counter-rotation
+
+    W construction (origin at x=64 for ligature overlap):
+      Five nodes along baseline and cap-height:
+        A: (64,  8)   — top-left start (cap-height, shared with S terminal)
+        B: (80, 72)   — first valley bottom
+        C: (96, 28)   — center peak (rises to 28, not full cap — key detail)
+        D: (112, 72)  — second valley bottom
+        E: (152, 8)   — top-right end
+      Stroke weight: 8px → matches S stroke width visually
+      The center peak at y=28 (not y=8) is INTENTIONAL —
+        creates asymmetry that distinguishes W from M-flipped
+        and prevents the "mountain range" cliché
+
+    Ligature joint:
+      S lower-right terminal exits at (64, 40) — optical midline
+      W node A is at (64, 8) — cap-height
+      The joint is a vertical stroke from (64, 40) to (64, 8)
+      This shared upstroke is colored #7B61FF
+      It reads as: "the moment of shift" — day to night
+
+    ALL PATHS are stroked, not filled. This ensures the mark
+    survives at 1px line weight and scales to 32px favicon.
+    ═══════════════════════════════════════════════════════
+  -->
+
+  <!-- ═══════════════════════════
+       S — upper bowl
+       Arc from top-right → top-left, then spine down-right to midpoint
+  ═══════════════════════════ -->
+  <path
+    id="s-upper"
+    d="
+      M 56,12
+      C 56,4  44,4  40,4
+      C 28,4  16,12 16,24
+      C 16,36 28,40 40,40
+    "
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- ═══════════════════════════
+       S — lower bowl
+       Spine continues from midpoint, arc to bottom-left → bottom-right
+  ═══════════════════════════ -->
+  <path
+    id="s-lower"
+    d="
+      M 40,40
+      C 52,40 64,44 64,56
+      C 64,68 52,76 40,76
+      C 28,76 16,68 16,60
+    "
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- ═══════════════════════════
+       LIGATURE JOINT
+       The single purple accent — the shared upstroke
+       S lower-right terminal (64, 56) up to W first node (64, 8)
+       This is one continuous vertical that belongs to BOTH letters.
+       Purple = the exact moment of the shift.
+  ═══════════════════════════ -->
+  <line
+    id="ligature-joint"
+    x1="64" y1="56"
+    x2="64" y2="8"
+    stroke="#7B61FF"
+    stroke-width="8"
+    stroke-linecap="round"
+  />
+
+  <!-- ═══════════════════════════
+       W — four strokes from the shared upstroke
+       Node A (64, 8) is the top-left entry, owned by the joint above.
+       The W continues as four strokes forming a precise waveform.
+       Center peak at y=26 (not y=8) — asymmetric, deliberate, branded.
+  ═══════════════════════════ -->
+  <polyline
+    id="w-strokes"
+    points="
+      64,8
+      82,72
+      100,26
+      118,72
+      148,8
+    "
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+</svg>

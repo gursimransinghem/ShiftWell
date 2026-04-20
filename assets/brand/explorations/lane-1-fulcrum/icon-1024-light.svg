@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — App Icon 1024×1024 — Light background
+  Android adaptive / light-mode variant. White #FFFFFF background.
+  Mark uses ink (#1F2133) for the beam and nodes; gold pivot unchanged.
+  Same 12% margin / 680px mark width as the dark variant.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1024 1024"
+  role="img"
+  aria-label="ShiftWell app icon — light"
+>
+  <title>ShiftWell</title>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+
+  <g id="mark">
+
+    <!-- Beam — ink on white -->
+    <line
+      x1="285" y1="479"
+      x2="739" y2="479"
+      stroke="#1F2133"
+      stroke-width="11.5"
+      stroke-linecap="round"
+    />
+
+    <!-- Left node — Work -->
+    <circle cx="285" cy="479" r="23" fill="#1F2133"/>
+
+    <!-- Center node — Life (gold ring accent) -->
+    <circle cx="512" cy="479" r="23" fill="#1F2133"/>
+    <circle cx="512" cy="479" r="37" fill="none" stroke="#C8A84B" stroke-width="8.5"/>
+
+    <!-- Right node — Sleep -->
+    <circle cx="739" cy="479" r="23" fill="#1F2133"/>
+
+    <!-- Pivot triangle — gold unchanged -->
+    <polygon
+      points="472,479 552,479 512,558"
+      fill="#C8A84B"
+    />
+
+    <!-- Pivot separator — white background color -->
+    <line
+      x1="472" y1="479"
+      x2="552" y2="479"
+      stroke="#FFFFFF"
+      stroke-width="7"
+    />
+
+  </g>
+
+</svg>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Circular Avatar (Social / Profile)
+  420×420 canvas, circular crop via clipPath
+  Designed for: Twitter/X profile, LinkedIn, GitHub, Discord, App Store developer icon
+
+  The circular format requires the curve to be reframed:
+  - Less horizontal span (circular crop cuts sides)
+  - Curve is slightly zoomed so the two inflection nodes sit within the circle
+  - The midnight endpoints are clipped by the circle edge — intentional.
+    It implies the rhythm CONTINUES beyond the visible frame, which is
+    scientifically accurate (circadian rhythm is continuous, not start/stop).
+
+  Background: deep space dark with subtle radial depth gradient
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 420 420"
+  role="img"
+  aria-label="ShiftWell avatar"
+>
+  <title>ShiftWell avatar</title>
+
+  <defs>
+    <linearGradient id="av-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="48%"  stop-color="#7B61FF"/>
+      <stop offset="72%"  stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+    <linearGradient id="av-glow-out" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.09"/>
+      <stop offset="48%"  stop-color="#7B61FF" stop-opacity="0.09"/>
+      <stop offset="72%"  stop-color="#4ECDC4" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.07"/>
+    </linearGradient>
+    <linearGradient id="av-glow-mid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.28"/>
+      <stop offset="48%"  stop-color="#7B61FF" stop-opacity="0.28"/>
+      <stop offset="72%"  stop-color="#4ECDC4" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.20"/>
+    </linearGradient>
+    <linearGradient id="av-glow-in" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.62"/>
+      <stop offset="48%"  stop-color="#7B61FF" stop-opacity="0.62"/>
+      <stop offset="72%"  stop-color="#4ECDC4" stop-opacity="0.50"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.50"/>
+    </linearGradient>
+    <radialGradient id="av-bg" cx="50%" cy="42%" r="58%">
+      <stop offset="0%"   stop-color="#0D1120"/>
+      <stop offset="100%" stop-color="#080B14"/>
+    </radialGradient>
+    <radialGradient id="av-node-p" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.80"/>
+      <stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="av-node-g" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="0.80"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Circular crop -->
+    <clipPath id="circle-crop">
+      <circle cx="210" cy="210" r="210"/>
+    </clipPath>
+  </defs>
+
+  <!-- Circular background -->
+  <circle cx="210" cy="210" r="210" fill="url(#av-bg)"/>
+
+  <!--
+    Curve inside circle:
+    The circle crops x ∈ [0,420]. The curve extends from x=-10 to x=430
+    so the midnight endpoints are visually clipped by the circle edge.
+    This reinforces the "rhythm continues" reading.
+
+    Horizontal span: -10 → 430 (440px total)
+    Midline: y=210
+    Night trough: y=95 (amplitude ±115px)
+    Peak alertness: y=325
+    6am inflection: x=100, y=210
+    6pm inflection: x=320, y=210
+    Control tangent offsets: k=0.5523 × (span/4) = 0.5523 × 110 ≈ 61
+  -->
+
+  <!-- Glow outer -->
+  <path
+    d="M -10,95
+       C -10,95 40,95 100,210
+       C 160,325 150,325 210,325
+       C 270,325 260,325 320,210
+       C 380,95 430,95 430,95"
+    fill="none"
+    stroke="url(#av-glow-out)"
+    stroke-width="75"
+    stroke-linecap="round"
+    clip-path="url(#circle-crop)"
+  />
+
+  <!-- Glow mid -->
+  <path
+    d="M -10,95
+       C -10,95 40,95 100,210
+       C 160,325 150,325 210,325
+       C 270,325 260,325 320,210
+       C 380,95 430,95 430,95"
+    fill="none"
+    stroke="url(#av-glow-mid)"
+    stroke-width="36"
+    stroke-linecap="round"
+    clip-path="url(#circle-crop)"
+  />
+
+  <!-- Glow inner -->
+  <path
+    d="M -10,95
+       C -10,95 40,95 100,210
+       C 160,325 150,325 210,325
+       C 270,325 260,325 320,210
+       C 380,95 430,95 430,95"
+    fill="none"
+    stroke="url(#av-glow-in)"
+    stroke-width="12"
+    stroke-linecap="round"
+    clip-path="url(#circle-crop)"
+  />
+
+  <!-- Core filament -->
+  <path
+    d="M -10,95
+       C -10,95 40,95 100,210
+       C 160,325 150,325 210,325
+       C 270,325 260,325 320,210
+       C 380,95 430,95 430,95"
+    fill="none"
+    stroke="url(#av-grad)"
+    stroke-width="4.5"
+    stroke-linecap="round"
+    clip-path="url(#circle-crop)"
+  />
+
+  <!-- Inflection nodes -->
+  <ellipse cx="100" cy="210" rx="48" ry="48" fill="url(#av-node-p)" opacity="0.88"/>
+  <circle cx="100" cy="210" r="7" fill="#7B61FF"/>
+
+  <ellipse cx="320" cy="210" rx="48" ry="48" fill="url(#av-node-g)" opacity="0.82"/>
+  <circle cx="320" cy="210" r="7" fill="#C8A84B"/>
+
+  <!-- Circular border: ultra-thin, purple at 15% — frames without boxing -->
+  <circle cx="210" cy="210" r="208" fill="none" stroke="#7B61FF" stroke-width="1" opacity="0.15"/>
+</svg>

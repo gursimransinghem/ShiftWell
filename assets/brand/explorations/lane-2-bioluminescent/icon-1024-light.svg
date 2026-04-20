@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — App Icon 1024×1024 (Light/White background)
+  Constraint: purple→teal→gold gradient must still read on white.
+  Solution:
+    - The glow layers are suppressed (they disappear on white — expected)
+    - The core gradient strokes are retained at full opacity
+    - Stroke widths are increased to compensate for lost glow volume
+    - Node dots are solid filled (no radial glow — it vanishes on white)
+    - A very subtle warm-white-to-cool-white background tint (not pure flat white)
+      suggests the sky/daylight context without adding decorative gradient
+    - The grid reference lines switch to a warm gray at 8% opacity
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1024 1024"
+  role="img"
+  aria-label="ShiftWell app icon — light variant"
+>
+  <title>ShiftWell App Icon — Light</title>
+
+  <defs>
+    <!-- Same circadian data gradient; works on white because colors are saturated -->
+    <linearGradient id="circadian-g-lt" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="45%"  stop-color="#7B61FF"/>
+      <stop offset="70%"  stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+
+    <!-- On white, glow-equivalents become soft shadows via opacity reduction -->
+    <linearGradient id="shadow-outer-lt" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.07"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.07"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.05"/>
+    </linearGradient>
+
+    <linearGradient id="shadow-mid-lt" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7B61FF" stop-opacity="0.15"/>
+      <stop offset="45%"  stop-color="#7B61FF" stop-opacity="0.15"/>
+      <stop offset="70%"  stop-color="#4ECDC4" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0.12"/>
+    </linearGradient>
+
+    <!-- Subtle background gradient: warm white sky → cool white -->
+    <linearGradient id="bg-light" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#FAFCFF"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+
+    <clipPath id="safe-zone-lt">
+      <rect x="123" y="123" width="778" height="778"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background: near-white (not pure #FFF — gives the gradient anchor point) -->
+  <rect width="1024" height="1024" fill="url(#bg-light)"/>
+
+  <!-- Horizon reference line: alertness midline — extremely subtle on white -->
+  <line x1="140" y1="512" x2="884" y2="512" stroke="#7B61FF" stroke-width="0.75" opacity="0.07"/>
+
+  <!-- Shadow layer 1 (replaces glow on white — same visual function, inverted physics) -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#shadow-outer-lt)"
+    stroke-width="60"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone-lt)"
+  />
+
+  <!-- Shadow layer 2 -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#shadow-mid-lt)"
+    stroke-width="24"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone-lt)"
+  />
+
+  <!-- Core filament — heavier than dark variant to compensate for no glow -->
+  <path
+    d="M 152,185
+       C 152,185 275,185 387,512
+       C 499,839 513,839 512,839
+       C 511,839 525,839 637,512
+       C 749,185 872,185 872,185"
+    fill="none"
+    stroke="url(#circadian-g-lt)"
+    stroke-width="9"
+    stroke-linecap="round"
+    clip-path="url(#safe-zone-lt)"
+  />
+
+  <!-- Node dots: solid, no radial (radial vanishes on white) -->
+  <circle cx="387" cy="512" r="10" fill="#7B61FF"/>
+  <circle cx="637" cy="512" r="10" fill="#C8A84B"/>
+
+  <!-- Midnight caps -->
+  <circle cx="152" cy="185" r="6" fill="#7B61FF" opacity="0.50"/>
+  <circle cx="872" cy="185" r="6" fill="#7B61FF" opacity="0.50"/>
+</svg>

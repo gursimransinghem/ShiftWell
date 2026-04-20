@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Circular Social Avatar
+  400×400 circle, safe for Instagram / Twitter / LinkedIn profile crop.
+  Mark centered within the circle with ~18% inset padding.
+  Background: #080B14 dark (consistent with brand dark mode).
+
+  Mark occupies ~260px wide zone (65% of 400px diameter = 260px)
+  Scale from 120×72 concept: 260/120 = 2.1667
+  Beam stroke: 2×2.1667 = 4.33≈4.5
+  Node r: 4×2.1667 = 8.67≈8.5
+  Gold ring r: 6.5×2.1667 = 14.08≈14
+  Gold ring stroke: 1.5×2.1667 = 3.25
+  Triangle scale: base 14px→30.3≈30, height 14px→30.3≈30
+
+  Mark center at circle center (200,200).
+  Beam y: 200 (centered)
+  Left node: 200-130=70, x=70
+  Right node: 200+130=330, x=330
+  Center: x=200
+  Triangle:
+    left x: 200-15=185
+    right x: 200+15=215
+    apex y: 200+30=230
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 400 400"
+  role="img"
+  aria-label="ShiftWell social avatar"
+>
+  <title>ShiftWell</title>
+
+  <!-- Circular clip -->
+  <defs>
+    <clipPath id="circle-clip">
+      <circle cx="200" cy="200" r="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="200" cy="200" r="200" fill="#080B14"/>
+
+  <!-- Mark, clipped to circle -->
+  <g clip-path="url(#circle-clip)">
+
+    <!-- Beam -->
+    <line
+      x1="70" y1="200"
+      x2="330" y2="200"
+      stroke="#FFFFFF"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+
+    <!-- Left node — Work -->
+    <circle cx="70" cy="200" r="8.5" fill="#FFFFFF"/>
+
+    <!-- Center node — Life -->
+    <circle cx="200" cy="200" r="8.5" fill="#FFFFFF"/>
+    <circle cx="200" cy="200" r="14" fill="none" stroke="#C8A84B" stroke-width="3.25"/>
+
+    <!-- Right node — Sleep -->
+    <circle cx="330" cy="200" r="8.5" fill="#FFFFFF"/>
+
+    <!-- Pivot triangle -->
+    <polygon
+      points="185,200 215,200 200,230"
+      fill="#C8A84B"
+    />
+
+    <!-- Pivot separator -->
+    <line
+      x1="185" y1="200"
+      x2="215" y2="200"
+      stroke="#080B14"
+      stroke-width="2.75"
+    />
+
+  </g>
+
+</svg>

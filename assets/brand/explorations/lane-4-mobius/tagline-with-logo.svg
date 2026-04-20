@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell Lane 4 — Full Tagline + Logo Lockup
+  Combines: Möbius mark + "ShiftWell" wordmark + tagline
+
+  Layout (top to bottom):
+    1. Möbius mark — 120×120, centered
+    2. "ShiftWell" wordmark — Inter 600, 40px, letter-spaced
+    3. Fulcrum divider (from tagline-lockup-dark.svg, adapted)
+    4. "Work. Life. Sleep. Rebalanced." tagline
+
+  ViewBox: 680×340
+  Background: #080B14
+
+  Typography: matches tagline-lockup-dark.svg conventions
+    Headline: Inter 700 / italic 600
+    Body: Inter 600
+    Tagline "Rebalanced." — italic gold
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 680 340"
+     role="img"
+     aria-label="ShiftWell — Work. Life. Sleep. Rebalanced. with Möbius logo">
+  <title>ShiftWell — Full Tagline Lockup with Lane 4 Möbius Logo</title>
+
+  <defs>
+    <linearGradient id="tl-grad-sleep" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#9B84FF"/>
+      <stop offset="100%" stop-color="#7B61FF"/>
+    </linearGradient>
+    <linearGradient id="tl-grad-wake" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#E8C96A"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+    <linearGradient id="tl-trans-sw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+
+    <filter id="tl-glow-gold" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="tl-glow-purple" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Ambient glow behind mark -->
+    <radialGradient id="tl-ambient-mark" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#16102e" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#080B14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="680" height="340" fill="#080B14"/>
+  <!-- Subtle ambient behind mark -->
+  <ellipse cx="340" cy="80" rx="130" ry="110" fill="url(#tl-ambient-mark)" opacity="0.8"/>
+
+  <!-- ── MÖBIUS MARK — 120×120, centered horizontally at x=340, top at y=8 ── -->
+  <!--
+    Concept center: 300,310. Effective mark: 120→480 wide, 155→465 tall = 360×310.
+    To fit in 120×120: scale = 120/360 = 0.333
+    After scale: height = 310×0.333 = 103px (fits in 120)
+    Center mark vertically in 120px: offset = (120-103)/2 = 8.5px top padding
+    Transform: translate(340,66) scale(0.333) translate(-300,-310)
+    (66 = 8 + 120/2 ≈ center of 120px mark block starting at y=8)
+  -->
+  <g transform="translate(340,66) scale(0.333) translate(-300,-310)">
+
+    <!-- Sleep lobe back -->
+    <path d="M 200,297 C 175,293 155,288 140,283 C 118,276 104,267 100,257 C 96,246 100,234 110,223 C 122,210 142,200 168,193 C 194,186 224,182 256,180 C 270,179 284,179 300,179 L 300,213 C 284,213 270,213 256,214 C 226,216 198,220 174,226 C 153,232 138,239 131,247 C 126,253 127,259 134,265 C 143,272 160,278 182,283 C 194,286 207,289 220,291 Z"
+      fill="url(#tl-grad-sleep)" opacity="0.72"/>
+    <path d="M 200,323 C 194,327 188,332 184,338 C 178,346 176,355 180,364 C 184,372 194,379 208,385 C 226,392 250,397 278,400 C 286,401 293,401 300,401 L 300,435 C 292,435 284,435 276,434 C 245,431 218,425 196,417 C 176,409 161,399 153,387 C 145,375 145,361 153,349 C 160,338 172,328 188,320 C 192,318 196,316 200,314 Z"
+      fill="url(#tl-grad-sleep)" opacity="0.72"/>
+
+    <!-- Wake lobe -->
+    <path d="M 408,310 C 408,290 406,271 402,255 C 397,236 388,220 375,208 C 360,194 340,185 316,181 C 309,180 304,179 300,179 L 300,213 C 303,213 307,213 311,214 C 330,217 345,223 356,232 C 367,241 372,253 372,265 C 372,278 368,290 360,300 L 380,310 C 390,310 400,310 408,310 Z"
+      fill="url(#tl-grad-wake)" opacity="0.85"/>
+    <path d="M 408,310 L 380,310 L 360,310 C 368,320 372,332 372,345 C 372,357 367,369 356,378 C 345,387 330,393 311,396 C 307,397 303,397 300,397 L 300,431 C 304,431 309,431 316,430 C 340,427 360,418 375,408 C 388,396 397,381 402,362 C 406,346 408,329 408,310 Z"
+      fill="url(#tl-grad-wake)" opacity="0.85"/>
+
+    <!-- Sleep lobe front -->
+    <path d="M 200,297 L 220,291 C 207,289 194,286 182,283 C 160,278 143,272 134,265 C 127,259 126,253 131,247 C 138,239 153,232 174,226 C 198,220 226,216 256,214 C 270,213 284,213 300,213 L 300,247 C 286,247 273,248 260,249 C 232,252 208,257 190,264 C 175,270 167,277 167,284 C 167,291 176,298 193,304 C 194,304 197,305 200,306 Z"
+      fill="#7B61FF" opacity="0.95" filter="url(#tl-glow-purple)"/>
+    <path d="M 200,314 C 196,316 192,318 188,320 C 172,328 160,338 153,349 C 145,361 145,375 153,387 C 161,399 176,409 196,417 C 218,425 245,431 276,434 C 284,435 292,435 300,435 L 300,401 C 293,401 286,401 278,400 C 250,397 226,392 208,385 C 194,379 184,372 180,364 C 176,355 178,346 184,338 C 188,332 194,327 200,323 Z"
+      fill="#7B61FF" opacity="0.95" filter="url(#tl-glow-purple)"/>
+
+    <!-- Edge strokes -->
+    <path d="M 472,310 C 472,285 468,262 460,242 C 450,218 434,199 413,185 C 390,170 361,161 328,158 C 318,157 309,157 300,157"
+      fill="none" stroke="#E8C96A" stroke-width="7" stroke-linecap="round" filter="url(#tl-glow-gold)"/>
+    <path d="M 472,310 C 472,335 468,358 460,378 C 450,402 434,421 413,435 C 390,450 361,459 328,462 C 318,463 309,463 300,463"
+      fill="none" stroke="#E8C96A" stroke-width="7" stroke-linecap="round" filter="url(#tl-glow-gold)"/>
+    <path d="M 300,157 C 270,157 243,162 218,172 C 189,184 164,203 148,227 C 132,251 127,279 135,303 C 139,315 147,326 158,335"
+      fill="none" stroke="#9B84FF" stroke-width="7" stroke-linecap="round" filter="url(#tl-glow-purple)"/>
+    <path d="M 300,463 C 270,463 243,458 218,448 C 189,436 164,417 148,393 C 132,369 127,341 135,317 C 139,305 147,294 158,285"
+      fill="none" stroke="#9B84FF" stroke-width="7" stroke-linecap="round" filter="url(#tl-glow-purple)"/>
+    <path d="M 408,277 C 408,261 405,246 398,233 C 390,218 377,207 360,200 C 340,192 316,189 300,189"
+      fill="none" stroke="#C8A84B" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 408,343 C 408,359 405,374 398,387 C 390,402 377,413 360,420 C 340,428 316,431 300,431"
+      fill="none" stroke="#C8A84B" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 300,189 C 276,189 254,193 236,201 C 215,211 199,226 191,244 C 184,260 184,279 191,295"
+      fill="none" stroke="#7B61FF" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+    <path d="M 300,431 C 276,431 254,427 236,419 C 215,409 199,394 191,376 C 184,360 184,341 191,325"
+      fill="none" stroke="#7B61FF" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+
+    <!-- Cross-sections -->
+    <line x1="158" y1="285" x2="158" y2="335" stroke="url(#tl-trans-sw)" stroke-width="7" stroke-linecap="round"/>
+    <line x1="472" y1="277" x2="472" y2="343" stroke="#E8C96A" stroke-width="8" stroke-linecap="round" filter="url(#tl-glow-gold)"/>
+    <path d="M 472,277 Q 482,310 472,343" fill="none" stroke="#E8C96A" stroke-width="7" stroke-linecap="round" filter="url(#tl-glow-gold)"/>
+
+    <!-- Phase dots -->
+    <circle cx="158" cy="310" r="10" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="158" cy="310" r="7"  fill="url(#tl-trans-sw)"/>
+    <circle cx="472" cy="310" r="10" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="472" cy="310" r="7"  fill="#E8C96A" filter="url(#tl-glow-gold)"/>
+  </g>
+
+  <!-- ── WORDMARK "ShiftWell" ──────────────────────────────────── -->
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif"
+     font-weight="600"
+     font-size="38"
+     text-anchor="middle"
+     letter-spacing="2.8">
+    <!-- "Shift" white, "Well" gold -->
+    <text x="340" y="154" fill="#FFFFFF">Shift<tspan fill="#C8A84B">Well</tspan></text>
+  </g>
+
+  <!-- ── FULCRUM DIVIDER — adapted from tagline-lockup-dark.svg ── -->
+  <g stroke="#C8A84B" stroke-width="1.25" fill="#C8A84B">
+    <!-- Horizontal beam -->
+    <line x1="130" y1="183" x2="550" y2="183" stroke-linecap="round"/>
+    <!-- Left weight -->
+    <circle cx="130" cy="183" r="3.5"/>
+    <!-- Right weight -->
+    <circle cx="550" cy="183" r="3.5"/>
+    <!-- Center pivot triangle -->
+    <path d="M 334 183 L 340 193 L 346 183 Z" fill="#C8A84B" stroke="none"/>
+    <!-- Pivot dot -->
+    <circle cx="340" cy="182.5" r="1.5" fill="#080B14" stroke="#C8A84B" stroke-width="1"/>
+  </g>
+
+  <!-- ── TAGLINE — "Work. Life. Sleep. Rebalanced." ─────────────── -->
+  <!-- Matches tagline-lockup-dark.svg conventions exactly -->
+  <g font-family="Inter, Georgia, 'Times New Roman', serif"
+     font-weight="700"
+     fill="#FFFFFF"
+     text-anchor="middle">
+    <text x="340" y="230" font-size="30" letter-spacing="0.5">
+      Work. Life. Sleep.
+      <tspan font-style="italic" font-weight="600" fill="#C8A84B"> Rebalanced.</tspan>
+    </text>
+  </g>
+
+  <!-- ── MICRO-CAPTION — product category, extreme restraint ───── -->
+  <text
+    x="340" y="270"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-weight="400"
+    font-size="11"
+    letter-spacing="3.5"
+    fill="#FFFFFF"
+    opacity="0.28"
+    text-anchor="middle">CIRCADIAN OPTIMIZATION FOR SHIFT WORKERS</text>
+
+</svg>

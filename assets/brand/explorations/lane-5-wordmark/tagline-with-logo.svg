@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 5 — Tagline + Logo Full Lockup
+  Integrates SW mark with the canonical tagline:
+    "Work. Life. Sleep. Rebalanced."
+    ── fulcrum divider ──
+    ShiftWell (wordmark)
+
+  This replaces the text-rendered "ShiftWell" in the existing tagline-lockup-dark.svg
+  with the SW mark above the existing fulcrum structure.
+
+  Layout (viewBox 720×280):
+    Row 1 y=0–80:   SW mark, centered (160×80 at 0.5 scale = 80×40, centered at x=320)
+    Gap: 16px
+    Row 2 y=96:     "Work. Life. Sleep. Rebalanced." — Inter 700, 34px
+    Row 3 y=140:    Fulcrum divider (inherited from tagline-lockup-dark.svg)
+    Row 4 y=195:    "ShiftWell" — Inter 600, 28px, letter-spacing 2.4
+
+  The SW mark sits ABOVE the tagline text, acting as a brand stamp.
+  The existing fulcrum gold divider is preserved — system coherence.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 720 280"
+  role="img"
+  aria-label="Work. Life. Sleep. Rebalanced by ShiftWell."
+>
+  <title>ShiftWell tagline lockup with SW mark</title>
+
+  <!-- Background (uncomment for standalone preview) -->
+  <rect width="720" height="280" fill="#080B14"/>
+
+  <!-- ═══════════════════════════
+       SW MARK — centered at top
+       80×40 rendered mark, centered in 720px width
+       translate((720-80)/2, 12) = translate(320, 12) at scale 0.5
+       But we need scale(0.5) of the 160×80 viewBox mark
+       So: translate(320-40, 12) = translate(280, 12) then scale(0.5)
+       Wait: scale(0.5) shrinks 160→80, 80→40
+       translate(280, 12) puts left edge at x=280, mark goes to x=360
+       Center = 280 + 40 = 320. Correct.
+  ═══════════════════════════ -->
+  <g transform="translate(280, 12) scale(0.5)">
+
+    <!-- S — upper bowl -->
+    <path
+      d="M 56,12 C 56,4 44,4 40,4 C 28,4 16,12 16,24 C 16,36 28,40 40,40"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- S — lower bowl -->
+    <path
+      d="M 40,40 C 52,40 64,44 64,56 C 64,68 52,76 40,76 C 28,76 16,68 16,60"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Ligature joint — purple -->
+    <line
+      x1="64" y1="56"
+      x2="64" y2="8"
+      stroke="#7B61FF"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <!-- W — four strokes -->
+    <polyline
+      points="64,8 82,72 100,26 118,72 148,8"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+  </g>
+
+  <!-- ═══════════════════════════
+       Thin separator between mark and tagline text
+       Gold, 1px, 200px centered
+  ═══════════════════════════ -->
+  <line
+    x1="260" y1="68"
+    x2="460" y2="68"
+    stroke="#C8A84B"
+    stroke-width="0.75"
+    stroke-linecap="round"
+  />
+
+  <!-- ═══════════════════════════
+       Line 1: Tagline headline
+  ═══════════════════════════ -->
+  <g font-family="Inter, Georgia, 'Times New Roman', serif" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+    <text x="360" y="110" font-size="34" letter-spacing="0.5">
+      Work. Life. Sleep. <tspan font-style="italic" font-weight="600" fill="#C8A84B">Rebalanced.</tspan>
+    </text>
+  </g>
+
+  <!-- ═══════════════════════════
+       Fulcrum divider — preserved from tagline-lockup-dark.svg
+  ═══════════════════════════ -->
+  <g stroke="#C8A84B" stroke-width="1.25" fill="#C8A84B">
+    <line x1="120" y1="150" x2="600" y2="150" stroke-linecap="round"/>
+    <circle cx="120" cy="150" r="3.5"/>
+    <circle cx="600" cy="150" r="3.5"/>
+    <path d="M 354 150 L 360 160 L 366 150 Z" fill="#C8A84B" stroke="none"/>
+    <circle cx="360" cy="149.5" r="1.5" fill="#080B14" stroke="#C8A84B" stroke-width="1"/>
+  </g>
+
+  <!-- ═══════════════════════════
+       Line 2: ShiftWell wordmark text
+  ═══════════════════════════ -->
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" fill="#FFFFFF" text-anchor="middle">
+    <text x="360" y="215" font-size="28" letter-spacing="2.4">
+      ShiftWell
+    </text>
+  </g>
+
+</svg>

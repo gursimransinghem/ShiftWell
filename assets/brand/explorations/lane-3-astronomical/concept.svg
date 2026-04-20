@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell — Lane 3: Astronomical / Night-Sky Monogram
+  concept.svg — Production master
+
+  The hidden "S":
+    The crescent moon's concave terminator edge forms the inflection point of an "S".
+    A curated arc of 7 stars traces the upper bowl (curving right) and lower bowl (curving left),
+    completing the letterform. The viewer's eye first reads: crescent + star cluster.
+    On second pass, the S emerges from the curve of light.
+
+  Palette (strict):
+    #080B14 — deep space background
+    #FFFFFF — moon lit face
+    #C8A84B — stars (gold, point-of-light quality)
+    #7B61FF — orbit ring (optional accent, used at 15% opacity only)
+
+  ViewBox: 200×200 for a square master. All variants derive from this composition.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img"
+     aria-label="ShiftWell astronomical monogram — crescent moon with star field forming a hidden S">
+  <title>ShiftWell — Lane 3 Astronomical concept</title>
+  <defs>
+    <!-- Moon gradient: lit face to shadow limb, anatomically correct -->
+    <radialGradient id="moonGlow" cx="38%" cy="42%" r="58%" fx="35%" fy="38%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="55%"  stop-color="#E8E4D8" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#B8B09A" stop-opacity="0.85"/>
+    </radialGradient>
+
+    <!-- Shadow circle mask to carve crescent from full moon -->
+    <mask id="crescentMask">
+      <rect width="200" height="200" fill="white"/>
+      <!-- Shadow hemisphere: offset to create a thin, precise crescent -->
+      <circle cx="113" cy="91" r="38" fill="black"/>
+    </mask>
+
+    <!-- Subtle star diffraction spike filter -->
+    <filter id="starGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Faint orbit arc: reference line showing the S-curve path -->
+    <path id="sPath"
+          d="M 98 60 C 128 60, 140 80, 108 100 C 76 120, 88 140, 118 140"
+          fill="none"/>
+  </defs>
+
+  <!-- ─── Background ─── -->
+  <rect width="200" height="200" fill="#080B14"/>
+
+  <!-- ─── Faint orbit trace (the S spine, barely visible — 8% opacity) ─── -->
+  <use href="#sPath" stroke="#7B61FF" stroke-width="0.7" stroke-opacity="0.12"
+       stroke-dasharray="2.5 3.5" fill="none"/>
+
+  <!-- ─── Moon: full disk clipped to crescent ─── -->
+  <!--
+    Full moon center: (96, 98), radius: 36
+    Shadow circle center: (113, 91), radius: 38
+    Result: a crescent opening leftward and downward — its concave edge
+    (the terminator) curves exactly along the S inflection axis.
+  -->
+  <circle cx="96" cy="98" r="36"
+          fill="url(#moonGlow)"
+          mask="url(#crescentMask)"/>
+
+  <!-- Moon limb ring (very faint — gives the edge precision) -->
+  <circle cx="96" cy="98" r="36"
+          fill="none"
+          stroke="#FFFFFF"
+          stroke-width="0.4"
+          stroke-opacity="0.25"
+          mask="url(#crescentMask)"/>
+
+  <!--
+    ─── Star field — the hidden S ───────────────────────────────────────────
+    Stars are placed to trace an S-curve:
+
+    Upper bowl of S (arcs right, above center):
+      Stars A, B, C sit at top-right, forming the top curve of the S
+      that bends rightward above the moon's concave edge.
+
+    Middle inflection (S waist):
+      The crescent's terminator IS the middle of the S — no star needed here,
+      the moon's edge provides the inflection.
+
+    Lower bowl of S (arcs left, below center):
+      Stars E, F, G sit at lower-left, completing the S that bends
+      leftward below the moon.
+
+    The full letterform: upper arc (stars) → inflection (moon edge) → lower arc (stars)
+  -->
+
+  <!-- Star A — top anchor of S upper terminal, 2.2px radius -->
+  <circle cx="114" cy="58" r="2.2" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star B — upper right arc peak -->
+  <circle cx="131" cy="69" r="1.6" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star C — S upper bowl, rightmost -->
+  <circle cx="138" cy="85" r="1.3" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star D — S waist (just above moon, bridging) -->
+  <circle cx="127" cy="98" r="1.0" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star E — inflection-to-lower transition -->
+  <circle cx="112" cy="113" r="1.2" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star F — lower bowl, leftmost -->
+  <circle cx="96"  cy="127" r="1.5" fill="#C8A84B" filter="url(#starGlow)"/>
+  <!-- Star G — S lower terminal anchor, 2.0px radius -->
+  <circle cx="108" cy="142" r="2.0" fill="#C8A84B" filter="url(#starGlow)"/>
+
+  <!-- ─── Three ambient field stars (NOT part of the S — visual breathing room) ─── -->
+  <!-- These make it read as a star field, not a connect-the-dots puzzle -->
+  <circle cx="52"  cy="62"  r="0.9" fill="#C8A84B" opacity="0.55" filter="url(#starGlow)"/>
+  <circle cx="155" cy="52"  r="0.7" fill="#C8A84B" opacity="0.40" filter="url(#starGlow)"/>
+  <circle cx="148" cy="148" r="0.8" fill="#C8A84B" opacity="0.45" filter="url(#starGlow)"/>
+  <circle cx="44"  cy="138" r="0.6" fill="#C8A84B" opacity="0.35" filter="url(#starGlow)"/>
+  <circle cx="64"  cy="155" r="0.7" fill="#C8A84B" opacity="0.38" filter="url(#starGlow)"/>
+
+</svg>

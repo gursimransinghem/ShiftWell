@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell Lane 4 — 1024×1024 App Icon, Dark Background
+  iOS safe zone: 12% padding = 123px each side
+  Mark lives in 778×778 region centered at (512, 512)
+  i.e. mark region: x=123 to x=901, y=123 to y=901
+
+  Background: #080B14
+  Mark: Möbius strip, purple-gold split
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1024 1024"
+     role="img"
+     aria-label="ShiftWell app icon — Möbius sleep-wake cycle">
+  <title>ShiftWell — App Icon 1024px Dark</title>
+
+  <defs>
+    <linearGradient id="dk-grad-wake" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#E8C96A"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+    <linearGradient id="dk-grad-sleep" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#9B84FF"/>
+      <stop offset="100%" stop-color="#7B61FF"/>
+    </linearGradient>
+    <linearGradient id="dk-trans-sw" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7B61FF"/>
+      <stop offset="100%" stop-color="#C8A84B"/>
+    </linearGradient>
+
+    <!-- Glow for premium app icon feel -->
+    <filter id="dk-glow-gold" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="dk-glow-purple" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle ambient glow on background -->
+    <radialGradient id="dk-ambient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#1a1435" stop-opacity="1"/>
+      <stop offset="60%"  stop-color="#0d1020" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#080B14" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#080B14" rx="224" ry="224"/>
+  <!-- Subtle ambient glow at center -->
+  <ellipse cx="512" cy="512" rx="420" ry="380" fill="url(#dk-ambient)" opacity="0.6"/>
+
+  <!-- ============================================================
+       MÖBIUS STRIP — scaled to fit 778px safe zone
+       Original viewbox: 600×600, center at 300,310
+       Scale factor: 778/480 ≈ 1.62 (using 480px effective mark width)
+       Translation: center strip at 512,520
+
+       Scale = 1.67, applied as transform on the mark group.
+       Original mark extent: ~120 to ~480 x, ~155 to ~465 y
+       Mark width ≈ 360, height ≈ 310
+       Scaled: 360×1.67 ≈ 601, 310×1.67 ≈ 518
+       Centered at 512,512: x_offset = 512 - 601/2 = 211, y_offset = 512 - 518/2 = 253
+  ============================================================ -->
+
+  <g transform="translate(512,518) scale(1.67) translate(-300,-310)">
+
+    <!-- SLEEP LOBE (purple) — left side, back sections first -->
+    <path
+      d="M 200,297
+         C 175,293 155,288 140,283
+         C 118,276 104,267 100,257
+         C 96,246 100,234 110,223
+         C 122,210 142,200 168,193
+         C 194,186 224,182 256,180
+         C 270,179 284,179 300,179
+         L 300,213
+         C 284,213 270,213 256,214
+         C 226,216 198,220 174,226
+         C 153,232 138,239 131,247
+         C 126,253 127,259 134,265
+         C 143,272 160,278 182,283
+         C 194,286 207,289 220,291
+         Z"
+      fill="url(#dk-grad-sleep)"
+      opacity="0.75"
+    />
+
+    <path
+      d="M 200,323
+         C 194,327 188,332 184,338
+         C 178,346 176,355 180,364
+         C 184,372 194,379 208,385
+         C 226,392 250,397 278,400
+         C 286,401 293,401 300,401
+         L 300,435
+         C 292,435 284,435 276,434
+         C 245,431 218,425 196,417
+         C 176,409 161,399 153,387
+         C 145,375 145,361 153,349
+         C 160,338 172,328 188,320
+         C 192,318 196,316 200,314
+         Z"
+      fill="url(#dk-grad-sleep)"
+      opacity="0.75"
+    />
+
+    <!-- WAKE LOBE (gold) — right side -->
+    <path
+      d="M 408,310
+         C 408,290 406,271 402,255
+         C 397,236 388,220 375,208
+         C 360,194 340,185 316,181
+         C 309,180 304,179 300,179
+         L 300,213
+         C 303,213 307,213 311,214
+         C 330,217 345,223 356,232
+         C 367,241 372,253 372,265
+         C 372,278 368,290 360,300
+         L 380,310
+         C 390,310 400,310 408,310
+         Z"
+      fill="url(#dk-grad-wake)"
+      opacity="0.88"
+    />
+    <path
+      d="M 408,310
+         L 380,310 L 360,310
+         C 368,320 372,332 372,345
+         C 372,357 367,369 356,378
+         C 345,387 330,393 311,396
+         C 307,397 303,397 300,397
+         L 300,431
+         C 304,431 309,431 316,430
+         C 340,427 360,418 375,408
+         C 388,396 397,381 402,362
+         C 406,346 408,329 408,310
+         Z"
+      fill="url(#dk-grad-wake)"
+      opacity="0.88"
+    />
+
+    <!-- SLEEP LOBE front sections -->
+    <path
+      d="M 200,297 L 220,291
+         C 207,289 194,286 182,283
+         C 160,278 143,272 134,265
+         C 127,259 126,253 131,247
+         C 138,239 153,232 174,226
+         C 198,220 226,216 256,214
+         C 270,213 284,213 300,213
+         L 300,247
+         C 286,247 273,248 260,249
+         C 232,252 208,257 190,264
+         C 175,270 167,277 167,284
+         C 167,291 176,298 193,304
+         C 194,304 197,305 200,306 Z"
+      fill="#7B61FF"
+      opacity="0.95"
+      filter="url(#dk-glow-purple)"
+    />
+    <path
+      d="M 200,314
+         C 196,316 192,318 188,320
+         C 172,328 160,338 153,349
+         C 145,361 145,375 153,387
+         C 161,399 176,409 196,417
+         C 218,425 245,431 276,434
+         C 284,435 292,435 300,435
+         L 300,401
+         C 293,401 286,401 278,400
+         C 250,397 226,392 208,385
+         C 194,379 184,372 180,364
+         C 176,355 178,346 184,338
+         C 188,332 194,327 200,323 Z"
+      fill="#7B61FF"
+      opacity="0.95"
+      filter="url(#dk-glow-purple)"
+    />
+
+    <!-- EDGE CURVES — outer boundary lines, glowing -->
+    <!-- Wake outer top -->
+    <path d="M 472,310 C 472,285 468,262 460,242 C 450,218 434,199 413,185 C 390,170 361,161 328,158 C 318,157 309,157 300,157"
+      fill="none" stroke="#E8C96A" stroke-width="5" stroke-linecap="round"
+      filter="url(#dk-glow-gold)"/>
+    <!-- Wake outer bottom -->
+    <path d="M 472,310 C 472,335 468,358 460,378 C 450,402 434,421 413,435 C 390,450 361,459 328,462 C 318,463 309,463 300,463"
+      fill="none" stroke="#E8C96A" stroke-width="5" stroke-linecap="round"
+      filter="url(#dk-glow-gold)"/>
+    <!-- Wake inner top -->
+    <path d="M 408,277 C 408,261 405,246 398,233 C 390,218 377,207 360,200 C 340,192 316,189 300,189"
+      fill="none" stroke="#C8A84B" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+    <!-- Wake inner bottom -->
+    <path d="M 408,343 C 408,359 405,374 398,387 C 390,402 377,413 360,420 C 340,428 316,431 300,431"
+      fill="none" stroke="#C8A84B" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- Sleep outer top -->
+    <path d="M 300,157 C 270,157 243,162 218,172 C 189,184 164,203 148,227 C 132,251 127,279 135,303 C 139,315 147,326 158,335"
+      fill="none" stroke="#9B84FF" stroke-width="5" stroke-linecap="round"
+      filter="url(#dk-glow-purple)"/>
+    <!-- Sleep outer bottom -->
+    <path d="M 300,463 C 270,463 243,458 218,448 C 189,436 164,417 148,393 C 132,369 127,341 135,317 C 139,305 147,294 158,285"
+      fill="none" stroke="#9B84FF" stroke-width="5" stroke-linecap="round"
+      filter="url(#dk-glow-purple)"/>
+    <!-- Sleep inner top -->
+    <path d="M 300,189 C 276,189 254,193 236,201 C 215,211 199,226 191,244 C 184,260 184,279 191,295"
+      fill="none" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+    <!-- Sleep inner bottom -->
+    <path d="M 300,431 C 276,431 254,427 236,419 C 215,409 199,394 191,376 C 184,360 184,341 191,325"
+      fill="none" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+
+    <!-- Cross-sections -->
+    <line x1="158" y1="285" x2="158" y2="335" stroke="url(#dk-trans-sw)" stroke-width="5" stroke-linecap="round"/>
+    <line x1="191" y1="295" x2="191" y2="325" stroke="#7B61FF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <line x1="472" y1="277" x2="472" y2="343" stroke="#E8C96A" stroke-width="6" stroke-linecap="round"/>
+    <line x1="408" y1="277" x2="408" y2="343" stroke="#C8A84B" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 472,277 Q 481,310 472,343" fill="none" stroke="#E8C96A" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Phase transition dots -->
+    <circle cx="158" cy="310" r="8" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="158" cy="310" r="5" fill="url(#dk-trans-sw)"/>
+    <circle cx="472" cy="310" r="8" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="472" cy="310" r="5" fill="#E8C96A"/>
+  </g>
+
+</svg>
