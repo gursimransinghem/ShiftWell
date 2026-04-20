@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Modal,
+  Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,48 +15,21 @@ import { useUserStore } from '@/src/store/user-store';
 import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
 import { logExposure } from '@/src/lib/growth/ab-testing';
 import { COLORS, SPACING, RADIUS, PURPLE } from '@/src/theme';
+import { PLAN_LIST, TRIAL_DAYS, type PricingPlan } from '@/src/lib/premium/pricing';
+import { PRIVACY_SUMMARY, HEALTH_DISCLAIMER } from '@/src/content/legal';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-type PlanKey = 'monthly' | 'annual' | 'lifetime';
-
-interface Plan {
-  key: PlanKey;
-  label: string;
-  price: string;
-  period: string;
-  perMonth?: string;
-  badge?: string;
-}
+type PlanKey = PricingPlan['key'];
+type Plan = PricingPlan;
 
 // ---------------------------------------------------------------------------
-// Data — Plans
+// Data — Plans (source: src/lib/premium/pricing.ts)
 // ---------------------------------------------------------------------------
 
-const PLANS: Plan[] = [
-  {
-    key: 'monthly',
-    label: 'Monthly',
-    price: '$6.99',
-    period: '/mo',
-  },
-  {
-    key: 'annual',
-    label: 'Annual',
-    price: '$49.99',
-    period: '/yr',
-    perMonth: '$4.17/mo',
-    badge: 'BEST VALUE · SAVE 40%',
-  },
-  {
-    key: 'lifetime',
-    label: 'Lifetime',
-    price: '$149.99',
-    period: 'once',
-  },
-];
+const PLANS: Plan[] = PLAN_LIST;
 
 // ---------------------------------------------------------------------------
 // Data — Flagship differentiator cards (2×2 grid)
@@ -240,6 +215,7 @@ function PlanCard({
 
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
+  const [legalModal, setLegalModal] = useState<null | 'privacy' | 'terms'>(null);
   const { purchase, restore, isLoading } = usePremiumStore();
   const profile = useUserStore((s) => s.profile);
 
@@ -275,11 +251,7 @@ export default function PaywallScreen() {
   }
 
   const disclaimerPeriod =
-    selectedPlan === 'lifetime'
-      ? 'one-time payment'
-      : selectedPlan === 'annual'
-      ? 'per year after trial'
-      : 'per month after trial';
+    selectedPlan === 'annual' ? 'per year after trial' : 'per month after trial';
 
   return (
     <View style={styles.container}>
@@ -349,6 +321,17 @@ export default function PaywallScreen() {
           ))}
         </View>
 
+        {/* ── Honest outcome block ─────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>TRACKABLE FROM DAY ONE</Text>
+        <View style={styles.outcomeCard}>
+          <Text style={styles.outcomeLine}>Recovery score every morning.</Text>
+          <Text style={styles.outcomeLine}>See your trend by day 14.</Text>
+          <Text style={styles.outcomeNote}>
+            No outcome promises until the data earns them. Your score and trend are
+            computed locally from your actual sleep records.
+          </Text>
+        </View>
+
         {/* ── Pricing ──────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
         <View style={styles.planRow}>
@@ -370,10 +353,13 @@ export default function PaywallScreen() {
           disabled={isLoading}
         >
           <Text style={styles.ctaText}>
-            {isLoading ? 'Processing…' : 'Start 14-Day Free Trial'}
+            {isLoading ? 'Processing…' : `Start ${TRIAL_DAYS}-Day Free Trial`}
           </Text>
           <Text style={styles.ctaSubText}>
             Then {currentPlan.price} {disclaimerPeriod} · Cancel anytime
+          </Text>
+          <Text style={styles.ctaCancelNote}>
+            One tap from Settings — no phone calls, no forms.
           </Text>
         </TouchableOpacity>
 
@@ -383,15 +369,44 @@ export default function PaywallScreen() {
             <Text style={styles.footerLink}>Restore Purchases</Text>
           </TouchableOpacity>
           <Text style={styles.footerSep}>·</Text>
-          <TouchableOpacity hitSlop={8}>
+          <TouchableOpacity hitSlop={8} onPress={() => setLegalModal('privacy')}>
             <Text style={styles.footerLink}>Privacy</Text>
           </TouchableOpacity>
           <Text style={styles.footerSep}>·</Text>
-          <TouchableOpacity hitSlop={8}>
+          <TouchableOpacity hitSlop={8} onPress={() => setLegalModal('terms')}>
             <Text style={styles.footerLink}>Terms</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* ── Legal modal ─────────────────────────────────────────────── */}
+      <Modal
+        visible={legalModal !== null}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setLegalModal(null)}
+      >
+        <View style={styles.legalContainer}>
+          <View style={styles.legalHeader}>
+            <Text style={styles.legalTitle}>
+              {legalModal === 'privacy' ? 'Privacy' : 'Health Disclaimer'}
+            </Text>
+            <Pressable
+              onPress={() => setLegalModal(null)}
+              hitSlop={12}
+              accessibilityLabel="Close"
+              accessibilityRole="button"
+            >
+              <Ionicons name="close" size={22} color={COLORS.text.secondary} />
+            </Pressable>
+          </View>
+          <ScrollView contentContainerStyle={styles.legalScroll}>
+            <Text style={styles.legalBody}>
+              {legalModal === 'privacy' ? PRIVACY_SUMMARY : HEALTH_DISCLAIMER}
+            </Text>
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -703,6 +718,65 @@ const styles = StyleSheet.create({
   ctaSubText: {
     fontSize: 11,
     color: 'rgba(11,13,22,0.65)',
+  },
+  ctaCancelNote: {
+    fontSize: 11,
+    color: 'rgba(11,13,22,0.55)',
+    marginTop: 2,
+    fontStyle: 'italic',
+  },
+
+  // ── Outcome block
+  outcomeCard: {
+    backgroundColor: 'rgba(200,168,75,0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(200,168,75,0.18)',
+    borderRadius: RADIUS.lg,
+    padding: 16,
+    marginBottom: 24,
+    gap: 2,
+  },
+  outcomeLine: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.text.primary,
+    lineHeight: 20,
+  },
+  outcomeNote: {
+    fontSize: 11,
+    color: COLORS.text.secondary,
+    lineHeight: 16,
+    marginTop: 8,
+  },
+
+  // ── Legal modal
+  legalContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background.primary,
+  },
+  legalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 18,
+    paddingBottom: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.border.default,
+  },
+  legalTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+  },
+  legalScroll: {
+    padding: 20,
+    paddingBottom: 48,
+  },
+  legalBody: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: COLORS.text.secondary,
   },
 
   // ── Footer

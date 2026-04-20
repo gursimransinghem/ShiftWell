@@ -61,7 +61,7 @@ export const es = {
   // Pantalla de pago (Paywall)
   paywall: {
     title: "Actualiza a ShiftWell Pro",
-    trial: "Comenzar Prueba Gratuita de 7 Días",
+    trial: "Comenzar Prueba Gratuita de 30 Días",
     perYear: "por año",
     features: {
       adaptiveBrain: "Cerebro Adaptativo",

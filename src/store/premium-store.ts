@@ -12,8 +12,7 @@ import {
 import type { Feature } from '../lib/premium/entitlements';
 import { isFeatureAvailable } from '../lib/premium/entitlements';
 import { computeIsGrandfathered } from '../lib/premium/feature-gate';
-
-const TRIAL_DAYS = 14;
+import { TRIAL_DAYS } from '../lib/premium/pricing';
 
 // ---------------------------------------------------------------------------
 // Trial helpers
