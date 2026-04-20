@@ -30,7 +30,7 @@ Choose one:
 ```
 Built by an ER doctor who works nights. Because "just sleep more" isn't a plan.
 
-If you work nights, rotating shifts, or irregular hours, you already know: most sleep advice doesn't apply to you. ShiftWell is the first sleep app designed around YOUR actual shift schedule — not someone else's 9-to-5.
+If you work nights, rotating shifts, or irregular hours: you've already heard every sleep tip that doesn't apply. ShiftWell is the first sleep app that reads your actual shift schedule and builds a science-backed plan around it. Automated.
 
 Import your shifts. Get a science-backed plan. Export it to your calendar. Done.
 
@@ -82,9 +82,13 @@ Built by an emergency medicine physician who rotates through days, nights, and e
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-100% FREE
+PRICING
 
-No subscriptions. No paywalls. No "premium" tier. Every feature is available to every user from day one.
+Free tier includes the circadian sleep plan, manual shift entry, and the Today view — enough to feel the difference within one shift rotation.
+
+ShiftWell Pro unlocks Smart Scheduling, native Calendar Export, the Circadian Activity Guide, and Sleep Insights. $9.99/month or $49.99/year (save 58%), with a 30-day free trial. Cancel in one tap from Settings — no phone calls, no forms.
+
+Canonical pricing is maintained in-app; if App Store Connect shows a different number it is authoritative.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -118,10 +122,10 @@ _(97 characters)_
 ## Promotional Text (170 char limit)
 
 ```
-Built by an ER doctor who works nights. The first sleep app that imports your shift schedule and creates a science-backed plan — sleep, naps, caffeine, meals. 100% free.
+Built by an ER doctor who works nights. Reads your actual shift schedule and builds a science-backed sleep, nap, caffeine, and meal plan around it. 30-day free trial.
 ```
 
-_(168 characters)_
+_(167 characters)_
 
 **Note:** Promotional Text can be updated at any time without submitting a new app version. Use it for seasonal messaging, feature launches, or press mentions.
 
@@ -274,7 +278,18 @@ _(Required for App Store submission. Since ShiftWell stores all data on-device w
 
 ---
 
+## Screenshot Capture — Deferred
+
+Screenshot generation is a **follow-on PR** once the logo tournament winner is chosen and the fast-path onboarding ships. The spec above (§ "Screenshot Refresh — Outcome Data Integration") is the capture plan. Do not regenerate screenshots until:
+
+1. Logo tournament winner is locked (blocks icon in Screenshot 1 hero)
+2. Fast-path onboarding flow is shipped (blocks populated Today-view data)
+3. Seeded demo data exists for "Week 1 vs Week 12" trend lines (Screenshot 6)
+4. Spanish locale strings are translated and audited (Screenshot 5)
+
+---
+
 Created: 2026-04-05
-Last Reviewed: 2026-04-05
-Last Edited: 2026-04-05
-Review Notes: Consolidated from APP_STORE_LISTING.md and app-store-metadata.md. Archive version merged; duplicate metadata eliminated. Single authoritative source ready for App Store Connect.
+Last Reviewed: 2026-04-19
+Last Edited: 2026-04-19
+Review Notes: 2026-04-19 — honesty pass. Removed "100% FREE" block (contradicted the paywall). Replaced with factual pricing sourced from src/lib/premium/pricing.ts ($9.99/mo · $49.99/yr · 30-day trial, cancel-in-one-tap). Sharpened hero opener. Promotional text aligned to new pricing and trial length. Screenshot capture deferred to follow-on PR.
