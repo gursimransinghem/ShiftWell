@@ -1,84 +1,73 @@
 # Active Tasks
 
-## P0: Adaptive Brain — Wire-up (NEXT SESSION)
-- [x] Wire LightProtocolStrip into Today screen for transition-day states (component built at `src/components/circadian/LightProtocolStrip.tsx`, not yet used in `index.tsx`)
-- [ ] Revert `app/index.tsx` onboarding bypass before production (currently seeds mock data)
-- [ ] Verify AdaptiveInsightCard renders correctly in simulator (seed a mock AdaptiveContext with a Day→Night transition 3 days out)
+> Refreshed 2026-04-19. Reflects remote-visible branch state only — items from the local working tree (audit artifacts, website/, shiftwell-dashboard/) are tracked separately under "Local → Remote sync" below.
 
-## P1: Live Device QA (needs iPhone/TestFlight)
-- [ ] GradientMeshBackground animation (3 orbs) — verify on live device
-- [ ] Wind-down state — time-dependent, test at ~9pm
-- [ ] Real HealthKit data flow — getSleepHistory(), computeRecoveryScore() with Apple Watch data
-- [ ] Score store wiring — HealthKit → real adherence scores
-- [ ] SET-03: DND/Sleep Focus mode — needs entitlements + live device
+## Recently Merged (context)
 
-## P2: External Blockers
-- [ ] LLC filing — decide: Circadian Labs vs Vigil Health
-- [ ] Apple Developer enrollment (requires LLC + D-U-N-S)
-- [ ] D-U-N-S number (~5 business days after LLC)
+- **PR #7** — Onboarding v2 (6 routed screens). Verify: `app/(onboarding)/_layout.tsx`.
+- **PR #6** — PostHog analytics.
+- **PR #4** — Sentry error monitoring.
+- **PR #5** — API-key migration / secrets hygiene.
+- **PR #3** — Themed component set.
+- **PR #2** — Supabase migrations 002-006 (updated_at, delete_user RPC, audit logs, RLS delete policies, perf indexes).
+- **This branch** — pricing SoT, paywall/App-Store honesty, WCAG fixes, brand principles, logo tournament.
 
-## P3: Adaptive Brain v2 (Post-Launch)
-- [ ] Add HRV RMSSD to HealthKit authorization (`heartRateVariabilitySDNN`)
-- [ ] Integrate HRV into recovery formula (currently sleep-stage only)
-- [ ] Shift-type baseline separation (post-night vs post-day HRV/RHR baselines)
-- [ ] Research pipeline cron — periodic agent → new studies → `docs/science/`
-- [ ] 30-day learning phase completion announcement UI
+## P0 — Unblockers for TestFlight
 
-## P4: App Store Prep
-- [ ] Sound design — 3 audio files for notification/confirmation stubs
-- [ ] App Store listing copy finalize
-- [ ] App icon finalization
-- [ ] Privacy policy + health disclaimers review
-- [ ] TestFlight build via EAS
+- [ ] **Local → Remote sync.** User has 2026-04-18 audit artifacts, `website/`, and sibling `shiftwell-dashboard/` only in local working tree. Push relevant pieces to feature branches (audits → `docs/audits/2026-04-18/`; website → decide target: `website/` or merge into `LANDING_PAGE.html`).
+- [ ] **npm audit** — 6 vulnerabilities reported last session. Triage: `npm audit --omit=dev` → upgrade or document each.
+- [ ] **Tagline lock.** Confirm App Store subtitle: "Circadian Sleep Plans for Shift Workers" (28 chars). Surfaces into marketing site + Store listing + first-run.
 
-## Completed (2026-04-06 Session)
+## P1 — Live Device QA (needs iPhone or TestFlight build)
 
-### Visual QA — V6 UI (VERIFIED)
-- [x] Recovery Day state: seed mock data (yesterday shift), clear stale AsyncStorage
-- [x] Hero Score ring (78, sparkline, trend) — fixed premium gate + seeded score store
-- [x] Header "Good morning / Monday, April 6" — added getGreeting() + dateHeadline to Today screen
-- [x] FloatingTabBar: 3 tabs only (Today/Schedule/Profile), gold active icon — fixed route filter
-- [x] AsyncStorage mock (in-memory) — zero error toasts
-- [x] RevenueCat mock (no-op) — no error toast
-- [x] Schedule screen: week strip + calendar + FAB ✅
-- [x] Profile screen: avatar + 78 avg score + stats + preferences ✅
-- [x] Kitchen Closes cell — H:MM countdown (amber), TRE fallback, 4-cell row ✅
-- [x] Timeline cards: countdown-to-start on right, H:MM format, TODAY'S PLAN label ✅
-- [x] Empty state — rocket CTA, 3-tab bar ✅
-- [x] Onboarding screens — welcome screen verified ✅
+- [ ] `GradientMeshBackground` 3-orb animation — verify on real device (simulator shows stutter).
+- [ ] Wind-down state — time-dependent, test ~9pm local.
+- [ ] Real HealthKit data flow — `getSleepHistory()`, `computeRecoveryScore()` with Apple Watch data.
+- [ ] Score store wiring — HealthKit → real adherence scores (currently mock-backed).
+- [ ] SET-03 DND / Sleep Focus mode — needs entitlements + live device.
+- [ ] Paywall on real device — trial countdown displays, one-tap cancel path works from iOS Settings.
 
-### Phase 6 — Features 1–6
-- [x] SleepDebtCard — debt bar meter
-- [x] NapCalculatorModal — 5-option nap picker with science
-- [x] ScienceInsightCard — daily rotating cited tips
-- [x] On-shift polish — mid-shift nap window (40%), caffeine cutoff (50%), H:MM format
-- [x] ScoreBreakdownCard — bedtime/wake/caffeine/nap factor breakdown
-- [x] PatternAlertCard — night-soon / consecutive / mixed-week alerts
+## P1 — Premium Revamp Follow-On PRs (each its own plan)
 
-### Paywall + Welcome Marketing
-- [x] "3%" stat block on welcome screen
-- [x] "Eat with your clock" feature card
-- [x] Paywall "THE RESEARCH" section (3 science stat cards)
+These are **intentionally deferred** from the current PR to keep review surface small:
 
-### Adaptive Brain (COMPLETE — 354 tests passing)
-- [x] Design spec (`docs/superpowers/specs/2026-04-06-adaptive-brain-design.md`)
-- [x] Sleep debt engine (14-night ledger, bank, Belenky tiers)
-- [x] Circadian protocol engine (5 transition types)
-- [x] Recovery calculator (Apple Watch composite, −43min correction)
-- [x] Context builder (assembles 4-factor AdaptiveContext)
-- [x] Change logger (diffs plans, >15min threshold)
-- [x] Extended generateSleepPlan() with adaptiveContext param
-- [x] Extended computeSleepBlocks() with bedtimeOffsetMinutes
-- [x] plan-store: snapshot + undo + setAdaptiveContext
-- [x] useAdaptivePlan hook
-- [x] AdaptiveInsightCard (learning + autopilot modes)
-- [x] LightProtocolArc (animated 24h timeline)
-- [x] LightProtocolStrip (compact today strip — built, needs wiring)
-- [x] SleepDebtCard dual meter (bank bar)
-- [x] Pre-Shift Brief tab (brief.tsx, 5-part coaching)
-- [x] FloatingTabBar Brief tab (conditional, ≤7 days)
-- [x] Research pipeline (docs/research/ + PostToolUse auto-file hook)
+- [ ] **Logo tournament finalize** — once 5 lanes complete in this PR, run the scoring rubric against `docs/design/BRAND-PRINCIPLES.md`, pick winner, promote to `assets/images/icon.png` at all required sizes.
+- [ ] **Website revamp** — target file decision (new `website/index.html` from local OR existing `LANDING_PAGE.html`). Apply brand principles. Kill any placeholder testimonials.
+- [ ] **Fast-path onboarding** — skip-to-shift-entry for returning-skeptic audience; 2-screen path vs current 6.
+- [ ] **Today-tier refactor** — restructure `app/(tabs)/index.tsx` (1,033 lines) into composed sections by tier (free vs pro).
+- [ ] **Screenshot capture (6)** — blocked on logo winner + fast-path + seeded demo data.
+
+## P2 — External Blockers
+
+- [ ] LLC filing — decide: Circadian Labs vs Vigil Health.
+- [ ] Apple Developer enrollment (requires LLC + D-U-N-S).
+- [ ] D-U-N-S number (~5 business days after LLC).
+- [ ] ACLS/BLS/PALS renewal — expires 2026-05-31 (41 days).
+
+## P3 — Adaptive Brain v2 (Post-Launch)
+
+- [ ] Add HRV RMSSD to HealthKit auth (`heartRateVariabilitySDNN`).
+- [ ] Integrate HRV into recovery formula (currently sleep-stage only).
+- [ ] Shift-type baseline separation (post-night vs post-day HRV/RHR baselines).
+- [ ] Research pipeline cron — periodic agent → new studies → `docs/science/`.
+- [ ] 30-day learning-phase completion announcement UI.
+
+## P4 — App Store Prep
+
+- [ ] Sound design — 3 audio files for notification/confirmation stubs.
+- [ ] App icon finalization (depends on logo tournament winner).
+- [ ] Privacy policy + health disclaimers — review against `src/content/legal.ts` inline summaries.
+- [ ] TestFlight build via EAS.
+- [ ] App Store listing — final proofread (already aligned to pricing SoT in this PR).
+
+## Post-Launch Backlog
+
+- [ ] Light mode — opt-in, not default.
+- [ ] Icon set consolidation — audit duplicate Ionicons usage across Today cards.
+- [ ] Spanish localization audit — strings exist but not reviewed by native speaker.
 
 ---
-Last Reviewed: 2026-04-06
-Last Edited: 2026-04-06
+
+Last Reviewed: 2026-04-19
+Last Edited: 2026-04-19
+Review Notes: Full rewrite. Dropped verified-complete items (LightProtocolStrip wired; app/index.tsx has no bypass to revert). Added pricing SoT reconciliation, logo tournament, and remote-sync items surfaced by this PR's audit. Recently-merged section added for onboarding context.
