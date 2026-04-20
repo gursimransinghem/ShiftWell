@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ShiftWell Tagline Lockup — Light mode (Sunrise / Twilight themes)
+  Line 1:  Work. Life. Sleep. Rebalanced.   (sentinel serif, "Rebalanced" italic purple)
+  Divider: Fulcrum scale — thin rule + center pivot + balance weights (purple on light)
+  Line 2:  ShiftWell                         (sans wordmark, dark ink)
+
+  Canonical palette (light mode):
+    Background:       warm cream / lavender gradient (handled by surface, not this SVG)
+    Text primary:     #1F2133 (ink)
+    Accent purple:    #7B61FF  — used in place of gold because gold fails contrast on warm light BGs
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" role="img" aria-label="Work. Life. Sleep. Rebalanced by ShiftWell.">
+  <title>ShiftWell tagline lockup — light</title>
+
+  <!-- Line 1: Headline -->
+  <g font-family="Inter, Georgia, 'Times New Roman', serif" font-weight="700" fill="#1F2133" text-anchor="middle">
+    <text x="360" y="60" font-size="34" letter-spacing="0.5">
+      Work. Life. Sleep. <tspan font-style="italic" font-weight="600" fill="#7B61FF">Rebalanced.</tspan>
+    </text>
+  </g>
+
+  <!-- Fulcrum divider -->
+  <g stroke="#7B61FF" stroke-width="1.25" fill="#7B61FF">
+    <line x1="120" y1="100" x2="600" y2="100" stroke-linecap="round"/>
+    <circle cx="120" cy="100" r="3.5"/>
+    <circle cx="600" cy="100" r="3.5"/>
+    <path d="M 354 100 L 360 110 L 366 100 Z" fill="#7B61FF" stroke="none"/>
+    <circle cx="360" cy="99.5" r="1.5" fill="#FFFFFF" stroke="#7B61FF" stroke-width="1"/>
+  </g>
+
+  <!-- Line 2: Wordmark -->
+  <g font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="600" fill="#1F2133" text-anchor="middle">
+    <text x="360" y="155" font-size="28" letter-spacing="2.4">
+      ShiftWell
+    </text>
+  </g>
+</svg>
