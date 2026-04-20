@@ -144,6 +144,8 @@ export const sectionLabel: TextStyle = {
   textTransform: 'uppercase' as const,
 };
 
+// Deprecated: 9px/8px fail WCAG AA for rendered body text. Kept only for
+// reference/decorative tokens — do not use for copy a user must read.
 export const timestamp: TextStyle = {
   fontSize: 9,
   fontWeight: '500',

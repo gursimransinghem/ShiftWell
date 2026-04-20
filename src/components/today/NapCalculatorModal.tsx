@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   badgeText: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: '700',
     color: '#7B61FF',
     letterSpacing: 0.5,
