@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Squircle clip path for App Store safe zone -->
+    <clipPath id="squircle-clip">
+      <path d="M512 32
+        C 720 32, 992 304, 992 512
+        C 992 720, 720 992, 512 992
+        C 304 992, 32 720, 32 512
+        C 32 304, 304 32, 512 32 Z"/>
+    </clipPath>
+    <!-- Subtle inner glow on the dot -->
+    <radialGradient id="dot-glow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#E8C86A" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="1"/>
+    </radialGradient>
+    <!-- Very faint halo behind dot for depth -->
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#C8A84B" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#080B14"/>
+
+  <!-- ======================================================
+       ANCHOR POINT GLYPH
+       Concept: a horizontal datum line — the anchor sleep
+       window — with a single weighted dot fixed precisely
+       upon it, flanked by two short tick marks that frame
+       the fixed point. The ticks give it ruler-like
+       authority without becoming decorative.
+       ====================================================== -->
+
+  <!-- Halo behind dot position (very subtle, depth only) -->
+  <ellipse cx="512" cy="512" rx="130" ry="130" fill="url(#halo)"/>
+
+  <!-- Main horizontal datum line
+       Bold, cream — the full span of the anchor sleep window.
+       Ends taper slightly (round caps) to feel precise, not blunt. -->
+  <line
+    x1="168" y1="512"
+    x2="856" y2="512"
+    stroke="#F5F2E8"
+    stroke-width="28"
+    stroke-linecap="round"/>
+
+  <!-- Left tick mark — marks the start of the anchor window -->
+  <line
+    x1="288" y1="458"
+    x2="288" y2="566"
+    stroke="#F5F2E8"
+    stroke-width="20"
+    stroke-linecap="round"/>
+
+  <!-- Right tick mark — marks the end of the anchor window -->
+  <line
+    x1="736" y1="458"
+    x2="736" y2="566"
+    stroke="#F5F2E8"
+    stroke-width="20"
+    stroke-linecap="round"/>
+
+  <!-- Anchor dot — the fixed reference point.
+       Warm gold. Sits precisely ON the datum line.
+       Radius sized so it visually dominates the line
+       without consuming the composition. -->
+  <circle
+    cx="512" cy="512" r="72"
+    fill="url(#dot-glow)"/>
+
+  <!-- Inner detail ring on dot — ultra-subtle, gives
+       the dot a machined/calibrated feel rather than
+       a plain circle. Echoes Oura's ring confidence. -->
+  <circle
+    cx="512" cy="512" r="46"
+    fill="none"
+    stroke="#080B14"
+    stroke-width="7"
+    stroke-opacity="0.35"/>
+
+</svg>

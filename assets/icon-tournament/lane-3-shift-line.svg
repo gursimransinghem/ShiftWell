@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+
+  <!-- Background: night-sky #080B14 per brand palette -->
+  <rect width="1024" height="1024" fill="#080B14"/>
+
+  <!--
+    ==========================================================
+    LANE 3 — "SHIFT LINE"
+    Sleep architecture waveform with one deliberate discontinuity.
+
+    CANVAS MATH
+    Total canvas:      1024 × 1024
+    Squircle-safe:     102 ≤ x ≤ 922,  102 ≤ y ≤ 922  (820×820 interior)
+    Working safe margin (extra 40px): 142 ≤ x ≤ 882
+
+    WAVE DESIGN
+    The line traces three ultradian sleep cycles (~90 min each) as
+    broad sinusoidal arches — smooth, biological, breathing. NOT spiky.
+    Each arch = one descent into NREM (trough) + ascent back to REM (peak).
+
+    Vertical band:  peaks at y=360 (near-wake / REM)
+                    baseline at y=512 (entry / neutral)
+                    troughs at y=672 (deep slow-wave sleep)
+
+    Three arches span x=142 → x=640, then the line decelerates
+    into the discontinuity zone (x=640→664, exit y=580).
+
+    GAP (discontinuity): x=664 → x=736  (72px silence)
+    The forced awakening. Nothing is drawn here.
+
+    Gold dot: x=700, y=512 (center of gap, vertically centered)
+    Radius 38px — large enough to survive 20px icon rendering.
+
+    POST-SHIFT: x=736 → x=882 — two compressed arches at reduced
+    amplitude and 72% opacity, suggesting disrupted / fragmented sleep.
+    Smaller arches read as "less restful" even at tiny sizes.
+    ==========================================================
+  -->
+
+  <!-- PRE-SHIFT WAVE — three full ultradian arches, off-white -->
+  <path
+    d="
+      M 142,512
+
+      C 172,512  188,672  228,672
+      C 268,672  284,360  324,360
+      C 364,360  380,672  420,672
+      C 460,672  476,360  516,360
+      C 556,360  572,672  612,672
+      C 634,672  648,616  664,580
+    "
+    fill="none"
+    stroke="#F5F2E8"
+    stroke-width="20"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!--
+    GOLD DOT — the "shift" moment
+    Sits in the gap between pre- and post-shift waves.
+    Centered in the canvas's golden-third zone, vertically at y=512.
+    At 20px icon size this renders as a 1–2px bright accent — the
+    single most legible element at extreme small sizes.
+  -->
+  <circle
+    cx="700"
+    cy="512"
+    r="38"
+    fill="#C8A84B"
+  />
+
+  <!-- POST-SHIFT WAVE — two compressed, reduced-amplitude arches -->
+  <!-- Lower opacity signals disrupted, less-restorative sleep -->
+  <path
+    d="
+      M 736,450
+
+      C 758,450  774,608  806,608
+      C 838,608  852,400  882,400
+    "
+    fill="none"
+    stroke="#F5F2E8"
+    stroke-width="20"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.68"
+  />
+
+  <!--
+    ENTRY DOT — marks the left terminus of the waveform
+    Signals a definite start (the beginning of a sleep session).
+    Smaller than the gold dot — supporting role only.
+  -->
+  <circle
+    cx="142"
+    cy="512"
+    r="10"
+    fill="#F5F2E8"
+    opacity="0.72"
+  />
+
+</svg>
