@@ -11,7 +11,7 @@ workflows: [all]
 ## What This Is
 Expo/React Native circadian sleep optimization app for shift workers.
 Phase 1-3 complete. 1,059 tests passing (71 suites). Pre-TestFlight stage.
-Monetization: Freemium + $29.99/yr annual sub with 7-day premium trial.
+Monetization: freemium + subscription. Canonical pricing and trial length live in `src/lib/premium/pricing.ts` — do not duplicate values elsewhere. (Current: $9.99/mo · $49.99/yr · 30-day trial.)
 
 ## The Problem
 700 million shift workers globally. 32% of US healthcare workers report short sleep. Shift Work Sleep Disorder affects 10-38% of night shift workers. No existing app combines calendar-aware scheduling with science-backed circadian optimization.
