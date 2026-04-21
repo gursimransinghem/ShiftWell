@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — ShiftWell</title>
+    <meta name="description" content="ShiftWell privacy policy. What data we collect, how it's used, and your rights.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://shiftwell.app/privacy.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #080B14;
+            --bg-surface: #131726;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --purple: #7B61FF;
+            --gold: #C8A84B;
+            --border-default: #1F2937;
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        .back-link {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 48px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--text-primary); }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-top: 56px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        p, li {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        ul { padding-left: 24px; }
+        li { margin-bottom: 8px; }
+
+        strong { color: var(--text-primary); font-weight: 600; }
+
+        .meta {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 32px;
+        }
+
+        .intro {
+            font-size: 18px;
+            color: var(--text-secondary);
+            padding: 24px;
+            background: var(--bg-surface);
+            border-left: 3px solid var(--purple);
+            border-radius: 6px;
+            margin-bottom: 48px;
+        }
+
+        a { color: var(--purple); text-decoration: underline; text-underline-offset: 3px; }
+        a:hover { color: var(--gold); }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-default);
+            margin: 64px 0 32px;
+        }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-default);
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to ShiftWell</a>
+
+        <h1>Privacy Policy</h1>
+        <p class="meta">Effective 2026-04-20 · Last reviewed 2026-04-20</p>
+
+        <div class="intro">
+            We built ShiftWell with privacy as a core principle. Most of your data stays on your device and is never transmitted anywhere. The small amount that does leave your device — anonymized analytics and crash reports — exists solely to make the product less broken and is documented explicitly below.
+        </div>
+
+        <h2>Who we are</h2>
+        <p>ShiftWell is developed by <strong>Dr. Gursimran Singh, DO</strong>, an Emergency Medicine physician at HCA Florida Trinity Hospital. Contact: <a href="mailto:hello@shiftwell.app">hello@shiftwell.app</a>.</p>
+
+        <h2>What stays on your device</h2>
+        <p>The following information lives only on your phone. We cannot see it, access it, or retrieve it:</p>
+        <ul>
+            <li><strong>Shift schedule</strong> — your work shift dates and times, including imported .ics calendars</li>
+            <li><strong>Chronotype quiz answers</strong> — your responses to the in-app chronotype assessment</li>
+            <li><strong>Sleep preferences</strong> — preferred sleep/wake times, nap preferences, caffeine sensitivity, commute duration</li>
+            <li><strong>Household profile</strong> — general information you provide (family size, presence of children or pets) used to tailor recommendations</li>
+            <li><strong>Adaptive brain context</strong> — the app's local learning about your patterns (sleep debt ledger, recovery scores)</li>
+            <li><strong>HealthKit data (iOS only, with your permission)</strong> — sleep history, heart rate, and heart rate variability read from Apple Health. This data stays on-device and is used only to compute recommendations locally. We never transmit HealthKit data off your device.</li>
+        </ul>
+        <p>This data is stored using on-device storage (<code>@react-native-async-storage</code> and iOS HealthKit) and is removed when you delete the app.</p>
+
+        <h2>What leaves your device</h2>
+        <p>Two narrow categories of information are transmitted, both anonymized and both strictly for product improvement:</p>
+
+        <h3>Anonymized product analytics (PostHog)</h3>
+        <p>We record which features you use — which screens you open, which actions you take, which settings you change. This data is anonymized (no name, no email, no shift schedule, no health data) and lets us see which features actually help people and which ones nobody uses. Without this we would be building blind. You can opt out at any time in Settings → Privacy → Analytics.</p>
+        <p>Analytics are processed by PostHog. We do not sell, share, or use this data for advertising.</p>
+
+        <h3>Crash reports (Sentry)</h3>
+        <p>When the app crashes, we receive an anonymized error report containing the stack trace, the device model, and the app version. This is how we fix bugs. Crash reports do not include your personal data, shift schedule, or health information. You can opt out in Settings → Privacy → Crash Reporting.</p>
+
+        <h2>What we never do</h2>
+        <ul>
+            <li>We do not sell your data to third parties</li>
+            <li>We do not share your data with advertisers</li>
+            <li>We do not require an account — no email, no password, no identity</li>
+            <li>We do not use ad tracking, ad SDKs, or behavioral advertising</li>
+            <li>We do not combine your data with any external dataset or identity resolution service</li>
+            <li>We do not retain data after you delete the app (on-device data) or after you opt out (transmitted data)</li>
+        </ul>
+
+        <h2>Calendar import and export</h2>
+        <p>ShiftWell can import .ics calendar files from your device to load your shift schedule, and export .ics files containing your optimized sleep plan. These operations happen entirely on your device using standard iOS file-handling APIs. We do not access, read, or store any files beyond what you explicitly select within the app.</p>
+
+        <h2>Your rights</h2>
+        <p>Because we collect almost no personal data, traditional data-subject rights (access, deletion, portability) apply narrowly:</p>
+        <ul>
+            <li><strong>On-device data:</strong> You can view, export, and delete this directly from within the app at any time. Uninstalling the app deletes all on-device data irrevocably.</li>
+            <li><strong>Transmitted analytics/crash data:</strong> You can opt out at any time from Settings. To request deletion of historical analytics events, email <a href="mailto:privacy@shiftwell.app">privacy@shiftwell.app</a> with your device's anonymous installation ID (found in Settings → About).</li>
+        </ul>
+
+        <h2>Children</h2>
+        <p>ShiftWell is not directed to children under 13. We do not knowingly collect data from children under 13. If you believe a child has used the app, contact us at <a href="mailto:privacy@shiftwell.app">privacy@shiftwell.app</a>.</p>
+
+        <h2>Changes to this policy</h2>
+        <p>We will post any updates to this page and update the "Last reviewed" date at the top. For material changes we will notify users in-app before the change takes effect.</p>
+
+        <h2>Contact</h2>
+        <p>Questions or concerns: <a href="mailto:privacy@shiftwell.app">privacy@shiftwell.app</a></p>
+
+        <footer>
+            <p>&copy; 2026 ShiftWell · Built by Dr. Gursimran Singh, DO · HCA Florida Trinity Hospital · <a href="/">shiftwell.app</a> · <a href="/disclaimers.html">Health Disclaimers</a></p>
+        </footer>
+    </div>
+</body>
+</html>

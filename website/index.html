@@ -462,6 +462,20 @@
             font-size: 13px;
             color: var(--text-tertiary);
             margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .hero-stat-cite {
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 0.2px;
+        }
+
+        .hero-stat-value {
+            font-feature-settings: "tnum";
         }
 
         .hero-divider {
@@ -1009,68 +1023,100 @@
         .founder-quote::after { content: '\201D'; }
 
         /* ============================================
-           Social Proof / Testimonials
+           Waitlist (replaces fabricated testimonials —
+           honesty over social proof we don't have yet)
            ============================================ */
-        .social-proof {
+        .waitlist {
             background: var(--bg-surface);
         }
 
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-2xl);
+        .waitlist-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .testimonial {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-default);
-            border-radius: var(--radius-xl);
-            padding: var(--space-3xl);
-        }
-
-        .testimonial-stars {
-            color: var(--gold);
-            font-size: 14px;
-            letter-spacing: 2px;
-            margin-bottom: var(--space-lg);
-        }
-
-        .testimonial-text {
-            font-size: 15px;
-            color: var(--text-secondary);
-            line-height: 1.65;
+        .waitlist-badge {
             margin-bottom: var(--space-2xl);
         }
 
-        .testimonial-author {
+        .waitlist-text {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin: var(--space-xl) 0 var(--space-4xl);
+        }
+
+        .waitlist-form {
+            max-width: 520px;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .waitlist-fields {
             display: flex;
-            align-items: center;
             gap: var(--space-md);
         }
 
-        .testimonial-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
+        .waitlist-input {
+            flex: 1;
+            padding: var(--space-lg) var(--space-xl);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-full);
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s ease;
         }
 
-        .testimonial-avatar-1 { background: rgba(123, 97, 255, 0.15); }
-        .testimonial-avatar-2 { background: rgba(52, 211, 153, 0.15); }
-        .testimonial-avatar-3 { background: rgba(200, 168, 75, 0.15); }
+        .waitlist-input::placeholder { color: var(--text-dim); }
+        .waitlist-input:focus { border-color: var(--purple); }
 
-        .testimonial-name {
+        .waitlist-btn {
+            padding: var(--space-lg) var(--space-2xl);
+            background: var(--purple);
+            border: none;
+            border-radius: var(--radius-full);
             font-family: var(--font-heading);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .testimonial-role {
-            font-size: 12px;
-            color: var(--text-tertiary);
+        .waitlist-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--purple-glow);
+        }
+
+        .waitlist-success {
+            padding: var(--space-xl);
+            background: rgba(52, 211, 153, 0.08);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+            border-radius: var(--radius-lg);
+        }
+
+        .waitlist-success-text {
+            color: var(--success);
+            font-family: var(--font-heading);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .waitlist-fine {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-top: var(--space-lg);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px; height: 1px;
+            padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0);
+            white-space: nowrap; border: 0;
         }
 
         /* ============================================
@@ -1414,7 +1460,7 @@
             .steps::before { display: none; }
 
             .feature-grid { grid-template-columns: 1fr; }
-            .testimonial-grid { grid-template-columns: 1fr; }
+            .waitlist-fields { flex-direction: column; }
             .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
 
             .footer-grid {
@@ -1507,7 +1553,7 @@
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#science" class="nav-link">Science</a>
                 <a href="#pricing" class="nav-link">Pricing</a>
-                <a href="#download" class="nav-cta">Download Free</a>
+                <a href="#waitlist" class="nav-cta">Join Waitlist</a>
             </div>
             <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
         </div>
@@ -1525,38 +1571,38 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-overline">
-                    <span class="badge"><span class="badge-dot"></span> Built by an ER physician</span>
+                    <span class="badge"><span class="badge-dot"></span> Built by Dr. Gursimran Singh, DO · ED physician</span>
                 </div>
 
-                <h1>Sleep autopilot<br>for <span class="text-gradient">shift workers</span></h1>
+                <h1>Stop guessing<br>when to <span class="text-gradient">sleep.</span></h1>
 
                 <p class="hero-subtitle">
-                    Import your shifts. Get a personalized sleep plan backed by circadian science.
-                    Export to your calendar. Finally rest like your schedule allows.
+                    Work. Life. Sleep. <em>Rebalanced.</em> ShiftWell imports your actual shift schedule
+                    and builds a science-backed sleep plan around it — automated, exported to your calendar.
                 </p>
 
                 <div class="hero-actions">
-                    <a href="#download" class="btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-                        Download for iOS
+                    <a href="#waitlist" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        Join the waitlist
                     </a>
                     <a href="#how-it-works" class="btn-secondary">See how it works</a>
                 </div>
 
                 <div class="hero-proof">
                     <div class="hero-stat">
-                        <span class="hero-stat-value">700M</span>
-                        <span class="hero-stat-label">Shift workers globally</span>
+                        <span class="hero-stat-value">1 in 3</span>
+                        <span class="hero-stat-label">night shift workers develop Shift Work Sleep Disorder<br><em class="hero-stat-cite">— Drake et al. 2004</em></span>
                     </div>
                     <div class="hero-divider"></div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value">1,059</span>
-                        <span class="hero-stat-label">Automated tests passing</span>
+                        <span class="hero-stat-value">23%</span>
+                        <span class="hero-stat-label">of hospital sentinel events trace to nurse fatigue<br><em class="hero-stat-cite">— Joint Commission</em></span>
                     </div>
                     <div class="hero-divider"></div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value">15+</span>
-                        <span class="hero-stat-label">Peer-reviewed citations</span>
+                        <span class="hero-stat-value">$136.4B</span>
+                        <span class="hero-stat-label">annual employer cost of shift-worker fatigue<br><em class="hero-stat-cite">— Rosekind 2010</em></span>
                     </div>
                 </div>
             </div>
@@ -1764,59 +1810,38 @@
                 <div class="founder-card fade-in fade-in-delay-2">
                     <div class="founder-avatar">🩺</div>
                     <div class="founder-name">Dr. Gursimran Singh, DO</div>
-                    <div class="founder-title">Emergency Medicine Physician · Founder</div>
+                    <div class="founder-title">Emergency Medicine · HCA Florida Trinity Hospital<br>Founder, ShiftWell</div>
                     <p class="founder-quote">
-                        I built ShiftWell because I was the problem. After years of night shifts, I realized no app understood my schedule. They all assumed I slept at night. So I built the one I needed — grounded in the same evidence-based medicine I practice in the ER.
+                        I built ShiftWell because I was the problem. After years of night shifts, I realized no app understood my schedule — they all assumed I slept at night. So I built the one I needed: grounded in the same evidence-based medicine I practice in the ER. I read the papers. I live the problem.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Social Proof -->
-    <section class="social-proof section" id="testimonials">
+    <!-- Waitlist -->
+    <section class="waitlist section" id="waitlist">
         <div class="container">
-            <div class="section-header fade-in">
-                <p class="section-overline">Early Feedback</p>
-                <h2>What shift workers <span class="text-gradient">are saying</span></h2>
-            </div>
-
-            <div class="testimonial-grid">
-                <div class="testimonial fade-in">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"I've tried every sleep app. They all assume you sleep at night. ShiftWell is the first one that actually understands rotating schedules. The caffeine cutoff alerts alone changed my sleep quality."</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar testimonial-avatar-1">👩‍⚕️</div>
-                        <div>
-                            <div class="testimonial-name">Sarah K.</div>
-                            <div class="testimonial-role">ICU Nurse · 12-hour nights</div>
-                        </div>
-                    </div>
+            <div class="waitlist-inner fade-in">
+                <div class="waitlist-badge">
+                    <span class="badge"><span class="badge-dot"></span> Beta opening 2026 Q2</span>
                 </div>
-
-                <div class="testimonial fade-in fade-in-delay-1">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"The transition days were always my worst. ShiftWell's light protocol helped me shift my clock 2 hours faster than I used to. I actually feel human on my first day back."</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar testimonial-avatar-2">👨‍🚒</div>
-                        <div>
-                            <div class="testimonial-name">Marcus T.</div>
-                            <div class="testimonial-role">Firefighter/Paramedic · 48/96 rotation</div>
-                        </div>
+                <h2>Founding-member access <span class="text-gradient">for shift workers.</span></h2>
+                <p class="waitlist-text">
+                    We don't have testimonials yet because the beta hasn't shipped. We'd rather show you nothing than fabricate strangers.
+                    Waitlist members get early access, founding-member pricing, and a direct line to the physician who's building this.
+                </p>
+                <form class="waitlist-form" onsubmit="event.preventDefault(); this.querySelector('.waitlist-success').style.display='block'; this.querySelector('.waitlist-fields').style.display='none';">
+                    <div class="waitlist-fields">
+                        <label class="sr-only" for="wait-email">Email address</label>
+                        <input id="wait-email" type="email" name="email" required autocomplete="email" placeholder="you@hospital.com" class="waitlist-input">
+                        <button type="submit" class="waitlist-btn">Join the waitlist</button>
                     </div>
-                </div>
-
-                <div class="testimonial fade-in fade-in-delay-2">
-                    <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Built by a doctor who actually works nights? That sold me. The meal timing feature was something I never even considered. My GI issues have noticeably improved."</p>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar testimonial-avatar-3">👮</div>
-                        <div>
-                            <div class="testimonial-name">Jen P.</div>
-                            <div class="testimonial-role">Police Officer · Rotating days/nights</div>
-                        </div>
+                    <div class="waitlist-success" style="display:none;">
+                        <p class="waitlist-success-text">✓ You're on the list. We'll email you when the beta opens.</p>
                     </div>
-                </div>
+                </form>
+                <p class="waitlist-fine">No spam. No marketing blasts. One email when the beta opens. Unsubscribe with one click.</p>
             </div>
         </div>
     </section>
@@ -1847,7 +1872,7 @@
                         <li>Calendar export</li>
                         <li>Chronotype assessment</li>
                     </ul>
-                    <a href="#download" class="pricing-btn pricing-btn-secondary">Get Started Free</a>
+                    <a href="#waitlist" class="pricing-btn pricing-btn-secondary">Join the Waitlist</a>
                 </div>
 
                 <div class="pricing-card featured fade-in fade-in-delay-1">
@@ -1858,7 +1883,7 @@
                         <span class="pricing-amount">$29.99</span>
                         <span class="pricing-period">/year</span>
                     </div>
-                    <div class="pricing-savings">7-day free trial · Cancel anytime</div>
+                    <div class="pricing-savings">7-day free trial · Cancel anytime in one tap from Settings</div>
                     <ul class="pricing-features">
                         <li>Everything in Free</li>
                         <li>Light exposure protocols</li>
@@ -1869,7 +1894,7 @@
                         <li>Weekly briefings</li>
                         <li>HealthKit integration</li>
                     </ul>
-                    <a href="#download" class="pricing-btn pricing-btn-primary">Start 7-Day Free Trial</a>
+                    <a href="#waitlist" class="pricing-btn pricing-btn-primary">Join the Waitlist</a>
                 </div>
 
                 <div class="pricing-card fade-in fade-in-delay-2">
@@ -1890,7 +1915,7 @@
                         <li>Weekly briefings</li>
                         <li>HealthKit integration</li>
                     </ul>
-                    <a href="#download" class="pricing-btn pricing-btn-secondary">Start 7-Day Free Trial</a>
+                    <a href="#waitlist" class="pricing-btn pricing-btn-secondary">Join the Waitlist</a>
                 </div>
             </div>
         </div>
@@ -1902,15 +1927,12 @@
         <div class="container">
             <div class="cta-inner fade-in">
                 <h2>Your schedule is complicated.<br><span class="text-gradient">Your sleep doesn't have to be.</span></h2>
-                <p>Join thousands of shift workers who stopped guessing and started sleeping. Free to start. Science inside.</p>
+                <p>Beta opens 2026 Q2. Waitlist members get early access, founding-member pricing, and a direct line to the physician building this.</p>
 
                 <div class="cta-buttons">
-                    <a href="https://apps.apple.com/app/shiftwell" class="app-store-btn" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                        <div>
-                            <div class="app-store-text-small">Download on the</div>
-                            <div class="app-store-text-large">App Store</div>
-                        </div>
+                    <a href="#waitlist" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        Join the waitlist
                     </a>
                 </div>
             </div>
@@ -1941,7 +1963,7 @@
                         <a href="#features" class="footer-link">Features</a>
                         <a href="#pricing" class="footer-link">Pricing</a>
                         <a href="#science" class="footer-link">Science</a>
-                        <a href="#download" class="footer-link">Download</a>
+                        <a href="#waitlist" class="footer-link">Waitlist</a>
                     </div>
                 </div>
 
@@ -1967,11 +1989,11 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 ShiftWell. All rights reserved.</p>
+                <p>&copy; 2026 ShiftWell · Built by Dr. Gursimran Singh, DO · HCA Florida Trinity Hospital</p>
                 <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Health Disclaimers</a>
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/disclaimers.html">Health Disclaimers</a>
+                    <a href="mailto:hello@shiftwell.app">Contact</a>
                 </div>
             </div>
         </div>
