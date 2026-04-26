@@ -5,6 +5,72 @@
 
 ---
 
+## 2026-04-26 — Session 10: Phase 3 Features — Sleep Focus, Tracking, Debrief, Live Activities
+
+### Completed
+- **WritePlannedSleep (iOS Sleep Focus)** — `src/lib/healthkit/sleep-focus.ts`
+  - Writes upcoming main-sleep and nap blocks to HealthKit within 36h horizon
+  - Triggers iOS Sleep Focus mode (silences notifications, dims lock screen)
+  - Called automatically in `plan-store.ts` after every `regeneratePlan()` when HealthKit is connected
+- **Caffeine tracking screen** — `app/caffeine.tsx`
+  - Quick-log presets: Coffee (95mg), Espresso (63mg), Black Tea (47mg), Green Tea (28mg), Energy Drink (160mg), Cola (34mg)
+  - Daily consumption meter (400mg AASM recommended limit), color-coded progress
+  - Cutoff awareness: shows cutoff time from plan, warning banner when past cutoff
+  - Today's log with timestamps, running total, science card citing Drake et al. (2013)
+- **Light tracking screen** — `app/light.tsx`
+  - Protocol-aware status card showing active light-seek or light-avoid block from plan
+  - Quick-log presets: Bright Light (30min), Blue-Blockers (60min), Dim Lights (120min), Screens Off (30min)
+  - Today's light protocol timeline from plan (with NOW badge, past checkmarks)
+  - Today's log, science card citing Eastman & Burgess (2009)
+- **Post-sleep debrief screen** — `app/debrief.tsx`
+  - 5-star sleep quality rating with emoji labels (Terrible → Great)
+  - "Do you feel rested?" yes/no toggle
+  - Wake-up counter (increment/decrement)
+  - Optional notes field, save confirmation animation
+  - Shows last planned sleep summary (times + duration)
+- **Live Activities module** — `src/lib/live-activity/`
+  - `types.ts`: ShiftWellActivityAttributes + ShiftWellContentState (block type, label, times, color)
+  - `live-activity-service.ts`: ActivityKit bridge facade (start/update/end) with safe no-op when native module unavailable
+  - `useLiveActivity` hook: auto-starts activity when plan has blocks, updates on active/next change, ends when empty
+- **Tracking store** — `src/store/tracking-store.ts`
+  - Zustand + AsyncStorage persistence for caffeine, light, and debrief entries
+  - Date-aware serialization (revives ISO strings to Date objects)
+  - Helper methods: getCaffeineToday, getLightToday, getDebriefForDate, clearOldEntries (30-day retention)
+- **Today screen updates** — `app/(tabs)/index.tsx`
+  - TRACK section: 3 quick-access cards (Caffeine, Light, Debrief) linking to new screens
+  - Debrief prompt banner: appears when main-sleep ended within last 2 hours and no debrief logged today
+  - Live Activity hook wired in
+- **Navigation** — `app/_layout.tsx`
+  - Added caffeine, light, debrief as modal Stack.Screen entries
+- **Barrel exports updated** — `src/store/index.ts`, `src/hooks/index.ts`, `src/lib/healthkit/index.ts`
+- **All 110 tests passing**, zero regressions
+
+### Key Decisions
+- Live Activities service uses a native module bridge pattern — safe no-op when module isn't built yet (requires EAS + Apple Developer enrollment for the widget extension)
+- Caffeine presets use standard serving sizes from USDA nutrition data
+- Tracking store has 30-day retention (auto-purge old entries)
+- Debrief prompt appears only within 2h of a sleep block ending — not intrusive
+
+### New Files Created (9)
+- `src/lib/healthkit/sleep-focus.ts`
+- `src/lib/live-activity/types.ts`, `live-activity-service.ts`, `index.ts`
+- `src/store/tracking-store.ts`
+- `src/hooks/useLiveActivity.ts`
+- `app/caffeine.tsx`, `app/light.tsx`, `app/debrief.tsx`
+
+### Files Modified (6)
+- `app/_layout.tsx`, `app/(tabs)/index.tsx`
+- `src/store/plan-store.ts`, `src/store/index.ts`
+- `src/hooks/index.ts`, `src/lib/healthkit/index.ts`
+
+### Next Steps
+- [ ] Build native iOS widget extension for Live Activities (requires EAS + Apple Developer)
+- [ ] iOS widgets (4 homescreen sizes)
+- [ ] Apple Watch companion app
+- [ ] Smart sleep window notifications ("Phone down, head to bed")
+
+---
+
 ## 2026-03-16 — Session 9: Phase 3 — Wire Infrastructure + Recovery Dashboard
 
 ### Completed

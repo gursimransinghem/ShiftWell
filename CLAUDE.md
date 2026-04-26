@@ -103,24 +103,28 @@ ShiftWell is an **iOS-first sleep optimization app for shift workers**, built by
 
 ---
 
-## Current Status (as of March 2026)
+## Current Status (as of April 2026)
 
-### What's DONE (MVP Feature-Complete)
+### What's DONE (MVP Feature-Complete + Phase 3 Tracking)
 - **Circadian algorithm** — 7 modules: shift classification, sleep windows, nap engine, caffeine cutoffs, meal timing, light protocols. Pure TS, deterministic, fully tested.
 - **5-step onboarding** — Welcome → Chronotype (MEQ) → Household → Preferences → HealthKit (optional)
 - **3-tab navigation** — Today (timeline + recovery), Schedule (calendar), Settings
-- **Today screen** — Recovery score ring, countdown cards, timeline blocks, insight banner, tip of the day
+- **Today screen** — Recovery score ring, countdown cards, timeline blocks, insight banner, tip of the day, tracking quick-access (caffeine/light/debrief), debrief prompt
 - **Calendar screen** — Month view with color-coded dots, day detail panel
 - **Manual shift entry** — Add/edit shifts with auto-classification
 - **.ics import** — 3-step flow: pick file → review → confirm
 - **.ics export** — Generate RFC 5545 file → share sheet
 - **Settings** — Account, sync status, notification toggles, import/export
-- **Zustand stores (5)** — User, Shifts, Plan, Auth, Premium (all persisted)
+- **Zustand stores (6)** — User, Shifts, Plan, Auth, Premium, Tracking (all persisted)
 - **Supabase backend** — Schema, client, auth (Apple + email), sync engine
-- **HealthKit integration** — Read sleep data, compare planned vs actual, accuracy scoring
+- **HealthKit integration** — Read sleep data, compare planned vs actual, accuracy scoring, **WritePlannedSleep (iOS Sleep Focus)**
 - **Push notifications** — Sleep reminders, caffeine cutoffs, wake alarms
 - **Premium/RevenueCat** — SDK wired, 14 features mapped, entitlements module
 - **Recovery score dashboard** — Circular ring, comparison cards, weekly trend chart
+- **Caffeine tracking screen** — Quick-log presets, daily meter (400mg limit), cutoff awareness
+- **Light tracking screen** — Protocol-aware status, quick-log, today's protocol timeline
+- **Post-sleep debrief** — 5-star quality, rested toggle, wake-up counter, notes
+- **Live Activities module** — Service facade + hook (native widget extension pending EAS build)
 - **110 passing tests** — Algorithm, calendar, sync, accuracy
 - **Expert committee review** — 7 experts, all top-10 issues resolved
 - **All documentation** — Business plan, deployment guide, privacy policy, health disclaimers, App Store listing, design assets guide
@@ -136,11 +140,8 @@ ShiftWell is an **iOS-first sleep optimization app for shift workers**, built by
 - [ ] Run EAS build → TestFlight → beta test with 10-20 shift workers
 
 **Code work remaining (Phase 3+):**
-- [ ] WritePlannedSleep call to trigger iOS Sleep Focus
-- [ ] Caffeine & light tracking dedicated screens
-- [ ] Post-sleep debrief ("How did you sleep?") quick log
+- [ ] Build native iOS widget extension for Live Activities (requires EAS + Apple Developer)
 - [ ] Smart sleep window notifications ("Phone down, head to bed")
-- [ ] Live Activities (lock screen plan preview)
 - [ ] iOS widgets (4 homescreen sizes)
 - [ ] Apple Watch companion app
 - [ ] RevenueCat paywall integration (deferred to v1.2+ per expert consensus)
