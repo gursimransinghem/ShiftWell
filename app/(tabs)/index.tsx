@@ -14,8 +14,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useTrackingStore } from '@/src/store/tracking-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
 import { useRecoveryScore } from '@/src/hooks/useRecoveryScore';
+import { useLiveActivity } from '@/src/hooks/useLiveActivity';
 import { TimelineEvent, CountdownCard, TipCard, InsightBanner } from '@/src/components/today';
 import { RecoveryScoreCard, SleepComparisonCard, WeeklyTrendChart } from '@/src/components/recovery';
 import Card from '@/src/components/ui/Card';
@@ -70,6 +72,24 @@ export default function TodayScreen() {
   const profile = useUserStore((s) => s.profile);
   const canAccess = usePremiumStore((s) => s.canAccess);
 
+  // Live Activity (Lock Screen plan preview)
+  useLiveActivity();
+
+  // Debrief prompt: show if a main-sleep block ended in the last 2 hours and no debrief logged today
+  const getDebriefForDate = useTrackingStore((s) => s.getDebriefForDate);
+  const showDebrief = React.useMemo(() => {
+    if (!plan) return false;
+    const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+    const recentSleep = plan.blocks.find(
+      (b) =>
+        b.type === 'main-sleep' &&
+        b.end.getTime() < now.getTime() &&
+        b.end.getTime() > twoHoursAgo.getTime(),
+    );
+    if (!recentSleep) return false;
+    return !getDebriefForDate(now);
+  }, [plan, now, getDebriefForDate]);
+
   // Recovery score data (from HealthKit)
   const recovery = useRecoveryScore();
   const showRecovery =
@@ -121,10 +141,11 @@ export default function TodayScreen() {
     statusSubtitle = format(now, 'EEEE, MMM d');
   }
 
-  // Navigate to schedule tab
-  const goToSchedule = () => {
-    router.push('/(tabs)/schedule');
-  };
+  // Navigation
+  const goToSchedule = () => router.push('/(tabs)/schedule');
+  const goToCaffeine = () => router.push('/caffeine');
+  const goToLight = () => router.push('/light');
+  const goToDebrief = () => router.push('/debrief');
 
   return (
     <ScrollView
@@ -225,6 +246,43 @@ export default function TodayScreen() {
             stats={plan.stats}
             profile={profile}
           />
+        </View>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Debrief prompt                                                      */}
+      {/* ------------------------------------------------------------------ */}
+      {showDebrief && (
+        <Pressable onPress={goToDebrief} style={styles.debriefBanner}>
+          <Text style={styles.debriefEmoji}>{'\u{1F4DD}'}</Text>
+          <View style={styles.debriefContent}>
+            <Text style={styles.debriefTitle}>How did you sleep?</Text>
+            <Text style={styles.debriefBody}>Quick debrief helps track your recovery</Text>
+          </View>
+          <Text style={styles.debriefArrow}>{'\u{203A}'}</Text>
+        </Pressable>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
+      {/* Tracking quick-access                                               */}
+      {/* ------------------------------------------------------------------ */}
+      {hasShifts && (
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>TRACK</Text>
+          <View style={styles.trackRow}>
+            <Pressable onPress={goToCaffeine} style={styles.trackCard}>
+              <Text style={styles.trackEmoji}>{'\u{2615}'}</Text>
+              <Text style={styles.trackLabel}>Caffeine</Text>
+            </Pressable>
+            <Pressable onPress={goToLight} style={styles.trackCard}>
+              <Text style={styles.trackEmoji}>{'\u{2600}'}</Text>
+              <Text style={styles.trackLabel}>Light</Text>
+            </Pressable>
+            <Pressable onPress={goToDebrief} style={styles.trackCard}>
+              <Text style={styles.trackEmoji}>{'\u{1F4DD}'}</Text>
+              <Text style={styles.trackLabel}>Debrief</Text>
+            </Pressable>
+          </View>
         </View>
       )}
 
@@ -441,4 +499,39 @@ const styles = StyleSheet.create({
     color: COLORS.text.secondary,
     flex: 1,
   },
+
+  /* Debrief prompt */
+  debriefBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.background.surface,
+    borderRadius: RADIUS.lg,
+    borderWidth: 1,
+    borderColor: COLORS.accent.primary,
+    padding: SPACING.lg,
+    marginBottom: SPACING['2xl'],
+  },
+  debriefEmoji: { fontSize: 28, marginRight: SPACING.md },
+  debriefContent: { flex: 1 },
+  debriefTitle: { ...TYPOGRAPHY.label, color: COLORS.text.primary },
+  debriefBody: { ...TYPOGRAPHY.caption, color: COLORS.text.secondary, marginTop: 2 },
+  debriefArrow: { ...TYPOGRAPHY.heading2, color: COLORS.text.tertiary },
+
+  /* Tracking quick-access */
+  trackRow: {
+    flexDirection: 'row',
+    gap: SPACING.md,
+  },
+  trackCard: {
+    flex: 1,
+    backgroundColor: COLORS.background.surface,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: COLORS.border.default,
+    paddingVertical: SPACING.md,
+    alignItems: 'center',
+    minHeight: 44,
+  },
+  trackEmoji: { fontSize: 22, marginBottom: SPACING.xs },
+  trackLabel: { ...TYPOGRAPHY.caption, color: COLORS.text.secondary },
 });

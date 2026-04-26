@@ -37,3 +37,6 @@ export {
 } from './accuracy-score';
 
 export type { PlanAccuracy } from './accuracy-score';
+
+// --- Sleep Focus (WritePlannedSleep) ---
+export { writePlannedSleepWindows } from './sleep-focus';

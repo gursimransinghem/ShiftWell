@@ -3,6 +3,7 @@ import { addDays } from 'date-fns';
 import type { SleepPlan } from '../lib/circadian/types';
 import { generateSleepPlan } from '../lib/circadian';
 import { schedulePlanNotifications } from '../lib/notifications/notification-service';
+import { writePlannedSleepWindows } from '../lib/healthkit/sleep-focus';
 import { useShiftsStore } from './shifts-store';
 import { useUserStore } from './user-store';
 
@@ -55,6 +56,13 @@ export const usePlanStore = create<PlanState>()((set, get) => ({
       schedulePlanNotifications(plan.blocks).catch(() => {
         // Notifications may not be permitted yet — fail silently
       });
+
+      // Write planned sleep windows to HealthKit → triggers iOS Sleep Focus
+      if (useUserStore.getState().healthkitConnected) {
+        writePlannedSleepWindows(plan.blocks).catch(() => {
+          // HealthKit write may not be permitted — fail silently
+        });
+      }
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Failed to generate sleep plan';
       set({ isGenerating: false, error: message });
