@@ -21,7 +21,13 @@ import type { PredictionInput, TransitionPrediction } from '../../../src/lib/cir
 // Helpers
 // ---------------------------------------------------------------------------
 
-const TODAY_STR = '2026-04-14';
+function getTodayISO(): string {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today.toISOString().slice(0, 10);
+}
+
+const TODAY_STR = getTodayISO();
 
 /** Build a minimal 14-day shift array with a night→day transition at dayIndex */
 function buildScheduleWithTransition(
