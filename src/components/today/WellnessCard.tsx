@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardLabel: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: '700',
     color: COLORS.text.tertiary,
     letterSpacing: 0.8,

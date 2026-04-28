@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!--
+    Lane 4 — Meridian Monogram
+    ShiftWell Icon Tournament
+
+    ═══════════════════════════════════════════════════════════
+    CONCEPT
+
+    A custom SW monogram where the geometry carries a second reading:
+
+    S — Two cubic Bézier arcs forming a continuous sinusoidal curve.
+        The shape is isomorphic to a circadian alertness trough plotted
+        over a 24h period: a descending arc (evening, sleep onset) and
+        an ascending arc (morning, wake recovery). Made typographic by
+        rotating 90 degrees into the vertical axis of a letterform.
+        Terminal exits are horizontal — the letter reads as two deliberate
+        arcs at any size, not a trailing calligraphic gesture.
+
+    W — Four straight strokes meeting at five vertices. The two inner
+        peaks sit at a shared horizontal y-coordinate — the "meridian"
+        of the monogram. This line is the shift boundary: the moment
+        where two consecutive shifts meet. The W valley sits slightly
+        above geometric center to mirror the asymmetry of a real
+        circadian chart (the trough is shorter than the recovery arc).
+
+    The meridian (shared y of W peaks and S upper-bowl inflection zone)
+    is present as geometry, not as a drawn line. It is discoverable on
+    close inspection — a reward for looking twice.
+
+    ═══════════════════════════════════════════════════════════
+    CONSTRUCTION GRID
+
+    Canvas:         1024 × 1024
+    Optical center: (512, 512)
+    Glyph zone:     y 308–716  (400px tall, 156px top/bottom margin)
+
+    S placement:    x 188–416  (228px wide)
+    Gap:            416–448    (32px)
+    W placement:    x 448–800  (352px wide)
+    Total mark:     612px wide, centered at x 494 — slight leftward lean
+                    compensated by W being optically heavier due to 4 strokes
+
+    Stroke width:   48px (round caps, round joins)
+
+    ───────────────────────────────────────────────────────────
+    S BEZIER CONSTRUCTION
+
+    Goal: clean S with horizontal terminal exits and open bowls.
+    A cubic Bézier exits the start point in the direction of CP1,
+    and arrives at the end point FROM the direction of CP2.
+    Therefore:
+      - To exit (390, 316) horizontally rightward: CP1 must be
+        directly right of start → CP1 = (450, 316)
+      - To arrive at inflection (260, 512) from below-left: CP2
+        must be left of and above inflection → CP2 = (180, 430)
+        This swings the upper bowl to the left. ✓
+
+      - To exit inflection (260, 512) continuing downward-right: CP1
+        must be right of and below inflection → CP1 = (340, 595)
+        This swings the lower bowl to the right. ✓
+      - To arrive at (390, 712) horizontally leftward: CP2 must be
+        directly left of end → CP2 = (210, 712)
+        This means the stroke arrives at the terminal from the left,
+        which is the correct anatomical shape of an S lower terminus.
+
+    Upper arc:  M(390,316) C(450,316) (180,430) (260,512)
+    Lower arc:            C(340,595) (210,712) (390,712)
+
+    ───────────────────────────────────────────────────────────
+    W VERTEX CONSTRUCTION
+
+    Five points, linear segments:
+      A = (448, 716)   left outer base
+      B = (526, 370)   first inner peak    ← meridian y = 370
+      C = (625, 582)   valley              (slightly high for waveform feel)
+      D = (724, 370)   second inner peak   ← meridian y = 370
+      E = (800, 716)   right outer base
+
+    Outer leg angle:  left  (448→526): rise=346, run=78,  slope=4.44
+                      right (724→800): rise=346, run=76,  slope=4.55  ≈ symmetric
+    Inner leg angle:  left  (526→625): drop=212, run=99,  slope=2.14
+                      right (625→724): rise=212, run=99,  slope=2.14  perfectly symmetric
+    Valley depth:     from peaks (y=370) to valley (y=582): 212px
+    Total height:     from peaks (y=370) to base (y=716):   346px
+    Valley ratio:     212/346 = 61% — valley sits at 61% depth, not 50%
+                      This matches the asymmetry of the sleep trough (longer fall, shorter rise)
+
+    Meridian at y=370 corresponds to upper-bowl S region (y≈316–430 is S top arc zone)
+    so the shared horizontal is real but not exact — intentional, like a hidden harmonic
+    rather than a mechanical grid snap.
+    ═══════════════════════════════════════════════════════════
+  -->
+
+  <!-- Night-sky field — brand background #080B14 -->
+  <rect width="1024" height="1024" fill="#080B14"/>
+
+  <g fill="none" stroke="#C8A84B" stroke-linecap="round" stroke-linejoin="round" stroke-width="48">
+
+    <!--
+      S ─ Sleep Sinusoid
+      Upper arc exits rightward from (390,316), bowl opens left,
+      inflects at (260,512), lower arc opens right,
+      arrives at (390,712) from the left — canonical S anatomy.
+    -->
+    <path d="M 390,316 C 450,316 180,430 260,512 C 340,595 210,712 390,712"/>
+
+    <!--
+      W ─ Shift Horizon
+      Five-vertex open polyline with symmetric inner leg angles.
+      Inner peaks at y=370 share the meridian horizontal.
+    -->
+    <polyline points="448,716 526,370 625,582 724,370 800,716"/>
+
+  </g>
+
+  <!--
+    Meridian accent — the hidden connecting geometry.
+    A hairline at y=370 spanning only between the two W inner peaks.
+    Opacity 0.14: present in the geometry, not in the experience.
+    Renders as ~0.3px at 20px icon size — effectively invisible.
+    At 1024px or in a brand document at 400px: legible on inspection.
+  -->
+  <line
+    x1="526" y1="370"
+    x2="724" y2="370"
+    stroke="#C8A84B"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.14"
+  />
+
+</svg>
