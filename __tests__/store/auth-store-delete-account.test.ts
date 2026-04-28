@@ -14,6 +14,7 @@
 import { useAuthStore } from '../../src/store/auth-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
+import { PERSISTED_LOCAL_DATA_KEYS } from '../../src/store/auth-store';
 
 // The mock adds multiRemove but the TS type doesn't include it — cast for assertions
 const MockAsyncStorage = AsyncStorage as typeof AsyncStorage & { multiRemove: jest.Mock };
@@ -79,15 +80,24 @@ describe('deleteAccount', () => {
     setAuthenticatedState();
     await useAuthStore.getState().deleteAccount();
 
-    expect(MockAsyncStorage.multiRemove).toHaveBeenCalledWith(
+    expect(MockAsyncStorage.multiRemove).toHaveBeenCalledWith(PERSISTED_LOCAL_DATA_KEYS);
+    expect(PERSISTED_LOCAL_DATA_KEYS).toEqual(
       expect.arrayContaining([
         'nightshift-user',
         'nightshift-shifts',
-        'nightshift-plan',
+        'nightshift-onboarding',
         'adaptive-plan-store',
         'premium-store',
         'score-history',
         'notification-prefs',
+        'pattern-store',
+        'prediction-store',
+        'ai-store',
+        'brief-store',
+        'autopilot-store',
+        'hrv-store',
+        'feedback-store',
+        'calendar-storage',
       ]),
     );
   });

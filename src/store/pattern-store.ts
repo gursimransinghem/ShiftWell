@@ -129,7 +129,10 @@ export const usePatternStore = create<PatternState>()(
         // Debounce: skip if analyzed within last 24h
         if (lastAnalyzedISO) {
           const lastMs = new Date(lastAnalyzedISO).getTime();
-          if (Date.now() - lastMs < REFRESH_DEBOUNCE_MS) return;
+          if (Date.now() - lastMs < REFRESH_DEBOUNCE_MS) {
+            set({ isAnalyzing: false });
+            return;
+          }
         }
 
         set({ isAnalyzing: true });

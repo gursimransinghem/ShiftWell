@@ -88,6 +88,11 @@ describe('isLikelyShift', () => {
   it('rejects events over 28h', () => {
     expect(isLikelyShift('Multi-day Conference', 48)).toBe(false);
   });
+
+  it('rejects long events without shift keywords', () => {
+    expect(isLikelyShift('Flight to NYC', 8)).toBe(false);
+    expect(isLikelyShift('Conference Travel Block', 12)).toBe(false);
+  });
 });
 
 // ── Tests: parseICSForShifts ─────────────────────────────────────────
@@ -170,11 +175,12 @@ describe('parseICSForShifts', () => {
     expect(eveningShift!.shiftType).toBe('evening');
   });
 
-  it('handles malformed .ics by throwing a parser error', () => {
-    // ical.js throws ParserError on completely invalid input — this is expected
-    expect(() => {
-      parseICSForShifts('this is not valid ics data');
-    }).toThrow();
+  it('handles malformed .ics gracefully', () => {
+    const result = parseICSForShifts('this is not valid ics data');
+
+    expect(result.detectedShifts).toHaveLength(0);
+    expect(result.otherEvents).toHaveLength(0);
+    expect(result.allEvents).toHaveLength(0);
   });
 
   it('handles empty .ics string gracefully', () => {
@@ -207,5 +213,21 @@ describe('parseICSForShifts', () => {
     const result = parseICSForShifts(ics);
     expect(result.detectedShifts).toHaveLength(0);
     expect(result.otherEvents).toHaveLength(2);
+  });
+
+  it('keeps long non-shift calendar blocks out of detected shifts', () => {
+    const ics = wrapICS(
+      makeVEvent({
+        uid: 'flight-001',
+        summary: 'Flight to NYC',
+        dtstart: '20260315T090000',
+        dtend: '20260315T170000',
+      }),
+    );
+
+    const result = parseICSForShifts(ics);
+    expect(result.detectedShifts).toHaveLength(0);
+    expect(result.otherEvents).toHaveLength(1);
+    expect(result.otherEvents[0].title).toBe('Flight to NYC');
   });
 });

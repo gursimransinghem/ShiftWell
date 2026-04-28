@@ -19,6 +19,7 @@ const ROUTE_ICONS: Record<string, [IoniconsName, IoniconsName]> = {
   circadian: ['pulse-outline', 'pulse'],
   profile: ['person-outline', 'person'],
   brief: ['briefcase-outline', 'briefcase'],
+  outcomes: ['analytics-outline', 'analytics'],
 };
 
 // Fallback icon pair for unrecognised route names
@@ -32,6 +33,7 @@ const ROUTE_LABELS: Record<string, string> = {
   circadian: 'Circadian',
   profile: 'Profile',
   brief: 'Brief',
+  outcomes: 'Outcomes',
 };
 
 // ---------------------------------------------------------------------------
@@ -43,6 +45,7 @@ export function FloatingTabBar({
   navigation,
 }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const daysUntilTransition = usePlanStore((s) => s.daysUntilTransition);
 
   return (
     <View
@@ -61,7 +64,6 @@ export function FloatingTabBar({
             if (!(route.name in ROUTE_LABELS)) return null;
             // Brief tab: only show when transition is approaching (≤7 days)
             if (route.name === 'brief') {
-              const daysUntilTransition = usePlanStore.getState().daysUntilTransition;
               if (daysUntilTransition > 7) return null;
             }
             const label =

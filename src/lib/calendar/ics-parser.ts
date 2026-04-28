@@ -10,27 +10,28 @@ import ICAL from 'ical.js';
 import { classifyShiftType } from '../circadian/classify-shifts';
 import type { ShiftEvent, PersonalEvent } from '../circadian/types';
 
-/**
- * Parse an ICS string into raw calendar events.
- */
-function parseICSToEvents(icsString: string): Array<{
+type RawCalendarEvent = {
   uid: string;
   summary: string;
   start: Date;
   end: Date;
   durationHours: number;
-}> {
-  const jcalData = ICAL.parse(icsString);
+};
+
+/**
+ * Parse an ICS string into raw calendar events.
+ */
+function parseICSToEvents(icsString: string): RawCalendarEvent[] {
+  let jcalData: ReturnType<typeof ICAL.parse>;
+  try {
+    jcalData = ICAL.parse(icsString);
+  } catch {
+    return [];
+  }
   const comp = new ICAL.Component(jcalData);
   const vevents = comp.getAllSubcomponents('vevent');
 
-  const events: Array<{
-    uid: string;
-    summary: string;
-    start: Date;
-    end: Date;
-    durationHours: number;
-  }> = [];
+  const events: RawCalendarEvent[] = [];
 
   for (const vevent of vevents) {
     try {
@@ -56,7 +57,10 @@ function parseICSToEvents(icsString: string): Array<{
           const duration = event.duration;
           const durationMs = duration
             ? (duration.weeks * 7 * 24 * 3600 + duration.days * 24 * 3600 + duration.hours * 3600 + duration.minutes * 60) * 1000
+            : event.endDate && event.startDate
+            ? event.endDate.toJSDate().getTime() - event.startDate.toJSDate().getTime()
             : 0;
+          if (durationMs <= 0) { occurrence = iterator.next(); count++; continue; }
           const end = new Date(start.getTime() + durationMs);
           const durationHours = durationMs / (1000 * 3600);
 
@@ -96,13 +100,29 @@ function parseICSToEvents(icsString: string): Array<{
  * Case-insensitive matching.
  */
 const SHIFT_KEYWORDS = [
-  'shift', 'ed', 'er', 'icu', 'nicu', 'picu', 'or', 'night',
+  'shift', 'ed', 'er', 'icu', 'nicu', 'picu', 'operating room', 'night',
   'day shift', 'night shift', 'evening shift', 'swing',
   'on call', 'on-call', 'oncall', 'coverage', 'clinical',
   'hospital', 'clinic', 'rounds', 'trauma', 'code',
   'qgenda', 'amion', 'schedule',
   // Common abbreviations
   'ns', 'ds', 'es',
+];
+
+const NEGATIVE_SHIFT_KEYWORDS = [
+  'flight',
+  'conference',
+  'vacation',
+  'pto',
+  'holiday',
+  'travel',
+  'wedding',
+  'birthday',
+  'concert',
+  'training',
+  'workshop',
+  'seminar',
+  'appointment',
 ];
 
 /**
@@ -125,13 +145,13 @@ export function isLikelyShift(
 
   // If duration is 6-28h, it's shift-length
   if (durationHours >= 6 && durationHours <= 28) {
-    // Check for keywords (bonus confidence)
     const lowerSummary = summary.toLowerCase();
+    const hasNegativeKeyword = NEGATIVE_SHIFT_KEYWORDS.some((kw) => lowerSummary.includes(kw));
+    if (hasNegativeKeyword) return false;
+
     const hasKeyword = SHIFT_KEYWORDS.some((kw) => lowerSummary.includes(kw));
 
-    // Long events (6h+) are very likely shifts even without keywords
-    // in a healthcare worker's calendar
-    return true;
+    return hasKeyword;
   }
 
   return false;

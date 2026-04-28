@@ -12,6 +12,26 @@ import { supabase } from '../lib/supabase/client';
 import { migrateLocalDataToCloud } from '../lib/sync/data-migration';
 
 const SESSION_KEY = 'nightshift-session';
+const LOCAL_DATA_KEYS = [
+  'nightshift-user',
+  'nightshift-shifts',
+  // Legacy plan key from earlier app versions. Keep clearing/checking it so
+  // older installs migrate and delete cleanly.
+  'nightshift-plan',
+  'adaptive-plan-store',
+  'nightshift-onboarding',
+  'premium-store',
+  'score-history',
+  'notification-prefs',
+  'pattern-store',
+  'prediction-store',
+  'ai-store',
+  'brief-store',
+  'autopilot-store',
+  'hrv-store',
+  'feedback-store',
+  'calendar-storage',
+];
 
 interface AuthState {
   userId: string | null;
@@ -35,8 +55,7 @@ interface AuthState {
  * Check whether the device has local data that should be migrated after sign-in.
  */
 async function hasLocalData(): Promise<boolean> {
-  const keys = ['nightshift-user', 'nightshift-shifts', 'nightshift-plan'];
-  for (const key of keys) {
+  for (const key of LOCAL_DATA_KEYS) {
     const value = await AsyncStorage.getItem(key);
     if (value) return true;
   }
@@ -182,19 +201,9 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
         await supabaseSignOut();
       }
 
-      // Clear all persisted local data
-      const ALL_STORE_KEYS = [
-        'nightshift-user',
-        'nightshift-shifts',
-        'nightshift-plan',
-        'adaptive-plan-store',
-        'premium-store',
-        'score-history',
-        'notification-prefs',
-      ];
       // multiRemove is part of the AsyncStorage API but missing from some type definitions
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (AsyncStorage as any).multiRemove(ALL_STORE_KEYS);
+      await (AsyncStorage as any).multiRemove(LOCAL_DATA_KEYS);
       await clearPersistedSession();
 
       set({

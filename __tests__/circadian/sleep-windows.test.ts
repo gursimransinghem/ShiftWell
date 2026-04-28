@@ -128,6 +128,20 @@ describe('computeSleepBlocks', () => {
       // Recovery sleep should be in the morning
       expect(getHours(sleepBlocks[0].start)).toBeLessThanOrEqual(9);
     });
+
+    it('generates unique ids for multiple recovery sleep blocks', () => {
+      const day: ClassifiedDay = {
+        date: new Date('2026-03-18'),
+        dayType: 'recovery',
+        shift: null,
+        personalEvents: [],
+      };
+
+      const blocks = computeSleepBlocks(day, testProfile);
+      const ids = blocks.map((block) => block.id);
+
+      expect(new Set(ids).size).toBe(ids.length);
+    });
   });
 
   describe('personal event conflict avoidance', () => {
@@ -152,6 +166,30 @@ describe('computeSleepBlocks', () => {
       expect(mainSleep).toBeDefined();
       // Sleep should be adjusted to avoid the dentist appointment
       // Either before or after the event
+    });
+
+    it('adjusts when a personal event fully contains the sleep window', () => {
+      const day: ClassifiedDay = {
+        date: new Date('2026-03-15'),
+        dayType: 'off',
+        shift: null,
+        personalEvents: [
+          {
+            id: 'travel',
+            title: 'Long travel block',
+            start: new Date('2026-03-15T20:00:00'),
+            end: new Date('2026-03-16T08:00:00'),
+          },
+        ],
+      };
+
+      const blocks = computeSleepBlocks(day, testProfile);
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep');
+
+      expect(mainSleep).toBeDefined();
+      expect(mainSleep!.start.getTime()).toBeGreaterThan(
+        new Date('2026-03-16T08:00:00').getTime(),
+      );
     });
   });
 });
