@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import { ScrollView, StyleSheet, View, Pressable, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { startOfMonth, startOfWeek, addDays, isSameDay, format } from 'date-fns';
 import { MonthView, DayDetail } from '@/src/components/calendar';
 import { useShiftsStore, usePlanStore } from '@/src/store';
