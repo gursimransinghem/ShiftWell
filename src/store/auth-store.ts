@@ -12,7 +12,7 @@ import { supabase } from '../lib/supabase/client';
 import { migrateLocalDataToCloud } from '../lib/sync/data-migration';
 
 const SESSION_KEY = 'nightshift-session';
-const LOCAL_DATA_KEYS = [
+export const PERSISTED_LOCAL_DATA_KEYS = [
   'nightshift-user',
   'nightshift-shifts',
   // Legacy plan key from earlier app versions. Keep clearing/checking it so
@@ -55,7 +55,7 @@ interface AuthState {
  * Check whether the device has local data that should be migrated after sign-in.
  */
 async function hasLocalData(): Promise<boolean> {
-  for (const key of LOCAL_DATA_KEYS) {
+  for (const key of PERSISTED_LOCAL_DATA_KEYS) {
     const value = await AsyncStorage.getItem(key);
     if (value) return true;
   }
@@ -203,7 +203,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
       // multiRemove is part of the AsyncStorage API but missing from some type definitions
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (AsyncStorage as any).multiRemove(LOCAL_DATA_KEYS);
+      await (AsyncStorage as any).multiRemove(PERSISTED_LOCAL_DATA_KEYS);
       await clearPersistedSession();
 
       set({

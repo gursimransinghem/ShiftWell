@@ -99,14 +99,14 @@ function clamp(val: number, min: number, max: number): number {
 }
 
 function addDaysToISO(isoDate: string, days: number): string {
-  const d = new Date(isoDate + 'T00:00:00');
-  d.setDate(d.getDate() + days);
+  const d = new Date(`${isoDate}T00:00:00.000Z`);
+  d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);
 }
 
 function daysBetweenISO(fromISO: string, toISO: string): number {
-  const from = new Date(fromISO + 'T00:00:00');
-  const to = new Date(toISO + 'T00:00:00');
+  const from = new Date(`${fromISO}T00:00:00.000Z`);
+  const to = new Date(`${toISO}T00:00:00.000Z`);
   return Math.round((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
 }
 
@@ -257,7 +257,7 @@ export function scanUpcomingTransitions(input: PredictionInput): TransitionPredi
 
   // Determine scan window
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
   const todayISO = today.toISOString().slice(0, 10);
 
   // Use first shift date or today as scan start
@@ -269,9 +269,9 @@ export function scanUpcomingTransitions(input: PredictionInput): TransitionPredi
 
   // Collect unique dates within window
   const allDates: string[] = [];
-  const start = new Date(scanStart + 'T00:00:00');
-  const end = new Date(scanEnd + 'T00:00:00');
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+  const start = new Date(`${scanStart}T00:00:00.000Z`);
+  const end = new Date(`${scanEnd}T00:00:00.000Z`);
+  for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
     allDates.push(d.toISOString().slice(0, 10));
   }
 
