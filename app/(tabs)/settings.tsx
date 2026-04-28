@@ -473,6 +473,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.border.default,
     marginHorizontal: 16,
   },
+  cardDivider: {
+    height: 1,
+    backgroundColor: COLORS.border.default,
+    marginHorizontal: 16,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -620,6 +625,11 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginTop: SPACING.xl,
     paddingHorizontal: SPACING.lg,
+  },
+  editButtonWrapper: {
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    alignItems: 'flex-start',
   },
 
   // Free plan / upgrade section

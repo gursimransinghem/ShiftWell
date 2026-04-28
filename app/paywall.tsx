@@ -14,7 +14,14 @@ import { useUserStore } from '@/src/store/user-store';
 import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
 import { logExposure } from '@/src/lib/growth/ab-testing';
 import { Button, Card, GradientMeshBackground } from '@/src/components/ui';
-import { COLORS, RADIUS, SPACING, TEXT, TYPOGRAPHY } from '@/src/theme';
+import {
+  COLORS,
+  RADIUS,
+  SPACING,
+  TEXT,
+  TYPOGRAPHY,
+  captionSmall,
+} from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -274,9 +281,16 @@ export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
   const { purchase, restore, isLoading } = usePremiumStore();
   const profile = useUserStore((s) => s.profile);
+  const paywallBucketKey = [
+    profile.chronotype,
+    profile.sleepNeed,
+    profile.caffeineHalfLife,
+    profile.napPreference ? 'nap-on' : 'nap-off',
+    profile.commuteDuration ?? 0,
+  ].join(':');
 
   // Paywall pricing A/B experiment (GRO-04)
-  const paywallVariant = getPaywallVariant(profile.id ?? '');
+  const paywallVariant = getPaywallVariant(paywallBucketKey);
 
   // Override annual plan pricing based on experiment variant
   const experimentPlans: Plan[] = PLANS.map((p) => {
@@ -294,9 +308,11 @@ export default function PaywallScreen() {
 
   async function handleStartTrial() {
     // Log paywall impression for experiment tracking
-    if (profile.id) {
-      logExposure('paywall-pricing-v1', paywallVariant.variantId === 'control' ? 'A' : 'B', profile.id).catch(() => {});
-    }
+    logExposure(
+      'paywall-pricing-v1',
+      paywallVariant.variantId === 'control' ? 'A' : 'B',
+      paywallBucketKey,
+    ).catch(() => {});
     await purchase(currentPlan);
     router.back();
   }
@@ -659,7 +675,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   scienceCitation: {
-    ...TYPOGRAPHY.captionSmall,
+    ...captionSmall,
     color: COLORS.text.muted,
     fontStyle: 'italic',
   },
@@ -730,7 +746,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   planBadgeText: {
-    ...TYPOGRAPHY.captionSmall,
+    ...captionSmall,
     fontWeight: '800',
     color: COLORS.text.inverse,
     letterSpacing: 0.4,
