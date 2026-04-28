@@ -23,6 +23,15 @@ import type { PredictionInput, TransitionPrediction } from '../../../src/lib/cir
 
 const TODAY_STR = '2026-04-14';
 
+beforeEach(() => {
+  jest.useFakeTimers();
+  jest.setSystemTime(new Date(`${TODAY_STR}T12:00:00Z`));
+});
+
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 /** Build a minimal 14-day shift array with a night→day transition at dayIndex */
 function buildScheduleWithTransition(
   transitionDayIndex: number,

@@ -11,11 +11,11 @@ import {
   startOfDay,
   endOfDay,
   addDays,
-  differenceInHours,
+  differenceInMinutes,
   getHours,
   isWithinInterval,
-  isSameDay,
   eachDayOfInterval,
+  format,
 } from 'date-fns';
 import type {
   ShiftEvent,
@@ -37,7 +37,7 @@ import type {
  * Reference: NIOSH Training for Nurses on Shift Work and Long Work Hours
  */
 export function classifyShiftType(start: Date, end: Date): ShiftType {
-  const durationHours = differenceInHours(end, start);
+  const durationHours = differenceInMinutes(end, start) / 60;
 
   if (durationHours > 16) {
     return 'extended';
@@ -172,16 +172,16 @@ export function classifyDays(
 
   const shiftsByDay = new Map<string, ShiftEvent | null>();
   for (const day of allDays) {
-    shiftsByDay.set(day.toISOString(), findShiftForDay(day, shifts));
+    shiftsByDay.set(format(day, 'yyyy-MM-dd'), findShiftForDay(day, shifts));
   }
 
   return days.map((date) => {
     const prevDay = addDays(date, -1);
     const nextDay = addDays(date, 1);
 
-    const shift = shiftsByDay.get(date.toISOString()) ?? null;
-    const prevShift = shiftsByDay.get(prevDay.toISOString()) ?? null;
-    const nextShift = shiftsByDay.get(nextDay.toISOString()) ?? null;
+    const shift = shiftsByDay.get(format(date, 'yyyy-MM-dd')) ?? null;
+    const prevShift = shiftsByDay.get(format(prevDay, 'yyyy-MM-dd')) ?? null;
+    const nextShift = shiftsByDay.get(format(nextDay, 'yyyy-MM-dd')) ?? null;
 
     const dayType = classifyDayType(date, shift, prevShift, nextShift);
     const dayPersonalEvents = getPersonalEventsForDay(date, personalEvents);

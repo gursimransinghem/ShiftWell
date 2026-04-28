@@ -37,6 +37,12 @@ describe('classifyShiftType', () => {
     const end = new Date('2026-03-16T00:00:00');
     expect(classifyShiftType(start, end)).toBe('extended');
   });
+
+  it('classifies fractional shifts over 16 hours as extended', () => {
+    const start = new Date('2026-03-15T06:00:00');
+    const end = new Date('2026-03-15T22:30:00');
+    expect(classifyShiftType(start, end)).toBe('extended');
+  });
 });
 
 describe('classifyDays', () => {

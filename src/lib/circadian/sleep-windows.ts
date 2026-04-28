@@ -32,6 +32,15 @@ import type {
 } from './types';
 import { DEFAULT_PROFILE, CHRONOTYPE_OFFSETS as OFFSETS } from './types';
 
+function intervalsOverlap(
+  startA: Date,
+  endA: Date,
+  startB: Date,
+  endB: Date,
+): boolean {
+  return startA < endB && startB < endA;
+}
+
 /** Set a specific time (hours.fraction) on a given date */
 function setTime(date: Date, hours: number): Date {
   const h = Math.floor(hours);
@@ -61,11 +70,8 @@ function avoidConflicts(
     const eventStart = event.start;
     const eventEnd = event.end;
 
-    // Event falls within our sleep window
-    if (
-      (isAfter(eventStart, sleepStart) && isBefore(eventStart, sleepEnd)) ||
-      (isAfter(eventEnd, sleepStart) && isBefore(eventEnd, sleepEnd))
-    ) {
+    // Event overlaps our sleep window, including events that fully cover it.
+    if (intervalsOverlap(sleepStart, sleepEnd, eventStart, eventEnd)) {
       const minutesBefore = differenceInMinutes(eventStart, sleepStart);
       const minutesAfter = differenceInMinutes(sleepEnd, eventEnd);
 
