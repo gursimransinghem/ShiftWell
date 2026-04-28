@@ -15,7 +15,7 @@ import {
   getHours,
 } from 'date-fns';
 import type { ShiftEvent, PlanBlock } from '@/src/lib/circadian/types';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, PURPLE } from '@/src/theme';
+import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, PURPLE, RADIUS, SPACING, TYPOGRAPHY } from '@/src/theme';
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -38,7 +38,6 @@ function getDotsForDay(
 
   for (const shift of shifts) {
     if (isSameDay(shift.start, date) || isSameDay(shift.end, date)) {
-      const startHour = getHours(shift.start);
       if (shift.shiftType === 'night') {
         dots.push({ color: BLOCK_COLORS.shiftNight, key: `shift-${shift.id}` });
       } else if (shift.shiftType === 'evening') {
@@ -240,7 +239,7 @@ export default function MonthView({
       </View>
 
       {/* Calendar grid — animated on month change */}
-      <Animated.View style={{ opacity: gridOpacity }}>
+      <Animated.View style={[styles.grid, { opacity: gridOpacity }]} pointerEvents="box-none">
         {weeks.map((week, weekIdx) => (
           <View key={weekIdx} style={styles.weekRow}>
             {week.map((day) => (
@@ -264,16 +263,18 @@ export default function MonthView({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: BACKGROUND.surface,
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    borderRadius: RADIUS.xl,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 8,
-    marginBottom: 12,
+    paddingHorizontal: SPACING.sm,
+    marginBottom: SPACING.md,
   },
   navButton: {
     width: 44,
@@ -281,6 +282,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.02)',
   },
   navArrow: {
     color: ACCENT.primary,
@@ -289,13 +291,15 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
   monthTitle: {
+    ...TYPOGRAPHY.label,
     color: TEXT.primary,
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   weekdayRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: SPACING.xs,
   },
   weekdayCell: {
     flex: 1,
@@ -303,45 +307,54 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   weekdayText: {
-    color: TEXT.tertiary,
-    fontSize: 12,
-    fontWeight: '500',
+    color: TEXT.muted,
+    fontSize: 11,
+    fontWeight: '700',
     textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  grid: {
+    opacity: 1,
   },
   weekRow: {
     flexDirection: 'row',
+    marginBottom: 2,
   },
   dayCell: {
     flex: 1,
-    height: 48,
+    height: 52,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
-    borderWidth: 1.5,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
     borderColor: 'transparent',
   },
   dayCellSelected: {
     borderColor: PURPLE,
-    backgroundColor: 'rgba(123,97,255,0.1)',
+    backgroundColor: 'rgba(123,97,255,0.12)',
+    shadowColor: PURPLE,
+    shadowOpacity: 0.12,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 2 },
   },
   dayNumberContainer: {
-    width: 28,
-    height: 28,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 14,
+    borderRadius: 15,
   },
   todayCircle: {
-    backgroundColor: 'rgba(74, 144, 217, 0.2)',
+    backgroundColor: 'rgba(200,168,75,0.16)',
   },
   dayNumber: {
     color: TEXT.primary,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   dayNumberDimmed: {
-    color: TEXT.tertiary,
-    opacity: 0.4,
+    color: TEXT.dim,
+    opacity: 0.45,
   },
   dayNumberToday: {
     color: ACCENT.primary,
@@ -352,7 +365,7 @@ const styles = StyleSheet.create({
   },
   dotsRow: {
     flexDirection: 'row',
-    marginTop: 2,
+    marginTop: 4,
     gap: 3,
     height: 6,
   },

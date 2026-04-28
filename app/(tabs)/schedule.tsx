@@ -6,7 +6,15 @@ import { MonthView, DayDetail } from '@/src/components/calendar';
 import { useShiftsStore, usePlanStore } from '@/src/store';
 import type { ShiftEvent } from '@/src/lib/circadian/types';
 import { GradientMeshBackground } from '@/src/components/ui';
-import { BACKGROUND, ACCENT, TEXT, BLOCK_COLORS, COLORS, SPACING, RADIUS } from '@/src/theme';
+import {
+  ACCENT,
+  BLOCK_COLORS,
+  COLORS,
+  RADIUS,
+  SPACING,
+  TEXT,
+  TYPOGRAPHY,
+} from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Shift type emoji/color map
@@ -66,10 +74,11 @@ function WeekStrip({
           <Pressable
             key={day.toISOString()}
             onPress={() => onDayPress(day)}
-            style={[
+            style={({ pressed }) => [
               styles.weekDay,
               isToday && styles.weekDayToday,
               isSelected && styles.weekDaySelected,
+              pressed && styles.weekDayPressed,
             ]}
           >
             <Text style={[styles.weekDayLabel, isToday && styles.weekDayLabelToday]}>
@@ -109,8 +118,11 @@ function ShiftCard({ shift, onPress }: { shift: ShiftEvent; onPress: () => void 
   const durationStr = durationM > 0 ? `${durationH}h ${durationM}m` : `${durationH}h`;
 
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.shiftCard, pressed && { opacity: 0.8 }]}>
-      <View style={[styles.shiftIconCircle, { backgroundColor: `${color}1A` }]}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.shiftCard, pressed && styles.shiftCardPressed]}
+    >
+      <View style={[styles.shiftIconCircle, { backgroundColor: `${color}20` }]}>
         <Text style={styles.shiftIconEmoji}>{emoji}</Text>
       </View>
       <View style={styles.shiftCardContent}>
@@ -121,7 +133,10 @@ function ShiftCard({ shift, onPress }: { shift: ShiftEvent; onPress: () => void 
           {startTime} - {endTime}
         </Text>
       </View>
-      <Text style={styles.shiftCardDuration}>{durationStr}</Text>
+      <View style={styles.shiftCardMeta}>
+        <Text style={styles.shiftCardDuration}>{durationStr}</Text>
+        <Ionicons name="chevron-forward" size={14} color={TEXT.dim} />
+      </View>
     </Pressable>
   );
 }
@@ -170,6 +185,13 @@ export default function ScheduleScreen() {
     return shifts.filter((s) => isSameDay(s.start, selectedDate));
   }, [shifts, selectedDate]);
 
+  const selectedLabel = selectedDate ? format(selectedDate, 'EEEE, MMM d') : 'Select a day';
+  const selectedSummary = selectedDate
+    ? selectedDayShifts.length > 0
+      ? `${selectedDayShifts.length} shift${selectedDayShifts.length === 1 ? '' : 's'} scheduled`
+      : 'No shifts scheduled yet'
+    : `${shifts.length} shift${shifts.length === 1 ? '' : 's'} this month`;
+
   return (
     <GradientMeshBackground>
       <View style={styles.screen}>
@@ -178,6 +200,28 @@ export default function ScheduleScreen() {
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
         >
+          <View style={styles.headerBlock}>
+            <Text style={styles.screenTitle}>Schedule</Text>
+            <Text style={styles.screenSubtitle}>
+              See your month at a glance and drill into the days that matter.
+            </Text>
+          </View>
+
+          <View style={styles.summaryCard}>
+            <View style={styles.summaryTopRow}>
+              <View>
+                <Text style={styles.summaryLabel}>{selectedDate ? 'SELECTED DAY' : 'THIS MONTH'}</Text>
+                <Text style={styles.summaryValue}>{selectedLabel}</Text>
+              </View>
+              <View style={styles.summaryBadge}>
+                <Text style={styles.summaryBadgeText}>
+                  {planBlocks.length > 0 ? `${planBlocks.length} plan blocks` : 'No plan yet'}
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.summaryBody}>{selectedSummary}</Text>
+          </View>
+
           {/* Week Strip */}
           <WeekStrip
             selectedDate={selectedDate}
@@ -271,50 +315,117 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: 16,
-    paddingBottom: 120,
+    paddingHorizontal: SPACING.lg,
+    paddingTop: SPACING.xl,
+    paddingBottom: 128,
+  },
+  headerBlock: {
+    marginBottom: SPACING.lg,
+  },
+  screenTitle: {
+    ...TYPOGRAPHY.heading2,
+    color: COLORS.text.primary,
+    letterSpacing: -0.6,
+  },
+  screenSubtitle: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+    marginTop: SPACING.xs,
+    maxWidth: 320,
+  },
+  summaryCard: {
+    backgroundColor: 'rgba(16,20,34,0.94)',
+    borderRadius: RADIUS.xl,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+    padding: SPACING.lg,
+    marginBottom: SPACING.lg,
+  },
+  summaryTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: SPACING.md,
+  },
+  summaryLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1,
+    color: COLORS.text.muted,
+    marginBottom: 6,
+  },
+  summaryValue: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+    letterSpacing: -0.4,
+  },
+  summaryBody: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondaryBright,
+    marginTop: SPACING.md,
+  },
+  summaryBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(123,97,255,0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(123,97,255,0.2)',
+  },
+  summaryBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: ACCENT.purple,
   },
 
   /* Week strip */
   weekStrip: {
     flexDirection: 'row',
-    paddingBottom: SPACING.md,
-    gap: 6,
+    paddingBottom: SPACING.lg,
+    gap: SPACING.sm,
   },
   weekDay: {
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 12,
-    borderRadius: 12,
-    minWidth: 46,
+    borderRadius: 16,
+    minWidth: 58,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: 'rgba(19,23,38,0.72)',
   },
   weekDayToday: {
     borderWidth: 1,
-    borderColor: 'rgba(200,168,75,0.5)',
-    backgroundColor: 'rgba(200,168,75,0.08)',
+    borderColor: 'rgba(200,168,75,0.36)',
+    backgroundColor: 'rgba(200,168,75,0.1)',
   },
   weekDaySelected: {
     backgroundColor: 'rgba(123,97,255,0.16)',
     borderWidth: 1,
-    borderColor: 'rgba(123,97,255,0.35)',
+    borderColor: 'rgba(123,97,255,0.34)',
+  },
+  weekDayPressed: {
+    opacity: 0.88,
   },
   weekDayLabel: {
     fontSize: 11,
     color: TEXT.tertiary,
-    fontWeight: '500',
+    fontWeight: '600',
     marginBottom: 4,
+    textTransform: 'uppercase',
   },
   weekDayLabelToday: {
-    color: '#C8A84B',
+    color: ACCENT.primary,
   },
   weekDayNum: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: TEXT.primary,
     marginBottom: 4,
   },
   weekDayNumToday: {
-    color: '#C8A84B',
+    color: ACCENT.primary,
   },
   dotRow: {
     flexDirection: 'row',
@@ -331,20 +442,24 @@ const styles = StyleSheet.create({
   shiftCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    padding: 12,
-    marginBottom: 8,
+    backgroundColor: 'rgba(18,23,37,0.84)',
+    padding: 14,
+    marginBottom: SPACING.sm,
+  },
+  shiftCardPressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.99 }],
   },
   shiftIconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: SPACING.md,
   },
   shiftIconEmoji: {
     fontSize: 18,
@@ -353,17 +468,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   shiftCardTitle: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
     color: TEXT.primary,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   shiftCardTime: {
-    fontSize: 12,
+    fontSize: 13,
     color: TEXT.secondary,
   },
+  shiftCardMeta: {
+    alignItems: 'flex-end',
+    gap: 4,
+    marginLeft: SPACING.sm,
+  },
   shiftCardDuration: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
     color: TEXT.muted,
   },
@@ -374,13 +494,13 @@ const styles = StyleSheet.create({
   },
   dayDetailHeader: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: TEXT.tertiary,
-    letterSpacing: 1,
+    letterSpacing: 1.1,
     marginBottom: SPACING.md,
   },
   noDayShifts: {
-    fontSize: 13,
+    fontSize: 14,
     color: TEXT.muted,
     marginBottom: SPACING.md,
   },
@@ -392,15 +512,17 @@ const styles = StyleSheet.create({
     bottom: 90,
     width: 52,
     height: 52,
-    borderRadius: 16,
-    backgroundColor: '#7B61FF',
+    borderRadius: 18,
+    backgroundColor: ACCENT.purple,
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 10,
-    shadowColor: '#7B61FF',
+    shadowColor: ACCENT.purple,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.5,
     shadowRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   fabPressed: {
     opacity: 0.8,
@@ -416,36 +538,44 @@ const styles = StyleSheet.create({
   /* Empty state */
   emptyState: {
     alignItems: 'center',
+    backgroundColor: 'rgba(16,20,34,0.9)',
+    borderRadius: RADIUS.xl,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
     paddingVertical: 40,
     paddingHorizontal: 24,
+    marginTop: SPACING.sm,
   },
   emptyEmoji: {
     fontSize: 48,
     marginBottom: 16,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 22,
+    fontWeight: '700',
     color: TEXT.primary,
     marginBottom: 8,
   },
   emptyBody: {
-    fontSize: 15,
+    ...TYPOGRAPHY.body,
     color: TEXT.secondary,
     textAlign: 'center',
-    lineHeight: 22,
     maxWidth: 280,
     marginBottom: 24,
   },
   emptyCta: {
-    backgroundColor: '#7B61FF',
+    backgroundColor: ACCENT.purple,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    borderRadius: 14,
+    borderRadius: 16,
+    shadowColor: ACCENT.purple,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.28,
+    shadowRadius: 18,
   },
   emptyCtaText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });

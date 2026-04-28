@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { tapLight } from '@/src/lib/haptics/haptic-service';
 import { usePlanStore } from '@/src/store/plan-store';
+import { ACCENT, BACKGROUND, BORDER, RADIUS, TEXT } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Icon map — route name → [inactive icon, active icon]
@@ -70,7 +71,7 @@ export function FloatingTabBar({
             const [inactiveIcon, activeIcon] =
               ROUTE_ICONS[route.name] ?? FALLBACK_ICONS;
             const iconName = isFocused ? activeIcon : inactiveIcon;
-            const color = isFocused ? '#7B61FF' : '#4B5563';
+            const color = isFocused ? ACCENT.purple : TEXT.dim;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -100,7 +101,10 @@ export function FloatingTabBar({
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={styles.tab}
+                style={[
+                  styles.tab,
+                  isFocused && styles.tabFocused,
+                ]}
                 activeOpacity={0.7}
               >
                 <Ionicons
@@ -141,28 +145,40 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   blurContainer: {
-    borderRadius: 22,
+    borderRadius: RADIUS.xl + 2,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(123,97,255,0.08)',
-    backgroundColor: 'rgba(8,11,20,0.94)',
+    borderColor: 'rgba(123,97,255,0.12)',
+    backgroundColor: 'rgba(8,11,20,0.9)',
   },
   innerContainer: {
     flexDirection: 'row',
     paddingVertical: 8,
     paddingHorizontal: 8,
+    gap: 6,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 6,
+    paddingVertical: 8,
+    borderRadius: RADIUS.lg,
     gap: 3,
+  },
+  tabFocused: {
+    backgroundColor: 'rgba(123,97,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(123,97,255,0.16)',
+    shadowColor: ACCENT.purple,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    elevation: 2,
   },
   tabLabel: {
     fontSize: 10,
-    fontWeight: '500',
-    letterSpacing: 0.2,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   activeIconShadow: {
     textShadowColor: 'rgba(123,97,255,0.7)',

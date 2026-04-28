@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -11,144 +11,301 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useUserStore } from '@/src/store/user-store';
-import { usePremiumStore } from '@/src/store/premium-store';
-<<<<<<< HEAD
+
+import { GradientMeshBackground } from '@/src/components/ui';
+import ReferralCard from '@/src/components/ui/ReferralCard';
+import { useFeatureGate } from '@/src/lib/premium/feature-gate';
 import { useAuthStore } from '@/src/store/auth-store';
 import { useBriefStore } from '@/src/store/brief-store';
+import { useNotificationStore } from '@/src/store/notification-store';
 import { usePlanStore } from '@/src/store/plan-store';
-import { useFeatureGate } from '@/src/lib/premium/feature-gate';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
-import ReferralCard from '@/src/components/ui/ReferralCard';
-=======
-import { useExport } from '@/src/hooks/useExport';
-import { DEFAULT_EXPORT_OPTIONS, type ExportOptions } from '@/src/lib/calendar/ics-generator';
-import { fullSync, getSyncStatus } from '@/src/lib/sync/sync-engine';
-import { requestPermissions, getScheduledNotifications } from '@/src/lib/notifications/notification-service';
+import { usePremiumStore } from '@/src/store/premium-store';
+import { useUserStore } from '@/src/store/user-store';
 import {
-  BACKGROUND,
-  TEXT,
   ACCENT,
+  BACKGROUND,
   BORDER,
+  COLORS,
+  RADIUS,
   SEMANTIC,
   SPACING,
-  RADIUS,
-  heading2,
-  heading3,
-  body,
-  bodySmall,
-  caption,
-  label,
+  TEXT as TEXT_COLORS,
+  TYPOGRAPHY,
 } from '@/src/theme';
-import Button from '@/src/components/ui/Button';
-import Card from '@/src/components/ui/Card';
-import { WeeklyBriefToggle } from '@/src/components/settings/WeeklyBriefToggle';
->>>>>>> worktree-agent-a211ed4f
 
-// ---------------------------------------------------------------------------
-// Section header
-// ---------------------------------------------------------------------------
+const CHRONOTYPE_LABELS: Record<string, string> = {
+  early: 'Early Bird',
+  intermediate: 'Intermediate',
+  late: 'Night Owl',
+};
 
 function SectionHeader({ title }: { title: string }) {
   return <Text style={styles.sectionHeader}>{title}</Text>;
 }
 
-// ---------------------------------------------------------------------------
-// Stepper control
-// ---------------------------------------------------------------------------
+function SettingsCard({
+  children,
+  style,
+}: {
+  children: React.ReactNode;
+  style?: object;
+}) {
+  return <View style={[styles.card, style]}>{children}</View>;
+}
+
+interface ToggleRowProps {
+  icon: React.ComponentProps<typeof Ionicons>['name'];
+  label: string;
+  description: string;
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+  disabled?: boolean;
+}
+
+function ToggleRow({
+  icon,
+  label,
+  description,
+  value,
+  onValueChange,
+  disabled = false,
+}: ToggleRowProps) {
+  return (
+    <View style={styles.row}>
+      <View style={styles.rowLeft}>
+        <View style={[styles.iconBadge, disabled && styles.iconBadgeDisabled]}>
+          <Ionicons
+            name={icon}
+            size={16}
+            color={disabled ? TEXT_COLORS.tertiary : ACCENT.primary}
+          />
+        </View>
+        <View style={styles.rowTextBlock}>
+          <Text style={[styles.rowLabel, disabled && styles.rowLabelMuted]}>{label}</Text>
+          <Text style={styles.rowSubLabel}>{description}</Text>
+        </View>
+      </View>
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        trackColor={{
+          false: BORDER.strong,
+          true: ACCENT.primaryMuted,
+        }}
+        thumbColor={value ? ACCENT.primary : '#F3F4F6'}
+      />
+    </View>
+  );
+}
 
 interface StepperProps {
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   label: string;
   unit: string;
   value: number;
   min: number;
   max: number;
   step: number;
-  onChangeValue: (v: number) => void;
+  onChangeValue: (value: number) => void;
 }
 
-function Stepper({ label, unit, value, min, max, step, onChangeValue }: StepperProps) {
+function Stepper({
+  icon,
+  label,
+  unit,
+  value,
+  min,
+  max,
+  step,
+  onChangeValue,
+}: StepperProps) {
+  const canDecrease = value > min;
+  const canIncrease = value < max;
+
   return (
     <View style={styles.row}>
-      <Text style={styles.rowLabel}>{label}</Text>
+      <View style={styles.rowLeft}>
+        <View style={styles.iconBadge}>
+          <Ionicons name={icon} size={16} color={ACCENT.primary} />
+        </View>
+        <View style={styles.rowTextBlock}>
+          <Text style={styles.rowLabel}>{label}</Text>
+          <Text style={styles.rowSubLabel}>Adjust in small increments</Text>
+        </View>
+      </View>
+
       <View style={styles.stepperRow}>
         <TouchableOpacity
-          style={[styles.stepperBtn, value <= min && styles.stepperBtnDisabled]}
+          style={[styles.stepperBtn, !canDecrease && styles.stepperBtnDisabled]}
           onPress={() => onChangeValue(Math.max(min, +(value - step).toFixed(1)))}
-          disabled={value <= min}
+          disabled={!canDecrease}
           hitSlop={8}
+          activeOpacity={0.8}
         >
-          <Ionicons name="remove" size={18} color={value <= min ? COLORS.text.muted : COLORS.text.primary} />
+          <Ionicons
+            name="remove"
+            size={16}
+            color={canDecrease ? COLORS.text.primary : COLORS.text.muted}
+          />
         </TouchableOpacity>
-        <Text style={styles.stepperValue}>
-          {value}
-          <Text style={styles.stepperUnit}> {unit}</Text>
-        </Text>
+
+        <View style={styles.stepperValueWrap}>
+          <Text style={styles.stepperValue}>{value}</Text>
+          <Text style={styles.stepperUnit}>{unit}</Text>
+        </View>
+
         <TouchableOpacity
-          style={[styles.stepperBtn, value >= max && styles.stepperBtnDisabled]}
+          style={[styles.stepperBtn, !canIncrease && styles.stepperBtnDisabled]}
           onPress={() => onChangeValue(Math.min(max, +(value + step).toFixed(1)))}
-          disabled={value >= max}
+          disabled={!canIncrease}
           hitSlop={8}
+          activeOpacity={0.8}
         >
-          <Ionicons name="add" size={18} color={value >= max ? COLORS.text.muted : COLORS.text.primary} />
+          <Ionicons
+            name="add"
+            size={16}
+            color={canIncrease ? COLORS.text.primary : COLORS.text.muted}
+          />
         </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Row with chevron
-// ---------------------------------------------------------------------------
-
-function LinkRow({ label, value, onPress, destructive }: {
+function LinkRow({
+  icon,
+  label,
+  value,
+  onPress,
+  destructive = false,
+}: {
+  icon: React.ComponentProps<typeof Ionicons>['name'];
   label: string;
   value?: string;
   onPress: () => void;
   destructive?: boolean;
 }) {
   return (
-    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
-      <Text style={[styles.rowLabel, destructive && styles.destructiveLabel]}>{label}</Text>
+    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.75}>
+      <View style={styles.rowLeft}>
+        <View style={[styles.iconBadge, destructive && styles.iconBadgeDestructive]}>
+          <Ionicons
+            name={icon}
+            size={16}
+            color={destructive ? SEMANTIC.error : ACCENT.primary}
+          />
+        </View>
+        <Text style={[styles.rowLabel, destructive && styles.destructiveLabel]}>{label}</Text>
+      </View>
       <View style={styles.rowRight}>
         {value ? <Text style={styles.rowValue}>{value}</Text> : null}
-        <Ionicons name="chevron-forward" size={16} color={COLORS.text.muted} />
+        <Ionicons name="chevron-forward" size={16} color={TEXT_COLORS.muted} />
       </View>
     </TouchableOpacity>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Screen
-// ---------------------------------------------------------------------------
-
 export default function SettingsScreen() {
-  const { profile, setProfile } = useUserStore();
-  const { isPremium, isInTrial, isGrandfathered, trialDaysLeft, plan } = usePremiumStore();
+  const profile = useUserStore((s) => s.profile);
+  const setProfile = useUserStore((s) => s.setProfile);
+  const weeklyBriefEnabled = useUserStore((s) => s.weeklyBriefEnabled);
+  const setWeeklyBriefEnabled = useUserStore((s) => s.setWeeklyBriefEnabled);
+
+  const {
+    isPremium,
+    isInTrial,
+    isGrandfathered,
+    trialDaysLeft,
+    plan,
+  } = usePremiumStore();
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const email = useAuthStore((s) => s.email);
+  const signOut = useAuthStore((s) => s.signOut);
   const deleteAccount = useAuthStore((s) => s.deleteAccount);
-  const { enabled: briefEnabled, toggleEnabled: toggleBrief } = useBriefStore();
-  const { autopilot, transparencyLog, setAutopilotEnabled } = usePlanStore();
+
+  const briefEnabled = useBriefStore((s) => s.enabled);
+  const toggleBrief = useBriefStore((s) => s.toggleEnabled);
+
+  const windDownEnabled = useNotificationStore((s) => s.windDownEnabled);
+  const caffeineCutoffEnabled = useNotificationStore((s) => s.caffeineCutoffEnabled);
+  const morningBriefEnabled = useNotificationStore((s) => s.morningBriefEnabled);
+  const setWindDown = useNotificationStore((s) => s.setWindDown);
+  const setCaffeineCutoff = useNotificationStore((s) => s.setCaffeineCutoff);
+  const setMorningBrief = useNotificationStore((s) => s.setMorningBrief);
+
+  const autopilot = usePlanStore((s) => s.autopilot);
+  const transparencyLog = usePlanStore((s) => s.transparencyLog);
+  const setAutopilotEnabled = usePlanStore((s) => s.setAutopilotEnabled);
   const { available: adaptiveBrainAvailable } = useFeatureGate('adaptive-brain');
 
   const [sleepNeed, setSleepNeed] = useState(profile.sleepNeed ?? 7.5);
   const [caffeineHalfLife, setCaffeineHalfLife] = useState(profile.caffeineHalfLife ?? 5);
-  const [commuteMinutes, setCommuteMinutes] = useState(profile.commuteDuration ?? 15);
-  const [napMinutes, setNapMinutes] = useState(
-    typeof profile.napPreference === 'number' ? profile.napPreference : 20,
-  );
+  const [commuteMinutes, setCommuteMinutes] = useState(profile.commuteDuration ?? 30);
+  const [strategicNaps, setStrategicNaps] = useState(profile.napPreference ?? true);
   const [saved, setSaved] = useState(false);
-  const [showTransparencyLog, setShowTransparencyLog] = useState(false);
+  const [showAutopilotHistory, setShowAutopilotHistory] = useState(false);
+
+  const subscriptionLabel = useMemo(() => {
+    if (isPremium) return `Pro · ${plan}`;
+    if (isInTrial) {
+      return `Trial · ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'} left`;
+    }
+    if (isGrandfathered) return 'Founding access';
+    return 'Free';
+  }, [isGrandfathered, isInTrial, isPremium, plan, trialDaysLeft]);
+
+  const subscriptionSummary = useMemo(() => {
+    if (isPremium) {
+      return 'Adaptive Brain, recovery insights, and premium planning features are unlocked.';
+    }
+    if (isInTrial) {
+      return 'You are exploring the full ShiftWell experience with premium features enabled.';
+    }
+    if (isGrandfathered) {
+      return 'Your install qualifies for early-access benefits while premium features evolve.';
+    }
+    return 'Core sleep planning is active. Upgrade when you want deeper coaching and automation.';
+  }, [isGrandfathered, isInTrial, isPremium]);
 
   function handleSave() {
-    setProfile({ sleepNeed, caffeineHalfLife, commuteDuration: commuteMinutes, napPreference: napMinutes > 0 });
+    setProfile({
+      sleepNeed,
+      caffeineHalfLife,
+      commuteDuration: commuteMinutes,
+      napPreference: strategicNaps,
+    });
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => setSaved(false), 1800);
+  }
+
+  function handleWeeklyBriefToggle(nextValue: boolean) {
+    if (weeklyBriefEnabled !== nextValue) {
+      setWeeklyBriefEnabled(nextValue);
+    }
+    if (briefEnabled !== nextValue) {
+      toggleBrief();
+    }
+  }
+
+  function handleSignOut() {
+    Alert.alert('Sign Out', 'You can sign back in anytime to restore your account.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Sign Out',
+        style: 'destructive',
+        onPress: async () => {
+          await signOut();
+        },
+      },
+    ]);
   }
 
   function handleDeleteAccount() {
     Alert.alert(
       'Delete Account',
-      'This will permanently delete your account and all data. This action cannot be undone.',
+      'This permanently removes your account and locally stored data from this device. This action cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -163,323 +320,459 @@ export default function SettingsScreen() {
     );
   }
 
-  const subscriptionLabel = isPremium
-    ? `Pro \u2014 ${plan}`
-    : isInTrial
-    ? `Trial \u2014 ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'} left`
-    : 'Free';
+  function handlePlaceholderLegal(title: string) {
+    Alert.alert(title, 'This item is not wired yet. Add the destination screen or external link when the legal pages are finalized.');
+  }
 
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={styles.screenTitle}>Settings</Text>
-
-        {/* Subscription */}
-        <SectionHeader title="SUBSCRIPTION" />
-        <View style={styles.card}>
-          <LinkRow
-            label="ShiftWell Pro"
-            value={subscriptionLabel}
-            onPress={() => router.push('/paywall')}
-          />
-        </View>
-
-        {/* Free Plan — show what's included vs locked for free/post-trial users */}
-        {!isPremium && !isInTrial && !isGrandfathered && (
-          <>
-            <SectionHeader title="YOUR FREE PLAN INCLUDES" />
-            <View style={styles.card}>
-              {[
-                'Sleep windows based on your shifts',
-                'Calendar sync (import + export)',
-                'Push notifications',
-                'Nap placement',
-                'Meal timing windows',
-                'Light protocols',
-              ].map((item) => (
-                <View key={item} style={styles.row}>
-                  <Text style={styles.freePlanCheck}>{'\u2713'}</Text>
-                  <Text style={styles.rowLabel}>{item}</Text>
-                </View>
-              ))}
-            </View>
-            <SectionHeader title="UNLOCK WITH PREMIUM" />
-            <View style={styles.card}>
-              {[
-                'Adaptive Brain — auto-adjusting sleep plans',
-                'AI Coaching — personalized weekly insights',
-                'Pattern Recognition — long-term sleep trends',
-                'Predictive Scheduling — plan weeks ahead',
-              ].map((item) => (
-                <View key={item} style={styles.row}>
-                  <Text style={styles.premiumLock}>{'\u{1F512}'}</Text>
-                  <Text style={[styles.rowLabel, styles.rowLabelMuted]}>{item}</Text>
-                </View>
-              ))}
-            </View>
-            <TouchableOpacity
-              style={styles.upgradeBanner}
-              onPress={() => router.push('/paywall')}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.upgradeText}>Upgrade to Premium</Text>
-            </TouchableOpacity>
-          </>
-        )}
-
-        {/* Sleep preferences */}
-        <SectionHeader title="SLEEP PREFERENCES" />
-        <View style={styles.card}>
-          <Stepper label="Sleep need" unit="hrs" value={sleepNeed} min={5} max={10} step={0.5} onChangeValue={setSleepNeed} />
-          <View style={styles.divider} />
-          <Stepper label="Caffeine half-life" unit="hrs" value={caffeineHalfLife} min={3} max={9} step={0.5} onChangeValue={setCaffeineHalfLife} />
-          <View style={styles.divider} />
-          <Stepper label="Nap length" unit="min" value={napMinutes} min={10} max={90} step={5} onChangeValue={setNapMinutes} />
-          <View style={styles.divider} />
-          <Stepper label="Commute time" unit="min" value={commuteMinutes} min={0} max={120} step={5} onChangeValue={setCommuteMinutes} />
-        </View>
-
-        <TouchableOpacity
-          style={[styles.saveBtn, saved && styles.saveBtnDone]}
-          onPress={handleSave}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.saveBtnText}>{saved ? '\u2713 Saved' : 'Save Changes'}</Text>
-        </TouchableOpacity>
-
-        {/* AI Features */}
-        <SectionHeader title="AI FEATURES" />
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <View style={styles.toggleLabelCol}>
-              <Text style={styles.rowLabel}>Weekly Sleep Brief</Text>
-              <Text style={styles.toggleSubtitle}>
-                Every Monday — AI summary of your sleep week
-              </Text>
-            </View>
-            <Switch
-              value={briefEnabled}
-              onValueChange={toggleBrief}
-              trackColor={{ false: COLORS.background.elevated, true: COLORS.accent.primary }}
-              thumbColor="#FFFFFF"
-            />
-          </View>
-
-          {/* Autopilot toggle (adaptive-brain gated) */}
-          {adaptiveBrainAvailable && (
-            <>
-              <View style={styles.divider} />
-              <View style={styles.row}>
-                <View style={styles.autopilotLabelBlock}>
-                  <Text style={styles.rowLabel}>Autopilot Mode</Text>
-                  <Text style={styles.autopilotSubLabel}>
-                    {autopilot.eligible
-                      ? autopilot.enabled
-                        ? `${autopilot.autonomousChanges} change${autopilot.autonomousChanges !== 1 ? 's' : ''} made automatically`
-                        : 'Eligible — small changes applied silently'
-                      : 'Available after 30 days of tracking'}
-                  </Text>
-                </View>
-                <Switch
-                  value={autopilot.enabled}
-                  onValueChange={(val) => {
-                    if (!autopilot.eligible) return;
-                    setAutopilotEnabled(val);
-                  }}
-                  disabled={!autopilot.eligible}
-                  trackColor={{ false: COLORS.border.default, true: COLORS.accent.primary }}
-                  thumbColor="#FFFFFF"
-                />
-              </View>
-
-              {/* Transparency log (shown when autopilot is on and has entries) */}
-              {autopilot.enabled && transparencyLog.length > 0 && (
-                <>
-                  <View style={styles.divider} />
-                  <TouchableOpacity
-                    style={styles.row}
-                    onPress={() => setShowTransparencyLog((v) => !v)}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={styles.rowLabel}>Autopilot History</Text>
-                    <View style={styles.rowRight}>
-                      <Text style={styles.rowValue}>{transparencyLog.length} entries</Text>
-                      <Ionicons
-                        name={showTransparencyLog ? 'chevron-up' : 'chevron-down'}
-                        size={16}
-                        color={COLORS.text.muted}
-                      />
-                    </View>
-                  </TouchableOpacity>
-
-                  {showTransparencyLog && (
-                    <View style={styles.transparencyBlock}>
-                      {transparencyLog.slice(-10).reverse().map((entry, i) => (
-                        <View key={i} style={styles.transparencyEntry}>
-                          <Text style={styles.transparencyDate}>{entry.dateISO}</Text>
-                          <Text style={styles.transparencyReason}>{entry.reason}</Text>
-                        </View>
-                      ))}
-                      {transparencyLog.length > 10 && (
-                        <Text style={styles.transparencyMore}>
-                          +{transparencyLog.length - 10} older entries
-                        </Text>
-                      )}
-                    </View>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </View>
-
-<<<<<<< HEAD
-        {/* Community */}
-        <SectionHeader title="COMMUNITY" />
-        <ReferralCard />
-=======
-        {/* ---- AI Coaching Section ---- */}
-        <SectionHeader title="AI COACHING" />
-        <Card style={styles.card}>
-          <WeeklyBriefToggle />
-        </Card>
-
-        {/* ---- Profile Section ---- */}
-        <SectionHeader title="PROFILE" />
-        <Card style={styles.card} padding={false}>
-          <SettingsRow
-            label="Chronotype"
-            value={CHRONOTYPE_LABELS[profile.chronotype] ?? profile.chronotype}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Sleep need"
-            value={`${profile.sleepNeed}h`}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Caffeine half-life"
-            value={`${profile.caffeineHalfLife}h`}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Strategic naps"
-            value={profile.napPreference ? 'Yes' : 'No'}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Commute"
-            value={`${profile.commuteDuration} min`}
-          />
-          <View style={styles.cardDivider} />
-          <View style={styles.editButtonWrapper}>
-            <Button
-              title="Edit Preferences"
-              onPress={() => router.push('/(onboarding)')}
-              variant="ghost"
-              size="sm"
-            />
-          </View>
-        </Card>
->>>>>>> worktree-agent-a211ed4f
-
-        {/* About */}
-        <SectionHeader title="ABOUT" />
-        <View style={styles.card}>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>Version</Text>
-            <Text style={styles.rowValue}>1.0.0</Text>
-          </View>
-          <View style={styles.divider} />
-          <LinkRow label="Privacy Policy" onPress={() => {}} />
-          <View style={styles.divider} />
-          <LinkRow label="Terms of Service" onPress={() => {}} />
-        </View>
-
-        {/* Medical Disclaimer */}
-        <SectionHeader title="MEDICAL DISCLAIMER" />
-        <View style={styles.card}>
-          <View style={styles.disclaimerRow}>
-            <Ionicons name="medical" size={16} color={COLORS.text.muted} style={styles.disclaimerIcon} />
-            <Text style={styles.disclaimerText}>
-              ShiftWell provides general wellness information based on circadian science research.
-              It is not a substitute for medical advice. Consult your physician before making
-              changes to your sleep, diet, or work schedule — especially if you have a medical
-              condition or take medications.
+    <GradientMeshBackground>
+      <SafeAreaView style={styles.safe} edges={['top']}>
+        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={styles.headerBlock}>
+            <Text style={styles.screenTitle}>Settings</Text>
+            <Text style={styles.screenSubtitle}>
+              Tune the way ShiftWell plans, reminds, and adapts around your life.
             </Text>
           </View>
-        </View>
 
-        {/* Account */}
-        <SectionHeader title="ACCOUNT" />
-        <View style={styles.card}>
-          <LinkRow
-            label="Delete Account"
-            onPress={handleDeleteAccount}
-            destructive
-          />
-        </View>
+          <SettingsCard style={styles.heroCard}>
+            <View style={styles.heroTopRow}>
+              <View style={styles.heroBadge}>
+                <Ionicons name="moon" size={14} color={ACCENT.primary} />
+                <Text style={styles.heroBadgeText}>{subscriptionLabel}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.heroAction}
+                onPress={() => router.push('/paywall')}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.heroActionText}>
+                  {isPremium ? 'Manage' : 'Upgrade'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.heroTitle}>Design your recovery system.</Text>
+            <Text style={styles.heroBody}>{subscriptionSummary}</Text>
 
-        <Text style={styles.legal}>
-          ShiftWell provides general wellness information based on circadian science research.
-          It is not medical advice. Always consult your doctor about sleep concerns.
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+            <View style={styles.heroStatsRow}>
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>
+                  {CHRONOTYPE_LABELS[profile.chronotype] ?? profile.chronotype}
+                </Text>
+                <Text style={styles.heroStatLabel}>Chronotype</Text>
+              </View>
+              <View style={styles.heroStatDivider} />
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>{profile.sleepNeed.toFixed(1)}h</Text>
+                <Text style={styles.heroStatLabel}>Sleep target</Text>
+              </View>
+              <View style={styles.heroStatDivider} />
+              <View style={styles.heroStat}>
+                <Text style={styles.heroStatValue}>{profile.commuteDuration}m</Text>
+                <Text style={styles.heroStatLabel}>Commute</Text>
+              </View>
+            </View>
+          </SettingsCard>
+
+          {!isPremium && !isInTrial && !isGrandfathered && (
+            <>
+              <SectionHeader title="WHAT PREMIUM ADDS" />
+              <SettingsCard>
+                {[
+                  'Adaptive Brain for auto-adjusting sleep plans',
+                  'AI coaching with weekly summaries and insights',
+                  'Pattern recognition across rotating schedules',
+                  'Predictive planning for difficult transitions',
+                ].map((item, index) => (
+                  <React.Fragment key={item}>
+                    <View style={styles.bulletRow}>
+                      <View style={styles.lockBadge}>
+                        <Ionicons name="sparkles" size={12} color={ACCENT.primary} />
+                      </View>
+                      <Text style={styles.bulletText}>{item}</Text>
+                    </View>
+                    {index < 3 ? <View style={styles.divider} /> : null}
+                  </React.Fragment>
+                ))}
+              </SettingsCard>
+            </>
+          )}
+
+          <SectionHeader title="SLEEP PROFILE" />
+          <SettingsCard>
+            <Stepper
+              icon="bed-outline"
+              label="Sleep need"
+              unit="hrs"
+              value={sleepNeed}
+              min={5}
+              max={10}
+              step={0.5}
+              onChangeValue={setSleepNeed}
+            />
+            <View style={styles.divider} />
+            <Stepper
+              icon="cafe-outline"
+              label="Caffeine half-life"
+              unit="hrs"
+              value={caffeineHalfLife}
+              min={3}
+              max={9}
+              step={0.5}
+              onChangeValue={setCaffeineHalfLife}
+            />
+            <View style={styles.divider} />
+            <Stepper
+              icon="car-outline"
+              label="Commute time"
+              unit="min"
+              value={commuteMinutes}
+              min={0}
+              max={120}
+              step={5}
+              onChangeValue={setCommuteMinutes}
+            />
+            <View style={styles.divider} />
+            <ToggleRow
+              icon="moon-outline"
+              label="Strategic naps"
+              description="Let ShiftWell build naps into the plan when they are useful."
+              value={strategicNaps}
+              onValueChange={setStrategicNaps}
+            />
+          </SettingsCard>
+
+          <TouchableOpacity
+            style={[styles.saveBtn, saved && styles.saveBtnDone]}
+            onPress={handleSave}
+            activeOpacity={0.85}
+          >
+            <Ionicons
+              name={saved ? 'checkmark-circle' : 'save-outline'}
+              size={16}
+              color="#0B0D16"
+            />
+            <Text style={styles.saveBtnText}>{saved ? 'Saved' : 'Save Changes'}</Text>
+          </TouchableOpacity>
+
+          <SectionHeader title="AUTOMATION & COACHING" />
+          <SettingsCard>
+            <ToggleRow
+              icon="newspaper-outline"
+              label="Weekly sleep brief"
+              description="Monday-morning AI recap with trend-level guidance."
+              value={weeklyBriefEnabled && briefEnabled}
+              onValueChange={handleWeeklyBriefToggle}
+            />
+            <View style={styles.divider} />
+            <ToggleRow
+              icon="alarm-outline"
+              label="Wind-down reminders"
+              description="Nudges before your planned sleep window opens."
+              value={windDownEnabled}
+              onValueChange={(value) => setWindDown(value)}
+            />
+            <View style={styles.divider} />
+            <ToggleRow
+              icon="cafe-outline"
+              label="Caffeine cutoff alerts"
+              description="Protect sleep timing with earlier cutoff prompts."
+              value={caffeineCutoffEnabled}
+              onValueChange={(value) => setCaffeineCutoff(value)}
+            />
+            <View style={styles.divider} />
+            <ToggleRow
+              icon="sunny-outline"
+              label="Morning brief notifications"
+              description="A gentle recap after wake time and overnight recovery."
+              value={morningBriefEnabled}
+              onValueChange={setMorningBrief}
+            />
+
+            {adaptiveBrainAvailable ? (
+              <>
+                <View style={styles.divider} />
+                <ToggleRow
+                  icon="sparkles-outline"
+                  label="Autopilot mode"
+                  description={
+                    autopilot.eligible
+                      ? autopilot.enabled
+                        ? `${autopilot.autonomousChanges} automatic change${autopilot.autonomousChanges === 1 ? '' : 's'} logged so far.`
+                        : 'Eligible now. Small safe plan changes can be applied automatically.'
+                      : 'Unlocks after enough tracked history has built trust in the model.'
+                  }
+                  value={autopilot.enabled}
+                  onValueChange={(value) => {
+                    if (!autopilot.eligible) return;
+                    setAutopilotEnabled(value);
+                  }}
+                  disabled={!autopilot.eligible}
+                />
+
+                {autopilot.enabled && transparencyLog.length > 0 ? (
+                  <>
+                    <View style={styles.divider} />
+                    <TouchableOpacity
+                      style={styles.historyToggle}
+                      onPress={() => setShowAutopilotHistory((value) => !value)}
+                      activeOpacity={0.75}
+                    >
+                      <Text style={styles.historyToggleLabel}>Autopilot history</Text>
+                      <View style={styles.rowRight}>
+                        <Text style={styles.rowValue}>{transparencyLog.length} entries</Text>
+                        <Ionicons
+                          name={showAutopilotHistory ? 'chevron-up' : 'chevron-down'}
+                          size={16}
+                          color={TEXT_COLORS.muted}
+                        />
+                      </View>
+                    </TouchableOpacity>
+
+                    {showAutopilotHistory ? (
+                      <View style={styles.historyBlock}>
+                        {transparencyLog.slice(-8).reverse().map((entry, index) => (
+                          <View
+                            key={`${entry.dateISO}-${index}`}
+                            style={[
+                              styles.historyEntry,
+                              index < Math.min(transparencyLog.length, 8) - 1 && styles.historyEntryBorder,
+                            ]}
+                          >
+                            <Text style={styles.historyDate}>{entry.dateISO}</Text>
+                            <Text style={styles.historyReason}>{entry.reason}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    ) : null}
+                  </>
+                ) : null}
+              </>
+            ) : null}
+          </SettingsCard>
+
+          <SectionHeader title="COMMUNITY" />
+          <ReferralCard />
+
+          <SectionHeader title="ABOUT" />
+          <SettingsCard>
+            <LinkRow icon="person-outline" label="Account" value={email ?? 'Local only'} onPress={() => router.push('/(tabs)/profile')} />
+            <View style={styles.divider} />
+            <LinkRow icon="information-circle-outline" label="Version" value="1.0.0" onPress={() => {}} />
+            <View style={styles.divider} />
+            <LinkRow
+              icon="shield-checkmark-outline"
+              label="Privacy Policy"
+              onPress={() => handlePlaceholderLegal('Privacy Policy')}
+            />
+            <View style={styles.divider} />
+            <LinkRow
+              icon="document-text-outline"
+              label="Terms of Service"
+              onPress={() => handlePlaceholderLegal('Terms of Service')}
+            />
+          </SettingsCard>
+
+          <SectionHeader title="MEDICAL DISCLAIMER" />
+          <SettingsCard style={styles.disclaimerCard}>
+            <View style={styles.disclaimerRow}>
+              <View style={styles.disclaimerBadge}>
+                <Ionicons name="medical-outline" size={16} color={ACCENT.primary} />
+              </View>
+              <Text style={styles.disclaimerText}>
+                ShiftWell provides general wellness information based on circadian science.
+                It does not diagnose or treat medical conditions, and it is not a substitute
+                for professional medical advice.
+              </Text>
+            </View>
+          </SettingsCard>
+
+          <SectionHeader title="ACCOUNT" />
+          <SettingsCard>
+            {isAuthenticated ? (
+              <>
+                <LinkRow
+                  icon="log-out-outline"
+                  label="Sign Out"
+                  onPress={handleSignOut}
+                />
+                <View style={styles.divider} />
+                <LinkRow
+                  icon="trash-outline"
+                  label="Delete Account"
+                  onPress={handleDeleteAccount}
+                  destructive
+                />
+              </>
+            ) : (
+              <LinkRow
+                icon="log-in-outline"
+                label="Sign In"
+                onPress={() => router.push('/(auth)/sign-in')}
+              />
+            )}
+          </SettingsCard>
+
+          <Text style={styles.legal}>
+            Your schedule, recovery, and reminders are designed to support safer sleep habits
+            around shift work. They should complement, not replace, clinical guidance.
+          </Text>
+        </ScrollView>
+      </SafeAreaView>
+    </GradientMeshBackground>
   );
 }
-
-// ---------------------------------------------------------------------------
-// Styles
-// ---------------------------------------------------------------------------
 
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.background.primary,
+    backgroundColor: 'transparent',
   },
   scroll: {
-    paddingHorizontal: 20,
-    paddingBottom: 120,
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING['4xl'] + 88,
+  },
+  headerBlock: {
+    paddingTop: SPACING.xl,
+    marginBottom: SPACING.lg,
   },
   screenTitle: {
-    fontSize: 28,
-    fontWeight: '700',
+    ...TYPOGRAPHY.heading2,
     color: COLORS.text.primary,
-    marginTop: SPACING.xl,
-    marginBottom: SPACING.lg,
+    letterSpacing: -0.6,
+  },
+  screenSubtitle: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+    marginTop: SPACING.xs,
+    maxWidth: 320,
   },
   sectionHeader: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.text.muted,
-    letterSpacing: 1,
+    letterSpacing: 1.1,
     marginTop: SPACING.xl,
     marginBottom: SPACING.sm,
-    paddingHorizontal: 4,
+    paddingHorizontal: SPACING.xs,
   },
   card: {
-    backgroundColor: COLORS.background.surface,
-    borderRadius: RADIUS.lg,
+    backgroundColor: 'rgba(19,23,38,0.9)',
+    borderRadius: RADIUS.xl,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
     overflow: 'hidden',
   },
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.border.default,
-    marginHorizontal: 16,
+  heroCard: {
+    padding: SPACING.lg,
+    backgroundColor: 'rgba(16,20,34,0.94)',
+  },
+  heroTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: SPACING.lg,
+  },
+  heroBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(200,168,75,0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(200,168,75,0.18)',
+  },
+  heroBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: ACCENT.primary,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  heroAction: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(123,97,255,0.14)',
+    borderWidth: 1,
+    borderColor: 'rgba(123,97,255,0.22)',
+  },
+  heroActionText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: ACCENT.purple,
+  },
+  heroTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+    letterSpacing: -0.6,
+    marginBottom: SPACING.sm,
+  },
+  heroBody: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondaryBright,
+    marginBottom: SPACING.lg,
+  },
+  heroStatsRow: {
+    flexDirection: 'row',
+    borderRadius: RADIUS.lg,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
+    overflow: 'hidden',
+  },
+  heroStat: {
+    flex: 1,
+    paddingVertical: SPACING.md,
+    alignItems: 'center',
+  },
+  heroStatDivider: {
+    width: 1,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+  },
+  heroStatValue: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: COLORS.text.primary,
+    marginBottom: 4,
+  },
+  heroStatLabel: {
+    fontSize: 11,
+    color: COLORS.text.muted,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    minHeight: 52,
+    gap: SPACING.md,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    minHeight: 66,
+  },
+  rowLeft: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: SPACING.md,
+  },
+  rowTextBlock: {
+    flex: 1,
+    gap: 2,
   },
   rowLabel: {
-    fontSize: 15,
+    ...TYPOGRAPHY.body,
     color: COLORS.text.primary,
-    flex: 1,
+  },
+  rowLabelMuted: {
+    color: COLORS.text.secondary,
+  },
+  rowSubLabel: {
+    fontSize: 12,
+    lineHeight: 17,
+    color: COLORS.text.muted,
   },
   rowRight: {
     flexDirection: 'row',
@@ -487,160 +780,169 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   rowValue: {
-    fontSize: 14,
+    fontSize: 13,
     color: COLORS.text.muted,
   },
   destructiveLabel: {
-    color: '#FF6B6B',
+    color: SEMANTIC.error,
   },
-
-  // Stepper
+  iconBadge: {
+    width: 34,
+    height: 34,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(200,168,75,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(200,168,75,0.14)',
+  },
+  iconBadgeDisabled: {
+    backgroundColor: 'rgba(75,85,99,0.14)',
+    borderColor: 'rgba(75,85,99,0.18)',
+  },
+  iconBadgeDestructive: {
+    backgroundColor: 'rgba(255,107,107,0.09)',
+    borderColor: 'rgba(255,107,107,0.16)',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    marginHorizontal: SPACING.lg,
+  },
   stepperRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: SPACING.sm,
   },
   stepperBtn: {
     width: 32,
     height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.background.elevated,
+    borderRadius: 12,
+    backgroundColor: BACKGROUND.elevated,
+    borderWidth: 1,
+    borderColor: BORDER.default,
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepperBtnDisabled: {
     opacity: 0.35,
   },
+  stepperValueWrap: {
+    minWidth: 54,
+    alignItems: 'center',
+  },
   stepperValue: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: COLORS.text.primary,
-    minWidth: 52,
-    textAlign: 'center',
+    lineHeight: 19,
   },
   stepperUnit: {
-    fontSize: 12,
-    fontWeight: '400',
+    fontSize: 11,
     color: COLORS.text.muted,
+    marginTop: 2,
   },
-
-  // Save button
   saveBtn: {
-    backgroundColor: COLORS.accent.primary,
-    borderRadius: RADIUS.lg,
-    paddingVertical: 15,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORS.accent.primary,
+    borderRadius: RADIUS.xl,
+    paddingVertical: 15,
     marginTop: SPACING.lg,
-    marginBottom: SPACING.sm,
   },
   saveBtnDone: {
-    backgroundColor: '#34D399',
+    backgroundColor: SEMANTIC.success,
   },
   saveBtnText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '800',
     color: '#0B0D16',
   },
-
-  // Disclaimer
+  bulletRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
+  lockBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(123,97,255,0.14)',
+  },
+  bulletText: {
+    flex: 1,
+    ...TYPOGRAPHY.bodySmall,
+    color: COLORS.text.secondaryBright,
+  },
+  historyToggle: {
+    minHeight: 56,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  historyToggleLabel: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.primary,
+  },
+  historyBlock: {
+    paddingHorizontal: SPACING.lg,
+    paddingBottom: SPACING.md,
+  },
+  historyEntry: {
+    paddingVertical: 10,
+    gap: 4,
+  },
+  historyEntryBorder: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.05)',
+  },
+  historyDate: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: COLORS.text.muted,
+    letterSpacing: 0.4,
+  },
+  historyReason: {
+    ...TYPOGRAPHY.bodySmall,
+    color: COLORS.text.secondary,
+  },
+  disclaimerCard: {
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+  },
   disclaimerRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
+    gap: SPACING.md,
   },
-  disclaimerIcon: {
-    marginTop: 1,
-    marginRight: 10,
+  disclaimerBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(200,168,75,0.1)',
   },
   disclaimerText: {
     flex: 1,
-    fontSize: 12,
-    color: COLORS.text.secondary,
-    lineHeight: 18,
-  },
-
-  // Toggle row
-  toggleLabelCol: {
-    flex: 1,
-    gap: 2,
-    paddingRight: SPACING.md,
-  },
-  toggleSubtitle: {
-    fontSize: 12,
-    color: COLORS.text.muted,
-  },
-
-  // Autopilot
-  autopilotLabelBlock: {
-    flex: 1,
-    gap: 2,
-    paddingRight: SPACING.md,
-  },
-  autopilotSubLabel: {
-    fontSize: 12,
-    color: COLORS.text.muted,
-    lineHeight: 16,
-  },
-  transparencyBlock: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    gap: 8,
-  },
-  transparencyEntry: {
-    gap: 2,
-  },
-  transparencyDate: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: COLORS.text.muted,
-    letterSpacing: 0.5,
-  },
-  transparencyReason: {
     fontSize: 13,
+    lineHeight: 19,
     color: COLORS.text.secondary,
-    lineHeight: 18,
   },
-  transparencyMore: {
-    fontSize: 12,
-    color: COLORS.text.muted,
-    fontStyle: 'italic',
-  },
-
-  // Legal
   legal: {
-    fontSize: 10,
-    color: COLORS.text.dim,
+    fontSize: 11,
+    lineHeight: 17,
+    color: TEXT_COLORS.dim,
     textAlign: 'center',
-    lineHeight: 16,
     marginTop: SPACING.xl,
-    paddingHorizontal: SPACING.lg,
-  },
-
-  // Free plan / upgrade section
-  freePlanCheck: {
-    fontSize: 14,
-    color: '#34D399',
-    marginRight: 8,
-    fontWeight: '700',
-  },
-  premiumLock: {
-    fontSize: 14,
-    marginRight: 8,
-  },
-  rowLabelMuted: {
-    color: COLORS.text.muted,
-  },
-  upgradeBanner: {
-    backgroundColor: COLORS.accent.primary,
-    borderRadius: RADIUS.lg,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginBottom: SPACING['2xl'],
-  },
-  upgradeText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#0A0A0F',
+    paddingHorizontal: SPACING.md,
   },
 });

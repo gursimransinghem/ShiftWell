@@ -4,7 +4,7 @@ import { format, isSameDay } from 'date-fns';
 import type { ShiftEvent, PlanBlock, SleepBlockType } from '@/src/lib/circadian/types';
 import Card from '@/src/components/ui/Card';
 import Button from '@/src/components/ui/Button';
-import { BACKGROUND, TEXT, ACCENT, BLOCK_COLORS, BORDER, PURPLE } from '@/src/theme';
+import { ACCENT, BLOCK_COLORS, COLORS, PURPLE, RADIUS, SPACING, TEXT, TYPOGRAPHY } from '@/src/theme';
 
 interface DayDetailProps {
   date: Date;
@@ -145,11 +145,21 @@ export default function DayDetail({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.dateTitle}>{format(date, 'EEEE, MMMM d')}</Text>
+      <View style={styles.headerRow}>
+        <View>
+          <Text style={styles.sectionEyebrow}>DAY DETAIL</Text>
+          <Text style={styles.dateTitle}>{format(date, 'EEEE, MMMM d')}</Text>
+        </View>
+        <View style={styles.eventCountBadge}>
+          <Text style={styles.eventCountText}>
+            {events.length} item{events.length === 1 ? '' : 's'}
+          </Text>
+        </View>
+      </View>
 
       {events.length === 0 ? (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>No events scheduled</Text>
+          <Text style={styles.emptyText}>Nothing scheduled yet for this day.</Text>
         </View>
       ) : (
         <View style={styles.eventList}>
@@ -198,48 +208,84 @@ export default function DayDetail({
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: SPACING.md,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: SPACING.md,
+    marginBottom: SPACING.md,
+  },
+  sectionEyebrow: {
+    ...TYPOGRAPHY.caption,
+    color: COLORS.text.muted,
+    fontWeight: '700',
+    letterSpacing: 1.1,
+    marginBottom: 2,
   },
   dateTitle: {
     color: TEXT.primary,
-    fontSize: 17,
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  eventCountBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+  },
+  eventCountText: {
+    fontSize: 11,
     fontWeight: '600',
-    marginBottom: 12,
+    color: COLORS.text.secondary,
   },
   emptyState: {
-    paddingVertical: 24,
+    paddingVertical: SPACING.xl,
     alignItems: 'center',
+    borderRadius: RADIUS.lg,
+    backgroundColor: 'rgba(255,255,255,0.025)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
   },
   emptyText: {
-    color: TEXT.tertiary,
+    color: TEXT.secondary,
     fontSize: 15,
+    textAlign: 'center',
   },
   eventList: {
-    gap: 8,
+    gap: SPACING.sm,
   },
   eventCard: {
     overflow: 'hidden',
+    borderRadius: RADIUS.xl,
+    backgroundColor: 'rgba(19,23,38,0.92)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   eventRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   colorBar: {
-    width: 4,
+    width: 5,
     alignSelf: 'stretch',
-    borderTopLeftRadius: 14,
-    borderBottomLeftRadius: 14,
+    borderTopLeftRadius: RADIUS.xl,
+    borderBottomLeftRadius: RADIUS.xl,
   },
   eventContent: {
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    paddingVertical: SPACING.md,
+    paddingHorizontal: SPACING.md,
   },
   eventHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 2,
+    gap: SPACING.sm,
+    marginBottom: 4,
   },
   eventEmoji: {
     fontSize: 14,
@@ -247,17 +293,17 @@ const styles = StyleSheet.create({
   eventLabel: {
     color: TEXT.primary,
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
     flex: 1,
   },
   eventTime: {
     color: TEXT.secondary,
     fontSize: 13,
     fontWeight: '400',
-    marginLeft: 20,
+    marginLeft: 22,
   },
   editButton: {
-    paddingHorizontal: 14,
+    paddingHorizontal: SPACING.lg,
     paddingVertical: 8,
     minHeight: 44,
     justifyContent: 'center',
@@ -268,6 +314,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   addButtonContainer: {
-    marginTop: 16,
+    marginTop: SPACING.lg,
   },
 });
