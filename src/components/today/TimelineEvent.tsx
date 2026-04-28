@@ -240,7 +240,7 @@ export default function TimelineEvent({
             </Card>
           </Animated.View>
         ) : (
-          <Card style={[styles.card, cardBorderNext]}>
+          <Card style={[styles.card, cardBorderNext]} padding={false}>
             {/* Color accent bar */}
             <View style={[styles.accentBar, { backgroundColor: color }]} />
 

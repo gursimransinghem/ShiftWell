@@ -58,7 +58,6 @@ import {
   RADIUS,
   TYPOGRAPHY,
   TEXT as TEXT_COLORS,
-  PURPLE,
 } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
@@ -595,98 +594,12 @@ export default function TodayScreen() {
                   <StatusPill {...statusPillProps} />
                 </View>
 
-                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
-                {canUseAdaptiveBrain ? (
-                  adaptiveContext && adaptiveChanges.length > 0 && (
-                    <View style={styles.section}>
-                      <AdaptiveInsightCard
-                        changes={adaptiveChanges}
-                        context={adaptiveContext}
-                        onUndo={undoPlan}
-                        onDismiss={dismissChanges}
-                      />
-                    </View>
-                  )
-                ) : (
-                  <View style={styles.section}>
-                    <PremiumFeatureGate
-                      title="Adaptive Brain"
-                      description="Your plan adapts automatically to your sleep debt and circadian phase."
-                      onUpgrade={() => router.push('/paywall')}
-                    />
-                  </View>
-                )}
-
-                {/* Weekly Sleep Brief (Phase 20) — Mondays only, until dismissed */}
-                {showBriefCard && currentBrief && (
-                  <View style={styles.section}>
-                    <WeeklyBriefCard
-                      brief={currentBrief}
-                      onDismiss={dismissBrief}
-                    />
-                  </View>
-                )}
-
-                {/* Pattern Alerts (Feature 6) */}
-                <View style={styles.section}>
-                  <PatternAlertCard />
-                </View>
-
-                {/* Light Protocol Strip — transition days only */}
-                {isTransitionDay && lightBlocks.length > 0 && (
-                  <View style={styles.section}>
-                    <LightProtocolStrip
-                      lightBlocks={lightBlocks}
-                      onNavigateToFull={goToCircadian}
-                    />
-                  </View>
-                )}
-
                 {/* Hero Score */}
                 {showRecovery && (
                   <View style={styles.section}>
                     <HeroScore {...heroScoreData} scrollOffset={scrollY} />
                   </View>
                 )}
-
-                {/* Score Breakdown (Feature 5) */}
-                {showRecovery && heroScoreData.score > 0 && (
-                  <View style={styles.section}>
-                    <ScoreBreakdownCard score={heroScoreData.score} />
-                  </View>
-                )}
-
-                {/* HRV Calibration Banner (Phase 33) — shows during calibration or when HRV active */}
-                <View style={styles.section}>
-                  <HRVCalibrationBanner />
-                </View>
-
-                {/* Sleep Debt Tracker (Feature 1) — premium gate (adaptive_brain) */}
-                {canUseAdaptiveBrain && showDebtCard && (
-                  <View style={styles.section}>
-                    <SleepDebtCard />
-                  </View>
-                )}
-
-                {/* Circadian Forecast Card (Phase 22) — upcoming transitions */}
-                <View style={styles.section}>
-                  <CircadianForecastCard />
-                </View>
-
-                {/* Behavioral Checklist (Phase 22) — nap, caffeine, light */}
-                <View style={styles.section}>
-                  <BehavioralChecklist
-                    nextShift={shifts.find((s) => s.start > now) ?? null}
-                    plannedSleepISO={
-                      futureBlocks.find((b) => b.type === 'main-sleep')?.start.toISOString() ?? null
-                    }
-                    shiftType={
-                      currentShift
-                        ? (currentShift.shiftType === 'extended' ? 'night' : currentShift.shiftType) as 'day' | 'evening' | 'night'
-                        : 'day'
-                    }
-                  />
-                </View>
 
                 {/* Countdown Row */}
                 {recoveryCells.length > 0 && (
@@ -752,6 +665,97 @@ export default function TodayScreen() {
                   </View>
                 )}
 
+                {/* Insight */}
+                <View style={styles.section}>
+                  <InsightLine text={insightText} />
+                </View>
+
+                {/* Light Protocol Strip — transition days only */}
+                {isTransitionDay && lightBlocks.length > 0 && (
+                  <View style={styles.section}>
+                    <LightProtocolStrip
+                      lightBlocks={lightBlocks}
+                      onNavigateToFull={goToCircadian}
+                    />
+                  </View>
+                )}
+
+                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain ? (
+                  adaptiveContext && adaptiveChanges.length > 0 && (
+                    <View style={styles.section}>
+                      <AdaptiveInsightCard
+                        changes={adaptiveChanges}
+                        context={adaptiveContext}
+                        onUndo={undoPlan}
+                        onDismiss={dismissChanges}
+                      />
+                    </View>
+                  )
+                ) : (
+                  <View style={styles.section}>
+                    <PremiumFeatureGate
+                      title="Adaptive Brain"
+                      description="Your plan adapts automatically to your sleep debt and circadian phase."
+                      onUpgrade={() => router.push('/paywall')}
+                    />
+                  </View>
+                )}
+
+                {/* Weekly Sleep Brief (Phase 20) — Mondays only, until dismissed */}
+                {showBriefCard && currentBrief && (
+                  <View style={styles.section}>
+                    <WeeklyBriefCard
+                      brief={currentBrief}
+                      onDismiss={dismissBrief}
+                    />
+                  </View>
+                )}
+
+                {/* Pattern Alerts (Feature 6) */}
+                <View style={styles.section}>
+                  <PatternAlertCard />
+                </View>
+
+                {/* Score Breakdown (Feature 5) */}
+                {showRecovery && heroScoreData.score > 0 && (
+                  <View style={styles.section}>
+                    <ScoreBreakdownCard score={heroScoreData.score} />
+                  </View>
+                )}
+
+                {/* HRV Calibration Banner (Phase 33) — shows during calibration or when HRV active */}
+                <View style={styles.section}>
+                  <HRVCalibrationBanner />
+                </View>
+
+                {/* Sleep Debt Tracker (Feature 1) — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain && showDebtCard && (
+                  <View style={styles.section}>
+                    <SleepDebtCard />
+                  </View>
+                )}
+
+                {/* Circadian Forecast Card (Phase 22) — upcoming transitions */}
+                <View style={styles.section}>
+                  <CircadianForecastCard />
+                </View>
+
+                {/* Behavioral Checklist (Phase 22) — nap, caffeine, light */}
+                <View style={styles.section}>
+                  <BehavioralChecklist
+                    nextShift={shifts.find((s) => s.start > now) ?? null}
+                    plannedSleepISO={
+                      futureBlocks.find((b) => b.type === 'main-sleep')?.start.toISOString() ?? null
+                    }
+                    shiftType={
+                      currentShift
+                        ? (currentShift.shiftType === 'extended' ? 'night' : currentShift.shiftType) as 'day' | 'evening' | 'night'
+                        : 'day'
+                    }
+                  />
+                </View>
+
                 {/* Science Insight Card (Feature 3) */}
                 <View style={styles.section}>
                   <ScienceInsightCard dayType={todayDayType} />
@@ -768,33 +772,6 @@ export default function TodayScreen() {
                 <View style={styles.section}>
                   <StatusPill {...statusPillProps} />
                 </View>
-
-                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
-                {canUseAdaptiveBrain && adaptiveContext && adaptiveChanges.length > 0 && (
-                  <View style={styles.section}>
-                    <AdaptiveInsightCard
-                      changes={adaptiveChanges}
-                      context={adaptiveContext}
-                      onUndo={undoPlan}
-                      onDismiss={dismissChanges}
-                    />
-                  </View>
-                )}
-
-                {/* Pattern Alerts (Feature 6) */}
-                <View style={styles.section}>
-                  <PatternAlertCard />
-                </View>
-
-                {/* Light Protocol Strip — transition days only */}
-                {isTransitionDay && lightBlocks.length > 0 && (
-                  <View style={styles.section}>
-                    <LightProtocolStrip
-                      lightBlocks={lightBlocks}
-                      onNavigateToFull={goToCircadian}
-                    />
-                  </View>
-                )}
 
                 {/* Countdown Row (Feature 4: now includes nap window + caffeine) */}
                 {onShiftCells.length > 0 && (
@@ -826,6 +803,7 @@ export default function TodayScreen() {
                 {/* Timeline: after-shift events */}
                 {futureBlocks.length > 0 && (
                   <View style={styles.section}>
+                    <Text style={styles.sectionLabel}>AFTER SHIFT</Text>
                     {futureBlocks.map((block) => {
                       const isActive = activeBlock?.id === block.id;
                       const isNext = nextBlock?.id === block.id;
@@ -841,6 +819,33 @@ export default function TodayScreen() {
                     })}
                   </View>
                 )}
+
+                {/* Light Protocol Strip — transition days only */}
+                {isTransitionDay && lightBlocks.length > 0 && (
+                  <View style={styles.section}>
+                    <LightProtocolStrip
+                      lightBlocks={lightBlocks}
+                      onNavigateToFull={goToCircadian}
+                    />
+                  </View>
+                )}
+
+                {/* Adaptive Insight Card — premium gate (adaptive_brain) */}
+                {canUseAdaptiveBrain && adaptiveContext && adaptiveChanges.length > 0 && (
+                  <View style={styles.section}>
+                    <AdaptiveInsightCard
+                      changes={adaptiveChanges}
+                      context={adaptiveContext}
+                      onUndo={undoPlan}
+                      onDismiss={dismissChanges}
+                    />
+                  </View>
+                )}
+
+                {/* Pattern Alerts (Feature 6) */}
+                <View style={styles.section}>
+                  <PatternAlertCard />
+                </View>
 
                 {/* Science Insight Card (Feature 3) */}
                 <View style={styles.section}>
@@ -928,15 +933,15 @@ const styles = StyleSheet.create({
 
   /* Sections */
   section: {
-    marginBottom: SPACING['2xl'],
+    marginBottom: SPACING.xl,
   },
   sectionLabel: {
-    fontSize: 11,
-    color: COLORS.text.muted,
+    fontSize: 10,
+    color: COLORS.text.dim,
     fontWeight: '600',
-    letterSpacing: 1.2,
+    letterSpacing: 1,
     textTransform: 'uppercase',
-    marginBottom: 12,
+    marginBottom: SPACING.md,
   },
 
   /* Empty state */
@@ -947,7 +952,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emptyEmoji: {
-    fontSize: 40,
+    fontSize: 44,
     marginBottom: SPACING.lg,
   },
   emptyTitle: {
@@ -965,14 +970,19 @@ const styles = StyleSheet.create({
     marginBottom: SPACING['2xl'],
   },
   gradientButton: {
-    backgroundColor: PURPLE,
+    backgroundColor: COLORS.accent.primary,
     paddingVertical: 14,
     paddingHorizontal: 40,
-    borderRadius: 14,
+    borderRadius: RADIUS.lg,
     marginBottom: SPACING.lg,
+    shadowColor: COLORS.accent.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 4,
   },
   gradientButtonText: {
-    color: COLORS.text.primary,
+    color: COLORS.text.inverse,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -986,11 +996,11 @@ const styles = StyleSheet.create({
   napCalcButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.background.surface,
+    backgroundColor: 'rgba(255,255,255,0.025)',
     borderRadius: RADIUS.lg,
     padding: 14,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: 'rgba(255,255,255,0.07)',
+    borderColor: COLORS.border.subtle,
     gap: 12,
   },
   napCalcEmoji: {

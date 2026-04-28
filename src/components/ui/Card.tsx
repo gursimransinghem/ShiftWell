@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
-import { COLORS } from '@/src/theme';
+import { COLORS, RADIUS, SPACING } from '@/src/theme';
 
 type CardVariant = 'default' | 'elevated' | 'outlined';
 
@@ -21,12 +21,12 @@ export default function Card({ children, style, padding = true, variant = 'defau
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: 14,
+    borderRadius: RADIUS.lg,
   },
   default: {
     backgroundColor: COLORS.background.surface,
-    borderWidth: 1,
-    borderColor: COLORS.border.default,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: COLORS.border.subtle,
   },
   elevated: {
     backgroundColor: COLORS.background.elevated,
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border.strong,
   },
   padding: {
-    padding: 16,
+    padding: SPACING.lg,
   },
 });

@@ -139,16 +139,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 12,
+    borderRadius: 14,
     minHeight: 44,
   },
   primaryBg: {
-    backgroundColor: PURPLE,
+    backgroundColor: ACCENT.primary,
+    shadowColor: ACCENT.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 4,
   },
   secondaryBg: {
-    backgroundColor: 'transparent',
+    backgroundColor: ACCENT.purpleMuted,
     borderWidth: 1.5,
-    borderColor: PURPLE,
+    borderColor: 'rgba(123,97,255,0.38)',
   },
   dangerBg: {
     backgroundColor: COLORS.semantic.error,
@@ -165,7 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   primaryText: {
-    color: COLORS.text.primary,
+    color: COLORS.text.inverse,
   },
   secondaryText: {
     color: PURPLE,
