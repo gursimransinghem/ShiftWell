@@ -12,18 +12,24 @@ import Animated, {
   Extrapolation,
   SharedValue,
 } from 'react-native-reanimated';
-import Svg, { Circle } from 'react-native-svg';
-import { TEXT, heroNumber } from '@/src/theme';
+import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { TEXT } from '@/src/theme';
 import { scoreViewHaptic, scoreHighHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const RING_SIZE = 104;
-const RING_RADIUS = 48; // (RING_SIZE / 2) - stroke/2 = 52 - 4 = 48
+const RING_SIZE = 124;
+const RING_STROKE = 6;
+const RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
-const RING_COLOR = '#7B61FF';
+
+const RING_GRADIENT_FROM = '#9C8BFF';
+const RING_GRADIENT_TO = '#7B61FF';
+const RING_TRACK = 'rgba(123,97,255,0.10)';
+const ACTIVE_BAR = '#9C8BFF';
+const INACTIVE_BAR = 'rgba(123,97,255,0.22)';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -52,7 +58,6 @@ export function HeroScore({
   trend,
   scrollOffset,
 }: HeroScoreProps) {
-  // Haptics on mount
   useEffect(() => {
     scoreViewHaptic();
     if (score >= 90) {
@@ -60,10 +65,7 @@ export function HeroScore({
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Ring fill animation
   const strokeOffset = useSharedValue(CIRCUMFERENCE);
-
-  // Breathing glow animation
   const glowOpacity = useSharedValue(0.4);
 
   useEffect(() => {
@@ -77,8 +79,8 @@ export function HeroScore({
   useEffect(() => {
     glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(1, { duration: 2000 }),
-        withTiming(0.4, { duration: 2000 }),
+        withTiming(0.85, { duration: 2200 }),
+        withTiming(0.3, { duration: 2200 }),
       ),
       -1,
       false,
@@ -104,9 +106,8 @@ export function HeroScore({
     };
   });
 
-  // Sparkline bar heights (normalize to max 22px)
   const maxScore = Math.max(...weeklyScores, 1);
-  const barHeights = weeklyScores.map((s) => Math.max(4, (s / maxScore) * 22));
+  const barHeights = weeklyScores.map((s) => Math.max(4, (s / maxScore) * 26));
   const todayIndex = weeklyScores.length - 1;
 
   const trendColor = trend >= 0 ? '#34D399' : '#FF6B6B';
@@ -116,31 +117,38 @@ export function HeroScore({
     <Animated.View style={[styles.container, heroStyle]}>
       {/* Ring + glow */}
       <View style={styles.ringWrapper}>
-        {/* Breathing glow behind ring */}
-        <Animated.View style={[styles.glow, animatedGlowStyle]} />
+        {/* Outer ambient glow */}
+        <Animated.View style={[styles.glowOuter, animatedGlowStyle]} />
+        {/* Inner soft glow */}
+        <View style={styles.glowInner} />
 
-        {/* SVG ring */}
         <Svg
           width={RING_SIZE}
           height={RING_SIZE}
           viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
         >
+          <Defs>
+            <LinearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <Stop offset="0%" stopColor={RING_GRADIENT_FROM} />
+              <Stop offset="100%" stopColor={RING_GRADIENT_TO} />
+            </LinearGradient>
+          </Defs>
           {/* Track */}
           <Circle
             cx={RING_SIZE / 2}
             cy={RING_SIZE / 2}
             r={RING_RADIUS}
-            stroke="rgba(123,97,255,0.12)"
-            strokeWidth={3}
+            stroke={RING_TRACK}
+            strokeWidth={RING_STROKE}
             fill="none"
           />
-          {/* Fill arc */}
+          {/* Fill arc with gradient */}
           <AnimatedCircle
             cx={RING_SIZE / 2}
             cy={RING_SIZE / 2}
             r={RING_RADIUS}
-            stroke={RING_COLOR}
-            strokeWidth={3}
+            stroke="url(#ring-grad)"
+            strokeWidth={RING_STROKE}
             fill="none"
             strokeDasharray={CIRCUMFERENCE}
             animatedProps={animatedCircleProps}
@@ -152,6 +160,7 @@ export function HeroScore({
         {/* Score centered in ring */}
         <View style={styles.scoreOverlay}>
           <Text style={styles.scoreText}>{score}</Text>
+          <Text style={styles.scoreUnit}>/100</Text>
         </View>
       </View>
 
@@ -164,20 +173,17 @@ export function HeroScore({
               styles.bar,
               {
                 height,
-                backgroundColor:
-                  index === todayIndex ? RING_COLOR : 'rgba(123,97,255,0.25)',
+                backgroundColor: index === todayIndex ? ACTIVE_BAR : INACTIVE_BAR,
               },
             ]}
           />
         ))}
       </View>
 
-      {/* Label */}
       <Text style={styles.label}>
         Recovery Score · {sleepHours}h of {targetHours}h
       </Text>
 
-      {/* Trend */}
       <Text style={[styles.trend, { color: trendColor }]}>
         {trendArrow} {Math.abs(trend)} pts from yesterday
       </Text>
@@ -192,8 +198,8 @@ export function HeroScore({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 20,
+    paddingTop: 20,
+    paddingBottom: 22,
   },
   ringWrapper: {
     width: RING_SIZE,
@@ -202,40 +208,68 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  glow: {
+  glowOuter: {
     position: 'absolute',
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    backgroundColor: 'rgba(123,97,255,0.12)',
+    width: RING_SIZE + 60,
+    height: RING_SIZE + 60,
+    borderRadius: (RING_SIZE + 60) / 2,
+    backgroundColor: 'rgba(123,97,255,0.08)',
+    shadowColor: '#7B61FF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 30,
+    elevation: 10,
+  },
+  glowInner: {
+    position: 'absolute',
+    width: RING_SIZE - 16,
+    height: RING_SIZE - 16,
+    borderRadius: (RING_SIZE - 16) / 2,
+    backgroundColor: 'rgba(123,97,255,0.05)',
   },
   scoreOverlay: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   scoreText: {
-    ...heroNumber,
+    fontSize: 44,
+    fontWeight: '700',
     color: TEXT.primary,
+    letterSpacing: -1.5,
+    fontVariant: ['tabular-nums'],
+  },
+  scoreUnit: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: TEXT.muted,
+    marginLeft: 2,
+    marginTop: 14,
+    letterSpacing: 0.3,
   },
   sparkline: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginTop: 10,
-    gap: 3,
+    marginTop: 14,
+    gap: 4,
+    height: 28,
   },
   bar: {
-    width: 5,
-    borderRadius: 2.5,
+    width: 6,
+    borderRadius: 3,
   },
   label: {
     fontSize: 13,
-    color: TEXT.muted,
-    marginTop: 8,
+    color: TEXT.secondaryBright,
+    marginTop: 10,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
   trend: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     marginTop: 4,
+    letterSpacing: 0.2,
   },
 });

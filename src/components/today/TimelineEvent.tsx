@@ -20,7 +20,6 @@ import {
   V6_LAYOUT,
   V6_RADIUS,
   timestamp,
-  cardTitle,
   meta,
 } from '@/src/theme';
 
@@ -285,8 +284,9 @@ export default function TimelineEvent({
 // ---------------------------------------------------------------------------
 
 const DOT_SIZE = 10;
-const DOT_ACTIVE_SIZE = 12;
+const DOT_ACTIVE_SIZE = 14;
 const SPINE_WIDTH = 1.5;
+const ACCENT_BAR_WIDTH = 4;
 
 const styles = StyleSheet.create({
   row: {
@@ -332,15 +332,17 @@ const styles = StyleSheet.create({
   dotActive: {
     shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOpacity: 0.55,
+    shadowRadius: 8,
+    elevation: 8,
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.4)',
   },
   dotNext: {
     shadowColor: '#FFFFFF',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
     elevation: 4,
   },
 
@@ -357,7 +359,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   accentBar: {
-    width: V6_LAYOUT.accentBar,
+    width: ACCENT_BAR_WIDTH,
     borderTopLeftRadius: V6_RADIUS.timelineCard,
     borderBottomLeftRadius: V6_RADIUS.timelineCard,
   },
@@ -379,17 +381,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: COLORS.text.primary,
     flex: 1,
+    letterSpacing: 0.1,
   },
   badge: {
-    paddingHorizontal: SPACING.sm,
-    paddingVertical: 2,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
     borderRadius: RADIUS.sm,
     marginLeft: SPACING.sm,
   },
   badgeText: {
-    ...TYPOGRAPHY.caption,
-    fontWeight: TYPOGRAPHY.fontWeight.bold,
+    fontSize: 10,
+    fontWeight: '700',
     color: COLORS.text.onAccent,
+    letterSpacing: 0.6,
   },
 
   /* Meta */

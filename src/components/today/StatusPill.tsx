@@ -7,7 +7,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { TEXT, V6_RADIUS } from '@/src/theme';
+import { TEXT } from '@/src/theme';
 import { windDownStartHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
@@ -45,21 +45,34 @@ export function StatusPill({ state, primaryText, secondaryText }: StatusPillProp
     prevState.current = state;
   }, [state]);
 
-  const glowOpacity = useSharedValue(0.06);
+  const glowOpacity = useSharedValue(0.08);
+  const dotPulse = useSharedValue(1);
 
   useEffect(() => {
     glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(0.14, { duration: 2000 }),
-        withTiming(0.06, { duration: 2000 }),
+        withTiming(0.18, { duration: 2200 }),
+        withTiming(0.08, { duration: 2200 }),
       ),
       -1,
       false,
     );
-  }, [glowOpacity]);
+    dotPulse.value = withRepeat(
+      withSequence(
+        withTiming(0.4, { duration: 1200 }),
+        withTiming(1, { duration: 1200 }),
+      ),
+      -1,
+      false,
+    );
+  }, [glowOpacity, dotPulse]);
 
   const animatedContainerStyle = useAnimatedStyle(() => ({
     shadowOpacity: glowOpacity.value,
+  }));
+
+  const dotStyle = useAnimatedStyle(() => ({
+    opacity: dotPulse.value,
   }));
 
   return (
@@ -67,27 +80,28 @@ export function StatusPill({ state, primaryText, secondaryText }: StatusPillProp
       style={[
         styles.container,
         {
-          backgroundColor: `${color}1A`, // 0.1 opacity hex
-          borderColor: `${color}2E`,     // 0.18 opacity hex
+          backgroundColor: `${color}1A`,
+          borderColor: `${color}33`,
           shadowColor: color,
         },
         animatedContainerStyle,
       ]}
     >
-      {/* Icon container */}
       <View
         style={[
           styles.iconContainer,
-          { backgroundColor: `${color}1F` }, // 0.12 opacity hex
+          { backgroundColor: `${color}26`, borderColor: `${color}33` },
         ]}
       >
         <Text style={styles.emoji}>{emoji}</Text>
       </View>
 
-      {/* Text */}
       <View style={styles.textBlock}>
-        <Text style={styles.primaryText}>{primaryText}</Text>
-        <Text style={styles.secondaryText}>{secondaryText}</Text>
+        <View style={styles.primaryRow}>
+          <Animated.View style={[styles.statusDot, { backgroundColor: color }, dotStyle]} />
+          <Text style={styles.primaryText} numberOfLines={1}>{primaryText}</Text>
+        </View>
+        <Text style={styles.secondaryText} numberOfLines={1}>{secondaryText}</Text>
       </View>
     </Animated.View>
   );
@@ -101,36 +115,50 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 16,
-    borderRadius: V6_RADIUS.pill,
+    borderRadius: 18,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 12,
+    shadowRadius: 16,
     elevation: 4,
   },
   iconContainer: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+    width: 42,
+    height: 42,
+    borderRadius: 13,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 14,
   },
   emoji: {
-    fontSize: 18,
+    fontSize: 19,
   },
   textBlock: {
     flex: 1,
+  },
+  primaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 3,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
   primaryText: {
     fontSize: 15,
     fontWeight: '600',
     color: TEXT.primary,
-    marginBottom: 2,
+    letterSpacing: 0.1,
+    flex: 1,
   },
   secondaryText: {
     fontSize: 12,
     color: TEXT.secondary,
+    letterSpacing: 0.1,
   },
 });
