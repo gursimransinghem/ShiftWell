@@ -13,19 +13,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/user-store';
 import { usePremiumStore } from '@/src/store/premium-store';
-<<<<<<< HEAD
 import { useAuthStore } from '@/src/store/auth-store';
 import { useBriefStore } from '@/src/store/brief-store';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useFeatureGate } from '@/src/lib/premium/feature-gate';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
-import ReferralCard from '@/src/components/ui/ReferralCard';
-=======
 import { useExport } from '@/src/hooks/useExport';
 import { DEFAULT_EXPORT_OPTIONS, type ExportOptions } from '@/src/lib/calendar/ics-generator';
 import { fullSync, getSyncStatus } from '@/src/lib/sync/sync-engine';
 import { requestPermissions, getScheduledNotifications } from '@/src/lib/notifications/notification-service';
 import {
+  COLORS,
   BACKGROUND,
   TEXT,
   ACCENT,
@@ -43,7 +40,6 @@ import {
 import Button from '@/src/components/ui/Button';
 import Card from '@/src/components/ui/Card';
 import { WeeklyBriefToggle } from '@/src/components/settings/WeeklyBriefToggle';
->>>>>>> worktree-agent-a211ed4f
 
 // ---------------------------------------------------------------------------
 // Section header
@@ -117,6 +113,21 @@ function LinkRow({ label, value, onPress, destructive }: {
     </TouchableOpacity>
   );
 }
+
+function SettingsRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.row}>
+      <Text style={styles.rowLabel}>{label}</Text>
+      <Text style={styles.rowValue}>{value}</Text>
+    </View>
+  );
+}
+
+const CHRONOTYPE_LABELS: Record<string, string> = {
+  early: 'Early bird',
+  intermediate: 'Intermediate',
+  late: 'Night owl',
+};
 
 // ---------------------------------------------------------------------------
 // Screen
@@ -333,11 +344,6 @@ export default function SettingsScreen() {
           )}
         </View>
 
-<<<<<<< HEAD
-        {/* Community */}
-        <SectionHeader title="COMMUNITY" />
-        <ReferralCard />
-=======
         {/* ---- AI Coaching Section ---- */}
         <SectionHeader title="AI COACHING" />
         <Card style={styles.card}>
@@ -381,7 +387,6 @@ export default function SettingsScreen() {
             />
           </View>
         </Card>
->>>>>>> worktree-agent-a211ed4f
 
         {/* About */}
         <SectionHeader title="ABOUT" />

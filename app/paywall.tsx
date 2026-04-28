@@ -6,13 +6,15 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremiumStore } from '@/src/store/premium-store';
 import { useUserStore } from '@/src/store/user-store';
 import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
 import { logExposure } from '@/src/lib/growth/ab-testing';
-import { COLORS, SPACING, RADIUS, PURPLE } from '@/src/theme';
+import { Button, Card, GradientMeshBackground } from '@/src/components/ui';
+import { COLORS, RADIUS, SPACING, TEXT, TYPOGRAPHY } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -27,6 +29,7 @@ interface Plan {
   period: string;
   perMonth?: string;
   badge?: string;
+  description: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -39,6 +42,7 @@ const PLANS: Plan[] = [
     label: 'Monthly',
     price: '$6.99',
     period: '/mo',
+    description: 'Best if you want maximum flexibility and a lighter upfront commitment.',
   },
   {
     key: 'annual',
@@ -47,12 +51,14 @@ const PLANS: Plan[] = [
     period: '/yr',
     perMonth: '$4.17/mo',
     badge: 'BEST VALUE · SAVE 40%',
+    description: 'Built for recurring rotations and frequent shift changes throughout the year.',
   },
   {
     key: 'lifetime',
     label: 'Lifetime',
     price: '$149.99',
     period: 'once',
+    description: 'One purchase for long-term shift work, residency, or years of rotating call.',
   },
 ];
 
@@ -156,13 +162,16 @@ const SCIENCE = [
 
 function FlagshipCard({ item }: { item: typeof FLAGSHIP[0] }) {
   return (
-    <View style={[styles.flagshipCard, { backgroundColor: item.gradient[1] }]}>
+    <Card
+      padding={false}
+      style={[styles.flagshipCard, { backgroundColor: item.gradient[1] }]}
+    >
       <View style={[styles.flagshipIconWrap, { backgroundColor: `${item.accent}22` }]}>
         <Ionicons name={item.icon} size={22} color={item.accent} />
       </View>
       <Text style={[styles.flagshipTitle, { color: item.accent }]}>{item.title}</Text>
       <Text style={styles.flagshipDesc}>{item.desc}</Text>
-    </View>
+    </Card>
   );
 }
 
@@ -187,14 +196,17 @@ function FeatureRow({ icon, label, free }: typeof FEATURES[0]) {
 
 function ScienceStatCard({ item }: { item: typeof SCIENCE[0] }) {
   return (
-    <View style={[styles.scienceCard, { borderLeftColor: item.color }]}>
+    <Card
+      padding={false}
+      style={[styles.scienceCard, { borderLeftColor: item.color }]}
+    >
       <View style={styles.scienceTop}>
         <Text style={[styles.scienceStat, { color: item.color }]}>{item.stat}</Text>
         <Text style={styles.scienceFinding}>{item.finding}</Text>
       </View>
       <Text style={styles.scienceInsight}>{item.insight}</Text>
       <Text style={styles.scienceCitation}>— {item.citation}</Text>
-    </View>
+    </Card>
   );
 }
 
@@ -213,23 +225,43 @@ function PlanCard({
       onPress={onSelect}
       activeOpacity={0.8}
     >
-      {plan.badge && (
-        <View style={styles.planBadge}>
-          <Text style={styles.planBadgeText}>{plan.badge}</Text>
+      <View style={styles.planHeaderRow}>
+        <View style={styles.planSelectionRow}>
+          <View style={[styles.radioOuter, selected && styles.radioOuterSelected]}>
+            {selected ? <View style={styles.radioInner} /> : null}
+          </View>
+          <View style={styles.planCopy}>
+            <View style={styles.planTitleRow}>
+              <Text style={[styles.planLabel, selected && styles.planLabelSelected]}>
+                {plan.label}
+              </Text>
+              {plan.badge ? (
+                <View style={styles.planBadge}>
+                  <Text style={styles.planBadgeText}>{plan.badge}</Text>
+                </View>
+              ) : null}
+            </View>
+            <Text style={styles.planDescription}>{plan.description}</Text>
+            {plan.perMonth ? (
+              <Text
+                style={[
+                  styles.planPerMonth,
+                  selected && styles.planPerMonthSelected,
+                ]}
+              >
+                {plan.perMonth}
+              </Text>
+            ) : null}
+          </View>
         </View>
-      )}
-      <Text style={[styles.planLabel, selected && styles.planLabelSelected]}>
-        {plan.label}
-      </Text>
-      <Text style={[styles.planPrice, selected && styles.planPriceSelected]}>
-        {plan.price}
-      </Text>
-      <Text style={styles.planPeriod}>{plan.period}</Text>
-      {plan.perMonth && (
-        <Text style={[styles.planPerMonth, selected && { color: COLORS.accent.primary }]}>
-          {plan.perMonth}
-        </Text>
-      )}
+
+        <View style={styles.planPriceColumn}>
+          <Text style={[styles.planPrice, selected && styles.planPriceSelected]}>
+            {plan.price}
+          </Text>
+          <Text style={styles.planPeriod}>{plan.period}</Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -282,117 +314,142 @@ export default function PaywallScreen() {
       : 'per month after trial';
 
   return (
-    <View style={styles.container}>
-      {/* Close */}
-      <TouchableOpacity
-        style={styles.closeBtn}
-        onPress={() => router.back()}
-        hitSlop={12}
-        accessibilityLabel="Close"
-        accessibilityRole="button"
-      >
-        <Ionicons name="close" size={20} color={COLORS.text.secondary} />
-      </TouchableOpacity>
-
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* ── Hero ─────────────────────────────────────────────────── */}
-        <View style={styles.hero}>
-          <View style={styles.heroBadge}>
-            <Ionicons name="star" size={11} color={COLORS.accent.primary} />
-            <Text style={styles.heroBadgeText}>SHIFTWELL PRO</Text>
-          </View>
-          <Text style={styles.heroTitle}>Work any shift.{'\n'}Sleep like a champion.</Text>
-          <Text style={styles.heroSub}>
-            The only sleep app built by an ER physician, for the 700 million people
-            who work against the clock.
-          </Text>
-        </View>
-
-        {/* ── Flagship 2×2 grid ────────────────────────────────────── */}
-        <Text style={styles.sectionLabel}>WHAT SETS US APART</Text>
-        <View style={styles.flagshipGrid}>
-          {FLAGSHIP.map((item) => (
-            <FlagshipCard key={item.title} item={item} />
-          ))}
-        </View>
-
-        {/* ── Full feature list ─────────────────────────────────────── */}
-        <Text style={styles.sectionLabel}>EVERYTHING IN PRO</Text>
-        <View style={styles.featureCard}>
-          {FEATURES.map((f, i) => (
-            <View key={f.label}>
-              <FeatureRow {...f} />
-              {i < FEATURES.length - 1 && <View style={styles.featureDivider} />}
-            </View>
-          ))}
-        </View>
-
-        {/* ── Trust bar ────────────────────────────────────────────── */}
-        <View style={styles.trustBar}>
-          {TRUST.map((t, i) => (
-            <View key={t.label} style={styles.trustItem}>
-              <Ionicons name={t.icon} size={14} color={COLORS.accent.primary} />
-              <Text style={styles.trustLabel}>{t.label}</Text>
-              {i < TRUST.length - 1 && <View style={styles.trustDot} />}
-            </View>
-          ))}
-        </View>
-
-        {/* ── Research findings ────────────────────────────────────── */}
-        <Text style={styles.sectionLabel}>THE RESEARCH</Text>
-        <View style={styles.scienceList}>
-          {SCIENCE.map((item) => (
-            <ScienceStatCard key={item.stat} item={item} />
-          ))}
-        </View>
-
-        {/* ── Pricing ──────────────────────────────────────────────── */}
-        <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
-        <View style={styles.planRow}>
-          {experimentPlans.map((plan) => (
-            <PlanCard
-              key={plan.key}
-              plan={plan}
-              selected={selectedPlan === plan.key}
-              onSelect={() => setSelectedPlan(plan.key)}
-            />
-          ))}
-        </View>
-
-        {/* ── CTA ──────────────────────────────────────────────────── */}
+    <GradientMeshBackground>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <TouchableOpacity
-          style={[styles.cta, isLoading && styles.ctaDisabled]}
-          onPress={handleStartTrial}
-          activeOpacity={0.85}
-          disabled={isLoading}
+          style={styles.closeBtn}
+          onPress={() => router.back()}
+          hitSlop={12}
+          accessibilityLabel="Close"
+          accessibilityRole="button"
         >
-          <Text style={styles.ctaText}>
-            {isLoading ? 'Processing…' : 'Start 14-Day Free Trial'}
-          </Text>
-          <Text style={styles.ctaSubText}>
-            Then {currentPlan.price} {disclaimerPeriod} · Cancel anytime
-          </Text>
+          <Ionicons name="close" size={20} color={COLORS.text.secondary} />
         </TouchableOpacity>
 
-        {/* ── Footer ───────────────────────────────────────────────── */}
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={handleRestore} hitSlop={8}>
-            <Text style={styles.footerLink}>Restore Purchases</Text>
-          </TouchableOpacity>
-          <Text style={styles.footerSep}>·</Text>
-          <TouchableOpacity hitSlop={8}>
-            <Text style={styles.footerLink}>Privacy</Text>
-          </TouchableOpacity>
-          <Text style={styles.footerSep}>·</Text>
-          <TouchableOpacity hitSlop={8}>
-            <Text style={styles.footerLink}>Terms</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.heroShell}>
+            <Card style={styles.heroCard}>
+              <View style={styles.heroBadge}>
+                <Ionicons name="star" size={11} color={COLORS.accent.primary} />
+                <Text style={styles.heroBadgeText}>SHIFTWELL PRO</Text>
+              </View>
+              <Text style={styles.heroTitle}>Work any shift.{'\n'}Recover with a real plan.</Text>
+              <Text style={styles.heroSub}>
+                A calmer, smarter sleep system for people whose schedules move every week.
+              </Text>
+
+              <View style={styles.heroStatsRow}>
+                {TRUST.map((item) => (
+                  <View key={item.label} style={styles.heroStatPill}>
+                    <Ionicons
+                      name={item.icon}
+                      size={13}
+                      color={COLORS.accent.primary}
+                    />
+                    <Text style={styles.heroStatText}>{item.label}</Text>
+                  </View>
+                ))}
+              </View>
+            </Card>
+          </View>
+
+          <Card style={styles.valueCard}>
+            <Text style={styles.sectionLabel}>WHY PEOPLE UPGRADE</Text>
+            <Text style={styles.valueTitle}>
+              Your schedule changes. Your sleep plan should too.
+            </Text>
+            <Text style={styles.valueBody}>
+              ShiftWell Pro adds adaptive planning, recovery insights, and calendar-ready
+              execution so the app feels like a system, not just a tracker.
+            </Text>
+          </Card>
+
+          <Text style={styles.sectionLabel}>WHAT SETS US APART</Text>
+          <View style={styles.flagshipGrid}>
+            {FLAGSHIP.map((item) => (
+              <FlagshipCard key={item.title} item={item} />
+            ))}
+          </View>
+
+          <Text style={styles.sectionLabel}>EVERYTHING IN PRO</Text>
+          <Card padding={false} style={styles.featureCard}>
+            {FEATURES.map((f, i) => (
+              <View key={f.label}>
+                <FeatureRow {...f} />
+                {i < FEATURES.length - 1 && <View style={styles.featureDivider} />}
+              </View>
+            ))}
+          </Card>
+
+          <Text style={styles.sectionLabel}>THE RESEARCH</Text>
+          <View style={styles.scienceList}>
+            {SCIENCE.map((item) => (
+              <ScienceStatCard key={item.stat} item={item} />
+            ))}
+          </View>
+
+          <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
+          <View style={styles.planStack}>
+            {experimentPlans.map((plan) => (
+              <PlanCard
+                key={plan.key}
+                plan={plan}
+                selected={selectedPlan === plan.key}
+                onSelect={() => setSelectedPlan(plan.key)}
+              />
+            ))}
+          </View>
+
+          <Card style={styles.ctaCard}>
+            <View style={styles.ctaHeader}>
+              <Text style={styles.ctaEyebrow}>
+                {selectedPlan === 'lifetime' ? 'ONE-TIME ACCESS' : '14-DAY FREE TRIAL'}
+              </Text>
+              <Text style={styles.ctaTitle}>
+                {selectedPlan === 'lifetime'
+                  ? 'Unlock ShiftWell Pro for good'
+                  : `Start free, then ${currentPlan.price} ${disclaimerPeriod}`}
+              </Text>
+              <Text style={styles.ctaBody}>
+                {selectedPlan === 'lifetime'
+                  ? 'Pay once and keep the full sleep optimization toolkit available for every future rotation.'
+                  : 'Try the full experience first. Cancel anytime during the trial if it is not right for your workflow.'}
+              </Text>
+            </View>
+
+            <Button
+              onPress={handleStartTrial}
+              loading={isLoading}
+              fullWidth
+              size="lg"
+            >
+              {selectedPlan === 'lifetime' ? 'Unlock Lifetime Access' : 'Start Free Trial'}
+            </Button>
+
+            <Text style={styles.ctaFinePrint}>
+              Secure billing through Apple. Your plan renews automatically unless cancelled.
+            </Text>
+          </Card>
+
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={handleRestore} hitSlop={8}>
+              <Text style={styles.footerLink}>Restore Purchases</Text>
+            </TouchableOpacity>
+            <Text style={styles.footerSep}>·</Text>
+            <TouchableOpacity hitSlop={8}>
+              <Text style={styles.footerLink}>Privacy</Text>
+            </TouchableOpacity>
+            <Text style={styles.footerSep}>·</Text>
+            <TouchableOpacity hitSlop={8}>
+              <Text style={styles.footerLink}>Terms</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </GradientMeshBackground>
   );
 }
 
@@ -400,93 +457,124 @@ export default function PaywallScreen() {
 // Styles
 // ---------------------------------------------------------------------------
 
-const GOLD = COLORS.accent.primary; // #C8A84B
+const GOLD = COLORS.accent.primary;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background.primary,
   },
-
   closeBtn: {
     position: 'absolute',
-    top: 56,
-    right: 20,
+    top: SPACING.lg,
+    right: SPACING.xl,
     zIndex: 10,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.background.surface,
+    width: 36,
+    height: 36,
+    borderRadius: RADIUS.full,
+    backgroundColor: 'rgba(19,23,38,0.92)',
+    borderWidth: 1,
+    borderColor: COLORS.border.default,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   scroll: {
-    paddingTop: 64,
-    paddingHorizontal: 20,
-    paddingBottom: 48,
+    paddingTop: 72,
+    paddingHorizontal: SPACING.xl,
+    paddingBottom: SPACING['4xl'],
   },
-
-  // ── Hero
-  hero: {
-    alignItems: 'center',
-    marginBottom: 32,
+  heroShell: {
+    marginBottom: SPACING['2xl'],
+  },
+  heroCard: {
+    backgroundColor: 'rgba(19,23,38,0.96)',
+    borderColor: 'rgba(123,97,255,0.22)',
+    shadowColor: COLORS.accent.purple,
+    shadowOpacity: 0.2,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 10,
   },
   heroBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    alignSelf: 'flex-start',
+    gap: 6,
     backgroundColor: `${GOLD}1A`,
     borderRadius: RADIUS.full,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    marginBottom: 18,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: 6,
+    marginBottom: SPACING.lg,
   },
   heroBadgeText: {
-    fontSize: 11,
+    ...TYPOGRAPHY.label,
     fontWeight: '700',
     color: GOLD,
-    letterSpacing: 1.5,
+    letterSpacing: 1.2,
   },
   heroTitle: {
-    fontSize: 32,
+    ...TYPOGRAPHY.heading2,
     fontWeight: '800',
     color: COLORS.text.primary,
-    textAlign: 'center',
     lineHeight: 38,
     letterSpacing: -0.5,
-    marginBottom: 14,
+    marginBottom: SPACING.md,
   },
   heroSub: {
-    fontSize: 14,
+    ...TYPOGRAPHY.body,
     color: COLORS.text.secondary,
-    textAlign: 'center',
-    lineHeight: 21,
-    maxWidth: 300,
+    maxWidth: 320,
+    marginBottom: SPACING.lg,
   },
-
-  // ── Section label
+  heroStatsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: SPACING.sm,
+  },
+  heroStatPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    borderRadius: RADIUS.full,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: 6,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: COLORS.border.subtle,
+  },
+  heroStatText: {
+    ...TYPOGRAPHY.caption,
+    color: COLORS.text.secondaryBright,
+  },
+  valueCard: {
+    marginBottom: SPACING['2xl'],
+  },
+  valueTitle: {
+    ...TYPOGRAPHY.heading3,
+    color: COLORS.text.primary,
+    marginBottom: SPACING.sm,
+  },
+  valueBody: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+  },
   sectionLabel: {
-    fontSize: 11,
+    ...TYPOGRAPHY.caption,
     fontWeight: '700',
     color: COLORS.text.muted,
     letterSpacing: 1.2,
-    marginBottom: 12,
+    marginBottom: SPACING.md,
   },
-
-  // ── Flagship grid
   flagshipGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 28,
+    gap: SPACING.sm,
+    marginBottom: SPACING['2xl'],
   },
   flagshipCard: {
     width: '48%',
-    borderRadius: 16,
-    padding: 16,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
+    padding: SPACING.lg,
   },
   flagshipIconWrap: {
     width: 38,
@@ -497,22 +585,18 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   flagshipTitle: {
-    fontSize: 13,
+    ...TYPOGRAPHY.bodySmall,
     fontWeight: '700',
     marginBottom: 6,
   },
   flagshipDesc: {
-    fontSize: 11,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.secondary,
     lineHeight: 16,
   },
-
-  // ── Feature list
   featureCard: {
-    backgroundColor: COLORS.background.surface,
-    borderRadius: RADIUS.lg,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: SPACING['2xl'],
   },
   featureRow: {
     flexDirection: 'row',
@@ -526,14 +610,14 @@ const styles = StyleSheet.create({
   },
   featureLabel: {
     flex: 1,
-    fontSize: 14,
+    ...TYPOGRAPHY.body,
     color: COLORS.text.primary,
   },
   featureLabelFree: {
     color: COLORS.text.muted,
   },
   freeTag: {
-    fontSize: 12,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.muted,
   },
   featureDivider: {
@@ -541,52 +625,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.border.default,
     marginLeft: 46,
   },
-
-  // ── Trust bar
-  trustBar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 28,
-    paddingHorizontal: 8,
-  },
-  trustItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  trustLabel: {
-    fontSize: 12,
-    color: COLORS.text.secondary,
-  },
-  trustDot: {
-    width: 3,
-    height: 3,
-    borderRadius: 1.5,
-    backgroundColor: COLORS.text.muted,
-    marginLeft: 8,
-  },
-
-  // ── Science research cards
   scienceList: {
-    gap: 10,
-    marginBottom: 28,
+    gap: SPACING.sm,
+    marginBottom: SPACING['2xl'],
   },
   scienceCard: {
     backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.07)',
     borderLeftWidth: 3,
-    borderRadius: 14,
-    padding: 16,
-    gap: 8,
+    gap: SPACING.sm,
   },
   scienceTop: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 10,
+    gap: SPACING.md,
   },
   scienceStat: {
     fontSize: 28,
@@ -597,129 +648,173 @@ const styles = StyleSheet.create({
   },
   scienceFinding: {
     flex: 1,
-    fontSize: 13,
+    ...TYPOGRAPHY.bodySmall,
     fontWeight: '600',
     color: COLORS.text.primary,
     lineHeight: 18,
   },
   scienceInsight: {
-    fontSize: 12,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.secondary,
     lineHeight: 18,
   },
   scienceCitation: {
-    fontSize: 10,
+    ...TYPOGRAPHY.captionSmall,
     color: COLORS.text.muted,
     fontStyle: 'italic',
   },
-
-  // ── Plan cards
-  planRow: {
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 20,
+  planStack: {
+    gap: SPACING.md,
+    marginBottom: SPACING['2xl'],
   },
   planCard: {
-    flex: 1,
-    backgroundColor: COLORS.background.surface,
+    backgroundColor: 'rgba(19,23,38,0.92)',
     borderRadius: RADIUS.lg,
-    padding: 14,
-    alignItems: 'center',
+    padding: SPACING.lg,
     borderWidth: 1.5,
     borderColor: COLORS.border.default,
-    minHeight: 100,
-    justifyContent: 'center',
   },
   planCardSelected: {
-    borderColor: PURPLE,
+    borderColor: COLORS.accent.purple,
     backgroundColor: 'rgba(123,97,255,0.07)',
+    shadowColor: COLORS.accent.purple,
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 6,
+  },
+  planHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: SPACING.md,
+  },
+  planSelectionRow: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: SPACING.md,
+  },
+  radioOuter: {
+    width: 20,
+    height: 20,
+    borderRadius: RADIUS.full,
+    borderWidth: 2,
+    borderColor: COLORS.border.strong,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 2,
+  },
+  radioOuterSelected: {
+    borderColor: COLORS.accent.purple,
+  },
+  radioInner: {
+    width: 8,
+    height: 8,
+    borderRadius: RADIUS.full,
+    backgroundColor: COLORS.accent.purple,
+  },
+  planCopy: {
+    flex: 1,
+    gap: 4,
+  },
+  planTitleRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: SPACING.sm,
   },
   planBadge: {
-    position: 'absolute',
-    top: -10,
     backgroundColor: GOLD,
     borderRadius: RADIUS.full,
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    alignSelf: 'center',
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: 4,
   },
   planBadgeText: {
-    fontSize: 7.5,
+    ...TYPOGRAPHY.captionSmall,
     fontWeight: '800',
-    color: '#0B0D16',
-    letterSpacing: 0.3,
+    color: COLORS.text.inverse,
+    letterSpacing: 0.4,
   },
   planLabel: {
-    fontSize: 11,
-    color: COLORS.text.muted,
-    marginBottom: 4,
-    marginTop: 6,
+    ...TYPOGRAPHY.body,
+    fontWeight: '700',
+    color: COLORS.text.primary,
   },
   planLabelSelected: {
-    color: PURPLE,
+    color: COLORS.accent.purple,
+  },
+  planDescription: {
+    ...TYPOGRAPHY.caption,
+    color: COLORS.text.secondary,
+  },
+  planPriceColumn: {
+    alignItems: 'flex-end',
+    minWidth: 84,
   },
   planPrice: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: '700',
     color: COLORS.text.primary,
   },
   planPriceSelected: {
-    color: PURPLE,
+    color: COLORS.accent.purple,
   },
   planPeriod: {
-    fontSize: 11,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.muted,
     marginTop: 2,
   },
   planPerMonth: {
-    fontSize: 10,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.muted,
-    marginTop: 3,
   },
-
-  // ── CTA
-  cta: {
-    borderRadius: RADIUS.lg,
-    backgroundColor: PURPLE,
-    paddingVertical: 18,
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: 16,
-    shadowColor: PURPLE,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 14,
-    elevation: 8,
+  planPerMonthSelected: {
+    color: COLORS.accent.primary,
   },
-  ctaDisabled: {
-    opacity: 0.6,
+  ctaCard: {
+    marginBottom: SPACING['2xl'],
+    borderColor: 'rgba(200,168,75,0.18)',
+    backgroundColor: 'rgba(19,23,38,0.96)',
   },
-  ctaText: {
-    fontSize: 17,
+  ctaHeader: {
+    marginBottom: SPACING.lg,
+  },
+  ctaEyebrow: {
+    ...TYPOGRAPHY.caption,
     fontWeight: '800',
-    color: '#0B0D16',
-    letterSpacing: -0.2,
+    color: COLORS.accent.primary,
+    letterSpacing: 1.1,
+    marginBottom: SPACING.xs,
   },
-  ctaSubText: {
-    fontSize: 11,
-    color: 'rgba(11,13,22,0.65)',
+  ctaTitle: {
+    ...TYPOGRAPHY.heading3,
+    color: COLORS.text.primary,
+    marginBottom: SPACING.sm,
   },
-
-  // ── Footer
+  ctaBody: {
+    ...TYPOGRAPHY.body,
+    color: COLORS.text.secondary,
+  },
+  ctaFinePrint: {
+    ...TYPOGRAPHY.caption,
+    color: TEXT.secondary,
+    marginTop: SPACING.md,
+    textAlign: 'center',
+  },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: SPACING.sm,
   },
   footerLink: {
-    fontSize: 12,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.muted,
     textDecorationLine: 'underline',
   },
   footerSep: {
-    fontSize: 12,
+    ...TYPOGRAPHY.caption,
     color: COLORS.text.muted,
   },
 });

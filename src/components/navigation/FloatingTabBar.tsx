@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { tapLight } from '@/src/lib/haptics/haptic-service';
 import { usePlanStore } from '@/src/store/plan-store';
+import { ACCENT, BACKGROUND, BORDER, RADIUS, TEXT } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Icon map — route name → [inactive icon, active icon]
@@ -70,7 +71,7 @@ export function FloatingTabBar({
             const [inactiveIcon, activeIcon] =
               ROUTE_ICONS[route.name] ?? FALLBACK_ICONS;
             const iconName = isFocused ? activeIcon : inactiveIcon;
-            const color = isFocused ? '#7B61FF' : '#4B5563';
+            const color = isFocused ? ACCENT.purple : TEXT.dim;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -100,7 +101,7 @@ export function FloatingTabBar({
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 onPress={onPress}
                 onLongPress={onLongPress}
-                style={styles.tab}
+                style={[styles.tab, isFocused && styles.tabActive]}
                 activeOpacity={0.7}
               >
                 <Ionicons
@@ -141,11 +142,11 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   blurContainer: {
-    borderRadius: 22,
+    borderRadius: RADIUS.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(123,97,255,0.08)',
-    backgroundColor: 'rgba(8,11,20,0.94)',
+    borderColor: BORDER.subtle,
+    backgroundColor: 'rgba(8,11,20,0.9)',
   },
   innerContainer: {
     flexDirection: 'row',
@@ -158,6 +159,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 6,
     gap: 3,
+    borderRadius: RADIUS.lg,
+  },
+  tabActive: {
+    backgroundColor: ACCENT.purpleMuted,
+    borderWidth: 1,
+    borderColor: 'rgba(123,97,255,0.18)',
   },
   tabLabel: {
     fontSize: 10,
@@ -165,7 +172,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   activeIconShadow: {
-    textShadowColor: 'rgba(123,97,255,0.7)',
+    textShadowColor: 'rgba(123,97,255,0.55)',
     textShadowRadius: 12,
     textShadowOffset: { width: 0, height: 0 },
   },

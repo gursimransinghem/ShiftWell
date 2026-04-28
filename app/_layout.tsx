@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, ThemeProvider, type Theme } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, router, useNavigationContainerRef } from 'expo-router';
 import { format } from 'date-fns';
@@ -9,7 +9,6 @@ import 'react-native-reanimated';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Notifications from 'expo-notifications';
 
-import { useColorScheme } from '@/components/useColorScheme';
 import { AdaptiveColorProvider } from '@/src/components/providers/AdaptiveColorProvider';
 import { useAuthStore } from '@/src/store/auth-store';
 import { usePremiumStore } from '@/src/store/premium-store';
@@ -24,6 +23,7 @@ import { handleAppOpen, scheduleReengagementSequence } from '@/src/lib/growth/re
 import { AnalyticsProvider } from '@/src/lib/analytics/posthog';
 import { initSentry, navigationIntegration, Sentry } from '@/src/lib/monitoring/sentry';
 import { ShiftWellErrorBoundary } from '@/src/components/ErrorBoundary';
+import { COLORS } from '@/src/theme';
 
 initSentry();
 
@@ -48,6 +48,20 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const shiftWellNavigationTheme: Theme = {
+  ...DarkTheme,
+  dark: true,
+  colors: {
+    ...DarkTheme.colors,
+    primary: COLORS.accent.purple,
+    background: COLORS.background.primary,
+    card: COLORS.background.surface,
+    text: COLORS.text.primary,
+    border: COLORS.border.default,
+    notification: COLORS.semantic.error,
+  },
+};
 
 function RootLayout() {
   const ref = useNavigationContainerRef();
@@ -83,7 +97,6 @@ function RootLayout() {
 export default Sentry.wrap(RootLayout);
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
   const checkSession = useAuthStore((s) => s.checkSession);
   const initializePremium = usePremiumStore((s) => s.initializePremium);
   const trialStartedAt = usePremiumStore((s) => s.trialStartedAt);
@@ -148,7 +161,7 @@ function RootLayoutNav() {
 
   return (
     <AnalyticsProvider>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={shiftWellNavigationTheme}>
       <AdaptiveColorProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" />
