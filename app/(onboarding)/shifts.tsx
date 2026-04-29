@@ -78,13 +78,14 @@ export default function ShiftsScreen() {
     trackShiftImportMethod('calendar');
     // The import flow owns its completion navigation. Pushing plan-ready here too
     // would skip the review step and leave a confusing back stack.
-    router.push('/import');
+    router.push('/import?from=onboarding');
   }
 
   function handleManual() {
     trackShiftImportMethod('manual');
-    // User will add shifts from the Schedule tab after onboarding.
-    router.push('/(onboarding)/plan-ready');
+    // Send users straight to the shift form; plan-ready should not imply a real
+    // plan exists before at least one shift has been entered.
+    router.push('/add-shift?from=onboarding');
   }
 
   function handleDemo() {
@@ -128,14 +129,14 @@ export default function ShiftsScreen() {
           <View style={styles.tiles}>
             <OptionTile
               emoji={'\u{1F4C5}'}
-              title="Import from Calendar"
-              subtitle="Pulls shifts from Apple / Google Calendar (fastest)"
+              title="Import a calendar file"
+              subtitle="Choose a .ics export from QGenda, Amion, Apple, Google, or Outlook"
               onPress={handleCalendarImport}
             />
             <OptionTile
               emoji={'\u270F\uFE0F'}
               title="Enter manually"
-              subtitle="Type your pattern (e.g. 7p\u20137a, 3 on 3 off)"
+              subtitle="Add your first shift now"
               onPress={handleManual}
             />
             <OptionTile

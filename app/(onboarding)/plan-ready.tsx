@@ -5,53 +5,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/src/components/ui/Button';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
-import { COLORS, PURPLE, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
 import { useOnboardingStore } from '@/src/store/onboarding-store';
+import { useShiftsStore } from '@/src/store/shifts-store';
 import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
 import { requestPermissions } from '@/src/lib/notifications/notification-service';
-import type { Chronotype } from '@/src/lib/circadian/types';
 import {
   trackOnboardingScreenViewed,
   trackOnboardingCompleted,
   trackNotificationPermissionResponse,
 } from '@/src/lib/analytics/onboarding-events';
-
-// ---------------------------------------------------------------------------
-// Plan preview data keyed by chronotype
-// ---------------------------------------------------------------------------
-
-interface PlanPreview {
-  sleep: string;
-  nap: string;
-  light: string;
-  meal: string;
-  caffeine: string;
-}
-
-const PLAN_PREVIEW: Record<Chronotype, PlanPreview> = {
-  early: {
-    sleep: '6:00a \u2013 1:30p',
-    nap: '5:30p \u2013 5:50p',
-    light: 'avoid until 12p',
-    meal: 'eat before 7a',
-    caffeine: 'stop by 12a',
-  },
-  intermediate: {
-    sleep: '8:15a \u2013 3:45p',
-    nap: '7:00p \u2013 7:20p',
-    light: 'avoid until 2p',
-    meal: 'eat before 9a',
-    caffeine: 'stop by 2a',
-  },
-  late: {
-    sleep: '9:30a \u2013 5:00p',
-    nap: '8:00p \u2013 8:20p',
-    light: 'avoid until 3p',
-    meal: 'eat before 10a',
-    caffeine: 'stop by 3a',
-  },
-};
 
 interface PlanRowProps {
   icon: string;
@@ -73,9 +37,9 @@ export default function PlanReadyScreen() {
   const screenStart = useRef(Date.now());
   const { onboardingStartedAt, setNotificationPermissionDeferred } = useOnboardingStore();
   const { profile, completeOnboarding } = useUserStore();
+  const shiftCount = useShiftsStore((s) => s.shifts.length);
   const [notifLoading, setNotifLoading] = useState(false);
-
-  const preview = PLAN_PREVIEW[profile.chronotype] ?? PLAN_PREVIEW.intermediate;
+  const hasShifts = shiftCount > 0;
   const showNap = profile.napPreference;
 
   useEffect(() => {
@@ -123,25 +87,40 @@ export default function PlanReadyScreen() {
         <AnimatedTransition delay={0} duration={300}>
           <View style={styles.successBadge}>
             <Text style={styles.checkmark}>{'\u2713'}</Text>
-            <Text style={styles.successText}>Your first plan is ready.</Text>
+            <Text style={styles.successText}>
+              {hasShifts ? 'Your schedule is ready.' : 'Your setup is ready.'}
+            </Text>
           </View>
         </AnimatedTransition>
 
-        {/* Plan preview card */}
+        {/* Plan readiness card */}
         <AnimatedTransition delay={150} duration={250}>
           <View style={styles.planCard}>
-            <Text style={styles.planCardLabel}>Tomorrow</Text>
+            <Text style={styles.planCardLabel}>
+              {hasShifts ? 'What happens next' : 'Add shifts to build your plan'}
+            </Text>
             <View style={styles.planRows}>
-              <PlanRow icon={'\u{1F6CF}\uFE0F'} label="Sleep" value={preview.sleep} />
+              <PlanRow
+                icon={'\u{1F4C5}'}
+                label="Schedule"
+                value={hasShifts ? `${shiftCount} shift${shiftCount === 1 ? '' : 's'} loaded` : 'Add shifts on the Schedule tab'}
+              />
+              <PlanRow
+                icon={'\u{1F6CF}\uFE0F'}
+                label="Sleep"
+                value={hasShifts ? 'Generated around your actual shifts' : 'Generated after your first shift'}
+              />
               {showNap && (
-                <PlanRow icon={'\u23F0'} label="Nap" value={preview.nap} />
+                <PlanRow icon={'\u23F0'} label="Nap" value="Included when it fits your day" />
               )}
-              <PlanRow icon={'\u2600\uFE0F'} label="Light" value={preview.light} />
-              <PlanRow icon={'\u{1F37D}\uFE0F'} label="Meal" value={preview.meal} />
-              <PlanRow icon={'\u2615'} label="Caffeine" value={preview.caffeine} />
+              <PlanRow icon={'\u2600\uFE0F'} label="Light" value="Timed to your shift pattern" />
+              <PlanRow icon={'\u{1F37D}\uFE0F'} label="Meals" value="Aligned to your body clock" />
+              <PlanRow icon={'\u2615'} label="Caffeine" value="Cutoff calculated from sleep timing" />
             </View>
             <Text style={styles.planCardNote}>
-              Based on your chronotype. Full plan on your dashboard.
+              {hasShifts
+                ? `Based on your ${profile.chronotype} chronotype and saved shifts. Open Today to review the actual plan.`
+                : 'No sample times here: ShiftWell will calculate real recommendations after you add or import shifts.'}
             </Text>
           </View>
         </AnimatedTransition>

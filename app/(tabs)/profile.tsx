@@ -210,7 +210,7 @@ export default function ProfileScreen() {
             <CardDivider />
             <CardRow
               label="Edit preferences"
-              onPress={() => router.push('/(onboarding)' as any)}
+              onPress={() => router.push('/(tabs)/settings')}
             />
           </GlassCard>
 
@@ -230,7 +230,7 @@ export default function ProfileScreen() {
             <CardDivider />
             <CardRow
               label="HealthKit"
-              value={recovery.isAvailable ? 'Connected' : 'Not available'}
+              value={recovery.isAvailable ? 'Available' : 'Not available'}
               valueColor={recovery.isAvailable ? '#34D399' : TEXT_COLORS.tertiary}
             />
           </GlassCard>

@@ -105,8 +105,8 @@ export default function HealthKitScreen() {
           matches the plan.
         </Text>
         <Text style={[styles.subtitle, styles.subtitleExtra]}>
-          It can also set your planned sleep schedule in Health, which activates
-          iOS Sleep Focus mode.
+          ShiftWell requests read-only access for TestFlight. You can revoke access
+          any time in the Health app.
         </Text>
 
         <Card style={styles.card}>
@@ -117,9 +117,9 @@ export default function HealthKitScreen() {
         </Card>
 
         <Card style={styles.card}>
-          <Text style={styles.cardTitle}>Auto Sleep Focus</Text>
+          <Text style={styles.cardTitle}>Private by Design</Text>
           <Text style={styles.cardDescription}>
-            Your iPhone automatically silences notifications during planned sleep
+            Health data stays in Apple Health and is used locally for recovery insights
           </Text>
         </Card>
 

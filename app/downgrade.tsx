@@ -9,20 +9,17 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, RADIUS } from '@/src/theme';
+import { TRIAL_DAYS, PRICING } from '@/src/lib/premium/pricing';
 
 // ---------------------------------------------------------------------------
 // Data — Premium features lost on downgrade
 // ---------------------------------------------------------------------------
 
 const PREMIUM_FEATURES = [
-  { icon: 'calendar-sharp' as const,          label: 'Smart shift scheduling' },
-  { icon: 'calendar-outline' as const,        label: 'Native calendar export' },
-  { icon: 'fitness-outline' as const,         label: 'Circadian activity guide' },
-  { icon: 'analytics-outline' as const,       label: 'Personal sleep insights' },
-  { icon: 'restaurant-outline' as const,      label: 'Meal & caffeine timing' },
-  { icon: 'trophy-outline' as const,          label: 'Daily recovery score' },
-  { icon: 'star-outline' as const,            label: 'Night Sky Mode' },
-  { icon: 'phone-portrait-outline' as const,  label: 'Live Activities' },
+  { icon: 'analytics-outline' as const,       label: 'Adaptive Brain plan adjustments' },
+  { icon: 'chatbubbles-outline' as const,     label: 'Personalized weekly coaching' },
+  { icon: 'trending-up-outline' as const,     label: 'Pattern recognition and predictions' },
+  { icon: 'shield-checkmark-outline' as const, label: 'Cloud backup and sync' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -62,13 +59,13 @@ export default function DowngradeScreen() {
           </View>
           <Text style={styles.title}>Your Trial Has Ended</Text>
           <Text style={styles.subtitle}>
-            Your 14-day ShiftWell Pro trial is over. Upgrade to keep full access to
-            every feature — or continue with the free plan.
+            Your {TRIAL_DAYS}-day ShiftWell Pro trial is over. Upgrade to keep
+            adaptive features — or continue with the free core plan.
           </Text>
         </View>
 
         {/* ── Feature summary ──────────────────────────────────────── */}
-        <Text style={styles.sectionLabel}>WHAT YOU'LL LOSE</Text>
+        <Text style={styles.sectionLabel}>WHAT PRO ADDS</Text>
         <View style={styles.featureCard}>
           {PREMIUM_FEATURES.map((f, i) => (
             <View key={f.label}>
@@ -89,7 +86,7 @@ export default function DowngradeScreen() {
           accessibilityLabel="Upgrade to ShiftWell Pro"
         >
           <Text style={styles.ctaText}>Upgrade to ShiftWell Pro</Text>
-          <Text style={styles.ctaSubText}>From $4.17/mo · Cancel anytime</Text>
+          <Text style={styles.ctaSubText}>From {PRICING.annual.perMonth} · Cancel anytime</Text>
         </TouchableOpacity>
 
         {/* ── Secondary link ───────────────────────────────────────── */}

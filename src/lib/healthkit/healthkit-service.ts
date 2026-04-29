@@ -1,8 +1,8 @@
 /**
  * HealthKit integration service for ShiftWell.
  *
- * Reads and writes sleep data via Apple HealthKit to compare planned
- * circadian schedules against actual sleep behavior.
+ * Reads sleep data via Apple HealthKit to compare planned circadian schedules
+ * against actual sleep behavior.
  *
  * Uses the @kingstinct/react-native-healthkit package which wraps
  * Apple's HKHealthStore API.
@@ -49,9 +49,8 @@ export interface SleepRecord {
 /**
  * Request HealthKit authorization for sleep-related data.
  *
- * We request read + write for sleep analysis so we can both read
- * actual sleep data and write planned sleep schedules (which
- * activates iOS Sleep Focus mode).
+ * We request read-only access for TestFlight. If planned sleep writes or Sleep
+ * Focus integration ship later, update HealthKit copy and permissions together.
  *
  * Heart rate read access is needed for sleeping heart rate analysis.
  */
@@ -70,7 +69,7 @@ export async function requestAuthorization(): Promise<boolean> {
         HKQuantityTypeIdentifier.appleSleepingWristTemperature,
         HKQuantityTypeIdentifier.stepCount,
       ],
-      [HKCategoryTypeIdentifier.sleepAnalysis],
+      [],
     );
     return result;
   } catch (error) {
