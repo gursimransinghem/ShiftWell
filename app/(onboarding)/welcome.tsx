@@ -2,14 +2,6 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-  withDelay,
-} from 'react-native-reanimated';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
 import Button from '@/src/components/ui/Button';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
@@ -50,26 +42,8 @@ const STARS = [
 ];
 
 function TwinkleStar({ star }: { star: typeof STARS[0] }) {
-  const opacity = useSharedValue(0.1);
-
-  useEffect(() => {
-    opacity.value = withDelay(
-      star.delay,
-      withRepeat(
-        withSequence(
-          withTiming(0.05, { duration: star.dur }),
-          withTiming(0.75, { duration: star.dur }),
-        ),
-        -1,
-        false,
-      ),
-    );
-  }, [opacity, star.delay, star.dur]);
-
-  const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
-
   return (
-    <Animated.View
+    <View
       style={[
         styles.star,
         {
@@ -79,7 +53,6 @@ function TwinkleStar({ star }: { star: typeof STARS[0] }) {
           height: star.size,
           borderRadius: star.size / 2,
         },
-        animStyle,
       ]}
     />
   );
