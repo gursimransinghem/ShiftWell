@@ -191,7 +191,7 @@ Useful generic principles:
 - Reliability over novelty.
 - Privacy and safety over convenience when sensitive data is involved.
 
-### 11. Defer / Kill / Keep
+### 11. Keep / Fix / Hide / Defer / Kill
 
 Create a clear triage table:
 
