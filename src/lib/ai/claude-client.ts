@@ -11,7 +11,7 @@
  */
 
 import { ClaudeAPIError } from './types';
-import { supabase } from '../supabase/client';
+import { isSupabaseConfigured, supabase } from '../supabase/client';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -63,6 +63,13 @@ async function callEdgeFunction(
   userMessage: string,
   model: string = DEFAULT_MODEL,
 ): Promise<{ text: string; tokensUsed: number }> {
+  const supabaseReady =
+    typeof isSupabaseConfigured === 'function' ? isSupabaseConfigured() : true;
+
+  if (!supabaseReady) {
+    throw new ClaudeAPIError(503, 'AI brief is unavailable until Supabase is configured');
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
   if (!session?.access_token) {
     throw new ClaudeAPIError(401, 'User not authenticated');
