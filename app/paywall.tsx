@@ -11,12 +11,9 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremiumStore } from '@/src/store/premium-store';
-import { useUserStore } from '@/src/store/user-store';
-import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
-import { logExposure } from '@/src/lib/growth/ab-testing';
 import { COLORS, SPACING, RADIUS, PURPLE } from '@/src/theme';
 import { PLAN_LIST, TRIAL_DAYS, type PricingPlan } from '@/src/lib/premium/pricing';
-import { PRIVACY_SUMMARY, HEALTH_DISCLAIMER } from '@/src/content/legal';
+import { PRIVACY_SUMMARY, HEALTH_DISCLAIMER, TERMS_SUMMARY } from '@/src/content/legal';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -24,6 +21,7 @@ import { PRIVACY_SUMMARY, HEALTH_DISCLAIMER } from '@/src/content/legal';
 
 type PlanKey = PricingPlan['key'];
 type Plan = PricingPlan;
+type LegalModal = 'privacy' | 'health' | 'terms';
 
 // ---------------------------------------------------------------------------
 // Data — Plans (source: src/lib/premium/pricing.ts)
@@ -74,17 +72,13 @@ const FEATURES = [
   { icon: 'moon-outline' as const,           label: 'Circadian sleep plan',            free: true },
   { icon: 'add-circle-outline' as const,     label: 'Manual shift entry',              free: true },
   { icon: 'today-outline' as const,          label: 'Today view',                      free: true },
-  { icon: 'calendar-sharp' as const,         label: 'Smart shift scheduling',          free: false },
-  { icon: 'calendar-outline' as const,       label: 'Native calendar export',          free: false },
-  { icon: 'fitness-outline' as const,        label: 'Circadian activity guide',        free: false },
-  { icon: 'analytics-outline' as const,      label: 'Personal sleep insights',         free: false },
-  { icon: 'restaurant-outline' as const,     label: 'Meal & caffeine timing',          free: false },
-  { icon: 'bed-outline' as const,            label: 'Strategic nap placement',         free: false },
-  { icon: 'sunny-outline' as const,          label: 'Light exposure protocol',         free: false },
-  { icon: 'trophy-outline' as const,         label: 'Daily recovery score',            free: false },
-  { icon: 'notifications-outline' as const,  label: 'Smart shift reminders',           free: false },
-  { icon: 'star-outline' as const,           label: 'Night Sky Mode',                  free: false },
-  { icon: 'phone-portrait-outline' as const, label: 'Live Activities (lock screen)',   free: false },
+  { icon: 'calendar-sharp' as const,         label: 'Shift import and calendar export', free: true },
+  { icon: 'restaurant-outline' as const,     label: 'Meal, caffeine, nap, and light timing', free: true },
+  { icon: 'notifications-outline' as const,  label: 'Core reminders',                  free: true },
+  { icon: 'analytics-outline' as const,      label: 'Adaptive Brain plan adjustments', free: false },
+  { icon: 'chatbubbles-outline' as const,    label: 'Personalized weekly coaching',    free: false },
+  { icon: 'trending-up-outline' as const,    label: 'Pattern recognition and predictions', free: false },
+  { icon: 'shield-checkmark-outline' as const, label: 'Cloud backup and sync',          free: false },
 ];
 
 // ---------------------------------------------------------------------------
@@ -92,9 +86,9 @@ const FEATURES = [
 // ---------------------------------------------------------------------------
 
 const TRUST = [
-  { icon: 'flask-outline' as const, label: '10+ peer-reviewed papers' },
+  { icon: 'flask-outline' as const, label: 'Research-informed' },
   { icon: 'medical-outline' as const, label: 'Built by an ER physician' },
-  { icon: 'people-outline' as const, label: '700M shift workers worldwide' },
+  { icon: 'people-outline' as const, label: 'Built for shift schedules' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -106,21 +100,21 @@ const SCIENCE = [
     stat: '3%',
     color: '#A78BFA',
     finding: 'of night shift workers ever fully adapt circadianly.',
-    insight: 'Most apps optimize for full adaptation. ShiftWell optimizes for minimal disruption and maximal recovery within your real rotation — a fundamentally different goal.',
-    citation: 'Circadian Biology Research',
+    insight: 'ShiftWell is designed around practical recovery within real rotations rather than assuming full circadian adaptation.',
+    citation: 'Eastman & Burgess, 2009',
   },
   {
     stat: '2×',
     color: '#FF6B6B',
     finding: 'the cognitive impairment of two sleepless nights',
-    insight: 'Just 6 hours/night for 14 days creates that deficit — and people don\'t feel as impaired as they are. ShiftWell tracks cumulative debt objectively.',
+    insight: 'Repeated short sleep can create meaningful performance deficits. ShiftWell helps you see and protect recovery windows.',
     citation: 'Van Dongen et al., 2003 · Walter Reed Army Institute',
   },
   {
     stat: '↓CVD',
     color: '#34D399',
     finding: 'Daytime-only eating reduces cardiovascular risk in night workers.',
-    insight: 'ShiftWell\'s meal timing engine is built directly on this finding. Your eating windows auto-adjust with every shift change.',
+    insight: 'ShiftWell meal timing is informed by emerging research on eating windows during night work.',
     citation: 'Chellappa et al., 2021',
   },
 ];
@@ -215,32 +209,12 @@ function PlanCard({
 
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
-  const [legalModal, setLegalModal] = useState<null | 'privacy' | 'terms'>(null);
+  const [legalModal, setLegalModal] = useState<null | LegalModal>(null);
   const { purchase, restore, isLoading } = usePremiumStore();
-  const profile = useUserStore((s) => s.profile);
 
-  // Paywall pricing A/B experiment (GRO-04)
-  const paywallVariant = getPaywallVariant(profile.id ?? '');
-
-  // Override annual plan pricing based on experiment variant
-  const experimentPlans: Plan[] = PLANS.map((p) => {
-    if (p.key === 'annual') {
-      return {
-        ...p,
-        price: paywallVariant.annualPrice,
-        perMonth: paywallVariant.monthlyEquivalent,
-      };
-    }
-    return p;
-  });
-
-  const currentPlan = experimentPlans.find((p) => p.key === selectedPlan)!;
+  const currentPlan = PLANS.find((p) => p.key === selectedPlan)!;
 
   async function handleStartTrial() {
-    // Log paywall impression for experiment tracking
-    if (profile.id) {
-      logExposure('paywall-pricing-v1', paywallVariant.variantId === 'control' ? 'A' : 'B', profile.id).catch(() => {});
-    }
     await purchase(currentPlan);
     router.back();
   }
@@ -278,8 +252,8 @@ export default function PaywallScreen() {
           </View>
           <Text style={styles.heroTitle}>Work any shift.{'\n'}Sleep like a champion.</Text>
           <Text style={styles.heroSub}>
-            The only sleep app built by an ER physician, for the 700 million people
-            who work against the clock.
+            Built by an ER physician for people whose work hours do not fit
+            generic sleep advice.
           </Text>
         </View>
 
@@ -335,7 +309,7 @@ export default function PaywallScreen() {
         {/* ── Pricing ──────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>CHOOSE YOUR PLAN</Text>
         <View style={styles.planRow}>
-          {experimentPlans.map((plan) => (
+          {PLANS.map((plan) => (
             <PlanCard
               key={plan.key}
               plan={plan}
@@ -353,13 +327,13 @@ export default function PaywallScreen() {
           disabled={isLoading}
         >
           <Text style={styles.ctaText}>
-            {isLoading ? 'Processing…' : `Start ${TRIAL_DAYS}-Day Free Trial`}
+            {isLoading ? 'Processing...' : `Start ${TRIAL_DAYS}-Day Free Trial`}
           </Text>
           <Text style={styles.ctaSubText}>
             Then {currentPlan.price} {disclaimerPeriod} · Cancel anytime
           </Text>
           <Text style={styles.ctaCancelNote}>
-            One tap from Settings — no phone calls, no forms.
+            Apple confirms the final price before purchase.
           </Text>
         </TouchableOpacity>
 
@@ -376,6 +350,10 @@ export default function PaywallScreen() {
           <TouchableOpacity hitSlop={8} onPress={() => setLegalModal('terms')}>
             <Text style={styles.footerLink}>Terms</Text>
           </TouchableOpacity>
+          <Text style={styles.footerSep}>·</Text>
+          <TouchableOpacity hitSlop={8} onPress={() => setLegalModal('health')}>
+            <Text style={styles.footerLink}>Health</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -389,7 +367,11 @@ export default function PaywallScreen() {
         <View style={styles.legalContainer}>
           <View style={styles.legalHeader}>
             <Text style={styles.legalTitle}>
-              {legalModal === 'privacy' ? 'Privacy' : 'Health Disclaimer'}
+              {legalModal === 'privacy'
+                ? 'Privacy'
+                : legalModal === 'terms'
+                  ? 'Terms'
+                  : 'Health Disclaimer'}
             </Text>
             <Pressable
               onPress={() => setLegalModal(null)}
@@ -402,7 +384,11 @@ export default function PaywallScreen() {
           </View>
           <ScrollView contentContainerStyle={styles.legalScroll}>
             <Text style={styles.legalBody}>
-              {legalModal === 'privacy' ? PRIVACY_SUMMARY : HEALTH_DISCLAIMER}
+              {legalModal === 'privacy'
+                ? PRIVACY_SUMMARY
+                : legalModal === 'terms'
+                  ? TERMS_SUMMARY
+                  : HEALTH_DISCLAIMER}
             </Text>
           </ScrollView>
         </View>

@@ -73,6 +73,7 @@ function mapGoogleEventItem(
   const endStr = item.end?.dateTime ?? item.end?.date;
 
   if (!startStr || !endStr) return null;
+  if (isAllDay) return null;
 
   return {
     id: item.id,

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { format } from 'date-fns';
@@ -47,6 +47,8 @@ const SHIFT_TYPE_COLORS: Record<string, string> = {
 // ---------------------------------------------------------------------------
 
 export default function ImportScreen() {
+  const params = useLocalSearchParams<{ from?: string }>();
+  const isOnboarding = params.from === 'onboarding';
   const [step, setStep] = useState<Step>('pick');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -365,16 +367,26 @@ export default function ImportScreen() {
 
         <View style={styles.doneActions}>
           <Button
-            title="View Schedule"
-            onPress={() => router.replace('/(tabs)/schedule')}
+            title={isOnboarding ? 'Continue setup' : 'View Schedule'}
+            onPress={() =>
+              isOnboarding
+                ? router.replace('/(onboarding)/plan-ready')
+                : router.replace('/(tabs)/schedule')
+            }
             variant="primary"
             size="lg"
             fullWidth
           />
           <View style={{ height: SPACING.md }} />
           <Button
-            title="Back to Settings"
-            onPress={() => router.back()}
+            title={isOnboarding ? 'Choose another file' : 'Done'}
+            onPress={() => {
+              if (isOnboarding) {
+                setStep('pick');
+              } else {
+                router.back();
+              }
+            }}
             variant="ghost"
             size="md"
           />

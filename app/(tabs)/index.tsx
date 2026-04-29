@@ -18,6 +18,7 @@ import { format, isWithinInterval, differenceInMinutes } from 'date-fns';
 
 import { usePlanStore } from '@/src/store/plan-store';
 import { useShiftsStore } from '@/src/store/shifts-store';
+import { useOnboardingStore } from '@/src/store/onboarding-store';
 import { usePremiumStore } from '@/src/store/premium-store';
 import { usePredictionStore } from '@/src/store/prediction-store';
 import { useTodayPlan } from '@/src/hooks/useTodayPlan';
@@ -202,6 +203,7 @@ export default function TodayScreen() {
   const regeneratePlan = usePlanStore((s) => s.regeneratePlan);
   const isGenerating = usePlanStore((s) => s.isGenerating);
   const shifts = useShiftsStore((s) => s.shifts);
+  const demoMode = useOnboardingStore((s) => s.demoMode);
 
   const {
     todayBlocks,
@@ -552,6 +554,15 @@ export default function TodayScreen() {
                   Plan generation failed. Tap to retry.
                 </Text>
               </Pressable>
+            )}
+
+            {demoMode && (
+              <View style={styles.demoBanner}>
+                <Text style={styles.demoBannerTitle}>Demo schedule</Text>
+                <Text style={styles.demoBannerText}>
+                  You are viewing sample night shifts. Add your own shifts when you are ready.
+                </Text>
+              </View>
             )}
 
             {/* ============================================================ */}
@@ -929,6 +940,26 @@ const styles = StyleSheet.create({
     ...TYPOGRAPHY.bodySmall,
     color: COLORS.semantic.error,
     textAlign: 'center',
+  },
+
+  /* Demo mode */
+  demoBanner: {
+    backgroundColor: 'rgba(200,168,75,0.08)',
+    borderRadius: RADIUS.lg,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(200,168,75,0.28)',
+    padding: SPACING.md,
+    marginBottom: SPACING.lg,
+  },
+  demoBannerTitle: {
+    ...TYPOGRAPHY.label,
+    color: COLORS.accent.primary,
+    marginBottom: 4,
+  },
+  demoBannerText: {
+    ...TYPOGRAPHY.bodySmall,
+    color: COLORS.text.secondary,
+    lineHeight: 18,
   },
 
   /* Sections */

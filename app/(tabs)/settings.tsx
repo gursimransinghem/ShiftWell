@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Alert,
+  Linking,
   ScrollView,
   StyleSheet,
   Switch,
@@ -17,8 +18,16 @@ import { useAuthStore } from '@/src/store/auth-store';
 import { useBriefStore } from '@/src/store/brief-store';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useFeatureGate } from '@/src/lib/premium/feature-gate';
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
+import { HEALTH_DISCLAIMER, PRIVACY_SUMMARY, SUPPORT_EMAIL } from '@/src/content/legal';
+import { COLORS, SPACING, RADIUS } from '@/src/theme';
 import ReferralCard from '@/src/components/ui/ReferralCard';
+
+function openSupportEmail(subject: string) {
+  const encodedSubject = encodeURIComponent(subject);
+  Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=${encodedSubject}`).catch(() => {
+    Alert.alert('Email unavailable', `Please email ${SUPPORT_EMAIL}.`);
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Section header
@@ -229,7 +238,7 @@ export default function SettingsScreen() {
             <View style={styles.toggleLabelCol}>
               <Text style={styles.rowLabel}>Weekly Sleep Brief</Text>
               <Text style={styles.toggleSubtitle}>
-                Every Monday — AI summary of your sleep week
+                Every Monday — personalized summary of your sleep week
               </Text>
             </View>
             <Switch
@@ -320,9 +329,20 @@ export default function SettingsScreen() {
             <Text style={styles.rowValue}>1.0.0</Text>
           </View>
           <View style={styles.divider} />
-          <LinkRow label="Privacy Policy" onPress={() => {}} />
+          <LinkRow
+            label="Privacy Summary"
+            onPress={() => Alert.alert('Privacy Summary', PRIVACY_SUMMARY)}
+          />
           <View style={styles.divider} />
-          <LinkRow label="Terms of Service" onPress={() => {}} />
+          <LinkRow
+            label="Health Disclaimer"
+            onPress={() => Alert.alert('Health Disclaimer', HEALTH_DISCLAIMER)}
+          />
+          <View style={styles.divider} />
+          <LinkRow
+            label="Help & Feedback"
+            onPress={() => openSupportEmail('ShiftWell TestFlight Feedback')}
+          />
         </View>
 
         {/* Medical Disclaimer */}

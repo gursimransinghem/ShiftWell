@@ -67,8 +67,10 @@ export function computeCutoffHours(
 /**
  * Compute caffeine cutoff time for a given day.
  *
- * The cutoff is relative to the FIRST sleep block of the day
- * (which may be a nap or the main sleep block).
+ * The cutoff is relative to the first primary sleep target. Recovery days
+ * have a short morning recovery block plus an evening sleep block; for those
+ * days, anchor caffeine advice to the later full sleep so users can still use
+ * caffeine strategically while staying awake through the reset day.
  *
  * @param doseMg - Optional caffeine dose in mg. When provided, uses the
  *   dose-aware formula. When omitted, falls back to the legacy 1.67x
@@ -87,7 +89,10 @@ export function computeCaffeineCutoff(
 
   if (sleepAndNapBlocks.length === 0) return null;
 
-  const firstSleep = sleepAndNapBlocks[0];
+  const targetSleep =
+    day.dayType === 'recovery'
+      ? sleepAndNapBlocks[sleepAndNapBlocks.length - 1]
+      : sleepAndNapBlocks[0];
   const dayId = day.date.toISOString().slice(0, 10);
 
   let cutoffMinutes: number;
@@ -108,7 +113,7 @@ export function computeCaffeineCutoff(
     descriptionSuffix = `With your ${profile.caffeineHalfLife}h caffeine half-life, this gives ${cutoffHoursFormatted}h for caffeine to clear before sleep.`;
   }
 
-  const cutoffTime = addMinutes(firstSleep.start, -cutoffMinutes);
+  const cutoffTime = addMinutes(targetSleep.start, -cutoffMinutes);
 
   return {
     id: `${dayId}-caffeine-cutoff`,

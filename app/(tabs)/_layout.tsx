@@ -14,30 +14,35 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Today',
+          tabBarAccessibilityLabel: 'Today tab',
         }}
       />
       <Tabs.Screen
         name="schedule"
         options={{
           title: 'Schedule',
+          tabBarAccessibilityLabel: 'Schedule tab',
         }}
       />
       <Tabs.Screen
         name="circadian"
         options={{
           title: 'Circadian',
+          tabBarAccessibilityLabel: 'Circadian tab',
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
+          tabBarAccessibilityLabel: 'Profile tab',
         }}
       />
       <Tabs.Screen
         name="brief"
         options={{
           title: 'Brief',
+          tabBarAccessibilityLabel: 'Brief tab',
           headerShown: false,
         }}
       />
@@ -45,6 +50,7 @@ export default function TabLayout() {
         name="outcomes"
         options={{
           title: 'Outcomes',
+          tabBarAccessibilityLabel: 'Outcomes tab',
         }}
       />
       <Tabs.Screen

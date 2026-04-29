@@ -43,7 +43,7 @@
       },
       "infoPlist": {
         "NSDocumentPickerUsageDescription": "ShiftWell needs access to your files to import shift schedules.",
-        "NSHealthShareUsageDescription": "ShiftWell uses Apple Health data, including sleep records and heart rate variability from your Apple Watch, to optimize your sleep schedule and calculate your recovery score.",
+        "NSHealthShareUsageDescription": "ShiftWell reads sleep and optional heart rate variability from Apple Health to show recovery insights on your device.",
         "NSHealthUpdateUsageDescription": "ShiftWell does not write health data.",
         "ITSAppUsesNonExemptEncryption": false,
         "NSCalendarsFullAccessUsageDescription": "ShiftWell reads your calendar to detect work shifts and writes sleep blocks back as events.",
@@ -81,7 +81,7 @@
       [
         "@kingstinct/react-native-healthkit",
         {
-          "NSHealthShareUsageDescription": "ShiftWell uses Apple Health data, including sleep records and heart rate variability from your Apple Watch, to optimize your sleep schedule and calculate your recovery score.",
+          "NSHealthShareUsageDescription": "ShiftWell reads sleep and optional heart rate variability from Apple Health to show recovery insights on your device.",
           "NSHealthUpdateUsageDescription": "ShiftWell does not write health data."
         }
       ],
