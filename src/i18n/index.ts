@@ -4,9 +4,7 @@ import { getLocales } from 'expo-localization';
 
 type SupportedLocale = 'en' | 'es';
 
-type TranslationMap = typeof en;
-
-const translations: Record<SupportedLocale, TranslationMap> = { en, es };
+const translations: Record<SupportedLocale, Record<string, unknown>> = { en, es };
 
 /**
  * Detect the device locale and return a supported locale code.
