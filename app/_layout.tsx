@@ -4,7 +4,7 @@ import { Stack, router, useNavigationContainerRef } from 'expo-router';
 import { format } from 'date-fns';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { AppState, type AppStateStatus } from 'react-native';
+import { AppState, LogBox, type AppStateStatus } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as Notifications from 'expo-notifications';
 
@@ -25,6 +25,16 @@ import { initSentry, navigationIntegration, Sentry } from '@/src/lib/monitoring/
 import { ShiftWellErrorBoundary } from '@/src/components/ErrorBoundary';
 
 initSentry();
+
+if (__DEV__) {
+  LogBox.ignoreLogs([
+    '"shadow*" style props are deprecated. Use "boxShadow".',
+    '"textShadow*" style props are deprecated. Use "textShadow".',
+    'props.pointerEvents is deprecated. Use style.pointerEvents',
+    '[expo-notifications] Listening to push token changes is not yet fully supported on web.',
+    '[analytics] PostHog not ready',
+  ]);
+}
 
 // Register foreground notification handler — SDK 55 API (shouldShowBanner replaces shouldShowAlert)
 Notifications.setNotificationHandler({
