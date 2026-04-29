@@ -2,6 +2,8 @@ import * as Sentry from '@sentry/react-native';
 import Constants from 'expo-constants';
 
 const DSN = process.env.EXPO_PUBLIC_SENTRY_DSN ?? '';
+type SentryErrorEvent = Parameters<NonNullable<Parameters<typeof Sentry.init>[0]['beforeSend']>>[0];
+type SentryBreadcrumb = Parameters<NonNullable<Parameters<typeof Sentry.init>[0]['beforeBreadcrumb']>>[0];
 
 function getEnvironment(): string {
   if (__DEV__) return 'development';
@@ -21,7 +23,7 @@ function scrubObject(obj: Record<string, unknown>): Record<string, unknown> {
   return scrubbed;
 }
 
-function scrubEvent(event: Sentry.Event): Sentry.Event | null {
+function scrubEvent(event: SentryErrorEvent): SentryErrorEvent | null {
   if (event.user) {
     event.user = { id: event.user.id };
   }
@@ -60,7 +62,7 @@ export function initSentry(): void {
     replaysSessionSampleRate: 0,
     integrations: [navigationIntegration, Sentry.mobileReplayIntegration()],
     beforeSend: scrubEvent,
-    beforeBreadcrumb(breadcrumb: { category?: string; [key: string]: unknown }) {
+    beforeBreadcrumb(breadcrumb: SentryBreadcrumb) {
       if (breadcrumb.category === 'console') return null;
       return breadcrumb;
     },

@@ -25,19 +25,27 @@
         "NSPrivacyAccessedAPITypes": [
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
-            "NSPrivacyAccessedAPITypeReasons": ["CA92.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "CA92.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryFileTimestamp",
-            "NSPrivacyAccessedAPITypeReasons": ["C617.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "C617.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryDiskSpace",
-            "NSPrivacyAccessedAPITypeReasons": ["E174.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "E174.1"
+            ]
           },
           {
             "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategorySystemBootTime",
-            "NSPrivacyAccessedAPITypeReasons": ["35F9.1"]
+            "NSPrivacyAccessedAPITypeReasons": [
+              "35F9.1"
+            ]
           }
         ]
       },
@@ -48,8 +56,14 @@
         "ITSAppUsesNonExemptEncryption": false,
         "NSCalendarsFullAccessUsageDescription": "ShiftWell reads your calendar to detect work shifts and writes sleep blocks back as events.",
         "NSCalendarsWriteOnlyAccessUsageDescription": "ShiftWell adds sleep plan events to your calendar.",
-        "UIBackgroundModes": ["fetch", "remote-notification", "processing"],
-        "BGTaskSchedulerPermittedIdentifiers": ["com.expo.modules.backgroundtask.processing"]
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification",
+          "processing"
+        ],
+        "BGTaskSchedulerPermittedIdentifiers": [
+          "com.expo.modules.backgroundtask.processing"
+        ]
       }
     },
     "android": {
@@ -75,9 +89,12 @@
       "expo-secure-store",
       "expo-apple-authentication",
       "expo-notifications",
-      ["expo-location", {
-        "locationWhenInUsePermission": "ShiftWell uses your location to calculate your commute time."
-      }],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "ShiftWell uses your location to calculate your commute time."
+        }
+      ],
       [
         "@kingstinct/react-native-healthkit",
         {
@@ -88,9 +105,12 @@
       "expo-calendar",
       "expo-background-task",
       "expo-task-manager",
-      ["@react-native-google-signin/google-signin", {
-        "iosUrlScheme": "com.googleusercontent.apps.PLACEHOLDER_CLIENT_ID"
-      }],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.PLACEHOLDER_CLIENT_ID"
+        }
+      ],
       [
         "@sentry/react-native/expo",
         {
@@ -98,7 +118,9 @@
           "project": "shiftwell",
           "organization": "YOUR_ORG_SLUG"
         }
-      ]
+      ],
+      "@sentry/react-native",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
