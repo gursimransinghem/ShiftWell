@@ -11,7 +11,7 @@ export default function EntryScreen() {
     if (onboardingComplete) {
       router.replace('/(tabs)');
     } else {
-      router.replace('/(onboarding)/welcome');
+      router.replace('/welcome');
     }
   }, [onboardingComplete]);
 
