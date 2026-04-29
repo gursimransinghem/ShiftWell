@@ -100,8 +100,9 @@ describe('front-end onboarding to calendar export wiring', () => {
     );
   });
 
-  it('falls back to a browser ICS download when native sharing is unavailable', async () => {
+  it('uses a browser ICS download before native file APIs on web', async () => {
     const { sharePlanICS } = await import('../src/hooks/useExport');
+    const FileSystem = await import('expo-file-system/legacy');
     const Sharing = await import('expo-sharing');
     const link = {
       href: '',
@@ -134,6 +135,8 @@ describe('front-end onboarding to calendar export wiring', () => {
     expect(link.click).toHaveBeenCalled();
     expect(link.remove).toHaveBeenCalled();
     expect(revokeObjectURL).toHaveBeenCalledWith('blob:shiftwell-export');
+    expect(FileSystem.writeAsStringAsync).not.toHaveBeenCalled();
+    expect(Sharing.shareAsync).not.toHaveBeenCalled();
   });
 
   it('marks onboarding complete before leaving the calendar onboarding screen', () => {

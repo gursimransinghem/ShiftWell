@@ -12,19 +12,8 @@ export async function sharePlanICS(
 ): Promise<boolean> {
   const icsContent = generateICS(plan, options);
   const fileName = 'ShiftWell-Sleep-Plan.ics';
-  const filePath = `${FileSystem.cacheDirectory}${fileName}`;
 
-  await FileSystem.writeAsStringAsync(filePath, icsContent, {
-    encoding: FileSystem.EncodingType.UTF8,
-  });
-
-  const sharingAvailable = await Sharing.isAvailableAsync();
-
-  if (!sharingAvailable) {
-    if (typeof document === 'undefined' || typeof URL === 'undefined' || typeof Blob === 'undefined') {
-      return false;
-    }
-
+  if (typeof document !== 'undefined' && typeof URL !== 'undefined' && typeof Blob !== 'undefined') {
     const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -35,6 +24,18 @@ export async function sharePlanICS(
     link.remove();
     URL.revokeObjectURL(url);
     return true;
+  }
+
+  const filePath = `${FileSystem.cacheDirectory}${fileName}`;
+
+  await FileSystem.writeAsStringAsync(filePath, icsContent, {
+    encoding: FileSystem.EncodingType.UTF8,
+  });
+
+  const sharingAvailable = await Sharing.isAvailableAsync();
+
+  if (!sharingAvailable) {
+    return false;
   }
 
   await Sharing.shareAsync(filePath, {
