@@ -5,6 +5,10 @@ const replaceMock = jest.fn();
 const pushMock = jest.fn();
 const backMock = jest.fn();
 
+const originalDocument = global.document;
+const originalURL = global.URL;
+const originalBlob = global.Blob;
+
 jest.mock('expo-router', () => ({
   router: {
     replace: replaceMock,
@@ -63,6 +67,15 @@ const mockPlan: SleepPlan = {
 describe('front-end onboarding to calendar export wiring', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    global.document = originalDocument;
+    global.URL = originalURL;
+    global.Blob = originalBlob;
+  });
+
+  afterAll(() => {
+    global.document = originalDocument;
+    global.URL = originalURL;
+    global.Blob = originalBlob;
   });
 
   it('exports the generated sleep plan as a shareable ICS file', async () => {
@@ -85,6 +98,42 @@ describe('front-end onboarding to calendar export wiring', () => {
         dialogTitle: 'Export Sleep Plan',
       }),
     );
+  });
+
+  it('falls back to a browser ICS download when native sharing is unavailable', async () => {
+    const { sharePlanICS } = await import('../src/hooks/useExport');
+    const Sharing = await import('expo-sharing');
+    const link = {
+      href: '',
+      download: '',
+      click: jest.fn(),
+      remove: jest.fn(),
+    };
+    const appendChild = jest.fn();
+    const createObjectURL = jest.fn().mockReturnValue('blob:shiftwell-export');
+    const revokeObjectURL = jest.fn();
+
+    (Sharing.isAvailableAsync as jest.Mock).mockResolvedValueOnce(false);
+    global.Blob = jest.fn().mockImplementation((parts, options) => ({ parts, options })) as any;
+    global.URL = {
+      ...originalURL,
+      createObjectURL,
+      revokeObjectURL,
+    } as any;
+    global.document = {
+      createElement: jest.fn().mockReturnValue(link),
+      body: { appendChild },
+    } as any;
+
+    const exported = await sharePlanICS(mockPlan, DEFAULT_EXPORT_OPTIONS);
+
+    expect(exported).toBe(true);
+    expect(link.download).toBe('ShiftWell-Sleep-Plan.ics');
+    expect(link.href).toBe('blob:shiftwell-export');
+    expect(appendChild).toHaveBeenCalledWith(link);
+    expect(link.click).toHaveBeenCalled();
+    expect(link.remove).toHaveBeenCalled();
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:shiftwell-export');
   });
 
   it('marks onboarding complete before leaving the calendar onboarding screen', () => {

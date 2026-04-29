@@ -21,7 +21,20 @@ export async function sharePlanICS(
   const sharingAvailable = await Sharing.isAvailableAsync();
 
   if (!sharingAvailable) {
-    return false;
+    if (typeof document === 'undefined' || typeof URL === 'undefined' || typeof Blob === 'undefined') {
+      return false;
+    }
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    return true;
   }
 
   await Sharing.shareAsync(filePath, {
