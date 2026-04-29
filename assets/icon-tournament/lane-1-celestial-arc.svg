@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!--
+      Gradient mask: fully opaque at arc base (lower-left), fading to transparent at arc tip (upper-right).
+      This creates the taper effect on a uniform-width annular segment.
+      Gradient runs from bottom-left corner toward upper-right, matching the arc's sweep direction.
+    -->
+    <linearGradient id="taperGrad" x1="320" y1="790" x2="700" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+      <stop offset="52%"  stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="taper">
+      <rect width="1024" height="1024" fill="url(#taperGrad)"/>
+    </mask>
+
+    <!--
+      Soft atmospheric glow behind arc, concentrated at base.
+      Gives depth without using a gradient on the gold itself.
+    -->
+    <radialGradient id="baseGlow" cx="390" cy="723" r="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#C8A84B" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#C8A84B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="#080B14"/>
+
+  <!--
+    ARC GEOMETRY
+    ============
+    Center: (512, 512). SVG coords: 0°=right, 90°=down, angles increase clockwise.
+
+    Arc sweeps CW from 7-o'clock (120° SVG) to 1-o'clock (330° SVG).
+    Total sweep: 210° — more than a half-day, evoking the long arc of a shift cycle.
+
+    Outer ring radius: 286
+    Inner ring radius: 202
+    Band width: 84px (generous at 1024px, collapses to clear blob at 20px)
+
+    Key points:
+      Outer start (120°, R=286): x=512+286·cos120°=512-143=369, y=512+286·sin120°=512+247.7=760
+      Outer end   (330°, R=286): x=512+286·cos330°=512+247.7=760, y=512+286·sin330°=512-143=369
+      Inner start (120°, R=202): x=512+202·cos120°=512-101=411, y=512+202·sin120°=512+174.9=687
+      Inner end   (330°, R=202): x=512+202·cos330°=512+174.9=687, y=512+202·sin330°=512-101=411
+
+    SVG arc flag: sweep > 180°, so large-arc-flag=1.
+    Outer arc: CW → sweep-flag=1. Inner arc (return path): CCW → sweep-flag=0.
+  -->
+
+  <!-- Atmospheric glow: drawn first, behind everything -->
+  <circle cx="390" cy="723" r="160" fill="url(#baseGlow)"/>
+
+  <!-- Arc band: annular donut segment, tapered by mask -->
+  <g mask="url(#taper)">
+    <path
+      d="M 369,760
+         A 286,286 0 1,1 760,369
+         L 687,411
+         A 202,202 0 1,0 411,687
+         Z"
+      fill="#C8A84B"
+    />
+  </g>
+
+  <!--
+    Anchor disc at arc base.
+    Not masked — remains fully opaque at all scales.
+    This is the "source of light" node. At 20px it reads as a bright point anchoring a rising tail.
+    Center: midpoint between outer and inner at 120°, at mean radius 244.
+      x = 512 + 244·cos120° = 512 - 122 = 390
+      y = 512 + 244·sin120° = 512 + 211.3 = 723
+    Radius: 70px (slightly larger than half the band width, so it cleanly covers the arc terminus)
+  -->
+  <circle cx="390" cy="723" r="70" fill="#C8A84B"/>
+
+  <!--
+    Horizon rule: a hairline below the anchor disc, grounding the glyph.
+    Extends from the arc's leftmost foot to just past the anchor.
+    Subtle: low opacity, very thin, does not appear at 20px scale.
+    Safe zone left edge: ~102px. We start at 220 to avoid crowding.
+  -->
+  <line
+    x1="220" y1="723"
+    x2="550" y2="723"
+    stroke="#C8A84B"
+    stroke-width="3"
+    stroke-opacity="0.22"
+    stroke-linecap="round"
+  />
+
+</svg>

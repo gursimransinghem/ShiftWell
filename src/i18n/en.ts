@@ -57,7 +57,7 @@ export const en = {
   // Paywall
   paywall: {
     title: "Upgrade to ShiftWell Pro",
-    trial: "Start 7-Day Free Trial",
+    trial: "Start 30-Day Free Trial",
     perYear: "per year",
     features: {
       adaptiveBrain: "Adaptive Brain",

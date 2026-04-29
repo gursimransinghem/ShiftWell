@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
   },
   disclaimerLabel: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: '600',
     color: COLORS.text.muted,
     textAlign: 'center',
@@ -367,9 +367,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   legal: {
-    fontSize: 9,
+    fontSize: 11,
     color: COLORS.text.dim,
     textAlign: 'center',
-    lineHeight: 14,
+    lineHeight: 16,
   },
 });

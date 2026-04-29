@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   chevron: {
-    fontSize: 9,
+    fontSize: 11,
     color: TEXT.dim,
     marginLeft: 4,
   },

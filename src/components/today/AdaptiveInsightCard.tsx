@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   citation: {
-    fontSize: 9,
+    fontSize: 11,
     color: COLORS.text.dim,
     fontStyle: 'italic',
     marginBottom: SPACING.sm,
