@@ -159,7 +159,7 @@ export default function WelcomeScreen() {
           <View style={styles.footer}>
             <Button
               title="Let's get started"
-              onPress={() => router.push('/(onboarding)/chronotype')}
+              onPress={() => router.push('/chronotype')}
               size="lg"
               fullWidth
             />
