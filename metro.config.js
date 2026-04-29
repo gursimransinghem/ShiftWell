@@ -14,6 +14,12 @@ const nativeMocks = {
 
 const originalResolveRequest = config.resolver.resolveRequest;
 config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (platform === 'web' && (moduleName === 'zustand' || moduleName.startsWith('zustand/'))) {
+    return {
+      type: 'sourceFile',
+      filePath: require.resolve(moduleName),
+    };
+  }
   if (nativeMocks[moduleName]) {
     return {
       type: 'sourceFile',
