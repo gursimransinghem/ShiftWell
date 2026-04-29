@@ -251,7 +251,6 @@ const styles = StyleSheet.create({
 
   /* Stat block */
   statBlock: {
-    flexDirection: 'row',
     backgroundColor: 'rgba(200,168,75,0.06)',
     borderWidth: 1,
     borderColor: 'rgba(200,168,75,0.18)',
@@ -259,7 +258,7 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     marginBottom: SPACING['2xl'],
     gap: SPACING.lg,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   statLeft: {
     alignItems: 'center',
@@ -273,15 +272,13 @@ const styles = StyleSheet.create({
     lineHeight: 40,
   },
   statDivider: {
-    width: 2,
-    flex: 1,
+    width: 48,
+    height: 2,
     backgroundColor: 'rgba(200,168,75,0.25)',
     marginTop: 6,
     borderRadius: 1,
-    minHeight: 20,
   },
   statRight: {
-    flex: 1,
     gap: 6,
   },
   statHeadline: {
@@ -289,11 +286,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#C8A84B',
     lineHeight: 18,
+    textAlign: 'center',
   },
   statBody: {
     fontSize: 11,
     color: COLORS.text.secondary,
     lineHeight: 16,
+    textAlign: 'center',
   },
 
   /* Trust badges */
