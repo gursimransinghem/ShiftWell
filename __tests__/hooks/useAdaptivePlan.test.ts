@@ -17,6 +17,8 @@ import { runAdaptiveBrain } from '../../src/hooks/useAdaptivePlan';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, subDays } from 'date-fns';
 import { DEFAULT_PROFILE } from '../../src/lib/circadian/types';
+import fs from 'fs';
+import path from 'path';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -251,4 +253,14 @@ test('does not call setDiscrepancyHistory when run is skipped (debounce gate)', 
   await runAdaptiveBrain(buildDeps());
 
   expect(mockSetDiscrepancyHistory).not.toHaveBeenCalled();
+});
+
+test('subscribes to raw feedback records instead of derived array selector', () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, '../../src/hooks/useAdaptivePlan.ts'),
+    'utf8',
+  );
+
+  expect(source).toContain('const feedbackRecords = useFeedbackStore((s) => s.records);');
+  expect(source).not.toContain('useFeedbackStore((s) => s.getRecentHistory(7))');
 });
