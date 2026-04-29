@@ -21,7 +21,12 @@ export default function ProgressBar({ currentStep, totalSteps }: ProgressBarProp
   }, [progress, animatedWidth]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      accessibilityRole="progressbar"
+      accessibilityLabel="Onboarding progress"
+      accessibilityValue={{ min: 0, max: totalSteps, now: currentStep }}
+    >
       <View style={styles.trackContainer}>
         <View style={styles.track}>
           <Animated.View

@@ -90,9 +90,9 @@ function TwinkleStar({ star }: { star: typeof STARS[0] }) {
 // ---------------------------------------------------------------------------
 
 const TRUST_BADGES = [
-  { label: 'ER Physician' },
-  { label: 'Circadian Science' },
-  { label: '700M Workers' },
+  { label: 'Physician-built' },
+  { label: 'Research-informed' },
+  { label: 'For shift schedules' },
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -135,7 +135,7 @@ export default function WelcomeScreen() {
             style={({ pressed }) => [styles.skipBtn, pressed && { opacity: 0.6 }]}
             accessibilityRole="button"
           >
-            <Text style={styles.skipText}>Skip {'\u2192'}</Text>
+            <Text style={styles.skipText}>Explore app {'\u2192'}</Text>
           </Pressable>
         </View>
 
@@ -145,7 +145,7 @@ export default function WelcomeScreen() {
             <Text style={styles.moonEmoji}>{'\u{1F319}'}</Text>
             <Text style={styles.headline}>Your sleep fights back.</Text>
             <Text style={styles.tagline}>
-              For everyone who works against the clock
+              Two-minute setup for everyone who works against the clock
             </Text>
           </View>
         </AnimatedTransition>
@@ -159,12 +159,11 @@ export default function WelcomeScreen() {
             </View>
             <View style={styles.statRight}>
               <Text style={styles.statHeadline}>
-                of night shift workers ever fully adapt circadianly.
+                of night workers in field studies fully adapted their body clock.
               </Text>
               <Text style={styles.statBody}>
-                Most apps chase that 3%. ShiftWell was built for the other 97%
-                — optimizing recovery within your real schedule, not some
-                impossible ideal.
+                ShiftWell is built for practical recovery inside your real
+                rotation, not an ideal schedule you cannot actually work.
               </Text>
             </View>
           </View>

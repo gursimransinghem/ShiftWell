@@ -53,7 +53,8 @@ function shiftTypeLabel(type: ShiftType): string {
 
 export default function AddShiftScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ shiftId?: string; date?: string }>();
+  const params = useLocalSearchParams<{ shiftId?: string; date?: string; from?: string }>();
+  const fromOnboarding = params.from === 'onboarding';
 
   const shifts = useShiftsStore((s) => s.shifts);
   const addShift = useShiftsStore((s) => s.addShift);
@@ -177,8 +178,12 @@ export default function AddShiftScreen() {
         shiftType: detectedType,
       });
     }
-    router.back();
-  }, [isEditing, existingShift, title, startTime, endTime, detectedType, addShift, updateShift, router]);
+    if (fromOnboarding) {
+      router.replace('/(onboarding)/plan-ready');
+    } else {
+      router.back();
+    }
+  }, [isEditing, existingShift, title, startTime, endTime, detectedType, addShift, updateShift, fromOnboarding, router]);
 
   const handleDelete = useCallback(() => {
     if (existingShift) {

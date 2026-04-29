@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { tapLight } from '@/src/lib/haptics/haptic-service';
 import { usePlanStore } from '@/src/store/plan-store';
+import { COLORS, PURPLE, TEXT, V6_RADIUS } from '@/src/theme';
 
 // ---------------------------------------------------------------------------
 // Icon map — route name → [inactive icon, active icon]
@@ -72,7 +73,7 @@ export function FloatingTabBar({
             const [inactiveIcon, activeIcon] =
               ROUTE_ICONS[route.name] ?? FALLBACK_ICONS;
             const iconName = isFocused ? activeIcon : inactiveIcon;
-            const color = isFocused ? '#7B61FF' : '#4B5563';
+            const color = isFocused ? PURPLE : TEXT.dim;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -99,7 +100,7 @@ export function FloatingTabBar({
                 key={route.key}
                 accessibilityRole="button"
                 accessibilityState={isFocused ? { selected: true } : {}}
-                accessibilityLabel={options.tabBarAccessibilityLabel}
+                accessibilityLabel={options.tabBarAccessibilityLabel ?? `${label} tab`}
                 onPress={onPress}
                 onLongPress={onLongPress}
                 style={styles.tab}
@@ -143,11 +144,11 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   blurContainer: {
-    borderRadius: 22,
+    borderRadius: V6_RADIUS.tabBar,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(123,97,255,0.08)',
-    backgroundColor: 'rgba(8,11,20,0.94)',
+    backgroundColor: COLORS.background.primary,
   },
   innerContainer: {
     flexDirection: 'row',
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 44,
     paddingVertical: 6,
     gap: 3,
   },
