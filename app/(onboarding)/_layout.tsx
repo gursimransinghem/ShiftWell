@@ -17,6 +17,8 @@ export default function OnboardingLayout() {
       <Stack.Screen name="household" />
       <Stack.Screen name="shifts" />
       <Stack.Screen name="plan-ready" />
+      <Stack.Screen name="healthkit" />
+      <Stack.Screen name="calendar" />
     </Stack>
   );
 }

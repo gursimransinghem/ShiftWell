@@ -3,7 +3,35 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 
 import { generateICS, type ExportOptions, DEFAULT_EXPORT_OPTIONS } from '../lib/calendar/ics-generator';
+import type { SleepPlan } from '../lib/circadian/types';
 import { usePlanStore } from '../store/plan-store';
+
+export async function sharePlanICS(
+  plan: SleepPlan,
+  options: ExportOptions = DEFAULT_EXPORT_OPTIONS,
+): Promise<boolean> {
+  const icsContent = generateICS(plan, options);
+  const fileName = 'ShiftWell-Sleep-Plan.ics';
+  const filePath = `${FileSystem.cacheDirectory}${fileName}`;
+
+  await FileSystem.writeAsStringAsync(filePath, icsContent, {
+    encoding: FileSystem.EncodingType.UTF8,
+  });
+
+  const sharingAvailable = await Sharing.isAvailableAsync();
+
+  if (!sharingAvailable) {
+    return false;
+  }
+
+  await Sharing.shareAsync(filePath, {
+    mimeType: 'text/calendar',
+    dialogTitle: 'Export Sleep Plan',
+    UTI: 'com.apple.ical.ics',
+  });
+
+  return true;
+}
 
 /**
  * Custom hook for exporting the current sleep plan as an .ics file.
@@ -33,31 +61,11 @@ export function useExport() {
           return false;
         }
 
-        // Generate ICS content
-        const icsContent = generateICS(plan, options);
-
-        // Write to a temp file
-        const fileName = `ShiftWell-Sleep-Plan.ics`;
-        const filePath = `${FileSystem.cacheDirectory}${fileName}`;
-
-        await FileSystem.writeAsStringAsync(filePath, icsContent, {
-          encoding: FileSystem.EncodingType.UTF8,
-        });
-
-        // Check if sharing is available (not available on all platforms)
-        const sharingAvailable = await Sharing.isAvailableAsync();
-
-        if (!sharingAvailable) {
+        const shared = await sharePlanICS(plan, options);
+        if (!shared) {
           setError('Sharing is not available on this device.');
           return false;
         }
-
-        // Open share sheet
-        await Sharing.shareAsync(filePath, {
-          mimeType: 'text/calendar',
-          dialogTitle: 'Export Sleep Plan',
-          UTI: 'com.apple.ical.ics',
-        });
 
         return true;
       } catch (e: any) {

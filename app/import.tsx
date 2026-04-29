@@ -17,6 +17,7 @@ import { format } from 'date-fns';
 import { parseICSForShifts } from '@/src/lib/calendar/ics-parser';
 import { useShiftsStore } from '@/src/store/shifts-store';
 import { usePremiumStore } from '@/src/store/premium-store';
+import { useUserStore } from '@/src/store/user-store';
 import { BACKGROUND, TEXT, ACCENT, BORDER, SEMANTIC, BLOCK_COLORS } from '@/src/theme';
 import { SPACING, RADIUS } from '@/src/theme';
 import { heading2, heading3, body, bodySmall, caption, label } from '@/src/theme';
@@ -57,6 +58,7 @@ export default function ImportScreen() {
   const importShifts = useShiftsStore((s) => s.importShifts);
   const importPersonalEvents = useShiftsStore((s) => s.importPersonalEvents);
   const canAccess = usePremiumStore((s) => s.canAccess);
+  const onboardingComplete = useUserStore((s) => s.onboardingComplete);
 
   // Premium gate: redirect to paywall if ICS import isn't available
   const isPremiumLocked = !canAccess('ics_import');
@@ -112,7 +114,7 @@ export default function ImportScreen() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isPremiumLocked]);
 
   // -----------------------------------------------------------------------
   // Checkbox toggling
@@ -365,15 +367,17 @@ export default function ImportScreen() {
 
         <View style={styles.doneActions}>
           <Button
-            title="View Schedule"
-            onPress={() => router.replace('/(tabs)/schedule')}
+            title={onboardingComplete ? 'View Schedule' : 'Continue Setup'}
+            onPress={() =>
+              router.replace(onboardingComplete ? '/(tabs)/schedule' : '/(onboarding)/plan-ready')
+            }
             variant="primary"
             size="lg"
             fullWidth
           />
           <View style={{ height: SPACING.md }} />
           <Button
-            title="Back to Settings"
+            title={onboardingComplete ? 'Back to Settings' : 'Back'}
             onPress={() => router.back()}
             variant="ghost"
             size="md"

@@ -37,6 +37,7 @@ import { fetchGoogleCalendarList, fetchGoogleEvents } from '@/src/lib/calendar/g
 import { useCalendarStore } from '@/src/lib/calendar/calendar-store';
 import { shiftConfidence } from '@/src/lib/calendar/shift-detector';
 import { useShiftsStore } from '@/src/store/shifts-store';
+import { useUserStore } from '@/src/store/user-store';
 import type { RawCalendarEvent, CalendarMeta } from '@/src/lib/calendar/calendar-types';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
 
@@ -64,6 +65,7 @@ export default function CalendarScreen() {
 
   const calendarStore = useCalendarStore();
   const addShift = useShiftsStore((s) => s.addShift);
+  const completeOnboarding = useUserStore((s) => s.completeOnboarding);
 
   const allCalendars: CalendarMeta[] = [
     ...calendarStore.appleCalendars,
@@ -74,6 +76,7 @@ export default function CalendarScreen() {
 
   async function finishOnboarding() {
     await AsyncStorage.setItem('installedAt', new Date().toISOString());
+    completeOnboarding();
     router.replace('/(tabs)');
   }
 

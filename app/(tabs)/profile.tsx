@@ -210,7 +210,7 @@ export default function ProfileScreen() {
             <CardDivider />
             <CardRow
               label="Edit preferences"
-              onPress={() => router.push('/(onboarding)' as any)}
+              onPress={() => router.push('/(onboarding)/welcome')}
             />
           </GlassCard>
 
