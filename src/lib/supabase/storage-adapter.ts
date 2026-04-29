@@ -1,11 +1,20 @@
 import * as SecureStore from 'expo-secure-store';
 
+const memoryStorage = new Map<string, string>();
+
 function getWebStorage(): Storage | null {
   if (typeof window === 'undefined' || !window.localStorage) {
     return null;
   }
 
   return window.localStorage;
+}
+
+function isReactNativeRuntime(): boolean {
+  return (
+    (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') ||
+    process.env['JEST_WORKER_ID'] !== undefined
+  );
 }
 
 export class SecureStoreAdapter {
@@ -15,7 +24,11 @@ export class SecureStoreAdapter {
       return webStorage.getItem(key);
     }
 
-    return await SecureStore.getItemAsync(key);
+    if (isReactNativeRuntime()) {
+      return await SecureStore.getItemAsync(key);
+    }
+
+    return memoryStorage.get(key) ?? null;
   }
 
   async setItem(key: string, value: string): Promise<void> {
@@ -25,7 +38,12 @@ export class SecureStoreAdapter {
       return;
     }
 
-    await SecureStore.setItemAsync(key, value);
+    if (isReactNativeRuntime()) {
+      await SecureStore.setItemAsync(key, value);
+      return;
+    }
+
+    memoryStorage.set(key, value);
   }
 
   async removeItem(key: string): Promise<void> {
@@ -35,6 +53,13 @@ export class SecureStoreAdapter {
       return;
     }
 
-    await SecureStore.deleteItemAsync(key);
+    if (isReactNativeRuntime()) {
+      await SecureStore.deleteItemAsync(key);
+      return;
+    }
+
+    memoryStorage.delete(key);
   }
 }
+
+export const sessionStorageAdapter = new SecureStoreAdapter();

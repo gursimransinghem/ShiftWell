@@ -13,7 +13,7 @@
 
 import { useAuthStore } from '../../src/store/auth-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
+import { sessionStorageAdapter } from '../../src/lib/supabase/storage-adapter';
 import { PERSISTED_LOCAL_DATA_KEYS } from '../../src/store/auth-store';
 
 // The mock adds multiRemove but the TS type doesn't include it — cast for assertions
@@ -102,10 +102,11 @@ describe('deleteAccount', () => {
     );
   });
 
-  it('clears SecureStore session', async () => {
+  it('clears persisted auth session', async () => {
+    await sessionStorageAdapter.setItem('nightshift-session', 'stored-session');
     setAuthenticatedState();
     await useAuthStore.getState().deleteAccount();
-    expect(SecureStore.deleteItemAsync).toHaveBeenCalledWith('nightshift-session');
+    await expect(sessionStorageAdapter.getItem('nightshift-session')).resolves.toBeNull();
   });
 
   it('resets auth state to unauthenticated after deletion', async () => {
@@ -139,7 +140,7 @@ describe('deleteAccount', () => {
 
     await useAuthStore.getState().deleteAccount();
 
-    expect(SecureStore.deleteItemAsync).toHaveBeenCalled();
+    await expect(sessionStorageAdapter.getItem('nightshift-session')).resolves.toBeNull();
     expect(useAuthStore.getState().isAuthenticated).toBe(false);
   });
 });

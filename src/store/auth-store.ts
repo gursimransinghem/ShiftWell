@@ -9,10 +9,9 @@ import {
 } from '../lib/supabase/auth';
 import { supabase } from '../lib/supabase/client';
 import { migrateLocalDataToCloud } from '../lib/sync/data-migration';
-import { SecureStoreAdapter } from '../lib/supabase/storage-adapter';
+import { sessionStorageAdapter } from '../lib/supabase/storage-adapter';
 
 const SESSION_KEY = 'nightshift-session';
-const sessionStorage = new SecureStoreAdapter();
 export const PERSISTED_LOCAL_DATA_KEYS = [
   'nightshift-user',
   'nightshift-shifts',
@@ -68,11 +67,11 @@ async function hasLocalData(): Promise<boolean> {
  * cold launch without hitting the network.
  */
 async function persistSession(userId: string, email: string | null, displayName: string | null) {
-  await sessionStorage.setItem(SESSION_KEY, JSON.stringify({ userId, email, displayName }));
+  await sessionStorageAdapter.setItem(SESSION_KEY, JSON.stringify({ userId, email, displayName }));
 }
 
 async function clearPersistedSession() {
-  await sessionStorage.removeItem(SESSION_KEY);
+  await sessionStorageAdapter.removeItem(SESSION_KEY);
 }
 
 export const useAuthStore = create<AuthState>()((set, get) => ({
@@ -234,7 +233,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // First try SecureStore for a fast local check
-      const stored = await sessionStorage.getItem(SESSION_KEY);
+      const stored = await sessionStorageAdapter.getItem(SESSION_KEY);
       if (stored) {
         const { userId, email, displayName } = JSON.parse(stored);
         set({
