@@ -9,7 +9,7 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../supabase/client';
+import { isSupabaseConfigured, supabase } from '../supabase/client';
 
 export interface MigrationResult {
   userMigrated: boolean;
@@ -46,6 +46,14 @@ export async function migrateLocalDataToCloud(userId: string): Promise<Migration
     sleepPlanMigrated: false,
     errors: [],
   };
+
+  const supabaseReady =
+    typeof isSupabaseConfigured === 'function' ? isSupabaseConfigured() : true;
+
+  if (!supabaseReady) {
+    result.errors.push('Supabase is not configured.');
+    return result;
+  }
 
   // --- 1. Migrate user profile ---
   try {

@@ -9,7 +9,7 @@
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../supabase/client';
+import { isSupabaseConfigured, supabase } from '../supabase/client';
 
 const SYNC_QUEUE_KEY = 'shiftwell-sync-queue';
 const LAST_SYNCED_KEY = 'shiftwell-last-synced-at';
@@ -47,6 +47,10 @@ export interface SyncResult {
 // ---------------------------------------------------------------------------
 
 let syncing = false;
+
+function isCloudSyncAvailable(): boolean {
+  return typeof isSupabaseConfigured === 'function' ? isSupabaseConfigured() : true;
+}
 
 // ---------------------------------------------------------------------------
 // Queue persistence helpers
@@ -101,6 +105,9 @@ export async function queueWrite(
 export async function flushQueue(): Promise<{ flushed: number; failed: number }> {
   const queue = await readQueue();
   if (queue.length === 0) return { flushed: 0, failed: 0 };
+  if (!isCloudSyncAvailable()) {
+    return { flushed: 0, failed: queue.length };
+  }
 
   syncing = true;
   const remaining: QueuedWrite[] = [];
@@ -151,6 +158,14 @@ export async function fullSync(userId: string): Promise<SyncResult> {
   const errors: string[] = [];
   let pushed = 0;
   let pulled = 0;
+
+  if (!isCloudSyncAvailable()) {
+    return {
+      pushed,
+      pulled,
+      errors: ['Supabase is not configured. Cloud sync is unavailable in this build.'],
+    };
+  }
 
   // --- Push: flush the offline queue ---
   const flushResult = await flushQueue();

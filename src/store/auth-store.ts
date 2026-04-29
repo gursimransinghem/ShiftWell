@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as SecureStore from 'expo-secure-store';
 import {
   signInWithApple as appleSignIn,
   signInWithEmail as emailSignIn,
@@ -10,6 +9,7 @@ import {
 } from '../lib/supabase/auth';
 import { supabase } from '../lib/supabase/client';
 import { migrateLocalDataToCloud } from '../lib/sync/data-migration';
+import { secureSessionStorage } from '../lib/supabase/storage-adapter';
 
 const SESSION_KEY = 'nightshift-session';
 export const PERSISTED_LOCAL_DATA_KEYS = [
@@ -67,14 +67,11 @@ async function hasLocalData(): Promise<boolean> {
  * cold launch without hitting the network.
  */
 async function persistSession(userId: string, email: string | null, displayName: string | null) {
-  await SecureStore.setItemAsync(
-    SESSION_KEY,
-    JSON.stringify({ userId, email, displayName }),
-  );
+  await secureSessionStorage.setItem(SESSION_KEY, JSON.stringify({ userId, email, displayName }));
 }
 
 async function clearPersistedSession() {
-  await SecureStore.deleteItemAsync(SESSION_KEY);
+  await secureSessionStorage.removeItem(SESSION_KEY);
 }
 
 export const useAuthStore = create<AuthState>()((set, get) => ({
@@ -236,7 +233,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // First try SecureStore for a fast local check
-      const stored = await SecureStore.getItemAsync(SESSION_KEY);
+      const stored = await secureSessionStorage.getItem(SESSION_KEY);
       if (stored) {
         const { userId, email, displayName } = JSON.parse(stored);
         set({
