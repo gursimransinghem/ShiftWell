@@ -1,20 +1,21 @@
-import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
-// `expo-secure-store` is a native module and does not work on web (or during
-// expo-router static SSR rendering on Node). Fall back to localStorage on web,
-// or a no-op in-memory map elsewhere where the native module is unavailable.
+// expo-secure-store is a native-only module. On web (and during expo-router
+// SSR rendering on Node) calling its functions throws because the underlying
+// ExpoSecureStore native binding is missing. Detect web/SSR via `typeof window`
+// + `localStorage` and avoid `react-native`'s Platform module so that Jest
+// (Node test env) can still import this file without ESM transform errors.
 const memoryStore = new Map<string, string>();
+const isWebLike =
+  typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
 
 function getWebItem(key: string): string | null {
-  if (typeof window !== 'undefined' && window.localStorage) {
-    return window.localStorage.getItem(key);
-  }
+  if (isWebLike) return window.localStorage.getItem(key);
   return memoryStore.get(key) ?? null;
 }
 
 function setWebItem(key: string, value: string) {
-  if (typeof window !== 'undefined' && window.localStorage) {
+  if (isWebLike) {
     window.localStorage.setItem(key, value);
     return;
   }
@@ -22,18 +23,22 @@ function setWebItem(key: string, value: string) {
 }
 
 function removeWebItem(key: string) {
-  if (typeof window !== 'undefined' && window.localStorage) {
+  if (isWebLike) {
     window.localStorage.removeItem(key);
     return;
   }
   memoryStore.delete(key);
 }
 
+// Native vs. non-native is decided by whether the SecureStore module exposes
+// the expected async APIs at runtime. On web, expo-secure-store's exports are
+// stubs that throw — so we route around them.
+const hasNativeSecureStore =
+  typeof SecureStore.getItemAsync === 'function' && !isWebLike;
+
 export class SecureStoreAdapter {
   async getItem(key: string): Promise<string | null> {
-    if (Platform.OS === 'web') {
-      return getWebItem(key);
-    }
+    if (!hasNativeSecureStore) return getWebItem(key);
     try {
       return await SecureStore.getItemAsync(key);
     } catch {
@@ -42,19 +47,19 @@ export class SecureStoreAdapter {
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    if (Platform.OS === 'web') {
+    if (!hasNativeSecureStore) {
       setWebItem(key, value);
       return;
     }
     try {
       await SecureStore.setItemAsync(key, value);
     } catch {
-      // ignore — best effort persistence
+      // ignore — best-effort persistence
     }
   }
 
   async removeItem(key: string): Promise<void> {
-    if (Platform.OS === 'web') {
+    if (!hasNativeSecureStore) {
       removeWebItem(key);
       return;
     }

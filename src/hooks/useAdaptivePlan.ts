@@ -8,7 +8,7 @@
  * Call this once at the root of app/(tabs)/index.tsx.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AppState, type AppStateStatus } from 'react-native';
 import { subDays, format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -280,7 +280,13 @@ export function useAdaptivePlan(): AdaptivePlanData {
   const { shifts, personalEvents } = useShiftsStore();
   const { profile } = useUserStore();
   const adaptiveContext = usePlanStore((s) => s.adaptiveContext);
-  const feedbackHistory = useFeedbackStore((s) => s.getRecentHistory(7));
+  // Select the stable records reference; slice in a memo so the value passed
+  // downstream is referentially stable across renders. Calling
+  // `getRecentHistory(7)` directly inside the selector returns a fresh array
+  // every render, which violates useSyncExternalStore's caching contract and
+  // causes "Maximum update depth exceeded" (REGRESSION FIX).
+  const feedbackRecords = useFeedbackStore((s) => s.records);
+  const feedbackHistory = useMemo(() => feedbackRecords.slice(-7), [feedbackRecords]);
   useEffect(() => {
     let cancelled = false;
 
