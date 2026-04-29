@@ -13,7 +13,7 @@ import Animated, {
   SharedValue,
 } from 'react-native-reanimated';
 import Svg, { Circle } from 'react-native-svg';
-import { TEXT, heroNumber } from '@/src/theme';
+import { COLORS, TEXT, heroNumber } from '@/src/theme';
 import { scoreViewHaptic, scoreHighHaptic } from '@/src/lib/haptics/haptic-service';
 
 // ---------------------------------------------------------------------------
@@ -23,7 +23,7 @@ import { scoreViewHaptic, scoreHighHaptic } from '@/src/lib/haptics/haptic-servi
 const RING_SIZE = 104;
 const RING_RADIUS = 48; // (RING_SIZE / 2) - stroke/2 = 52 - 4 = 48
 const CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
-const RING_COLOR = '#7B61FF';
+const RING_COLOR = '#34D399';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -130,7 +130,7 @@ export function HeroScore({
             cx={RING_SIZE / 2}
             cy={RING_SIZE / 2}
             r={RING_RADIUS}
-            stroke="rgba(123,97,255,0.12)"
+            stroke="rgba(52,211,153,0.12)"
             strokeWidth={3}
             fill="none"
           />
@@ -165,7 +165,7 @@ export function HeroScore({
               {
                 height,
                 backgroundColor:
-                  index === todayIndex ? RING_COLOR : 'rgba(123,97,255,0.25)',
+                  index === todayIndex ? RING_COLOR : 'rgba(52,211,153,0.25)',
               },
             ]}
           />
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
     width: 140,
     height: 140,
     borderRadius: 70,
-    backgroundColor: 'rgba(123,97,255,0.12)',
+    backgroundColor: 'rgba(52,211,153,0.10)',
   },
   scoreOverlay: {
     position: 'absolute',
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 13,
-    color: TEXT.muted,
+    color: COLORS.text.tertiary,
     marginTop: 8,
   },
   trend: {

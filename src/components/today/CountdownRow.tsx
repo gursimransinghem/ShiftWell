@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: V6_RADIUS.countdown,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: 'rgba(255,255,255,0.025)',
     overflow: 'hidden',
   },
   cell: {

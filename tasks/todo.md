@@ -1,5 +1,12 @@
 # Active Tasks
 
+## P0: Final Ship Sprint — Core Loop First (2026-04-29)
+- [ ] Use `docs/dev/2026-04-29-final-ship-sprint-plan.md` as the active execution plan until TestFlight.
+- [ ] Invoke `docs/superpowers/skills/deep-product-ship-review.md` for periodic honest product/ship-readiness reviews.
+- [ ] Freeze new feature work unless it directly improves the core loop: onboard -> import/add shifts -> generate plan -> Today guidance -> export/notify -> feedback.
+- [ ] Hide, disable, or de-emphasize half-baked surfaces that do not support the TestFlight core loop.
+- [ ] Run a full fresh-install iPhone walkthrough and record every friction point before adding new functionality.
+
 > Refreshed 2026-04-19. Reflects remote-visible branch state only — items from the local working tree (audit artifacts, website/, shiftwell-dashboard/) are tracked separately under "Local → Remote sync" below.
 
 ## Recently Merged (context)
