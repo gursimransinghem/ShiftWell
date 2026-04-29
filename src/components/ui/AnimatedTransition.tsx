@@ -18,10 +18,15 @@ export default function AnimatedTransition({
   duration = 250,
   style,
 }: AnimatedTransitionProps) {
-  const opacity = useRef(new Animated.Value(0)).current;
-  const translateY = useRef(new Animated.Value(20)).current;
+  const isWeb = typeof document !== 'undefined';
+  const opacity = useRef(new Animated.Value(isWeb ? 1 : 0)).current;
+  const translateY = useRef(new Animated.Value(isWeb ? 0 : 20)).current;
 
   useEffect(() => {
+    if (isWeb) {
+      return;
+    }
+
     Animated.parallel([
       Animated.timing(opacity, {
         toValue: 1,
@@ -36,7 +41,7 @@ export default function AnimatedTransition({
         useNativeDriver: true,
       }),
     ]).start();
-  }, [opacity, translateY, delay, duration]);
+  }, [isWeb, opacity, translateY, delay, duration]);
 
   return (
     <Animated.View style={[{ opacity, transform: [{ translateY }] }, style]}>
