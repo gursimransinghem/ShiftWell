@@ -11,17 +11,17 @@
 
 export const BACKGROUND = {
   /** App-level background — deep space (Path B darker navy) */
-  primary: '#080B14',
+  primary: '#0B0D16',
   /** Cards, sheets, modals */
-  surface: '#131726',
+  surface: '#151A2A',
   /** Elevated surfaces (e.g. floating action buttons) */
-  elevated: '#1A1F35',
+  elevated: '#1C2137',
 } as const;
 
 export const TEXT = {
   primary: '#FFFFFF',
-  secondary: '#9CA3AF',
-  tertiary: '#6B7280',
+  secondary: '#D1D5DB',
+  tertiary: '#9CA3AF',
   /** For text rendered on accent-colored backgrounds */
   onAccent: '#FFFFFF',
   inverse: '#0A0E1A',
@@ -35,7 +35,7 @@ export const TEXT = {
 
 export const BORDER = {
   default: '#1F2937',
-  subtle: '#171D2E',
+  subtle: 'rgba(255,255,255,0.06)',
   strong: '#374151',
 } as const;
 
