@@ -8,32 +8,9 @@
 
 ## What This Skill Produces
 
-Use this skill when you want a senior-level, honest, structured assessment that turns ambiguity into a practical next step.
+Use this skill when you want a senior-level, honest, structured assessment that turns ambiguity into a practical next step. It should work for a business idea, product, feature, roadmap, architecture, launch plan, monetization strategy, workflow, or half-built project.
 
-It should work for:
-
-- A new business idea.
-- A product or app.
-- A feature proposal.
-- A roadmap.
-- A technical architecture.
-- A launch plan.
-- A monetization strategy.
-- A workflow or internal process.
-- A half-built project that needs focus.
-
-The output should answer:
-
-1. What is this, in plain English?
-2. Who is it for?
-3. What problem does it solve?
-4. Why might it work?
-5. Why might it fail?
-6. What is strong?
-7. What is weak, half-baked, or premature?
-8. What assumptions need proof?
-9. What should happen next?
-10. What should be explicitly deferred?
+The output should explain the thing in plain English, identify the real strengths and risks, name the assumptions that need proof, and end with a clear next focus plus keep/fix/hide/defer/kill decisions.
 
 The tone should feel like a trusted senior operator: direct, practical, thoughtful, and willing to say "not yet."
 
@@ -41,45 +18,18 @@ The tone should feel like a trusted senior operator: direct, practical, thoughtf
 
 ## Required Inputs
 
-Before writing the review, gather only the context needed for the active question.
+Before writing the review, gather only the context needed for the active question:
 
-Minimum context:
+1. Object under review: idea, feature, app, strategy, codebase, roadmap, workflow, etc.
+2. Current goal: validate, ship, improve, simplify, monetize, debug, or decide whether to continue.
+3. Current state: concept, prototype, in progress, shipped, validated, or struggling.
+4. Evidence available: user feedback, tests, analytics, market data, technical constraints, founder insight, research, examples, or competitors.
 
-1. **Object under review**
-   - idea, feature, app, strategy, codebase, roadmap, workflow, etc.
-2. **Target user or beneficiary**
-   - who has the problem?
-   - who pays?
-   - who decides?
-   - who uses it repeatedly?
-3. **Current goal**
-   - validate?
-   - ship?
-   - improve?
-   - simplify?
-   - monetize?
-   - debug?
-   - decide whether to continue?
-4. **Evidence available**
-   - user feedback
-   - tests
-   - analytics
-   - market data
-   - technical constraints
-   - founder insight
-   - research
-   - examples or competitors
-5. **Current state**
-   - concept only
-   - prototype
-   - in progress
-   - shipped
-   - validated
-   - struggling
-6. **Known constraints**
-   - time, budget, platform, legal, technical debt, distribution, team skill, compliance, dependencies.
-7. **Principles**
-   - company principles, product philosophy, brand rules, technical standards, ethical limits, or founder values.
+Use these only when relevant:
+
+- Target user or beneficiary: who has the problem, pays, decides, and uses it repeatedly.
+- Known constraints: budget, platform, legal, technical debt, distribution, team skill, compliance, dependencies.
+- Principles: company principles, product philosophy, brand rules, technical standards, ethical limits, or founder values.
 
 If some inputs are missing, state assumptions clearly instead of blocking the review.
 
@@ -115,20 +65,14 @@ If the target user is vague, say so directly.
 
 Name the real assets. Do not flatter without evidence.
 
-Useful strength categories:
+Useful strength categories include:
 
 - Painful problem.
 - Clear user.
 - Founder-market fit.
-- Distribution advantage.
-- Technical moat.
 - Data advantage.
 - Workflow fit.
-- Strong design or trust advantage.
-- Existing usage or retention.
 - Strong test coverage or reliability.
-- Regulatory/compliance readiness.
-- Cost advantage.
 
 ### 4. What Is Weak, Risky, or Half-Baked
 
@@ -145,25 +89,21 @@ Use direct language. The goal is clarity, not comfort.
 
 Identify the parts that are coherent and should be protected.
 
-For a product, this might be:
+For a product, this might include:
 
 - Core workflow.
 - User journey.
 - Algorithm.
 - Pricing logic.
 - Trust model.
-- Data model.
-- Distribution channel.
-- Brand positioning.
 
-For a technical system, this might be:
+For a technical system, this might include:
 
 - Domain boundaries.
 - Pure logic.
 - Testable modules.
 - Security model.
 - Failure handling.
-- Deployment path.
 
 ### 6. What Needs Proof
 
@@ -177,11 +117,8 @@ Common proof questions:
 - Can users understand it without explanation?
 - Do users trust it?
 - Does it work in real conditions?
-- Does it create repeat use?
 - Does the buyer value it enough to pay?
-- Is the acquisition channel real?
 - Is the technical approach reliable at expected scale?
-- Are legal/compliance claims accurate?
 
 Prefer proof by real behavior over opinions.
 
@@ -213,13 +150,10 @@ Good next-focus examples:
 - Make one workflow reliable end-to-end.
 - Hide premature surfaces.
 - Fix trust and explanation.
-- Run live-device QA.
-- Interview the exact user segment.
-- Replace a brittle integration.
 
 ### 9. Execution Cadence
 
-Turn the assessment into a clean operating rhythm.
+Include this when the review should produce an execution plan. Skip it for narrow reviews where `Recommended Next Focus` and `Final Call` are enough.
 
 Use this format:
 
@@ -241,10 +175,8 @@ Rules:
 - One primary objective per loop.
 - One user journey or system boundary per loop.
 - No new feature unless it strengthens the objective.
-- Each loop should end with evidence.
-- Prefer small, reversible steps.
 
-### 10. Principles Check
+### 10. Core Principles Check
 
 Tie recommendations back to the project's principles.
 
@@ -257,9 +189,7 @@ Useful generic principles:
 - Evidence over opinion.
 - Simplicity over cleverness.
 - Reliability over novelty.
-- Clear positioning over broad appeal.
 - Privacy and safety over convenience when sensitive data is involved.
-- Revenue follows retained value.
 
 ### 11. Defer / Kill / Keep
 
@@ -299,100 +229,34 @@ End with a crisp recommendation:
 
 ## Output Template
 
-```md
-# Universal Deep Review — [Project / Idea / Feature]
+Use the full structure for substantial reviews. For narrow reviews, collapse sections while preserving the final recommendation and keep/fix/hide/defer/kill triage.
 
-## Plain-English Summary
+Headings, in order:
 
-...
-
-## Target User and Use Case
-
-...
-
-## What Is Strong
-
-...
-
-## What Is Weak, Risky, or Half-Baked
-
-...
-
-## What Logic Makes Sense
-
-...
-
-## What Needs Proof
-
-...
-
-## Honest Utility / Value Assessment
-
-...
-
-## Recommended Next Focus
-
-...
-
-## Execution Cadence
-
-### Loop 1: [Name]
-
-**Objective:** ...
-
-**Scope:** ...
-
-**Non-scope:** ...
-
-**Actions:**
-1. ...
-
-**Exit criteria:**
-- ...
-
-**Decision after exit:** ...
-
-## Principles Check
-
-...
-
-## Keep / Fix / Hide / Defer / Kill
-
-| Item | Decision | Reason | Trigger to revisit |
-|---|---|---|---|
-| ... | ... | ... | ... |
-
-## Final Call
-
-**Do next:** ...
-
-**Do not do yet:** ...
-
-**Defer until:** ...
-
-**Success looks like:** ...
-```
+1. Plain-English Summary
+2. Target User and Use Case
+3. What Is Strong
+4. What Is Weak, Risky, or Half-Baked
+5. What Logic Makes Sense
+6. What Needs Proof
+7. Honest Utility / Value Assessment
+8. Recommended Next Focus
+9. Execution Cadence, if useful
+10. Core Principles Check
+11. Keep / Fix / Hide / Defer / Kill
+12. Final Call
 
 ---
 
-## Quick Invocation Prompts
+## Quick Invocation Prompt
 
-### General
+Copy/paste this when needed:
 
-> Run the Universal Deep Review skill on [idea/project/feature]. Give me a plain-English summary, strengths, weaknesses, what logic makes sense, what is half-baked, what needs proof, honest utility assessment, next focus, execution cadence, and keep/fix/hide/defer/kill recommendations. Be direct and practical.
+> Run the Universal Deep Review skill on [idea/project/feature/plan]. Be direct and practical. End with one next focus, keep/fix/hide/defer/kill triage, and clear triggers for anything deferred.
 
-### New idea
+Optional emphasis:
 
-> Run the Universal Deep Review skill on this idea. Assess the target user, problem severity, differentiation, risks, validation plan, minimum useful version, and whether I should pursue, simplify, defer, or kill it.
-
-### Feature
-
-> Run the Universal Deep Review skill on this feature. Tell me whether it strengthens the core user journey, what assumptions need proof, what could go wrong, and what the smallest useful version should be.
-
-### Existing project
-
-> Run the Universal Deep Review skill on this project. Identify the real asset, the bloat, the half-baked surfaces, the next focus, and the clean execution cadence to get it to a useful shipped version.
-
-### Technical architecture
-
-> Run the Universal Deep Review skill on this architecture. Assess coherence, boundaries, risk, reliability, testability, premature complexity, and the next hardening step.
+- New idea: target user, problem severity, differentiation, validation path, and whether to pursue, simplify, defer, or kill it.
+- Feature: core journey fit, assumptions needing proof, risks, and smallest useful version.
+- Existing project: real asset, bloat, half-baked surfaces, next focus, and execution cadence if useful.
+- Technical architecture: coherence, boundaries, reliability, testability, premature complexity, and next hardening step.
