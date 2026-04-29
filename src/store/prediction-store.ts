@@ -8,7 +8,7 @@
  */
 
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from '@/src/lib/persist-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanUpcomingTransitions } from '@/src/lib/circadian/prediction-engine';
 import type { TransitionPrediction, PredictionInput } from '@/src/lib/circadian/types';

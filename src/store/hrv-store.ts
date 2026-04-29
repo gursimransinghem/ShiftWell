@@ -6,7 +6,7 @@
  */
 
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from '@/src/lib/persist-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { HRVReading } from '../lib/healthkit/hrv-reader';
 import type { HRVRecoveryModifier } from '../lib/adaptive/hrv-recovery-modifier';
