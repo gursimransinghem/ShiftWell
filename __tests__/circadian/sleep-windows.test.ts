@@ -129,6 +129,26 @@ describe('computeSleepBlocks', () => {
       expect(getHours(sleepBlocks[0].start)).toBeLessThanOrEqual(9);
     });
 
+    it('places late chronotype recovery bedtime on the recovery evening, not the prior midnight', () => {
+      const day: ClassifiedDay = {
+        date: new Date('2026-03-18T00:00:00'),
+        dayType: 'recovery',
+        shift: null,
+        personalEvents: [],
+      };
+      const lateProfile: UserProfile = {
+        ...testProfile,
+        chronotype: 'late',
+      };
+
+      const blocks = computeSleepBlocks(day, lateProfile);
+      const mainSleep = blocks.find((b) => b.id.endsWith('-main-sleep'));
+
+      expect(mainSleep).toBeDefined();
+      expect(mainSleep!.start.getDate()).toBe(18);
+      expect(getHours(mainSleep!.start)).toBe(23);
+    });
+
     it('generates unique ids for multiple recovery sleep blocks', () => {
       const day: ClassifiedDay = {
         date: new Date('2026-03-18'),

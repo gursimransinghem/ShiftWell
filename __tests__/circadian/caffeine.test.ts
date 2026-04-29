@@ -138,6 +138,26 @@ describe('Caffeine Cutoff', () => {
       // Cutoff must be before the earliest sleep/nap block
       expect(cutoff!.start.getTime()).toBeLessThan(allSleepNap[0].start.getTime());
     });
+
+    it('anchors recovery-day cutoff to the main overnight sleep, not the morning recovery block', () => {
+      const profile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 5 };
+      const day: ClassifiedDay = {
+        date: new Date('2026-03-18T00:00:00'),
+        dayType: 'recovery',
+        shift: null,
+        personalEvents: [],
+      };
+      const blocks = computeSleepBlocks(day, profile);
+      const cutoff = computeCaffeineCutoff(day, profile, blocks);
+
+      expect(cutoff).not.toBeNull();
+
+      const mainOvernightSleep = blocks.find((b) => b.id.endsWith('-main-sleep'));
+      expect(mainOvernightSleep).toBeDefined();
+
+      const hoursBefore = differenceInMinutes(mainOvernightSleep!.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeCloseTo(8.35, 0);
+    });
   });
 
   describe('no sleep blocks', () => {

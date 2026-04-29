@@ -363,13 +363,14 @@ function computeRecoverySleep(
     priority: 1,
   });
 
-  // Early bedtime to reclaim normal schedule
+  // Early bedtime to reclaim normal schedule. Late chronotypes naturally sleep
+  // after midnight; advancing by 1h can land on the previous evening.
   const earlyBedtime = offsets.naturalSleepOnset - 1; // 1h earlier than usual
-  let normalSleepStart = setTime(date, earlyBedtime);
-  if (earlyBedtime < 12) {
-    // Would be next day for late chronotypes
-    normalSleepStart = setTime(date, earlyBedtime);
-  }
+  const normalSleepStart = earlyBedtime < 0
+    ? setTime(date, earlyBedtime + 24)
+    : earlyBedtime < 12
+    ? setTime(addDays(date, 1), earlyBedtime)
+    : setTime(date, earlyBedtime);
   const normalSleepEnd = alignToSleepCycle(normalSleepStart, profile.sleepNeed);
 
   blocks.push({

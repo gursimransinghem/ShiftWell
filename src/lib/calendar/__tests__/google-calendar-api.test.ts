@@ -151,11 +151,10 @@ describe('fetchGoogleEvents', () => {
     expect(ids).not.toContain('evt2');
   });
 
-  it('Test 5: handles all-day events (date instead of dateTime)', async () => {
+  it('Test 5: filters all-day events (date instead of dateTime)', async () => {
     const result = await fetchGoogleEvents(['cal1'], ACCESS_TOKEN, startDate, endDate);
     const allDay = result.find((e) => e.id === 'evt3');
-    expect(allDay).toBeDefined();
-    expect(allDay?.allDay).toBe(true);
+    expect(allDay).toBeUndefined();
   });
 
   it('Test 8: gracefully returns [] on non-ok response per calendar (no throw)', async () => {

@@ -26,10 +26,9 @@ describe('shiftConfidence — keyword + duration scoring', () => {
     expect(shiftConfidence('Coverage', 8)).toBeGreaterThanOrEqual(0.90);
   });
 
-  test('Test 5: "Birthday Party" 7h returns >= 0.50 and < 0.80 (shift length, no keyword)', () => {
+  test('Test 5: social events are rejected even when they are shift-length', () => {
     const score = shiftConfidence('Birthday Party', 7);
-    expect(score).toBeGreaterThanOrEqual(0.50);
-    expect(score).toBeLessThan(0.80);
+    expect(score).toBe(0);
   });
 
   test('Test 6: "Doctor Appointment" 6h returns 0 (negative keyword penalizes)', () => {
@@ -38,10 +37,10 @@ describe('shiftConfidence — keyword + duration scoring', () => {
 });
 
 describe('shiftConfidence — isWorkCalendar override', () => {
-  test('isWorkCalendar=true always returns 1.0 regardless of title/duration', () => {
-    expect(shiftConfidence('Birthday Party', 2, { isWorkCalendar: true })).toBe(1.0);
-    expect(shiftConfidence('Vacation', 24, { isWorkCalendar: true })).toBe(1.0);
-    expect(shiftConfidence('Random', 1, { isWorkCalendar: true })).toBe(1.0);
+  test('isWorkCalendar=true boosts only plausible shift-length events', () => {
+    expect(shiftConfidence('Random', 8, { isWorkCalendar: true })).toBe(0.79);
+    expect(shiftConfidence('Birthday Party', 2, { isWorkCalendar: true })).toBe(0);
+    expect(shiftConfidence('Vacation', 24, { isWorkCalendar: true })).toBe(0);
   });
 });
 
@@ -67,12 +66,33 @@ describe('separateShiftsFromPersonalWithConfidence', () => {
     expect(typeof result.confidenceMap['evt-1']).toBe('number');
   });
 
-  test('Test 8: events from a workCalendarId get confidence 1.0', () => {
+  test('Test 8: workCalendarId preserves keyword confidence without forcing all events to 1.0', () => {
     const result = separateShiftsFromPersonalWithConfidence(baseEvents, {
       workCalendarId: 'work-cal',
       eventCalendarIds: { 'evt-1': 'work-cal', 'evt-2': 'other-cal' },
     });
-    expect(result.confidenceMap['evt-1']).toBe(1.0);
+    expect(result.confidenceMap['evt-1']).toBe(0.95);
     expect(result.confidenceMap['evt-2']).toBe(0);
+  });
+
+  test('work-calendar non-shift events stay personal below auto-add threshold', () => {
+    const result = separateShiftsFromPersonalWithConfidence(
+      [
+        {
+          id: 'evt-party',
+          title: 'Birthday Party',
+          start: new Date('2026-04-01T18:00:00'),
+          end: new Date('2026-04-02T01:00:00'),
+        },
+      ],
+      {
+        workCalendarId: 'work-cal',
+        eventCalendarIds: { 'evt-party': 'work-cal' },
+      },
+    );
+
+    expect(result.confidenceMap['evt-party']).toBe(0);
+    expect(result.shifts).toHaveLength(0);
+    expect(result.personal).toHaveLength(1);
   });
 });

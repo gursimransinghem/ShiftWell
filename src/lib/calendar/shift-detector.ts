@@ -29,25 +29,26 @@ export const NEGATIVE_KEYWORDS: string[] = [
   'appointment', 'flight', 'travel', 'vacation', 'trip',
   'conference', 'meeting', 'lunch', 'dinner',
   'wedding', 'doctor', 'dentist', 'therapy', 'class', 'lecture',
+  'birthday', 'party',
 ];
 
 /**
  * Compute a confidence score (0.0–1.0) that a calendar event is a work shift.
  *
  * Rules:
- * - isWorkCalendar=true → 1.0 (D-07 heuristic bypass)
+ * - isWorkCalendar=true → modest confidence boost, not a bypass
  * - All-day events (24h exactly) → 0 (PTO / holiday)
  * - Duration < 5.5h → 0 (too short for a clinical shift)
  * - Negative keyword match → 0
  * - Duration in shift range (6–28h) + keyword match → 0.95
  * - Duration in shift range (6–28h), no keyword → 0.70
+ * - Work calendar + shift length + no negative keyword → 0.79 (review, not auto-add)
  */
 export function shiftConfidence(
   summary: string,
   durationHours: number,
   options?: { isWorkCalendar?: boolean },
 ): number {
-  if (options?.isWorkCalendar) return 1.0;
   if (durationHours === 24) return 0;   // All-day = not a shift
   if (durationHours < 5.5) return 0;    // Too short
 
@@ -59,6 +60,7 @@ export function shiftConfidence(
   const isShiftLength = durationHours >= 6 && durationHours <= 28;
 
   if (isShiftLength && hasKeyword) return 0.95;
+  if (isShiftLength && options?.isWorkCalendar) return 0.79;
   if (isShiftLength) return 0.70;
   return 0;
 }
@@ -98,7 +100,7 @@ export function separateShiftsFromPersonalWithConfidence(
     const confidence = shiftConfidence(event.title, durationHours, { isWorkCalendar });
     confidenceMap[event.id] = confidence;
 
-    if (confidence >= 0.50 || isWorkCalendar) {
+    if (confidence >= 0.50) {
       shifts.push({
         id: event.id,
         title: event.title,
