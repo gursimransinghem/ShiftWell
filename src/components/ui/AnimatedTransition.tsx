@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, type ViewStyle } from 'react-native';
+import { Animated, View, type ViewStyle } from 'react-native';
 
 interface AnimatedTransitionProps {
   children: React.ReactNode;
@@ -42,6 +42,10 @@ export default function AnimatedTransition({
       }),
     ]).start();
   }, [isWeb, opacity, translateY, delay, duration]);
+
+  if (isWeb) {
+    return <View style={style}>{children}</View>;
+  }
 
   return (
     <Animated.View style={[{ opacity, transform: [{ translateY }] }, style]}>
