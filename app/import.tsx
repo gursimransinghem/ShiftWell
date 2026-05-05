@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { format } from 'date-fns';
@@ -47,6 +47,9 @@ const SHIFT_TYPE_COLORS: Record<string, string> = {
 // ---------------------------------------------------------------------------
 
 export default function ImportScreen() {
+  const params = useLocalSearchParams<{ redirect?: string }>();
+  const redirect = typeof params.redirect === 'string' ? params.redirect : undefined;
+
   const [step, setStep] = useState<Step>('pick');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -364,20 +367,32 @@ export default function ImportScreen() {
         </Text>
 
         <View style={styles.doneActions}>
-          <Button
-            title="View Schedule"
-            onPress={() => router.replace('/(tabs)/schedule')}
-            variant="primary"
-            size="lg"
-            fullWidth
-          />
-          <View style={{ height: SPACING.md }} />
-          <Button
-            title="Back to Settings"
-            onPress={() => router.back()}
-            variant="ghost"
-            size="md"
-          />
+          {redirect ? (
+            <Button
+              title="Continue"
+              onPress={() => router.replace(redirect as any)}
+              variant="primary"
+              size="lg"
+              fullWidth
+            />
+          ) : (
+            <>
+              <Button
+                title="View Schedule"
+                onPress={() => router.replace('/(tabs)/schedule')}
+                variant="primary"
+                size="lg"
+                fullWidth
+              />
+              <View style={{ height: SPACING.md }} />
+              <Button
+                title="Back to Settings"
+                onPress={() => router.back()}
+                variant="ghost"
+                size="md"
+              />
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>

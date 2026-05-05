@@ -76,13 +76,12 @@ export default function ShiftsScreen() {
 
   function handleCalendarImport() {
     trackShiftImportMethod('calendar');
-    // Navigate to the existing import modal; it handles calendar permissions internally.
-    // On completion the user will land back on the navigation stack; we push plan-ready
-    // as the next route so returning from the modal continues the flow.
-    router.push('/import');
-    // After the modal closes, Expo Router pops back — so we also push plan-ready
-    // here so the back stack is: shifts → plan-ready
-    router.push('/(onboarding)/plan-ready');
+    // Pass redirect param so the import screen routes to plan-ready on completion.
+    // Avoids the race where two sequential router.push calls fire in the same tick.
+    router.push({
+      pathname: '/import',
+      params: { redirect: '/(onboarding)/plan-ready' },
+    });
   }
 
   function handleManual() {

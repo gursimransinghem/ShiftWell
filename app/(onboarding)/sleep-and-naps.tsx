@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   },
   stepperValue: {
     fontSize: 44,
-    fontWeight: '800',
+    fontWeight: TYPOGRAPHY.fontWeight.bold,
     color: PURPLE,
     letterSpacing: -1,
     lineHeight: 50,

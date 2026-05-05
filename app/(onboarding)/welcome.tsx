@@ -134,6 +134,7 @@ export default function WelcomeScreen() {
             onPress={handleSkip}
             style={({ pressed }) => [styles.skipBtn, pressed && { opacity: 0.6 }]}
             accessibilityRole="button"
+            accessibilityLabel="Skip onboarding"
           >
             <Text style={styles.skipText}>Skip {'\u2192'}</Text>
           </Pressable>
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   },
   star: {
     position: 'absolute',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.text.primary,
   },
   scrollContent: {
     flexGrow: 1,
@@ -262,9 +263,8 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.lg,
   },
   headline: {
-    fontSize: 30,
-    fontWeight: '800',
-    color: '#C8A84B',
+    ...TYPOGRAPHY.heading2,
+    color: COLORS.accent.primary,
     textAlign: 'center',
     marginBottom: SPACING.md,
   },
@@ -293,9 +293,9 @@ const styles = StyleSheet.create({
     paddingTop: 2,
   },
   statNumber: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: '#C8A84B',
+    fontSize: TYPOGRAPHY.fontSize['4xl'],
+    fontWeight: TYPOGRAPHY.fontWeight.bold,
+    color: COLORS.accent.primary,
     letterSpacing: -1,
     lineHeight: 40,
   },
@@ -312,13 +312,13 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   statHeadline: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#C8A84B',
+    fontSize: TYPOGRAPHY.fontSize.sm,
+    fontWeight: TYPOGRAPHY.fontWeight.bold,
+    color: COLORS.accent.primary,
     lineHeight: 18,
   },
   statBody: {
-    fontSize: 11,
+    fontSize: TYPOGRAPHY.fontSize.xs,
     color: COLORS.text.secondary,
     lineHeight: 16,
   },
@@ -340,9 +340,9 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#7B61FF',
+    fontSize: TYPOGRAPHY.fontSize.sm,
+    fontWeight: TYPOGRAPHY.fontWeight.semibold,
+    color: COLORS.accent.purple,
   },
 
   /* CTA */
@@ -358,8 +358,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SPACING.lg,
   },
   disclaimerLabel: {
-    fontSize: 9,
-    fontWeight: '600',
+    fontSize: TYPOGRAPHY.fontSize.xs,
+    fontWeight: TYPOGRAPHY.fontWeight.semibold,
     color: COLORS.text.muted,
     textAlign: 'center',
     letterSpacing: 0.8,
@@ -367,9 +367,9 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   legal: {
-    fontSize: 9,
+    fontSize: TYPOGRAPHY.fontSize.xs,
     color: COLORS.text.dim,
     textAlign: 'center',
-    lineHeight: 14,
+    lineHeight: 16,
   },
 });

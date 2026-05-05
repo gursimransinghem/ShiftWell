@@ -14,10 +14,4 @@ export const ONBOARDING_STEPS = {
   household: 4,
   shifts: 5,
   planReady: 6,
-  // Legacy keys — keeps old screens that still exist on disk compiling
-  preferences: 4,
-  amRoutine: 5,
-  pmRoutine: 6,
-  addresses: 7,
-  healthkit: 8,
 } as const;

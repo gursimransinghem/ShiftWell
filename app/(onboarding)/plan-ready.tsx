@@ -159,7 +159,7 @@ export default function PlanReadyScreen() {
               size="lg"
               fullWidth
               loading={notifLoading}
-              icon={notifLoading ? <ActivityIndicator size="small" color="#fff" /> : undefined}
+              icon={notifLoading ? <ActivityIndicator size="small" color={COLORS.text.primary} /> : undefined}
             />
 
             <Pressable
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 32,
     fontSize: 16,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontWeight: TYPOGRAPHY.fontWeight.bold,
+    color: COLORS.text.primary,
     overflow: 'hidden',
   },
   successText: {

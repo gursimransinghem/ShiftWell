@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '@/src/components/ui/Button';
 import ProgressBar from '@/src/components/ui/ProgressBar';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
-import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
+import { COLORS, PURPLE, SPACING, TYPOGRAPHY } from '@/src/theme';
 import { useUserStore } from '@/src/store/user-store';
 import { useOnboardingStore } from '@/src/store/onboarding-store';
 import { ONBOARDING_TOTAL_STEPS, ONBOARDING_STEPS } from '@/src/constants/onboarding';
@@ -194,8 +194,8 @@ const styles = StyleSheet.create({
     minHeight: 48,
   },
   chipActive: {
-    backgroundColor: 'rgba(123,97,255,0.12)',
-    borderColor: '#7B61FF',
+    backgroundColor: COLORS.accent.purpleMuted,
+    borderColor: PURPLE,
   },
   chipPressed: {
     opacity: 0.75,
@@ -209,8 +209,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   chipLabelActive: {
-    color: '#7B61FF',
-    fontWeight: '700',
+    color: PURPLE,
+    fontWeight: TYPOGRAPHY.fontWeight.bold,
   },
   footer: {
     marginTop: 'auto',
