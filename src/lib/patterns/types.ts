@@ -16,7 +16,8 @@ export type PatternType =
   | 'weekend-compensation'
   | 'chronic-late-sleep'
   | 'improving-adherence'
-  | 'recovery-debt-trend';
+  | 'recovery-debt-trend'
+  | 'shift-transition-cluster';
 
 export type PatternSeverity = 'info' | 'warning' | 'critical';
 

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
+import { persist, createJSONStorage, type StateStorage } from '@/src/lib/persist-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { ShiftEvent, PersonalEvent } from '../lib/circadian/types';
 import { classifyShiftType } from '../lib/circadian/classify-shifts';

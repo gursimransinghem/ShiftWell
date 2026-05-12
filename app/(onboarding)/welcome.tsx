@@ -2,14 +2,6 @@ import { useEffect } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-  withDelay,
-} from 'react-native-reanimated';
 import AnimatedTransition from '@/src/components/ui/AnimatedTransition';
 import Button from '@/src/components/ui/Button';
 import { COLORS, SPACING, TYPOGRAPHY } from '@/src/theme';
@@ -50,26 +42,8 @@ const STARS = [
 ];
 
 function TwinkleStar({ star }: { star: typeof STARS[0] }) {
-  const opacity = useSharedValue(0.1);
-
-  useEffect(() => {
-    opacity.value = withDelay(
-      star.delay,
-      withRepeat(
-        withSequence(
-          withTiming(0.05, { duration: star.dur }),
-          withTiming(0.75, { duration: star.dur }),
-        ),
-        -1,
-        false,
-      ),
-    );
-  }, [opacity, star.delay, star.dur]);
-
-  const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
-
   return (
-    <Animated.View
+    <View
       style={[
         styles.star,
         {
@@ -79,7 +53,6 @@ function TwinkleStar({ star }: { star: typeof STARS[0] }) {
           height: star.size,
           borderRadius: star.size / 2,
         },
-        animStyle,
       ]}
     />
   );
@@ -186,7 +159,7 @@ export default function WelcomeScreen() {
           <View style={styles.footer}>
             <Button
               title="Let's get started"
-              onPress={() => router.push('/(onboarding)/chronotype')}
+              onPress={() => router.push('/chronotype')}
               size="lg"
               fullWidth
             />
@@ -278,7 +251,6 @@ const styles = StyleSheet.create({
 
   /* Stat block */
   statBlock: {
-    flexDirection: 'row',
     backgroundColor: 'rgba(200,168,75,0.06)',
     borderWidth: 1,
     borderColor: 'rgba(200,168,75,0.18)',
@@ -286,7 +258,7 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     marginBottom: SPACING['2xl'],
     gap: SPACING.lg,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   statLeft: {
     alignItems: 'center',
@@ -300,15 +272,13 @@ const styles = StyleSheet.create({
     lineHeight: 40,
   },
   statDivider: {
-    width: 2,
-    flex: 1,
+    width: 48,
+    height: 2,
     backgroundColor: 'rgba(200,168,75,0.25)',
     marginTop: 6,
     borderRadius: 1,
-    minHeight: 20,
   },
   statRight: {
-    flex: 1,
     gap: 6,
   },
   statHeadline: {
@@ -316,11 +286,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#C8A84B',
     lineHeight: 18,
+    textAlign: 'center',
   },
   statBody: {
     fontSize: 11,
     color: COLORS.text.secondary,
     lineHeight: 16,
+    textAlign: 'center',
   },
 
   /* Trust badges */

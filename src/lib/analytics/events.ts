@@ -2,6 +2,8 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import type { PostHog } from 'posthog-react-native';
 
+type AnalyticsProperties = Parameters<PostHog['register']>[0];
+
 // ---------------------------------------------------------------------------
 // Tier 1 event name constants
 // ---------------------------------------------------------------------------
@@ -91,7 +93,7 @@ export function identifyUser(
  * Set super properties that persist across all subsequent events.
  */
 export function setSuperProperties(properties: Record<string, unknown>): void {
-  _posthog?.register(properties);
+  _posthog?.register(properties as AnalyticsProperties);
 }
 
 /**

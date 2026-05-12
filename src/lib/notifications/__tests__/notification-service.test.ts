@@ -12,8 +12,8 @@ import type { PlanBlock } from '../../../lib/circadian/types';
 const mockScheduleNotificationAsync = jest.fn().mockResolvedValue('mock-id-123');
 const mockCancelAllScheduledNotificationsAsync = jest.fn().mockResolvedValue(undefined);
 const mockGetAllScheduledNotificationsAsync = jest.fn().mockResolvedValue([]);
-const mockGetPermissionsAsync = jest.fn().mockResolvedValue({ status: 'granted' });
-const mockRequestPermissionsAsync = jest.fn().mockResolvedValue({ status: 'granted' });
+const mockGetPermissionsAsync = jest.fn().mockResolvedValue({ granted: true, canAskAgain: true });
+const mockRequestPermissionsAsync = jest.fn().mockResolvedValue({ granted: true, canAskAgain: true });
 
 jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync: mockScheduleNotificationAsync,

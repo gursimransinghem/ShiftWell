@@ -7,7 +7,7 @@
  */
 
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from '@/src/lib/persist-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import type { CalendarMeta, ChangeNotificationMode } from './calendar-types';

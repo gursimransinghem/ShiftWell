@@ -7,11 +7,6 @@ import {
   type ViewStyle,
   type TextStyle,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
 import { COLORS, ACCENT, PURPLE } from '@/src/theme';
 
 interface ButtonProps {
@@ -46,22 +41,6 @@ export default function Button({
 }: ButtonProps) {
   const sizeConfig = SIZE_CONFIG[size];
   const isDisabled = disabled || loading;
-
-  const scale = useSharedValue(1);
-
-  const handlePressIn = () => {
-    if (isDisabled) return;
-    scale.value = withSpring(0.97, { damping: 20, stiffness: 400 });
-  };
-
-  const handlePressOut = () => {
-    if (isDisabled) return;
-    scale.value = withSpring(1, { damping: 20, stiffness: 400 });
-  };
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
 
   const containerStyle: ViewStyle[] = [
     styles.base,
@@ -109,28 +88,27 @@ export default function Button({
   const indicatorColor = variant === 'primary' || variant === 'danger' ? COLORS.text.primary : PURPLE;
 
   return (
-    <Animated.View style={animatedStyle}>
-      <Pressable
-        onPress={onPress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        disabled={isDisabled}
-        style={containerStyle}
-        accessibilityRole="button"
-        accessibilityState={{ disabled: isDisabled }}
-      >
-        {loading ? (
-          <ActivityIndicator color={indicatorColor} size="small" />
-        ) : (
-          <>
-            {icon && <>{icon}</>}
-            <Text style={[...textStyle, icon ? styles.iconSpacing : undefined]}>
-              {children ?? title}
-            </Text>
-          </>
-        )}
-      </Pressable>
-    </Animated.View>
+    <Pressable
+      onPress={onPress}
+      disabled={isDisabled}
+      style={({ pressed }) => [
+        ...containerStyle,
+        pressed && !isDisabled ? styles.pressed : undefined,
+      ]}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: isDisabled }}
+    >
+      {loading ? (
+        <ActivityIndicator color={indicatorColor} size="small" />
+      ) : (
+        <>
+          {icon && <>{icon}</>}
+          <Text style={[...textStyle, icon ? styles.iconSpacing : undefined]}>
+            {children ?? title}
+          </Text>
+        </>
+      )}
+    </Pressable>
   );
 }
 
@@ -165,6 +143,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background.elevated,
     borderColor: COLORS.background.elevated,
     opacity: 0.6,
+  },
+  pressed: {
+    transform: [{ scale: 0.97 }],
   },
   text: {
     fontWeight: '600',

@@ -4,8 +4,8 @@ const Notifications = {
   cancelAllScheduledNotificationsAsync: jest.fn().mockResolvedValue(undefined),
   cancelScheduledNotificationAsync: jest.fn().mockResolvedValue(undefined),
   getAllScheduledNotificationsAsync: jest.fn().mockResolvedValue([]),
-  getPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
-  requestPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted' }),
+  getPermissionsAsync: jest.fn().mockResolvedValue({ granted: true, canAskAgain: true }),
+  requestPermissionsAsync: jest.fn().mockResolvedValue({ granted: true, canAskAgain: true }),
   SchedulableTriggerInputTypes: {
     DATE: 'date',
     TIME_INTERVAL: 'timeInterval',
