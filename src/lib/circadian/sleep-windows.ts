@@ -31,6 +31,7 @@ import type {
   CHRONOTYPE_OFFSETS,
 } from './types';
 import { DEFAULT_PROFILE, CHRONOTYPE_OFFSETS as OFFSETS } from './types';
+import { SHIFT_RATE_CAPS } from './transition-planner';
 
 const MIN_MAIN_SLEEP_MINUTES = 2 * 60;
 
@@ -41,12 +42,21 @@ function setTime(date: Date, hours: number): Date {
   return setMinutes(setHours(date, h), m);
 }
 
-/** Align a time to the nearest 90-minute sleep cycle boundary */
+/**
+ * Soft, NON-DESTRUCTIVE 90-minute cycle alignment (gap-analysis R11).
+ *
+ * 90-min cycle wake-timing is a weak-evidence heuristic — cycles actually run
+ * 90-110 min and vary within a night. It is demoted to a tiebreak: snap to a 90-min
+ * boundary ONLY when doing so does not deliver less than the sleep need. If snapping
+ * to the nearest boundary would cost sleep, deliver exactly the need instead — cycle
+ * alignment may never be the reason a plan under-delivers sleep.
+ */
 function alignToSleepCycle(sleepOnset: Date, sleepNeedHours: number): Date {
-  const cycleMinutes = 90;
-  const totalMinutes = sleepNeedHours * 60;
-  const cycles = Math.round(totalMinutes / cycleMinutes);
-  return addMinutes(sleepOnset, cycles * cycleMinutes);
+  const needMinutes = Math.round(sleepNeedHours * 60);
+  const cycles = Math.round(needMinutes / 90);
+  const snapped = cycles * 90;
+  const durationMinutes = snapped >= needMinutes ? snapped : needMinutes;
+  return addMinutes(sleepOnset, durationMinutes);
 }
 
 /**
@@ -196,35 +206,36 @@ function computeDayShiftSleep(
 function computeNightShiftSleep(
   day: ClassifiedDay,
   profile: UserProfile,
+  napReserveMinutes: number = 0,
 ): PlanBlock[] {
   const blocks: PlanBlock[] = [];
   const date = day.date;
   const dayId = date.toISOString().slice(0, 10);
   const shift = day.shift!;
 
-  // Main sleep after the shift ends
-  // Typical night shift ends 06:00-08:00. Add commute + wind-down buffer.
+  // Main sleep after the shift ends. Add commute + wind-down buffer.
   const arriveHome = addMinutes(shift.end, profile.commuteDuration);
-  let mainSleepStart = addMinutes(arriveHome, 30); // 30min to wind down, eat, etc.
+  // Young children → household wakes early; get to bed faster.
+  const mainSleepStart = addMinutes(arriveHome, profile.hasYoungChildren ? 15 : 30);
 
-  // Adjust if there are young children (household wakes around 7-8am typically)
-  // In that case, try to get sleep before the household wakes
-  if (profile.hasYoungChildren) {
-    // If kids are up, morning sleep will be fragmented. Prioritize getting to bed ASAP.
-    mainSleepStart = addMinutes(arriveHome, 15);
-  }
-
-  let mainSleepEnd = addHours(mainSleepStart, Math.max(profile.sleepNeed - 1, 5));
-
-  // Pets (especially dogs) require morning feeding/walking that can cut daytime recovery short.
-  // Cap sleep 30 min earlier to reflect real-world interruption.
-  if (profile.hasPets) {
-    mainSleepEnd = addMinutes(mainSleepEnd, -30);
-  }
-  // Reserve 1h of sleep need for pre-shift nap if user wants naps
+  // Target the FULL sleep need (7-9h — AASM; gap-analysis R4). The main block is
+  // reduced ONLY by a pre-shift nap that has actually been placed (napReserveMinutes,
+  // supplied by the index.ts nap-first pass) — never by an unconditional hour, and
+  // never by hasPets. Pets are a *prediction* of interruption, not a reason to
+  // *prescribe* a shorter window (audit devil's-advocate point 5: predict short,
+  // prescribe full — let the feedback loop measure the realized shortfall).
+  const mainDurationMinutes = Math.max(
+    profile.sleepNeed * 60 - napReserveMinutes,
+    MIN_MAIN_SLEEP_MINUTES,
+  );
+  const mainSleepEnd = addMinutes(mainSleepStart, mainDurationMinutes);
 
   // Adjust for personal event conflicts
   const adjusted = avoidConflicts(mainSleepStart, mainSleepEnd, day.personalEvents);
+
+  const petNote = profile.hasPets
+    ? ' Pets may interrupt — protect this window as best you can.'
+    : '';
 
   blocks.push({
     id: `${dayId}-main-sleep`,
@@ -232,7 +243,8 @@ function computeNightShiftSleep(
     start: adjusted.start,
     end: adjusted.end,
     label: 'Main Sleep',
-    description: 'Post-shift recovery sleep. Blackout curtains, cool room, earplugs. This is non-negotiable.',
+    description:
+      `Post-shift recovery sleep — engineer your daytime bedroom to mimic night: full blackout, cool (18-20°C / 65-68°F), earplugs or white noise.${petNote} This is non-negotiable.`,
     priority: 1,
   });
 
@@ -298,8 +310,9 @@ function computeTransitionToNightsSleep(
   const dayId = date.toISOString().slice(0, 10);
   const offsets = OFFSETS[profile.chronotype];
 
-  // Delay sleep onset by 2-3 hours from natural time
-  let delayedOnset = offsets.naturalSleepOnset + 2.5;
+  // Delay sleep onset by the shared one-day delay ceiling (2.0h). Was 2.5h — a third
+  // rogue shift rate above the physiological cap (gap-analysis G8 / R3).
+  let delayedOnset = offsets.naturalSleepOnset + SHIFT_RATE_CAPS.MAX_DELAY_PER_DAY / 60;
   let sleepStart = setTime(date, delayedOnset);
   if (delayedOnset >= 24) {
     sleepStart = setTime(addDays(date, 1), delayedOnset - 24);
@@ -468,10 +481,17 @@ function computeExtendedShiftSleep(
 export function computeSleepBlocks(
   day: ClassifiedDay,
   profile: UserProfile = DEFAULT_PROFILE,
-  options?: { bedtimeOffsetMinutes?: number; wakeOffsetMinutes?: number },
+  options?: {
+    bedtimeOffsetMinutes?: number;
+    wakeOffsetMinutes?: number;
+    /** Minutes of pre-shift nap already placed — the work-night main block is sized to
+     *  (sleepNeed − napReserve) so total planned sleep equals the need (R4). */
+    napReserveMinutes?: number;
+  },
 ): PlanBlock[] {
   const bedtimeOffset = options?.bedtimeOffsetMinutes ?? 0;
   const wakeOffset = options?.wakeOffsetMinutes ?? bedtimeOffset;
+  const napReserveMinutes = options?.napReserveMinutes ?? 0;
   const blocks = (() => {
     switch (day.dayType) {
       case 'work-day':
@@ -479,7 +499,7 @@ export function computeSleepBlocks(
       case 'work-evening':
         return computeEveningShiftSleep(day, profile);
       case 'work-night':
-        return computeNightShiftSleep(day, profile);
+        return computeNightShiftSleep(day, profile, napReserveMinutes);
       case 'work-extended':
         return computeExtendedShiftSleep(day, profile);
       case 'transition-to-nights':

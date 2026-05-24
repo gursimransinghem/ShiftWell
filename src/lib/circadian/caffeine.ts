@@ -60,8 +60,17 @@ export function computeCutoffHours(
   doseMg: number,
   halfLifeHours: number,
 ): number {
-  const threshold = CAFFEINE_SLEEP_THRESHOLD_MG;
-  return halfLifeHours * Math.log2(doseMg / threshold);
+  // Default 6h (NIOSH ≥6h). Extended toward a HARD CAP of 9h for high doses and slow
+  // metabolizers. The old unbounded `halfLife * log2(dose/25)` sent a 2-cup user to a
+  // 15h cutoff — non-actionable (gap-analysis R5). 25mg threshold kept as documentation.
+  const BASE_HOURS = 6;
+  const MAX_HOURS = 9;
+  // Dose modifier: ≤200mg adds nothing; scales linearly to +3h at 400mg. Drake 2013 —
+  // 400mg still cut total sleep when taken 6h before bed, so a high dose needs longer.
+  const doseAdd = Math.max(0, Math.min(3, ((doseMg - 200) / 200) * 3));
+  // Metabolizer modifier: a half-life above the ~5h norm scales toward +3h at ~12h.
+  const halfLifeAdd = Math.max(0, Math.min(3, ((halfLifeHours - 5) / 7) * 3));
+  return Math.max(BASE_HOURS, Math.min(MAX_HOURS, BASE_HOURS + doseAdd + halfLifeAdd));
 }
 
 /**
@@ -87,26 +96,19 @@ export function computeCaffeineCutoff(
 
   if (sleepAndNapBlocks.length === 0) return null;
 
-  const firstSleep = sleepAndNapBlocks[0];
+  // Anchor the cutoff to the MAIN sleep being protected — not merely the earliest
+  // block. On a work-night day the earliest block is the pre-shift nap; anchoring
+  // there would forbid caffeine for the entire night shift (A/B hardening HF-4).
+  const mainSleep = sleepAndNapBlocks.find((b) => b.type === 'main-sleep');
+  const firstSleep = mainSleep ?? sleepAndNapBlocks[0];
   const dayId = day.date.toISOString().slice(0, 10);
 
-  let cutoffMinutes: number;
-  let descriptionSuffix: string;
-
-  if (doseMg !== undefined) {
-    // Dose-aware path: use log2 formula for precision
-    // computeCutoffHours(doseMg, halfLife) gives hours at which residual < 25mg
-    const cutoffHours = computeCutoffHours(doseMg, profile.caffeineHalfLife);
-    cutoffMinutes = Math.round(cutoffHours * 60);
-    const cutoffHoursFormatted = cutoffHours.toFixed(1);
-    descriptionSuffix = `With ${doseMg}mg caffeine and your ${profile.caffeineHalfLife}h half-life, this gives ${cutoffHoursFormatted}h for caffeine to clear below the 25mg sleep threshold.`;
-  } else {
-    // Legacy path: cutoff = half_life * 1.67 (backward compatible)
-    // For default 5h half-life: 5 * 1.67 = 8.35 hours before sleep
-    cutoffMinutes = Math.round(profile.caffeineHalfLife * 1.67 * 60);
-    const cutoffHoursFormatted = (cutoffMinutes / 60).toFixed(1);
-    descriptionSuffix = `With your ${profile.caffeineHalfLife}h caffeine half-life, this gives ${cutoffHoursFormatted}h for caffeine to clear before sleep.`;
-  }
+  // One bounded path (the legacy 1.67x path is retired — its 8.35h sat inside the new
+  // 6-9h band anyway). When no dose is supplied, assume one standard cup.
+  const effectiveDose = doseMg ?? DEFAULT_CAFFEINE_DOSE_MG;
+  const cutoffHours = computeCutoffHours(effectiveDose, profile.caffeineHalfLife);
+  const cutoffMinutes = Math.round(cutoffHours * 60);
+  const descriptionSuffix = `With ~${effectiveDose}mg caffeine and your ${profile.caffeineHalfLife}h half-life, stop ${cutoffHours.toFixed(1)}h before sleep (6h default, 9h hard cap so the guidance stays actionable).`;
 
   const cutoffTime = addMinutes(firstSleep.start, -cutoffMinutes);
 

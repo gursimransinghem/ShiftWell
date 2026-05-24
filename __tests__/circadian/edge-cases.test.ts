@@ -418,13 +418,17 @@ describe('Edge Cases', () => {
     // Caffeine cutoff should exist and be well before sleep
     const cutoff = plan.blocks.find((b) => b.type === 'caffeine-cutoff' && b.label === 'Caffeine Cutoff');
     expect(cutoff).toBeDefined();
-    const firstSleep = plan.blocks
-      .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
+    // HF-4: the cutoff anchors to the main sleep it protects — find that block.
+    const protectedSleep = plan.blocks
+      .filter((b) => b.type === 'main-sleep' && b.start.getTime() > cutoff!.start.getTime())
       .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
-    if (cutoff && firstSleep) {
-      const hoursBeforeSleep = differenceInMinutes(firstSleep.start, cutoff.start) / 60;
-      // 7h * 1.67 = 11.69h cutoff
-      expect(hoursBeforeSleep).toBeGreaterThanOrEqual(11);
+    if (cutoff && protectedSleep) {
+      const hoursBeforeSleep = differenceInMinutes(protectedSleep.start, cutoff.start) / 60;
+      // B8 (spec Part 6.2): the caffeine cutoff is now bounded to [6,9]h — the legacy
+      // 7h*1.67 = 11.69h figure was non-actionable. A 7h half-life is a slow
+      // metabolizer, so the cutoff sits above the 6h floor but at/under the 9h cap.
+      expect(hoursBeforeSleep).toBeGreaterThan(6);
+      expect(hoursBeforeSleep).toBeLessThanOrEqual(9);
     }
   });
 

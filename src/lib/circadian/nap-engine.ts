@@ -23,7 +23,14 @@
  */
 
 import { addMinutes, addHours, isBefore, isAfter, setHours, setMinutes } from 'date-fns';
-import type { ClassifiedDay, UserProfile, PlanBlock } from './types';
+import type { ClassifiedDay, UserProfile, PlanBlock, CircadianPhase } from './types';
+import { cbtMinDate } from './phase-model';
+import { circadianTelemetry } from './telemetry';
+
+/** On-shift nap: 25 min (mid of the 20-30 min evidence band). */
+const ON_SHIFT_NAP_MINUTES = 25;
+/** Sleep-inertia buffer after the on-shift nap (Hilditch et al.). */
+const ON_SHIFT_INERTIA_BUFFER = 30;
 
 /**
  * Flexible nap duration tiers.
@@ -103,14 +110,65 @@ function hasConflict(
 }
 
 /**
+ * Build the on-shift nap (gap-analysis R8) — a 20-30 min nap targeted so the worker
+ * clears sleep inertia right as the circadian nadir (estimated CBTmin) hits.
+ *
+ * Anchored to estimated CBTmin (A/B audit AF-11), not a literal 03:00 — and falls back
+ * to ~65% through the shift when CBTmin lands outside the shift. Returns null when the
+ * shift is too short to safely contain a nap with alert time on both sides.
+ */
+function buildOnShiftNap(
+  shift: { start: Date; end: Date },
+  dayId: string,
+  existingBlocks: PlanBlock[],
+  phase?: CircadianPhase,
+): PlanBlock | null {
+  const shiftMs = shift.end.getTime() - shift.start.getTime();
+  if (shiftMs < 6 * 3600000) return null; // too short for a safe on-shift nap
+
+  const earliestStart = addMinutes(shift.start, 60);
+  const latestEnd = addMinutes(shift.end, -60);
+
+  // Target: nap ends one inertia-buffer BEFORE estimated CBTmin.
+  let napEnd: Date = phase
+    ? addMinutes(cbtMinDate(phase, shift.start), -ON_SHIFT_INERTIA_BUFFER)
+    : new Date(shift.start.getTime() + shiftMs * 0.65);
+  let napStart = addMinutes(napEnd, -ON_SHIFT_NAP_MINUTES);
+
+  // Fall back to ~65% through the shift when the CBTmin window is out of band.
+  if (napStart.getTime() < earliestStart.getTime() || napEnd.getTime() > latestEnd.getTime()) {
+    napEnd = new Date(shift.start.getTime() + shiftMs * 0.65);
+    napStart = addMinutes(napEnd, -ON_SHIFT_NAP_MINUTES);
+  }
+  if (napStart.getTime() < earliestStart.getTime() || napEnd.getTime() > latestEnd.getTime()) {
+    return null;
+  }
+  if (hasConflict(napStart, napEnd, existingBlocks)) return null;
+
+  circadianTelemetry.emit('circadian_caffeine_nap_suggested', {
+    shiftLengthHours: Math.round((shiftMs / 3600000) * 10) / 10,
+    napEndHour: napEnd.getHours() + napEnd.getMinutes() / 60,
+  });
+
+  return {
+    id: `${dayId}-on-shift-nap`,
+    type: 'nap',
+    start: napStart,
+    end: napEnd,
+    label: 'On-Shift Nap',
+    description:
+      'A 25-min nap targeted at your circadian low — the deepest alertness dip of the shift. Set an alarm; keep it short to avoid grogginess. Caffeine-nap option: if your next real sleep is still 6+ hours away, take 150-200 mg caffeine right before lying down — it peaks (~20-30 min) just as you wake.',
+    priority: 2,
+  };
+}
+
+/**
  * Generate nap blocks for a classified day.
  *
  * Called AFTER sleep-windows has generated main sleep blocks.
  * Naps are placed in the gaps between sleep and shift blocks.
  *
- * Nap duration is personalised via profile.napPreference:
- *   - boolean true/false: true uses the per-context default tier
- *   - NapDuration string ('power' | 'short' | 'full'): applied directly
+ * @param phase Estimated circadian phase — anchors the on-shift nap to CBTmin.
  *
  * If shift starts in < 3 hours, forces 'power' nap regardless of preference
  * to avoid sleep inertia at shift start (Milner & Cote, 2009).
@@ -119,6 +177,7 @@ export function generateNaps(
   day: ClassifiedDay,
   profile: UserProfile,
   existingBlocks: PlanBlock[],
+  phase?: CircadianPhase,
 ): PlanBlock[] {
   if (!profile.napPreference) return [];
 
@@ -159,7 +218,19 @@ export function generateNaps(
             : `${durationMinutes}-minute power nap before your night shift — alertness boost with minimal inertia.`,
           priority: 2,
         });
+      } else {
+        // The prophylactic pre-shift nap could not be placed (calendar conflict).
+        // Warn instead of silently losing it — the main sleep block is then sized to
+        // the full sleep need (R4), but the worker should know the nap was dropped.
+        circadianTelemetry.emit('circadian_dropped_nap_warning', {
+          dayType: 'work-night',
+          reason: 'calendar-conflict',
+        });
       }
+
+      // On-shift nap at the circadian nadir (gap-analysis R8).
+      const onShiftNap = buildOnShiftNap(shift, dayId, [...existingBlocks, ...naps], phase);
+      if (onShiftNap) naps.push(onShiftNap);
       break;
     }
 

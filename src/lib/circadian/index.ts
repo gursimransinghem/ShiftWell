@@ -17,13 +17,17 @@
  * The entire algorithm runs locally — no network calls, no LLM, no API costs.
  */
 
-import { differenceInHours, format } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { classifyDays, detectPatterns } from './classify-shifts';
 import { computeSleepBlocks } from './sleep-windows';
 import { generateNaps } from './nap-engine';
 import { computeCaffeineCutoff, computeCaffeineWindow } from './caffeine';
 import { generateMealWindows } from './meals';
 import { generateLightProtocol } from './light-protocol';
+import { estimateBaselinePhase } from './phase-model';
+import { consecutiveNightsForDate, selectMode } from './transition-planner';
+import type { TransitionMode } from './transition-planner';
+import type { DecisionTraceEntry } from './telemetry';
 import type {
   ShiftEvent,
   PersonalEvent,
@@ -116,6 +120,16 @@ export function generateSleepPlan(
 
   // Step 2-6: Generate all blocks for each day
   const allBlocks: PlanBlock[] = [];
+  const decisionTrace: DecisionTraceEntry[] = [];
+
+  // R6 — estimate the user's circadian phase once. It anchors the light protocol and
+  // the on-shift nap. Seeded from chronotype (or a user-tuned DLMO if present).
+  const phase = estimateBaselinePhase(profile);
+  decisionTrace.push({
+    step: 'phase.estimate',
+    detail: `DLMO~${phase.dlmoHour.toFixed(1)}h CBTmin~${phase.cbtMinHour.toFixed(1)}h (${phase.source}, ±${phase.confidenceHours}h)`,
+    value: phase.dlmoHour,
+  });
 
   for (const day of classifiedDays) {
     // Look up adaptive offsets for this day.
@@ -129,12 +143,38 @@ export function generateSleepPlan(
     const wakeOffsetMinutes = protocolOffsetMinutes ??
       (feedbackActive ? adaptiveContext.feedbackResult!.adjustedWakeOffsetMinutes : bedtimeOffsetMinutes);
 
-    // Step 2: Main sleep windows (with adaptive offset if applicable)
-    const sleepBlocks = computeSleepBlocks(day, profile, { bedtimeOffsetMinutes, wakeOffsetMinutes });
-    allBlocks.push(...sleepBlocks);
+    // R1 — Hold/Adapt mode for a work-night day (drives the light protocol).
+    let dayMode: TransitionMode | undefined;
+    if (day.dayType === 'work-night') {
+      const consecutiveNights = consecutiveNightsForDate(shifts, day.date);
+      dayMode = selectMode(consecutiveNights);
+      decisionTrace.push({
+        step: 'transition.mode',
+        detail: `${dayKey} work-night -> ${dayMode}`,
+        value: consecutiveNights,
+      });
+    }
 
-    // Step 3: Strategic naps
-    const napBlocks = generateNaps(day, profile, sleepBlocks);
+    // Step 2 (pass 1): provisional main sleep windows.
+    let sleepBlocks = computeSleepBlocks(day, profile, { bedtimeOffsetMinutes, wakeOffsetMinutes });
+
+    // Step 3 (pass 2): strategic naps, conflict-checked against the provisional sleep.
+    const napBlocks = generateNaps(day, profile, sleepBlocks, phase);
+
+    // Pass 3 (R4 / AF-10): for a work-night day, resize the main block so that
+    // main + placed pre-shift nap = the full sleep need. No nap placed → full need.
+    if (day.dayType === 'work-night') {
+      const preShiftNap = napBlocks.find((n) => n.id.endsWith('-pre-shift-nap'));
+      if (preShiftNap) {
+        const napReserveMinutes = differenceInMinutes(preShiftNap.end, preShiftNap.start);
+        sleepBlocks = computeSleepBlocks(day, profile, {
+          bedtimeOffsetMinutes,
+          wakeOffsetMinutes,
+          napReserveMinutes,
+        });
+      }
+    }
+    allBlocks.push(...sleepBlocks);
     allBlocks.push(...napBlocks);
 
     // Combine sleep + naps for downstream calculations
@@ -151,21 +191,24 @@ export function generateSleepPlan(
     const mealBlocks = generateMealWindows(day, profile, sleepBlocks);
     allBlocks.push(...mealBlocks);
 
-    // Step 6: Light protocol
-    const lightBlocks = generateLightProtocol(day, profile, sleepBlocks);
+    // Step 6: Light protocol — CBTmin-anchored and Hold/Adapt-gated for work-night days.
+    const lightBlocks = generateLightProtocol(day, profile, sleepBlocks, phase, dayMode);
     allBlocks.push(...lightBlocks);
   }
 
-  // Step 7: Compute stats
-  const stats = computeStats(classifiedDays, allBlocks);
-
-  // Step 8: Resolve overlapping sleep blocks across day boundaries
+  // Step 7: Resolve overlapping sleep blocks across day boundaries.
   // Each day's planner runs independently, so adjacent days can produce
-  // overlapping main-sleep blocks (e.g., day→night transition, late chronotype).
+  // overlapping/duplicate main-sleep blocks (e.g., day→night transition, the
+  // night-block tail day). This MUST run before stats.
   const resolvedBlocks = resolveOverlaps(allBlocks);
 
   // Sort all blocks chronologically
   resolvedBlocks.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+  // Step 8: Compute stats on the RESOLVED blocks. Computing on the pre-resolution
+  // allBlocks double-counts cross-day duplicates and inflates avgSleepHours by ~1h
+  // (A/B hardening HF-1).
+  const stats = computeStats(classifiedDays, resolvedBlocks, profile);
 
   return {
     blocks: resolvedBlocks,
@@ -173,6 +216,7 @@ export function generateSleepPlan(
     endDate,
     classifiedDays,
     stats,
+    decisionTrace,
   };
 }
 
@@ -296,13 +340,16 @@ function resolveOverlaps(blocks: PlanBlock[]): PlanBlock[] {
 function computeStats(
   classifiedDays: ReturnType<typeof classifyDays>,
   blocks: PlanBlock[],
+  profile: UserProfile,
 ): PlanStats {
   const sleepBlocks = blocks.filter(
     (b) => b.type === 'main-sleep' || b.type === 'nap'
   );
 
+  // Minute-precision sum: differenceInHours() floors, so a 6.5h block used to
+  // count as 6h and avgSleepHours under-reported (gap-analysis R12 correctness bug).
   const totalSleepHours = sleepBlocks.reduce(
-    (sum, b) => sum + differenceInHours(b.end, b.start),
+    (sum, b) => sum + differenceInMinutes(b.end, b.start) / 60,
     0
   );
 
@@ -320,7 +367,7 @@ function computeStats(
   const nightPenalty = nightShiftCount * 8;
   const transitionPenalty = patterns.hardTransitions * 12;
   const consecutivePenalty = Math.max(0, patterns.consecutiveWorkDays - 3) * 5;
-  const sleepDebtPenalty = Math.max(0, (7.5 - avgSleepHours) * 10);
+  const sleepDebtPenalty = Math.max(0, (profile.sleepNeed - avgSleepHours) * 10);
   const circadianDebtScore = Math.min(
     100,
     nightPenalty + transitionPenalty + consecutivePenalty + sleepDebtPenalty

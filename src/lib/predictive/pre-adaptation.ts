@@ -16,6 +16,7 @@
 
 import { addDays, addMinutes, subDays } from 'date-fns';
 import type { TransitionStressPoint } from './stress-scorer';
+import { selectMode, clampDailyShift } from '../circadian/transition-planner';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -59,8 +60,8 @@ function generateDelayActions(
   currentBedtime: Date,
 ): DailyAdaptationAction[] {
   const actions: DailyAdaptationAction[] = [];
-  // Shift bedtime ~30 min later each day
-  const shiftPerDay = 30;
+  // Shift bedtime ~30 min later each day — routed through the shared rate authority.
+  const shiftPerDay = clampDailyShift(30);
 
   for (let i = 0; i < daysAhead; i++) {
     const date = addDays(startDate, i);
@@ -99,8 +100,8 @@ function generateAdvanceActions(
   currentBedtime: Date,
 ): DailyAdaptationAction[] {
   const actions: DailyAdaptationAction[] = [];
-  // Shift bedtime ~30 min earlier each day
-  const shiftPerDay = -30;
+  // Shift bedtime ~30 min earlier each day — routed through the shared rate authority.
+  const shiftPerDay = clampDailyShift(-30);
 
   for (let i = 0; i < daysAhead; i++) {
     const date = addDays(startDate, i);
@@ -140,7 +141,7 @@ function generateGeneralActions(
   for (let i = 0; i < daysAhead; i++) {
     const date = addDays(startDate, i);
     const isDelaying = transitionType === 'evening-to-night' || transitionType === 'day-to-evening';
-    const shiftPerDay = isDelaying ? 20 : -20;
+    const shiftPerDay = clampDailyShift(isDelaying ? 20 : -20);
 
     actions.push({
       date,
@@ -151,6 +152,33 @@ function generateGeneralActions(
     });
   }
 
+  return actions;
+}
+
+/**
+ * Generate HOLD actions for a short (1-3 night) block.
+ *
+ * The consecutive-night gate (gap-analysis R1): for a block too short to adapt to,
+ * do NOT shift the clock at all. This is the fix for the rotation-whiplash bug — and
+ * the structural end of the G3 contradiction (an isolated night can no longer be sent
+ * down a 5-day progressive delay).
+ */
+function generateHoldActions(
+  startDate: Date,
+  daysAhead: number,
+): DailyAdaptationAction[] {
+  const actions: DailyAdaptationAction[] = [];
+  for (let i = 0; i < daysAhead; i++) {
+    actions.push({
+      date: addDays(startDate, i),
+      bedtimeShift: 0,
+      lightGuidance:
+        'Short night block — hold your normal sleep/wake schedule. Do NOT shift your clock. Bank extra sleep where you can, and rely on a strong pre-shift nap plus strategic early-shift caffeine.',
+      napGuidance: i === daysAhead - 1
+        ? 'Plan a 90-min prophylactic nap before your first night shift.'
+        : undefined,
+    });
+  }
   return actions;
 }
 
@@ -188,18 +216,32 @@ export function generatePreAdaptation(
 
   if (remainingDays < 1) return null;
 
+  // R1 consecutive-night gate: a 1-3 night block is HELD (no clock shift), not chased.
+  // selectMode + the consecutiveNights now carried on the stress point are the single
+  // shared authority — pre-adaptation no longer contradicts circadian-protocols (G3).
+  const nightBound =
+    stressPoint.transitionType === 'day-to-night' ||
+    stressPoint.transitionType === 'isolated-night' ||
+    stressPoint.transitionType === 'evening-to-night';
+  const mode = nightBound ? selectMode(stressPoint.consecutiveNights) : 'adapt';
+
   let dailyActions: DailyAdaptationAction[];
 
-  switch (stressPoint.transitionType) {
-    case 'day-to-night':
-    case 'isolated-night':
-      dailyActions = generateDelayActions(effectiveStart, remainingDays, currentBedtime);
-      break;
-    case 'night-to-day':
-      dailyActions = generateAdvanceActions(effectiveStart, remainingDays, currentBedtime);
-      break;
-    default:
-      dailyActions = generateGeneralActions(effectiveStart, remainingDays, stressPoint.transitionType);
+  if (nightBound && mode === 'hold') {
+    dailyActions = generateHoldActions(effectiveStart, remainingDays);
+  } else {
+    switch (stressPoint.transitionType) {
+      case 'day-to-night':
+      case 'isolated-night':
+      case 'evening-to-night':
+        dailyActions = generateDelayActions(effectiveStart, remainingDays, currentBedtime);
+        break;
+      case 'night-to-day':
+        dailyActions = generateAdvanceActions(effectiveStart, remainingDays, currentBedtime);
+        break;
+      default:
+        dailyActions = generateGeneralActions(effectiveStart, remainingDays, stressPoint.transitionType);
+    }
   }
 
   return {

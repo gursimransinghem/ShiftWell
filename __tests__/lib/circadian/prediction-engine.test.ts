@@ -372,7 +372,10 @@ describe('buildPreAdaptationProtocol', () => {
     });
   });
 
-  it('distributes phase shift evenly (max 90 min/day per Eastman & Burgess 2009)', () => {
+  // B4 (spec Part 6.1): the uniform 90 min/day cap is retired. buildPreAdaptationProtocol
+  // now draws from the shared SHIFT_RATE_CAPS — delay ≤120 min/day, advance ≤60 min/day.
+  // Was: every step ≤ 90. Now: a delay step may legitimately reach 120.
+  it('caps a delay (day-to-night) ramp at the 120 min/day delay ceiling', () => {
     const prediction: TransitionPrediction = {
       transitionDate: '2026-04-21',
       transitionType: 'day-to-night',
@@ -382,13 +385,66 @@ describe('buildPreAdaptationProtocol', () => {
       protocolType: 'pre-night-critical',
       predictedAlertnesNadir: 30,
       daysUntilTransition: 7,
+      // ≥4 consecutive nights → 'adapt' mode, so a real (non-zero) ramp is produced.
+      consecutiveNights: 6,
     };
 
     const today = new Date('2026-04-14T00:00:00');
     const steps = buildPreAdaptationProtocol(prediction, today);
 
+    expect(steps.length).toBeGreaterThan(0);
     steps.forEach((step) => {
-      expect(Math.abs(step.shiftMinutes)).toBeLessThanOrEqual(90);
+      // Delay = positive minutes; capped at the 120 min/day delay ceiling.
+      expect(step.shiftMinutes).toBeGreaterThan(0);
+      expect(step.shiftMinutes).toBeLessThanOrEqual(120);
+    });
+  });
+
+  // B4: the advance ceiling is 60 min/day (research correction — was effectively 90).
+  it('caps an advance (night-to-day) ramp at the 60 min/day advance ceiling', () => {
+    const prediction: TransitionPrediction = {
+      transitionDate: '2026-04-21',
+      transitionType: 'night-to-day',
+      severityScore: 70,
+      severity: 'high',
+      preAdaptationStartDate: '2026-04-16',
+      protocolType: 'post-night-high',
+      predictedAlertnesNadir: 45,
+      daysUntilTransition: 7,
+    };
+
+    const today = new Date('2026-04-14T00:00:00');
+    const steps = buildPreAdaptationProtocol(prediction, today);
+
+    expect(steps.length).toBeGreaterThan(0);
+    steps.forEach((step) => {
+      // Advance = negative minutes; magnitude capped at the 60 min/day advance ceiling.
+      expect(step.shiftMinutes).toBeLessThan(0);
+      expect(Math.abs(step.shiftMinutes)).toBeLessThanOrEqual(60);
+    });
+  });
+
+  // B4 / SC-B4.4: a short night-bound block (consecutiveNights ≤3 → 'hold') yields a
+  // zero clock-shift protocol — no delay is chased for a block too short to adapt to.
+  it('emits a zero-shift hold protocol for a short (≤3-night) day-to-night block', () => {
+    const prediction: TransitionPrediction = {
+      transitionDate: '2026-04-21',
+      transitionType: 'day-to-night',
+      severityScore: 60,
+      severity: 'high',
+      preAdaptationStartDate: '2026-04-16',
+      protocolType: 'pre-night-high',
+      predictedAlertnesNadir: 50,
+      daysUntilTransition: 7,
+      consecutiveNights: 2,
+    };
+
+    const today = new Date('2026-04-14T00:00:00');
+    const steps = buildPreAdaptationProtocol(prediction, today);
+
+    expect(steps.length).toBeGreaterThan(0);
+    steps.forEach((step) => {
+      expect(step.shiftMinutes).toBe(0);
     });
   });
 });

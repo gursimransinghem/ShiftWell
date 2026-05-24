@@ -45,10 +45,14 @@ export function classifyShiftType(start: Date, end: Date): ShiftType {
 
   const startHour = getHours(start);
 
-  if (startHour >= 5 && startHour < 14) {
+  // Day: 05:00-11:59. Evening band widened to start at 12:00 (was 14:00) so an
+  // early-afternoon start — e.g. a 13:00 QGenda evening shift — is no longer
+  // mis-typed as a 'day' shift and given the wrong sleep window.
+  // (A/B audit AF-12; gap-analysis R12 correctness bug.)
+  if (startHour >= 5 && startHour < 12) {
     return 'day';
   }
-  if (startHour >= 14 && startHour < 18) {
+  if (startHour >= 12 && startHour < 18) {
     return 'evening';
   }
   // 18:00-04:59

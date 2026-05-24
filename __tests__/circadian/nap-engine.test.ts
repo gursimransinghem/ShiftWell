@@ -134,14 +134,35 @@ describe('Nap Engine', () => {
   });
 
   describe('conflict avoidance', () => {
-    it('nap does not overlap with the shift', () => {
+    // B7: a work-night day now also produces an ON-shift nap (id `*-on-shift-nap`) that
+    // sits INSIDE the shift by design. The pre-shift nap still ends before shift start;
+    // the on-shift nap is constrained to fall fully within the shift bounds.
+    it('the pre-shift nap ends before the shift; the on-shift nap stays inside it', () => {
       const day = makeNightShiftDay('2026-03-15');
       const sleepBlocks = computeSleepBlocks(day, napProfile);
       const naps = generateNaps(day, napProfile, sleepBlocks);
 
-      for (const nap of naps) {
-        expect(nap.end.getTime()).toBeLessThanOrEqual(day.shift!.start.getTime());
-      }
+      const preShiftNap = naps.find((n) => n.id.endsWith('-pre-shift-nap'));
+      expect(preShiftNap).toBeDefined();
+      // Pre-shift nap must finish before the shift starts.
+      expect(preShiftNap!.end.getTime()).toBeLessThanOrEqual(day.shift!.start.getTime());
+
+      const onShiftNap = naps.find((n) => n.id.endsWith('-on-shift-nap'));
+      expect(onShiftNap).toBeDefined();
+      // The on-shift nap is deliberately within the shift — both ends inside the shift.
+      expect(onShiftNap!.start.getTime()).toBeGreaterThanOrEqual(day.shift!.start.getTime());
+      expect(onShiftNap!.end.getTime()).toBeLessThanOrEqual(day.shift!.end.getTime());
+    });
+
+    it('a work-night day produces a 25-min on-shift nap labelled "On-Shift Nap"', () => {
+      const day = makeNightShiftDay('2026-03-15');
+      const sleepBlocks = computeSleepBlocks(day, napProfile);
+      const naps = generateNaps(day, napProfile, sleepBlocks);
+
+      const onShiftNap = naps.find((n) => n.id.endsWith('-on-shift-nap'));
+      expect(onShiftNap).toBeDefined();
+      expect(onShiftNap!.label).toBe('On-Shift Nap');
+      expect(differenceInMinutes(onShiftNap!.end, onShiftNap!.start)).toBe(25);
     });
 
     it('nap does not overlap with sleep blocks', () => {

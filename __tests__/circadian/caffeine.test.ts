@@ -56,7 +56,10 @@ describe('Caffeine Cutoff', () => {
   describe('normal sensitivity (5h half-life)', () => {
     const normalProfile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 5 };
 
-    it('computes cutoff ~8.35 hours before first sleep', () => {
+    // B8 (spec Part 6.2 ledger): the unbounded `halfLife * 1.67` legacy path is retired.
+    // computeCaffeineCutoff now assumes a default 100mg dose and bounds the cutoff to
+    // [6,9]h. Was: cutoff ~8.35h. Now: cutoff is exactly the 6h floor (100mg, 5h half-life).
+    it('computes cutoff at the 6h floor before first sleep (100mg default, 5h half-life)', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
       const cutoff = computeCaffeineCutoff(day, normalProfile, blocks);
@@ -66,64 +69,72 @@ describe('Caffeine Cutoff', () => {
       expect(cutoff!.label).toBe('Caffeine Cutoff');
 
       // Find the earliest sleep/nap block
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const minutesBefore = differenceInMinutes(earliestSleep.start, cutoff!.start);
+      const minutesBefore = differenceInMinutes(mainSleep.start, cutoff!.start);
       const hoursBefore = minutesBefore / 60;
 
-      // 5h * 1.67 = 8.35h
-      expect(hoursBefore).toBeCloseTo(8.35, 0);
+      // SC-B8.2: moderate dose + normal metabolizer sits at / near the 6h floor.
+      expect(hoursBefore).toBeCloseTo(6.0, 1);
+      expect(hoursBefore).toBeGreaterThanOrEqual(6);
+      expect(hoursBefore).toBeLessThanOrEqual(9);
     });
   });
 
   describe('high sensitivity (7h half-life)', () => {
     const highProfile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 7 };
 
-    it('computes cutoff ~11.69 hours before first sleep', () => {
+    // B8: a slow metabolizer pushes the cutoff above the 6h floor but the hard 9h cap
+    // holds. Was: cutoff ~11.69h (legacy 7h*1.67 — non-actionable). Now: bounded [6,9].
+    it('computes a cutoff in the bounded [6,9]h band, above the 6h floor (7h half-life)', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, highProfile);
       const cutoff = computeCaffeineCutoff(day, highProfile, blocks);
 
       expect(cutoff).not.toBeNull();
 
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const minutesBefore = differenceInMinutes(earliestSleep.start, cutoff!.start);
+      const minutesBefore = differenceInMinutes(mainSleep.start, cutoff!.start);
       const hoursBefore = minutesBefore / 60;
 
-      // 7h * 1.67 = 11.69h
-      expect(hoursBefore).toBeCloseTo(11.69, 0);
+      // SC-B8.1: bounded [6,9]; slow metabolizer modifier lifts it above the 6h floor.
+      expect(hoursBefore).toBeGreaterThan(6);
+      expect(hoursBefore).toBeLessThanOrEqual(9);
     });
   });
 
   describe('low sensitivity (3h half-life)', () => {
     const lowProfile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 3 };
 
-    it('computes cutoff ~5.01 hours before first sleep', () => {
+    // B8: a fast metabolizer can never drop the cutoff below the 6h NIOSH floor.
+    // Was: cutoff ~5.01h (legacy 3h*1.67 — below the actionable floor). Now: floored at 6h.
+    it('computes a cutoff floored at 6h before first sleep (fast 3h metabolizer)', () => {
       const day = makeDayShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, lowProfile);
       const cutoff = computeCaffeineCutoff(day, lowProfile, blocks);
 
       expect(cutoff).not.toBeNull();
 
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const minutesBefore = differenceInMinutes(earliestSleep.start, cutoff!.start);
+      const minutesBefore = differenceInMinutes(mainSleep.start, cutoff!.start);
       const hoursBefore = minutesBefore / 60;
 
-      // 3h * 1.67 = 5.01h
-      expect(hoursBefore).toBeCloseTo(5.01, 0);
+      // SC-B8.1: the [6,9] band — a fast metabolizer is held at the 6h floor.
+      expect(hoursBefore).toBeCloseTo(6.0, 1);
+      expect(hoursBefore).toBeGreaterThanOrEqual(6);
     });
   });
 
   describe('cutoff relative to sleep/nap', () => {
-    it('cutoff is always before the first sleep or nap block', () => {
+    it('cutoff is before the main sleep it protects', () => {
       const profile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 5, napPreference: true };
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, profile);
@@ -131,12 +142,10 @@ describe('Caffeine Cutoff', () => {
 
       expect(cutoff).not.toBeNull();
 
-      const allSleepNap = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime());
-
-      // Cutoff must be before the earliest sleep/nap block
-      expect(cutoff!.start.getTime()).toBeLessThan(allSleepNap[0].start.getTime());
+      // HF-4: the cutoff anchors to the main sleep being protected — on a work-night
+      // day the post-shift sleep, NOT the earliest (pre-shift nap) block.
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
+      expect(cutoff!.start.getTime()).toBeLessThan(mainSleep.start.getTime());
     });
   });
 
@@ -150,106 +159,145 @@ describe('Caffeine Cutoff', () => {
   });
 
   describe('dose-aware cutoff (computeCutoffHours)', () => {
-    // Formula: halfLife * log2(doseMg / 25mg threshold)
-    // At 5h half-life:
-    //   100mg: log2(100/25) = log2(4) = 2.0 × 5h = 10.0h
-    //   200mg: log2(200/25) = log2(8) = 3.0 × 5h = 15.0h
-    //   300mg: log2(300/25) ≈ 3.585 × 5h ≈ 17.9h
+    // B8 (spec Part 6.2 ledger): the unbounded `halfLife * log2(dose/25)` formula is
+    // replaced. computeCutoffHours now returns a value bounded to [6,9]h — 6h default
+    // (NIOSH), scaling toward a 9h hard cap for high doses + slow metabolizers.
+    //   100mg @ 5h → 6.0h (floor)   200mg @ 5h → 6.0h (no dose modifier below 200mg)
+    //   300mg @ 5h → 7.5h           400mg @ 12h → 9.0h (cap)
 
-    it('100mg at 5h half-life requires ~10.0h cutoff', () => {
+    // SC-B8.2 — moderate dose, normal metabolizer → at/near the 6h floor.
+    it('100mg at 5h half-life returns a cutoff in [6,7] (at the 6h floor)', () => {
       const hours = computeCutoffHours(100, 5);
-      expect(hours).toBeCloseTo(10.0, 1);
+      expect(hours).toBeGreaterThanOrEqual(6);
+      expect(hours).toBeLessThanOrEqual(7);
+      expect(hours).toBeCloseTo(6.0, 1);
     });
 
-    it('200mg (double dose) at 5h half-life requires ~15.0h cutoff', () => {
+    // SC-B8.1 — every cutoff is bounded [6,9].
+    it('200mg (double dose) at 5h half-life returns a bounded cutoff in [6,9]', () => {
       const hours = computeCutoffHours(200, 5);
-      expect(hours).toBeCloseTo(15.0, 1);
+      expect(hours).toBeGreaterThanOrEqual(6);
+      expect(hours).toBeLessThanOrEqual(9);
     });
 
-    it('300mg (triple dose / energy drink) at 5h half-life requires ~17.9h cutoff', () => {
+    it('300mg (triple dose / energy drink) at 5h half-life returns a bounded cutoff in [6,9]', () => {
       const hours = computeCutoffHours(300, 5);
-      expect(hours).toBeCloseTo(17.9, 0);
+      expect(hours).toBeGreaterThanOrEqual(6);
+      expect(hours).toBeLessThanOrEqual(9);
     });
 
-    it('higher dose always requires a longer cutoff', () => {
-      expect(computeCutoffHours(200, 5)).toBeGreaterThan(computeCutoffHours(100, 5));
-      expect(computeCutoffHours(300, 5)).toBeGreaterThan(computeCutoffHours(200, 5));
+    // SC-B8.3 — high dose + slow metabolizer saturates at the 9h hard cap.
+    it('400mg at 12h half-life returns 9.0h (the hard cap)', () => {
+      expect(computeCutoffHours(400, 12)).toBeCloseTo(9.0, 5);
     });
 
-    it('longer half-life always requires a longer cutoff for same dose', () => {
-      expect(computeCutoffHours(100, 7)).toBeGreaterThan(computeCutoffHours(100, 5));
+    // SC-B8.1 — bounded across every dose × half-life pair from the spec.
+    it('every dose × half-life pair returns a value in [6,9]', () => {
+      for (const dose of [50, 100, 200, 300, 400, 600]) {
+        for (const halfLife of [3, 5, 8, 12]) {
+          const hours = computeCutoffHours(dose, halfLife);
+          expect(hours).toBeGreaterThanOrEqual(6);
+          expect(hours).toBeLessThanOrEqual(9);
+        }
+      }
+    });
+
+    // SC-B8.4 — monotonic is now NON-STRICT (the cutoff saturates at the 9h cap, and
+    // the dose modifier is flat below 200mg). Asserts `>=`, not `>`.
+    it('higher dose never requires a shorter cutoff (non-strict monotonic in dose)', () => {
+      expect(computeCutoffHours(200, 5)).toBeGreaterThanOrEqual(computeCutoffHours(100, 5));
+      expect(computeCutoffHours(300, 5)).toBeGreaterThanOrEqual(computeCutoffHours(200, 5));
+      expect(computeCutoffHours(600, 5)).toBeGreaterThanOrEqual(computeCutoffHours(400, 5));
+    });
+
+    // SC-B8.4 — non-strict monotonic in half-life as well.
+    it('longer half-life never requires a shorter cutoff (non-strict monotonic in half-life)', () => {
+      expect(computeCutoffHours(100, 7)).toBeGreaterThanOrEqual(computeCutoffHours(100, 5));
+      expect(computeCutoffHours(100, 12)).toBeGreaterThanOrEqual(computeCutoffHours(100, 7));
     });
   });
 
   describe('dose-aware computeCaffeineCutoff', () => {
     const normalProfile: UserProfile = { ...DEFAULT_PROFILE, caffeineHalfLife: 5 };
 
-    it('with 100mg dose, cutoff is ~10.0h before first sleep (vs legacy ~8.35h)', () => {
+    // B8 (spec Part 6.2 ledger): computeCaffeineCutoff now produces a bounded [6,9]h
+    // cutoff for any dose. Was: 100mg → ~10h, 200mg → ~15h (non-actionable legacy).
+    it('with 100mg dose, cutoff is bounded [6,9]h before first sleep (SC-B8.1)', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
       const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 100);
 
       expect(cutoff).not.toBeNull();
 
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
-      expect(hoursBefore).toBeCloseTo(10.0, 0);
+      const hoursBefore = differenceInMinutes(mainSleep.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeGreaterThanOrEqual(6);
+      expect(hoursBefore).toBeLessThanOrEqual(9);
     });
 
-    it('with 200mg dose, cutoff is ~15.0h before first sleep', () => {
+    it('with 200mg dose, cutoff is bounded [6,9]h before first sleep (SC-B8.1)', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
       const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 200);
 
       expect(cutoff).not.toBeNull();
 
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
-      expect(hoursBefore).toBeCloseTo(15.0, 0);
+      const hoursBefore = differenceInMinutes(mainSleep.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeGreaterThanOrEqual(6);
+      expect(hoursBefore).toBeLessThanOrEqual(9);
     });
 
-    it('dose-aware cutoff is earlier in the day than legacy cutoff (more conservative)', () => {
+    // B8: a higher dose never produces an *earlier* cutoff than a lower dose
+    // (non-strict — both can sit at the 6h floor below 200mg).
+    it('a higher dose never produces a cutoff later in the day than a lower dose', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
-      const legacyCutoff = computeCaffeineCutoff(day, normalProfile, blocks);
-      const doseCutoff = computeCaffeineCutoff(day, normalProfile, blocks, 100);
+      const lowDose = computeCaffeineCutoff(day, normalProfile, blocks, 100);
+      const highDose = computeCaffeineCutoff(day, normalProfile, blocks, 400);
 
-      expect(legacyCutoff).not.toBeNull();
-      expect(doseCutoff).not.toBeNull();
-      // Dose-aware (10h) should be earlier than legacy (8.35h)
-      expect(doseCutoff!.start.getTime()).toBeLessThan(legacyCutoff!.start.getTime());
+      expect(lowDose).not.toBeNull();
+      expect(highDose).not.toBeNull();
+      // Higher dose → earlier-or-equal cutoff (start time is earlier-or-equal).
+      expect(highDose!.start.getTime()).toBeLessThanOrEqual(lowDose!.start.getTime());
     });
 
-    it('no dose parameter uses legacy formula (backward compatible)', () => {
+    // B8: the no-dose path no longer uses the legacy 1.67x formula — it assumes a
+    // default 100mg dose and produces the same bounded [6,9]h cutoff.
+    it('no dose parameter assumes the default dose and stays bounded [6,9]h', () => {
       const day = makeNightShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
       const cutoff = computeCaffeineCutoff(day, normalProfile, blocks);
 
       expect(cutoff).not.toBeNull();
 
-      const earliestSleep = blocks
-        .filter((b) => b.type === 'main-sleep' || b.type === 'nap')
-        .sort((a, b) => a.start.getTime() - b.start.getTime())[0];
+      // HF-4: the cutoff anchors to the main sleep being protected, not the earliest
+      // block (on a work-night day the earliest block is the pre-shift nap).
+      const mainSleep = blocks.find((b) => b.type === 'main-sleep')!;
 
-      const hoursBefore = differenceInMinutes(earliestSleep.start, cutoff!.start) / 60;
-      // Legacy: 5h * 1.67 = 8.35h
-      expect(hoursBefore).toBeCloseTo(8.35, 0);
+      const hoursBefore = differenceInMinutes(mainSleep.start, cutoff!.start) / 60;
+      expect(hoursBefore).toBeGreaterThanOrEqual(6);
+      expect(hoursBefore).toBeLessThanOrEqual(9);
     });
 
-    it('dose-aware description mentions dose and 25mg threshold', () => {
+    // B8 / SC-B8.5: the shipping description names the dose and never claims a cutoff
+    // above the 9h hard cap (the 25mg threshold language was retired from the string).
+    it('dose-aware description mentions the dose and never states a cutoff over 9h', () => {
       const day = makeDayShiftDay('2026-03-15');
       const blocks = getSleepAndNapBlocks(day, normalProfile);
       const cutoff = computeCaffeineCutoff(day, normalProfile, blocks, 150);
 
       expect(cutoff).not.toBeNull();
       expect(cutoff!.description).toContain('150mg');
-      expect(cutoff!.description).toContain('25mg');
+      // SC-B8.5 — the description must reference the 9h hard cap, never a larger value.
+      expect(cutoff!.description).toContain('9h hard cap');
+      expect(cutoff!.description).not.toMatch(/\b(1[0-9]|[2-9][0-9])h\b/);
     });
   });
 

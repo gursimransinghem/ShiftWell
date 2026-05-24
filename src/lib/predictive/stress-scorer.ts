@@ -20,6 +20,7 @@
 
 import { addDays, differenceInHours } from 'date-fns';
 import type { ShiftEvent, ShiftType } from '../circadian/types';
+import { consecutiveNightsForDate } from '../circadian/transition-planner';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -44,6 +45,12 @@ export interface TransitionStressPoint {
   factors: string[];
   /** Number of days from today until this transition */
   daysUntil: number;
+  /**
+   * Consecutive nights in the night block this transition leads into (0 for non-night
+   * transitions). Feeds the shared selectMode() gate in pre-adaptation — so a 1-3 night
+   * block is held, not chased. (A/B audit AF-2.)
+   */
+  consecutiveNights: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -184,6 +191,16 @@ export function scoreTransitionStress(
       (curr.start.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
     );
 
+    // True night-block length for the block this transition leads into (drives the
+    // Hold/Adapt gate downstream). Non-night transitions carry 0.
+    const isNightBound =
+      transitionType === 'day-to-night' ||
+      transitionType === 'evening-to-night' ||
+      transitionType === 'isolated-night';
+    const consecutiveNightsInBlock = isNightBound
+      ? consecutiveNightsForDate(shifts, curr.start)
+      : 0;
+
     stressPoints.push({
       date: curr.start,
       transitionType,
@@ -191,6 +208,7 @@ export function scoreTransitionStress(
       score,
       factors,
       daysUntil,
+      consecutiveNights: consecutiveNightsInBlock,
     });
   }
 

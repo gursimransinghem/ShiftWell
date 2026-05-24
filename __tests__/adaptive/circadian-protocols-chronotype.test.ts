@@ -15,60 +15,53 @@ import { buildProtocol } from '../../src/lib/adaptive/circadian-protocols';
 
 const TODAY = new Date('2026-04-10T08:00:00.000Z');
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
-
-/**
- * Round a value to the nearest 15 min — matches applyChronotypeMod behaviour.
- */
-function roundTo15(minutes: number): number {
-  return Math.round(minutes / 15) * 15;
-}
+// B4 (spec Part 6.1 ledger): buildProtocol takes a TransitionDetection with
+// `consecutiveNights`. Night-bound fixtures use ≥4 so Adapt mode produces a ramp
+// (where the old tests expected a ramp). Exact-minute assertions are replaced with
+// the chronotype ORDERING principle, which survives the new physiological clamps:
+//   - delay magnitude:  late ≤ intermediate ≤ early
+//   - advance magnitude: early ≤ intermediate ≤ late
 
 // ─── day-to-night (phase delay) ───────────────────────────────────────────────
 
 describe('buildProtocol — chronotype modifier on day-to-night (delay direction)', () => {
-  const transition = { type: 'day-to-night' as const, daysUntil: 3 };
+  // ≥4 nights → Adapt mode → a real delay ramp is produced.
+  const transition = { type: 'day-to-night' as const, daysUntil: 3, consecutiveNights: 5 };
 
-  it('intermediate chronotype uses unmodified baseline adjustments', () => {
-    const protocol = buildProtocol(transition, TODAY, 'intermediate');
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(90);
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(180);
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(270);
-  });
-
-  it('early chronotype increases delay adjustments by ~15% (rounded to 15 min)', () => {
-    // Early types fight delays harder — modifier +15%
-    const protocol = buildProtocol(transition, TODAY, 'early');
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(roundTo15(90 * 1.15));
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(roundTo15(180 * 1.15));
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(roundTo15(270 * 1.15));
-  });
-
-  it('late chronotype decreases delay adjustments by ~15% (rounded to 15 min)', () => {
-    // Late types shift easily in the delay direction — modifier -15%
-    const protocol = buildProtocol(transition, TODAY, 'late');
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(roundTo15(90 * 0.85));
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(roundTo15(180 * 0.85));
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(roundTo15(270 * 0.85));
-  });
-
-  it('early chronotype adjustments are greater than intermediate (delays harder)', () => {
-    const early = buildProtocol(transition, TODAY, 'early');
-    const intermediate = buildProtocol(transition, TODAY, 'intermediate');
-    for (let i = 0; i < 3; i++) {
-      expect(early.dailyTargets[i].bedtimeAdjustMinutes).toBeGreaterThan(
-        intermediate.dailyTargets[i].bedtimeAdjustMinutes,
-      );
+  it('every chronotype produces a monotonic delay ramp within the [-60,+120] band', () => {
+    for (const ct of ['early', 'intermediate', 'late'] as const) {
+      const protocol = buildProtocol(transition, TODAY, ct);
+      expect(protocol.dailyTargets).toHaveLength(3);
+      for (let i = 0; i < 3; i++) {
+        const prev = i === 0 ? 0 : protocol.dailyTargets[i - 1].bedtimeAdjustMinutes;
+        const delta = protocol.dailyTargets[i].bedtimeAdjustMinutes - prev;
+        // Each per-day delta is a positive delay within the 120 min/day ceiling.
+        expect(delta).toBeGreaterThan(0);
+        expect(delta).toBeLessThanOrEqual(120);
+      }
     }
   });
 
-  it('late chronotype adjustments are less than intermediate (delays easier)', () => {
-    const late = buildProtocol(transition, TODAY, 'late');
+  // Ordering principle (replaces the exact ±15% assertions): delay magnitude
+  // late ≤ intermediate ≤ early — early types fight delays hardest.
+  it('delay magnitude orders late ≤ intermediate ≤ early', () => {
+    const early = buildProtocol(transition, TODAY, 'early');
     const intermediate = buildProtocol(transition, TODAY, 'intermediate');
+    const late = buildProtocol(transition, TODAY, 'late');
     for (let i = 0; i < 3; i++) {
-      expect(late.dailyTargets[i].bedtimeAdjustMinutes).toBeLessThan(
-        intermediate.dailyTargets[i].bedtimeAdjustMinutes,
-      );
+      expect(late.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeLessThanOrEqual(intermediate.dailyTargets[i].bedtimeAdjustMinutes);
+      expect(intermediate.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeLessThanOrEqual(early.dailyTargets[i].bedtimeAdjustMinutes);
+    }
+  });
+
+  it('early chronotype delay is strictly greater than late chronotype delay', () => {
+    const early = buildProtocol(transition, TODAY, 'early');
+    const late = buildProtocol(transition, TODAY, 'late');
+    for (let i = 0; i < 3; i++) {
+      expect(early.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeGreaterThan(late.dailyTargets[i].bedtimeAdjustMinutes);
     }
   });
 });
@@ -76,50 +69,46 @@ describe('buildProtocol — chronotype modifier on day-to-night (delay direction
 // ─── night-to-day (phase advance) ─────────────────────────────────────────────
 
 describe('buildProtocol — chronotype modifier on night-to-day (advance direction)', () => {
-  const transition = { type: 'night-to-day' as const, daysUntil: 0 };
+  const transition = { type: 'night-to-day' as const, daysUntil: 0, consecutiveNights: 0 };
 
-  it('intermediate chronotype uses unmodified baseline adjustments', () => {
-    const protocol = buildProtocol(transition, TODAY, 'intermediate');
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(-120);
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(-240);
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(-360);
-  });
-
-  it('early chronotype advances more easily (-15% applied to negative values → less negative)', () => {
-    // Early types advance more easily — modifier 0.85 applied to advance direction
-    const protocol = buildProtocol(transition, TODAY, 'early');
-    // -120 * 0.85 = -102 → rounded to nearest 15 = -105
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(roundTo15(-120 * 0.85));
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(roundTo15(-240 * 0.85));
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(roundTo15(-360 * 0.85));
-  });
-
-  it('late chronotype advances more slowly (adjustments more negative than intermediate)', () => {
-    // Late types resist advances — modifier 1.15 applied to advance direction
-    const protocol = buildProtocol(transition, TODAY, 'late');
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(roundTo15(-120 * 1.15));
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(roundTo15(-240 * 1.15));
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(roundTo15(-360 * 1.15));
-  });
-
-  it('early chronotype has less-negative adjustments than intermediate (advances easier)', () => {
-    const early = buildProtocol(transition, TODAY, 'early');
-    const intermediate = buildProtocol(transition, TODAY, 'intermediate');
-    for (let i = 0; i < 3; i++) {
-      // "less negative" means numerically greater
-      expect(early.dailyTargets[i].bedtimeAdjustMinutes).toBeGreaterThan(
-        intermediate.dailyTargets[i].bedtimeAdjustMinutes,
-      );
+  it('every chronotype produces a monotonic advance ramp within the [-60,+120] band', () => {
+    for (const ct of ['early', 'intermediate', 'late'] as const) {
+      const protocol = buildProtocol(transition, TODAY, ct);
+      expect(protocol.dailyTargets).toHaveLength(3);
+      for (let i = 0; i < 3; i++) {
+        const prev = i === 0 ? 0 : protocol.dailyTargets[i - 1].bedtimeAdjustMinutes;
+        const delta = protocol.dailyTargets[i].bedtimeAdjustMinutes - prev;
+        // Each per-day delta is a negative advance within the 60 min/day advance cap.
+        expect(delta).toBeLessThan(0);
+        expect(delta).toBeGreaterThanOrEqual(-60);
+      }
     }
   });
 
-  it('late chronotype has more-negative adjustments than intermediate (advances harder)', () => {
+  // Ordering principle (replaces the exact ±15% assertions): advance MAGNITUDE
+  // early ≤ intermediate ≤ late — early types advance most easily. The 60 min/day
+  // advance cap can collapse the late vs intermediate gap, so this is non-strict.
+  it('advance magnitude orders early ≤ intermediate ≤ late', () => {
+    const early = buildProtocol(transition, TODAY, 'early');
+    const intermediate = buildProtocol(transition, TODAY, 'intermediate');
     const late = buildProtocol(transition, TODAY, 'late');
+    for (let i = 0; i < 3; i++) {
+      // Magnitude = absolute value; advances are negative.
+      const earlyMag = Math.abs(early.dailyTargets[i].bedtimeAdjustMinutes);
+      const interMag = Math.abs(intermediate.dailyTargets[i].bedtimeAdjustMinutes);
+      const lateMag = Math.abs(late.dailyTargets[i].bedtimeAdjustMinutes);
+      expect(earlyMag).toBeLessThanOrEqual(interMag);
+      expect(interMag).toBeLessThanOrEqual(lateMag);
+    }
+  });
+
+  it('early chronotype advances with a strictly smaller magnitude than intermediate', () => {
+    const early = buildProtocol(transition, TODAY, 'early');
     const intermediate = buildProtocol(transition, TODAY, 'intermediate');
     for (let i = 0; i < 3; i++) {
-      expect(late.dailyTargets[i].bedtimeAdjustMinutes).toBeLessThan(
-        intermediate.dailyTargets[i].bedtimeAdjustMinutes,
-      );
+      // "advances more easily" → numerically greater (less negative).
+      expect(early.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeGreaterThan(intermediate.dailyTargets[i].bedtimeAdjustMinutes);
     }
   });
 });
@@ -127,22 +116,27 @@ describe('buildProtocol — chronotype modifier on night-to-day (advance directi
 // ─── Light guidance text ──────────────────────────────────────────────────────
 
 describe('buildProtocol — chronotype-specific light guidance', () => {
+  // Chronotype light notes only appear in Adapt mode (≥4 nights); a Hold protocol
+  // ships the fixed short-block guidance, so these fixtures use consecutiveNights:5.
   it('early chronotype day-to-night protocol includes night shift warning in guidance', () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 3 }, TODAY, 'early');
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'early');
     for (const target of protocol.dailyTargets) {
       expect(target.lightGuidance).toContain('early chronotype makes night shifts harder');
     }
   });
 
   it('late chronotype day-to-night protocol includes natural advantage note in guidance', () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 3 }, TODAY, 'late');
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'late');
     for (const target of protocol.dailyTargets) {
       expect(target.lightGuidance).toContain('natural advantage for night shifts');
     }
   });
 
   it('intermediate chronotype day-to-night protocol has no chronotype note', () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 3 }, TODAY, 'intermediate');
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'intermediate');
     for (const target of protocol.dailyTargets) {
       expect(target.lightGuidance).not.toContain('chronotype');
     }
@@ -154,7 +148,8 @@ describe('buildProtocol — chronotype-specific light guidance', () => {
 describe('buildProtocol — isolated-night is unaffected by chronotype', () => {
   it('bedtimeAdjustMinutes is always 0 for isolated-night regardless of chronotype', () => {
     for (const ct of ['early', 'intermediate', 'late'] as const) {
-      const protocol = buildProtocol({ type: 'isolated-night', daysUntil: 2 }, TODAY, ct);
+      const protocol = buildProtocol(
+        { type: 'isolated-night', daysUntil: 2, consecutiveNights: 1 }, TODAY, ct);
       expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(0);
     }
   });
@@ -163,11 +158,13 @@ describe('buildProtocol — isolated-night is unaffected by chronotype', () => {
 // ─── adjustments are multiples of 15 min ─────────────────────────────────────
 
 describe('buildProtocol — all adjustments are rounded to nearest 15 min', () => {
+  // Night-bound fixtures use consecutiveNights:5 (Adapt) so a ramp exists to check;
+  // a Hold protocol's single 0 target is trivially a multiple of 15.
   const transitions = [
-    { type: 'day-to-night' as const, daysUntil: 3 },
-    { type: 'night-to-day' as const, daysUntil: 0 },
-    { type: 'evening-to-night' as const, daysUntil: 3 },
-    { type: 'day-to-evening' as const, daysUntil: 2 },
+    { type: 'day-to-night' as const, daysUntil: 3, consecutiveNights: 5 },
+    { type: 'night-to-day' as const, daysUntil: 0, consecutiveNights: 0 },
+    { type: 'evening-to-night' as const, daysUntil: 3, consecutiveNights: 5 },
+    { type: 'day-to-evening' as const, daysUntil: 2, consecutiveNights: 0 },
   ];
 
   for (const ct of ['early', 'intermediate', 'late'] as const) {

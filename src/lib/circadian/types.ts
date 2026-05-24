@@ -76,6 +76,12 @@ export interface UserProfile {
   amRoutine: RoutineStep[];
   /** Evening routine activities */
   pmRoutine: RoutineStep[];
+  /**
+   * Optional measured / user-tuned DLMO (dim-light melatonin onset), hour-of-day 0-24.
+   * When present, the circadian phase model uses it instead of the chronotype seed and
+   * reports higher confidence. Wearable-refined estimates are a v2 extension point.
+   */
+  measuredDlmoHour?: number;
 }
 
 /** Default profile for new users */
@@ -93,6 +99,10 @@ export const DEFAULT_PROFILE: UserProfile = {
   amRoutine: [],
   pmRoutine: [],
 };
+
+// Re-exported decision-trace entry type (defined in telemetry.ts).
+import type { DecisionTraceEntry } from './telemetry';
+export type { DecisionTraceEntry } from './telemetry';
 
 /** A classified day in the schedule with its type */
 export interface ClassifiedDay {
@@ -138,6 +148,12 @@ export interface SleepPlan {
   classifiedDays: ClassifiedDay[];
   /** Summary stats */
   stats: PlanStats;
+  /**
+   * Inspectable trace of the circadian decisions behind this plan (phase estimate,
+   * Hold/Adapt mode per night). Plain serializable primitives only — byte-stable
+   * across runs. Lets decisions be audited without enabling telemetry.
+   */
+  decisionTrace?: DecisionTraceEntry[];
 }
 
 export interface PlanStats {
@@ -203,6 +219,8 @@ export interface TransitionPrediction {
   protocolType: string;             // Phase 9 protocol type name
   predictedAlertnesNadir: number;   // Estimated alertness % at transition nadir (0-100)
   daysUntilTransition: number;      // Calendar days from today to transitionDate
+  /** Consecutive nights in the block this transition leads into — feeds the R1 gate. */
+  consecutiveNights?: number;
 }
 
 /**
@@ -227,3 +245,28 @@ export const CHRONOTYPE_OFFSETS: Record<Chronotype, { naturalSleepOnset: number;
   intermediate: { naturalSleepOnset: 23.0, naturalWake: 7.0 },  // 11:00 PM - 7:00 AM
   late: { naturalSleepOnset: 0.5, naturalWake: 8.5 },           // 12:30 AM - 8:30 AM
 };
+
+// ─── Circadian Phase Model (R6-core) ──────────────────────────────────────────
+
+/**
+ * An estimate of where the body clock currently sits.
+ *
+ * The whole point of R6: every downstream timing decision (light, naps, melatonin
+ * guidance) anchors to an estimated phase instead of to clock time / "half the shift".
+ *
+ * Hours are local hour-of-day in [0, 24) — treat as CIRCULAR (a `dlmoHour` of 23.5 and
+ * a `cbtMinHour` of (23.5+7) mod 24 = 6.5 are both valid).
+ *
+ * Reference: Khalsa et al. 2003 (light PRC pivots on CBTmin); Smith/Fogg/Eastman 2009
+ * (CBTmin = DLMO + 7h); Kantermann/Sung/Burgess 2015 (DLMO ≈ MSFsc − 6h, ±2h spread).
+ */
+export interface CircadianPhase {
+  /** Estimated dim-light melatonin onset, hour-of-day [0,24). */
+  dlmoHour: number;
+  /** Estimated core-body-temperature minimum = (dlmoHour + 7) mod 24. */
+  cbtMinHour: number;
+  /** ± half-width of the estimate, hours. Never below 1.5 for a seeded estimate. */
+  confidenceHours: number;
+  /** Where the estimate came from. */
+  source: 'chronotype-seed' | 'user-tuned' | 'wearable-refined';
+}

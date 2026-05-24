@@ -39,6 +39,12 @@ export const EVENTS = {
 
   // AI Coach (Tier 3 but defined here for completeness)
   AI_COACH_QUERY_SENT: 'ai_coach_query_sent',
+
+  // Circadian algorithm decisions (silent telemetry — circadian v1 hardening)
+  CIRCADIAN_PHASE_ESTIMATED: 'circadian_phase_estimated',
+  CIRCADIAN_PROTOCOL_SELECTED: 'circadian_protocol_selected',
+  CIRCADIAN_CAFFEINE_NAP_SUGGESTED: 'circadian_caffeine_nap_suggested',
+  CIRCADIAN_DROPPED_NAP_WARNING: 'circadian_dropped_nap_warning',
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

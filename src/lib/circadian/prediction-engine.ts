@@ -20,6 +20,7 @@ import type {
   TransitionType,
   PreAdaptationStep,
 } from './types';
+import { SHIFT_RATE_CAPS, selectMode } from './transition-planner';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -161,7 +162,11 @@ function scoreTransitionStress(
   f1 = Math.min(f1, 30);
 
   // Factor 2 — Recovery time penalty (0-25 pts)
-  const maxShiftRate = isAdvance ? 1.0 : 1.5; // h/day; advances are harder
+  // Rate derived from the SHARED authority — no private rate constant (A/B hardening
+  // HF-8): delay 2.0 h/day, advance 1.0 h/day.
+  const maxShiftRate = isAdvance
+    ? SHIFT_RATE_CAPS.MAX_ADVANCE_PER_DAY / 60
+    : SHIFT_RATE_CAPS.MAX_DELAY_PER_DAY / 60;
   const idealRecoveryDays = phaseShiftHours / maxShiftRate;
   const deficit = Math.max(0, 1 - (recoveryDaysAvailable / idealRecoveryDays));
   const f2 = Math.round(deficit * 25);
@@ -345,6 +350,7 @@ export function scanUpcomingTransitions(input: PredictionInput): TransitionPredi
           protocolType: selectProtocolType(severity, transitionType),
           predictedAlertnesNadir: alertnessNadir,
           daysUntilTransition,
+          consecutiveNights,
         });
       }
     }
@@ -387,15 +393,26 @@ export function buildPreAdaptationProtocol(
   const totalPhaseShiftHours = PHASE_SHIFT_HOURS[transitionType] ?? 4;
   const totalShiftMinutes = totalPhaseShiftHours * 60;
 
-  // Distribute shift evenly, cap at 90 min/day
-  const idealPerDay = totalShiftMinutes / daysAvailable;
-  const shiftPerDay = Math.min(idealPerDay, 90);
-
-  // Determine direction (delay = positive minutes, advance = negative)
+  // Direction first (delay = positive minutes, advance = negative).
   const isDelay = transitionType === 'day-to-night' ||
     transitionType === 'evening-to-night' ||
     transitionType === 'off-to-night' ||
     transitionType === 'off-to-extended';
+
+  // R1 consecutive-night gate: a short night-bound block (1-3 nights) is HELD —
+  // emit a zero-shift protocol instead of chasing a clock move that will not finish.
+  const held = isDelay
+    && typeof prediction.consecutiveNights === 'number'
+    && selectMode(prediction.consecutiveNights) === 'hold';
+
+  // Distribute the shift evenly, capped at the SHARED physiological ceiling
+  // (delay ≤120/day, advance ≤60/day) — closes the old uniform 90 min/day cap,
+  // which silently allowed a 90 min/day advance, 30 min past the advance ceiling.
+  const idealPerDay = totalShiftMinutes / daysAvailable;
+  const cap = isDelay
+    ? SHIFT_RATE_CAPS.MAX_DELAY_PER_DAY
+    : SHIFT_RATE_CAPS.MAX_ADVANCE_PER_DAY;
+  const shiftPerDay = held ? 0 : Math.min(idealPerDay, cap);
   const shiftDirection = isDelay ? 1 : -1;
   const shiftMinutes = Math.round(shiftPerDay) * shiftDirection;
 
@@ -409,7 +426,11 @@ export function buildPreAdaptationProtocol(
 
     let action: string;
 
-    if (isDelay) {
+    if (held) {
+      action = i === daysAvailable - 1
+        ? 'Final day before a short night block — no clock shift. Take a 90-min prophylactic nap before your first night shift.'
+        : 'Short night block — hold your normal schedule. No clock shift; bank sleep and rely on naps + strategic caffeine.';
+    } else if (isDelay) {
       // Delaying clock (day→night transition)
       if (i === 0) {
         action = 'Seek bright light in the evening (8–10 PM) to begin delaying your clock. Dim lights after 11 PM.';

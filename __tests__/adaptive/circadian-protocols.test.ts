@@ -109,57 +109,133 @@ describe('detectTransition', () => {
 
 // ─── buildProtocol ────────────────────────────────────────────────────────────
 
+/**
+ * B4 (spec Part 6.1 test-invalidation ledger): buildProtocol now takes a
+ * TransitionDetection carrying `consecutiveNights`, and the exact-minute assertions
+ * (90/180/270, -120/-240/-360) are invalidated. The replacements lock the new
+ * principle-based behaviour:
+ *   - mode-gated: a short night block (≤3) → Hold → every target is 0;
+ *   - a long night block (≥4) → Adapt → a monotonic, capped ramp;
+ *   - every per-day delta is within the physiological band [-60, +120].
+ */
 describe('buildProtocol', () => {
+  /** Per-day deltas — differences between consecutive cumulative bedtimeAdjustMinutes. */
+  function perDayDeltas(targets: { bedtimeAdjustMinutes: number }[]): number[] {
+    const deltas: number[] = [];
+    for (let i = 0; i < targets.length; i++) {
+      const prev = i === 0 ? 0 : targets[i - 1].bedtimeAdjustMinutes;
+      deltas.push(targets[i].bedtimeAdjustMinutes - prev);
+    }
+    return deltas;
+  }
+
   it("returns empty dailyTargets for type='none'", () => {
-    const protocol = buildProtocol({ type: 'none', daysUntil: 999 }, TODAY, 'intermediate');
+    const protocol = buildProtocol(
+      { type: 'none', daysUntil: 999, consecutiveNights: 0 }, TODAY, 'intermediate');
     expect(protocol.transitionType).toBe('none');
     expect(protocol.dailyTargets).toHaveLength(0);
   });
 
-  it("builds 3 daily targets for 'day-to-night' with daysUntil=3, first has bedtimeAdjustMinutes=90", () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 3 }, TODAY, 'intermediate');
+  // Was: exact 90/180/270. Now (Adapt mode, ≥4 nights): monotonically increasing delay,
+  // every per-day delta within (0, +120].
+  it("builds a monotonic, capped delay ramp for an Adapt-mode 'day-to-night' block", () => {
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(3);
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(90);
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(180);
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(270);
+    // Cumulative bedtime adjustment strictly increases (a delay ramp).
+    for (let i = 1; i < protocol.dailyTargets.length; i++) {
+      expect(protocol.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeGreaterThan(protocol.dailyTargets[i - 1].bedtimeAdjustMinutes);
+    }
+    // Every per-day delta is a positive delay within the 120 min/day ceiling.
+    for (const delta of perDayDeltas(protocol.dailyTargets)) {
+      expect(delta).toBeGreaterThan(0);
+      expect(delta).toBeLessThanOrEqual(120);
+    }
+  });
+
+  // SC-B4.1 — a short (≤3-night) day-to-night block is Hold: every target is 0.
+  it("builds a zero-shift Hold protocol for a short (≤3-night) 'day-to-night' block", () => {
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 2 }, TODAY, 'intermediate');
+    expect(protocol.dailyTargets.length).toBeGreaterThan(0);
+    for (const target of protocol.dailyTargets) {
+      expect(target.bedtimeAdjustMinutes).toBe(0);
+    }
   });
 
   it("builds no active targets for 'day-to-night' with daysUntil=7 (outside 3-day window)", () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 7 }, TODAY, 'intermediate');
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 7, consecutiveNights: 5 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(0);
   });
 
   it("builds 1 target for 'isolated-night' with bedtimeAdjustMinutes=0 and napGuidance present", () => {
-    const protocol = buildProtocol({ type: 'isolated-night', daysUntil: 2 }, TODAY, 'intermediate');
+    const protocol = buildProtocol(
+      { type: 'isolated-night', daysUntil: 2, consecutiveNights: 1 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(1);
     expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(0);
     expect(protocol.dailyTargets[0].napGuidance).toBeTruthy();
   });
 
-  it("'night-to-day' builds 3 targets with negative bedtime adjustments", () => {
-    const protocol = buildProtocol({ type: 'night-to-day', daysUntil: 0 }, TODAY, 'intermediate');
+  // Was: exact -120/-240/-360. Now: an advance ramp (negative, monotonically
+  // decreasing) with every per-day delta within [-60, 0) — the 60 min/day advance cap.
+  it("'night-to-day' builds a monotonic advance ramp capped at 60 min/day", () => {
+    const protocol = buildProtocol(
+      { type: 'night-to-day', daysUntil: 0, consecutiveNights: 0 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(3);
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(-120);
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(-240);
-    expect(protocol.dailyTargets[2].bedtimeAdjustMinutes).toBe(-360);
+    // Cumulative adjustment is negative and strictly decreasing (an advance ramp).
+    for (const target of protocol.dailyTargets) {
+      expect(target.bedtimeAdjustMinutes).toBeLessThan(0);
+    }
+    for (let i = 1; i < protocol.dailyTargets.length; i++) {
+      expect(protocol.dailyTargets[i].bedtimeAdjustMinutes)
+        .toBeLessThan(protocol.dailyTargets[i - 1].bedtimeAdjustMinutes);
+    }
+    // Every per-day delta is a negative advance within the 60 min/day advance ceiling.
+    for (const delta of perDayDeltas(protocol.dailyTargets)) {
+      expect(delta).toBeLessThan(0);
+      expect(delta).toBeGreaterThanOrEqual(-60);
+    }
   });
 
-  it("'evening-to-night' builds 2 targets", () => {
-    const protocol = buildProtocol({ type: 'evening-to-night', daysUntil: 3 }, TODAY, 'intermediate');
+  // Was: exact 90/180. Now (Adapt mode, ≥4 nights): a monotonic capped delay ramp.
+  it("'evening-to-night' builds a 2-day capped delay ramp for an Adapt-mode block", () => {
+    const protocol = buildProtocol(
+      { type: 'evening-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(2);
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(90);
-    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes).toBe(180);
+    expect(protocol.dailyTargets[1].bedtimeAdjustMinutes)
+      .toBeGreaterThan(protocol.dailyTargets[0].bedtimeAdjustMinutes);
+    for (const delta of perDayDeltas(protocol.dailyTargets)) {
+      expect(delta).toBeGreaterThan(0);
+      expect(delta).toBeLessThanOrEqual(120);
+    }
     expect(protocol.dailyTargets[1].napGuidance).toBeTruthy();
   });
 
-  it("'day-to-evening' builds 1 target with bedtimeAdjustMinutes=60", () => {
-    const protocol = buildProtocol({ type: 'day-to-evening', daysUntil: 2 }, TODAY, 'intermediate');
+  // SC-B4.1 — a short evening-to-night block is also Hold (zero shift).
+  it("'evening-to-night' is a zero-shift Hold protocol for a short (≤3-night) block", () => {
+    const protocol = buildProtocol(
+      { type: 'evening-to-night', daysUntil: 3, consecutiveNights: 2 }, TODAY, 'intermediate');
+    expect(protocol.dailyTargets.length).toBeGreaterThan(0);
+    for (const target of protocol.dailyTargets) {
+      expect(target.bedtimeAdjustMinutes).toBe(0);
+    }
+  });
+
+  // day-to-evening is not night-bound — always Adapt; per-day delta within [-60, +120].
+  it("'day-to-evening' builds 1 target with a delay within the [-60,+120] band", () => {
+    const protocol = buildProtocol(
+      { type: 'day-to-evening', daysUntil: 2, consecutiveNights: 0 }, TODAY, 'intermediate');
     expect(protocol.dailyTargets).toHaveLength(1);
-    expect(protocol.dailyTargets[0].bedtimeAdjustMinutes).toBe(60);
+    const delta = protocol.dailyTargets[0].bedtimeAdjustMinutes;
+    expect(delta).toBeGreaterThan(0);
+    expect(delta).toBeLessThanOrEqual(120);
   });
 
   it('protocol carries correct transitionType and daysUntilTransition', () => {
-    const protocol = buildProtocol({ type: 'day-to-night', daysUntil: 3 }, TODAY, 'late');
+    const protocol = buildProtocol(
+      { type: 'day-to-night', daysUntil: 3, consecutiveNights: 5 }, TODAY, 'late');
     expect(protocol.transitionType).toBe('day-to-night');
     expect(protocol.daysUntilTransition).toBe(3);
   });
