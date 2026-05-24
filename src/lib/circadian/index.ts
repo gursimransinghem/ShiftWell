@@ -17,7 +17,7 @@
  * The entire algorithm runs locally — no network calls, no LLM, no API costs.
  */
 
-import { differenceInHours, format } from 'date-fns';
+import { format } from 'date-fns';
 import { classifyDays, detectPatterns } from './classify-shifts';
 import { computeSleepBlocks } from './sleep-windows';
 import { generateNaps } from './nap-engine';
@@ -103,8 +103,59 @@ export function generateSleepPlan(
   profile: UserProfile = DEFAULT_PROFILE,
   adaptiveContext?: AdaptiveContext,
 ): SleepPlan {
+  // ── Input validation & sanitization ──────────────────────────────────────
+  // Turns previously-silent failures (NaN dates, reversed ranges, malformed
+  // calendar imports) into either a clear error or a recorded warning, so a
+  // bad input can never quietly produce a confident-but-wrong plan.
+  const warnings: string[] = [];
+
+  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    throw new Error(
+      'generateSleepPlan: startDate and endDate must both be valid dates.',
+    );
+  }
+
+  // Reversed range: normalize instead of silently producing a reversed plan.
+  let planStart = startDate;
+  let planEnd = endDate;
+  if (planEnd.getTime() < planStart.getTime()) {
+    warnings.push(
+      `Date range was reversed (end ${endDate.toISOString()} is before start ` +
+      `${startDate.toISOString()}); start and end were swapped.`,
+    );
+    [planStart, planEnd] = [planEnd, planStart];
+  }
+
+  // Drop malformed shifts (invalid dates, or end on/before start) so they
+  // cannot poison classification or yield negative-duration plan blocks.
+  const isValidInterval = (x: { start: Date; end: Date } | null | undefined): boolean =>
+    x != null &&
+    x.start instanceof Date &&
+    x.end instanceof Date &&
+    !isNaN(x.start.getTime()) &&
+    !isNaN(x.end.getTime()) &&
+    x.end.getTime() > x.start.getTime();
+
+  const cleanShifts = shifts.filter((s) => {
+    if (isValidInterval(s)) return true;
+    warnings.push(
+      `Skipped malformed shift "${s?.title ?? s?.id ?? 'unknown'}" ` +
+      `(invalid date or non-positive duration).`,
+    );
+    return false;
+  });
+
+  const cleanEvents = personalEvents.filter((e) => {
+    if (isValidInterval(e)) return true;
+    warnings.push(
+      `Skipped malformed personal event "${e?.title ?? e?.id ?? 'unknown'}" ` +
+      `(invalid date or non-positive duration).`,
+    );
+    return false;
+  });
+
   // Step 1: Classify each day
-  const classifiedDays = classifyDays(startDate, endDate, shifts, personalEvents);
+  const classifiedDays = classifyDays(planStart, planEnd, cleanShifts, cleanEvents);
 
   // Build a lookup for adaptive protocol targets by date string (YYYY-MM-DD)
   const protocolTargets = new Map<string, number>();
@@ -169,10 +220,11 @@ export function generateSleepPlan(
 
   return {
     blocks: resolvedBlocks,
-    startDate,
-    endDate,
+    startDate: planStart,
+    endDate: planEnd,
     classifiedDays,
     stats,
+    warnings: warnings.length > 0 ? warnings : undefined,
   };
 }
 
@@ -243,17 +295,22 @@ function resolveOverlaps(blocks: PlanBlock[]): PlanBlock[] {
     .filter((b) => !droppedSleepIds.has(b.id))
     .map((b) => truncatedSleep.get(b.id) ?? b);
 
-  // Step 3: Remove orphaned wind-down blocks whose parent sleep was dropped
-  // Wind-down IDs follow the pattern "{dayId}-wind-down" and their parent sleep
-  // is "{dayId}-main-sleep". If the parent was dropped, remove the wind-down.
-  const remainingSleepIds = new Set(
-    deduped.filter((b) => b.type === 'main-sleep').map((b) => b.id)
+  // Step 3: Remove derived blocks orphaned by a dropped main-sleep.
+  // A day's wind-down, meal, caffeine, and light blocks are all anchored to
+  // that day's main sleep. Every block ID is prefixed with its day
+  // ("YYYY-MM-DD"). If every main-sleep block for a day was dropped in Step 2,
+  // those derived blocks are now stale guidance and must be removed too.
+  // (Previously only wind-down was cleaned up — meal/caffeine/light orphans
+  // survived, producing duplicate/contradictory blocks across adjacent days.)
+  const ORPHANABLE_TYPES: string[] = [
+    'wind-down', 'meal-window', 'caffeine-cutoff', 'light-seek', 'light-avoid',
+  ];
+  const survivingSleepDays = new Set(
+    deduped.filter((b) => b.type === 'main-sleep').map((b) => b.id.slice(0, 10))
   );
   deduped = deduped.filter((b) => {
-    if (b.type !== 'wind-down') return true;
-    // Wind-down ID: "YYYY-MM-DD-wind-down", parent: "YYYY-MM-DD-main-sleep"
-    const parentId = b.id.replace('-wind-down', '-main-sleep');
-    return remainingSleepIds.has(parentId);
+    if (!ORPHANABLE_TYPES.includes(b.type)) return true;
+    return survivingSleepDays.has(b.id.slice(0, 10));
   });
 
   // Step 4: Resolve overlapping nap blocks using the same approach
@@ -261,12 +318,15 @@ function resolveOverlaps(blocks: PlanBlock[]): PlanBlock[] {
     .filter((b) => b.type === 'nap')
     .sort((a, b) => a.start.getTime() - b.start.getTime());
 
+  // Compare each nap against the last KEPT nap, not the raw previous one —
+  // otherwise an already-dropped nap could still shadow a later valid nap.
   const droppedNapIds = new Set<string>();
-  for (let i = 1; i < napBlocks.length; i++) {
-    const prev = napBlocks[i - 1];
-    const curr = napBlocks[i];
-    if (curr.start.getTime() < prev.end.getTime()) {
+  let lastKeptNap: PlanBlock | null = null;
+  for (const curr of napBlocks) {
+    if (lastKeptNap && curr.start.getTime() < lastKeptNap.end.getTime()) {
       droppedNapIds.add(curr.id);
+    } else {
+      lastKeptNap = curr;
     }
   }
 
@@ -287,6 +347,36 @@ function resolveOverlaps(blocks: PlanBlock[]): PlanBlock[] {
 
   deduped = deduped.filter((b) => !droppedNapIds.has(b.id));
 
+  // Step 5: De-duplicate overlapping derived blocks of the same type produced
+  // by independent adjacent-day planners (meal windows, light blocks, caffeine
+  // windows/cutoffs). Without this, a day→night transition emits e.g. two
+  // overlapping caffeine blocks — contradictory "drink coffee" vs "caffeine
+  // cutoff" guidance at the same time. Keep the higher-priority block (lower
+  // priority number); on a tie keep the earlier one.
+  const OVERLAP_RESOLVED_TYPES = [
+    'meal-window', 'light-seek', 'light-avoid', 'caffeine-cutoff',
+  ];
+  const droppedDerivedIds = new Set<string>();
+  for (const type of OVERLAP_RESOLVED_TYPES) {
+    const group = deduped
+      .filter((b) => b.type === type)
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
+    let lastKept: PlanBlock | null = null;
+    for (const curr of group) {
+      if (lastKept && curr.start.getTime() < lastKept.end.getTime()) {
+        if (curr.priority < lastKept.priority) {
+          droppedDerivedIds.add(lastKept.id);
+          lastKept = curr;
+        } else {
+          droppedDerivedIds.add(curr.id);
+        }
+      } else {
+        lastKept = curr;
+      }
+    }
+  }
+  deduped = deduped.filter((b) => !droppedDerivedIds.has(b.id));
+
   return deduped;
 }
 
@@ -301,8 +391,11 @@ function computeStats(
     (b) => b.type === 'main-sleep' || b.type === 'nap'
   );
 
+  // Use millisecond-precise duration. date-fns differenceInHours truncates
+  // toward zero, so a 7.5h block counted as 7h — systematically under-
+  // reporting sleep and inflating the circadian debt score.
   const totalSleepHours = sleepBlocks.reduce(
-    (sum, b) => sum + differenceInHours(b.end, b.start),
+    (sum, b) => sum + (b.end.getTime() - b.start.getTime()) / 3_600_000,
     0
   );
 

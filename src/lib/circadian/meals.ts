@@ -19,7 +19,7 @@
  * - Sato et al. (2014) — Peripheral clocks and meal timing
  */
 
-import { addHours, addMinutes, isBefore, isAfter, setHours, setMinutes } from 'date-fns';
+import { addHours, addMinutes, setHours, setMinutes } from 'date-fns';
 import type { ClassifiedDay, UserProfile, PlanBlock } from './types';
 
 /** Set a specific time on a date */
@@ -135,48 +135,57 @@ export function generateMealWindows(
     case 'off':
     case 'recovery':
     default: {
-      // Standard 3-meal pattern within first 10-12 hours of waking
-      // Breakfast: 1-2h after wake
-      const breakfast = addHours(wakeTime, 1.5);
-      if (isBefore(breakfast, fastingStart)) {
-        meals.push({
-          id: `${dayId}-meal-breakfast`,
-          type: 'meal-window',
-          start: breakfast,
-          end: addMinutes(breakfast, 30),
-          label: 'Breakfast',
+      // Standard 3-meal pattern across the waking window [wakeTime, fastingStart].
+      // The natural targets are 1.5 / 5.5 / 9.5 h after waking. On a short
+      // waking window (e.g. a recovery day with a morning recovery sleep AND an
+      // early evening bedtime, or any day whose next sleep is soon) those fixed
+      // offsets push dinner — sometimes lunch — past the fasting cutoff, and the
+      // old code SILENTLY DROPPED any meal that didn't fit. Instead, when the
+      // window is too short, the three meals are compressed proportionally so
+      // every window still lands before the fasting cutoff. No meal is lost.
+      const MEALS = [
+        {
+          idSuffix: 'breakfast', label: 'Breakfast', durationMin: 30, naturalOffsetMin: 90,
           description: 'First meal 1-2 hours after waking. Your metabolic system is most efficient in the morning.',
-          priority: 3,
-        });
-      }
-
-      // Lunch: 5-6h after wake
-      const lunch = addHours(wakeTime, 5.5);
-      if (isBefore(lunch, fastingStart)) {
-        meals.push({
-          id: `${dayId}-meal-lunch`,
-          type: 'meal-window',
-          start: lunch,
-          end: addMinutes(lunch, 45),
-          label: 'Lunch',
+        },
+        {
+          idSuffix: 'lunch', label: 'Lunch', durationMin: 45, naturalOffsetMin: 330,
           description: 'Main midday meal. This should be your largest meal if possible — front-loading calories improves metabolic health.',
-          priority: 3,
-        });
+        },
+        {
+          idSuffix: 'dinner', label: 'Dinner', durationMin: 45, naturalOffsetMin: 570,
+          description: 'Last meal of the day. Keep it lighter than lunch. Finish 3+ hours before bed to improve sleep quality.',
+        },
+      ];
+
+      const windowMinutes = (fastingStart.getTime() - wakeTime.getTime()) / 60000;
+      const NATURAL_SPAN = 570; // dinner's natural offset from wake, in minutes
+      let offsets: number[];
+      if (windowMinutes >= NATURAL_SPAN + 45) {
+        // Window comfortably fits the natural schedule — use it unchanged.
+        offsets = MEALS.map((m) => m.naturalOffsetMin);
+      } else if (windowMinutes >= 180) {
+        // Short window: compress the three meals to 12% / 50% / 88% of it so
+        // every meal still lands before the fasting cutoff.
+        offsets = [0.12, 0.5, 0.88].map((f) => Math.round(windowMinutes * f));
+      } else {
+        // Degenerate window (<3h of eating time): one meal mid-window.
+        offsets = [Math.max(0, Math.round(windowMinutes * 0.4))];
       }
 
-      // Dinner: 9-10h after wake (must be 3h+ before sleep)
-      const dinner = addHours(wakeTime, 9.5);
-      if (isBefore(dinner, fastingStart)) {
+      offsets.forEach((offsetMin, i) => {
+        const meal = MEALS[i];
+        const start = addMinutes(wakeTime, offsetMin);
         meals.push({
-          id: `${dayId}-meal-dinner`,
+          id: `${dayId}-meal-${meal.idSuffix}`,
           type: 'meal-window',
-          start: dinner,
-          end: addMinutes(dinner, 45),
-          label: 'Dinner',
-          description: 'Last meal of the day. Keep it lighter than lunch. Finish 3+ hours before bed to improve sleep quality.',
+          start,
+          end: addMinutes(start, meal.durationMin),
+          label: meal.label,
+          description: meal.description,
           priority: 3,
         });
-      }
+      });
       break;
     }
   }

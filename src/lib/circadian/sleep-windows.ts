@@ -359,13 +359,14 @@ function computeRecoverySleep(
     priority: 1,
   });
 
-  // Early bedtime to reclaim normal schedule
-  const earlyBedtime = offsets.naturalSleepOnset - 1; // 1h earlier than usual
-  let normalSleepStart = setTime(date, earlyBedtime);
-  if (earlyBedtime < 12) {
-    // Would be next day for late chronotypes
-    normalSleepStart = setTime(date, earlyBedtime);
-  }
+  // Early bedtime to reclaim a normal schedule — 1h earlier than the user's
+  // natural onset. For a late chronotype whose natural onset is just after
+  // midnight (0.5), "1h earlier" is -0.5; without wrapping that into the
+  // 0–24 range, setTime() with a negative hour rolled the sleep block onto
+  // the PREVIOUS calendar day. Wrap so it lands the same evening instead.
+  let earlyBedtime = offsets.naturalSleepOnset - 1;
+  if (earlyBedtime < 0) earlyBedtime += 24;
+  const normalSleepStart = setTime(date, earlyBedtime);
   const normalSleepEnd = alignToSleepCycle(normalSleepStart, profile.sleepNeed);
 
   blocks.push({

@@ -76,11 +76,11 @@ describe('classifyDays', () => {
     expect(classified[2].dayType).toBe('work-night');
     // Mar 17: night shift
     expect(classified[3].dayType).toBe('work-night');
-    // Mar 18: the overnight shift from Mar 17 bleeds into Mar 18,
-    // so the shift detector assigns Mar 18 as work-night too (shift ends 07:00).
-    // Mar 19: first fully clear day after nights → recovery
-    expect(classified[4].dayType).toBe('work-night');
-    expect(classified[5].dayType).toBe('recovery');
+    // Mar 18: the Mar 17 night shift only bleeds its 07:00 tail into this
+    // morning — that is post-night recovery, not another work-night day.
+    // Mar 19: a clear day, second day after nights → off.
+    expect(classified[4].dayType).toBe('recovery');
+    expect(classified[5].dayType).toBe('off');
   });
 
   it('classifies day shifts correctly', () => {
@@ -142,8 +142,9 @@ describe('detectPatterns', () => {
     const classified = classifyDays(startDate, endDate, shifts);
     const patterns = detectPatterns(classified);
 
-    // 3 night shifts + the bleed-over day = 4 classified night-work days
-    expect(patterns.nightStretchLengths).toContain(4);
+    // 3 consecutive night shifts → a night stretch of length 3. The overnight
+    // tail bleeding into the 4th morning no longer double-counts as work-night.
+    expect(patterns.nightStretchLengths).toContain(3);
     expect(patterns.hardTransitions).toBeGreaterThan(0);
   });
 });

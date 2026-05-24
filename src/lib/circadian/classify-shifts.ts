@@ -66,23 +66,20 @@ function findShiftForDay(date: Date, shifts: ShiftEvent[]): ShiftEvent | null {
   const dayStart = startOfDay(date);
   const dayEnd = endOfDay(date);
 
-  // First: shift that starts on this day
+  // A day "owns" the shift that STARTS on it. A night shift that started the
+  // previous day and only bleeds its tail (e.g. a 07:00 end) into this morning
+  // is intentionally NOT returned here: that morning is post-shift recovery,
+  // not another work day. classifyDayType() already handles it correctly via
+  // the previous day's shift context.
+  //
+  // The removed "overnightShift" branch double-counted every overnight shift —
+  // the morning-after day was wrongly classified work-night, which inflated
+  // nightShiftCount and the circadian debt score and made the per-day planner
+  // emit a duplicate post-shift sleep block for a day with no actual shift.
   const startingShift = shifts.find((s) =>
     isWithinInterval(s.start, { start: dayStart, end: dayEnd })
   );
-  if (startingShift) return startingShift;
-
-  // Second: shift that started yesterday but extends into this day
-  // (e.g., night shift 19:00-07:00, the 07:00 end is on "today")
-  const overnightShift = shifts.find(
-    (s) =>
-      s.start < dayStart &&
-      s.end > dayStart &&
-      isWithinInterval(s.end, { start: dayStart, end: dayEnd })
-  );
-  if (overnightShift) return overnightShift;
-
-  return null;
+  return startingShift ?? null;
 }
 
 /**

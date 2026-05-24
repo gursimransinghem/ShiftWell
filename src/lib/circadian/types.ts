@@ -138,6 +138,13 @@ export interface SleepPlan {
   classifiedDays: ClassifiedDay[];
   /** Summary stats */
   stats: PlanStats;
+  /**
+   * Non-fatal data-quality issues encountered while generating this plan
+   * (e.g. malformed shifts that were skipped, a reversed date range that was
+   * normalized). Empty/absent when the inputs were clean. Surfacing these
+   * turns previously-silent input failures into visible, inspectable data.
+   */
+  warnings?: string[];
 }
 
 export interface PlanStats {

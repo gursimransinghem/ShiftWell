@@ -235,8 +235,9 @@ describe('generateSleepPlan (integration)', () => {
     expect(mealBlocks.length).toBeGreaterThan(0);
 
     // Stats should be populated
-    // 3 shifts but overnight bleed-over creates 4 classified night-work days
-    expect(plan.stats.nightShiftCount).toBe(4);
+    // 3 night shifts → exactly 3 classified work-night days (the overnight
+    // tail bleeding into the 4th morning is no longer double-counted).
+    expect(plan.stats.nightShiftCount).toBe(3);
     expect(plan.stats.avgSleepHours).toBeGreaterThan(0);
     expect(plan.stats.circadianDebtScore).toBeGreaterThan(0);
   });
