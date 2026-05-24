@@ -21,7 +21,7 @@ function scrubObject(obj: Record<string, unknown>): Record<string, unknown> {
   return scrubbed;
 }
 
-function scrubEvent(event: Sentry.Event): Sentry.Event | null {
+function scrubEvent(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
   if (event.user) {
     event.user = { id: event.user.id };
   }
@@ -60,7 +60,7 @@ export function initSentry(): void {
     replaysSessionSampleRate: 0,
     integrations: [navigationIntegration, Sentry.mobileReplayIntegration()],
     beforeSend: scrubEvent,
-    beforeBreadcrumb(breadcrumb: { category?: string; [key: string]: unknown }) {
+    beforeBreadcrumb(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb | null {
       if (breadcrumb.category === 'console') return null;
       return breadcrumb;
     },

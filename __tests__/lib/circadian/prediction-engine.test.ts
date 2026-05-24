@@ -67,6 +67,7 @@ describe('scanUpcomingTransitions — basic detection', () => {
       currentSleepDebt: 0,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -107,6 +108,7 @@ describe('scanUpcomingTransitions — severity bands', () => {
       currentSleepDebt: 10,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -134,6 +136,7 @@ describe('scanUpcomingTransitions — severity bands', () => {
       currentSleepDebt: 4,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -165,6 +168,7 @@ describe('scanUpcomingTransitions — severity bands', () => {
       currentSleepDebt: 2,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -195,6 +199,7 @@ describe('scanUpcomingTransitions — severity bands', () => {
       currentSleepDebt: 0,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -220,6 +225,7 @@ describe('scanUpcomingTransitions — pre-adaptation start dates', () => {
       currentSleepDebt: 6,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -262,6 +268,7 @@ describe('scanUpcomingTransitions — sleep debt escalation', () => {
       currentSleepDebt: 0,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const highDebtInput: PredictionInput = { ...baseInput, currentSleepDebt: 10 };
@@ -290,6 +297,7 @@ describe('scanUpcomingTransitions — edge cases', () => {
       currentSleepDebt: 0,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -304,6 +312,7 @@ describe('scanUpcomingTransitions — edge cases', () => {
       currentSleepDebt: 0,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const predictions = scanUpcomingTransitions(input);
@@ -322,6 +331,7 @@ describe('scanUpcomingTransitions — performance', () => {
       currentSleepDebt: 3,
       baselineMidsleep: 2.5,
       lookAheadDays: 14,
+      referenceDate: TODAY_STR,
     };
 
     const start = Date.now();

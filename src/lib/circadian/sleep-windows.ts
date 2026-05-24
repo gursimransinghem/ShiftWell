@@ -32,6 +32,8 @@ import type {
 } from './types';
 import { DEFAULT_PROFILE, CHRONOTYPE_OFFSETS as OFFSETS } from './types';
 
+const MIN_MAIN_SLEEP_MINUTES = 2 * 60;
+
 /** Set a specific time (hours.fraction) on a given date */
 function setTime(date: Date, hours: number): Date {
   const h = Math.floor(hours);
@@ -466,9 +468,10 @@ function computeExtendedShiftSleep(
 export function computeSleepBlocks(
   day: ClassifiedDay,
   profile: UserProfile = DEFAULT_PROFILE,
-  options?: { bedtimeOffsetMinutes?: number },
+  options?: { bedtimeOffsetMinutes?: number; wakeOffsetMinutes?: number },
 ): PlanBlock[] {
-  const offset = options?.bedtimeOffsetMinutes ?? 0;
+  const bedtimeOffset = options?.bedtimeOffsetMinutes ?? 0;
+  const wakeOffset = options?.wakeOffsetMinutes ?? bedtimeOffset;
   const blocks = (() => {
     switch (day.dayType) {
       case 'work-day':
@@ -491,15 +494,29 @@ export function computeSleepBlocks(
     }
   })();
 
-  // Apply adaptive bedtime offset (circadian protocol engine)
-  if (offset === 0) return blocks;
+  // Apply adaptive offsets from circadian protocols or feedback calibration.
+  if (bedtimeOffset === 0 && wakeOffset === 0) return blocks;
 
   return blocks.map((block) => {
-    if (block.type !== 'main-sleep' && block.type !== 'wind-down') return block;
+    if (block.type === 'wind-down') {
+      return {
+        ...block,
+        start: addMinutes(block.start, bedtimeOffset),
+        end: addMinutes(block.end, bedtimeOffset),
+      };
+    }
+    if (block.type !== 'main-sleep') return block;
+
+    const start = addMinutes(block.start, bedtimeOffset);
+    let end = addMinutes(block.end, wakeOffset);
+    if (differenceInMinutes(end, start) < MIN_MAIN_SLEEP_MINUTES) {
+      end = addMinutes(start, MIN_MAIN_SLEEP_MINUTES);
+    }
+
     return {
       ...block,
-      start: addMinutes(block.start, offset),
-      end: addMinutes(block.end, offset),
+      start,
+      end,
     };
   });
 }

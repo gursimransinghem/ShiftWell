@@ -8,6 +8,7 @@
 import { useBriefStore } from '../../src/store/brief-store';
 import type { BriefResponse } from '../../src/lib/ai/claude-client';
 import type { BriefRequest } from '../../src/lib/ai/claude-client';
+import { format } from 'date-fns';
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -82,7 +83,7 @@ describe('useBriefStore — generateBrief', () => {
 
   it('sets lastGeneratedISO to today', async () => {
     await useBriefStore.getState().generateBrief(MOCK_REQUEST, false);
-    const today = new Date().toISOString().slice(0, 10);
+    const today = format(new Date(), 'yyyy-MM-dd');
     expect(useBriefStore.getState().lastGeneratedISO).toBe(today);
   });
 

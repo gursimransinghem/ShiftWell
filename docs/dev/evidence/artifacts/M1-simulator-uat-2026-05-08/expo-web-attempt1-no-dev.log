@@ -1,0 +1,70 @@
+env: load .env
+env: export EXPO_PUBLIC_REVENUECAT_API_KEY EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL
+Starting project at /Users/sima/Projects/ShiftWell
+Metro is running in CI mode, reloads are disabled. Remove CI=true to enable watch mode.
+Starting Metro Bundler
+
+The following packages should be updated for best compatibility with the installed expo version:
+  @react-native-async-storage/async-storage@3.0.1 - expected version: 2.2.0
+  expo@55.0.6 - expected version: ~55.0.23
+  expo-apple-authentication@55.0.8 - expected version: ~55.0.13
+  expo-application@55.0.9 - expected version: ~55.0.14
+  expo-background-task@55.0.10 - expected version: ~55.0.17
+  expo-blur@55.0.12 - expected version: ~55.0.14
+  expo-calendar@55.0.10 - expected version: ~55.0.14
+  expo-constants@55.0.7 - expected version: ~55.0.16
+  expo-device@55.0.15 - expected version: ~55.0.16
+  expo-document-picker@55.0.8 - expected version: ~55.0.13
+  expo-file-system@55.0.10 - expected version: ~55.0.19
+  expo-font@55.0.4 - expected version: ~55.0.7
+  expo-haptics@55.0.11 - expected version: ~55.0.14
+  expo-linking@55.0.7 - expected version: ~55.0.15
+  expo-location@55.1.4 - expected version: ~55.1.9
+  expo-notifications@55.0.12 - expected version: ~55.0.22
+  expo-router@55.0.5 - expected version: ~55.0.14
+  expo-secure-store@55.0.8 - expected version: ~55.0.13
+  expo-sharing@55.0.11 - expected version: ~55.0.18
+  expo-splash-screen@55.0.10 - expected version: ~55.0.20
+  expo-status-bar@55.0.4 - expected version: ~55.0.6
+  expo-symbols@55.0.5 - expected version: ~55.0.8
+  expo-task-manager@55.0.10 - expected version: ~55.0.15
+  expo-web-browser@55.0.9 - expected version: ~55.0.15
+  react-native@0.83.2 - expected version: 0.83.6
+  react-native-worklets@0.7.2 - expected version: 0.7.4
+  @sentry/react-native@6.22.0 - expected version: ~7.11.0
+  @types/jest@30.0.0 - expected version: 29.5.14
+  jest@30.3.0 - expected version: ~29.7.0
+Your project may not work correctly until you install the expected versions of the packages.
+Waiting on http://localhost:8083
+Logs for your project will appear below.
+Web node_modules/expo-router/entry.js ░░░░░░░░░░░░░░░░  0.0% (0/1)
+λ Bundled 3179ms node_modules/expo/node_modules/@expo/cli/node_modules/@expo/router-server/node/render.js (1918 modules)
+[expo-notifications] Listening to push token changes is not yet fully supported on web. Adding a listener will have no effect.
+TypeError: ExpoSecureStore.default.getValueWithKeyAsync is not a function
+    at Object.getItemAsync (/Users/sima/Projects/ShiftWell/node_modules/expo-secure-store/build/SecureStore.js:87:34)
+    at SecureStoreAdapter.getItem (/Users/sima/Projects/ShiftWell/src/lib/supabase/storage-adapter.ts:5:30)
+    at getItemAsync (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/lib/helpers.js:129:33)
+    at SupabaseAuthClient._recoverAndRefresh (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:2052:69)
+    at SupabaseAuthClient._initialize (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:311:24)
+    at fn (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:250:35)
+    at fn (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1304:36)
+    at SupabaseAuthClient.lock (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:32:18)
+    at SupabaseAuthClient._acquireLock (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1300:31)
+    at /Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:249:31
+/Users/sima/Projects/ShiftWell/node_modules/expo/node_modules/@expo/cli/build/src/utils/errors.js:130
+    throw error;
+    ^
+
+TypeError: ExpoSecureStore.default.getValueWithKeyAsync is not a function
+    at Object.getItemAsync (/Users/sima/Projects/ShiftWell/node_modules/expo-secure-store/build/SecureStore.js:87:34)
+    at SecureStoreAdapter.getItem (/Users/sima/Projects/ShiftWell/src/lib/supabase/storage-adapter.ts:5:30)
+    at getItemAsync (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/lib/helpers.js:129:33)
+    at SupabaseAuthClient.__loadSession (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1361:66)
+    at SupabaseAuthClient._useSession (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1342:39)
+    at SupabaseAuthClient._emitInitialSession (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1802:27)
+    at fn (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1796:22)
+    at fn (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1304:36)
+    at SupabaseAuthClient.lock (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:32:18)
+    at SupabaseAuthClient._acquireLock (/Users/sima/Projects/ShiftWell/node_modules/@supabase/auth-js/dist/main/GoTrueClient.js:1300:31)
+
+Node.js v24.14.1

@@ -15,13 +15,15 @@ type BeforeCaptureScope = {
   setLevel(level: string): void;
 };
 
-interface FallbackProps {
-  error: Error;
-  componentStack: string | null;
+interface FallbackRenderProps {
+  error: unknown;
+  componentStack: string;
+  eventId: string;
   resetError: () => void;
 }
 
-function ErrorFallback({ error, resetError }: FallbackProps) {
+function ErrorFallback({ error, resetError }: FallbackRenderProps) {
+  const errorMessage = error instanceof Error ? error.message : String(error);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -32,7 +34,7 @@ function ErrorFallback({ error, resetError }: FallbackProps) {
           has been reported automatically.
         </Text>
         {__DEV__ && (
-          <Text style={styles.devError}>{error.message}</Text>
+          <Text style={styles.devError}>{errorMessage}</Text>
         )}
         <TouchableOpacity style={styles.button} onPress={resetError} activeOpacity={0.8}>
           <Text style={styles.buttonText}>Try Again</Text>
@@ -53,7 +55,7 @@ export function ShiftWellErrorBoundary({
 }: ShiftWellErrorBoundaryProps) {
   return (
     <Sentry.ErrorBoundary
-      fallback={(props: FallbackProps) => <ErrorFallback {...props} />}
+      fallback={(props) => <ErrorFallback {...props} />}
       beforeCapture={(scope: BeforeCaptureScope) => {
         scope.setTag('boundary.section', section);
         scope.setTag('error.type', 'render_crash');
@@ -68,7 +70,7 @@ export function ShiftWellErrorBoundary({
         scope.setTag('shift.type', latestShiftType);
         scope.setTag('shift.count', String(shifts.length));
       }}
-      onError={(error: Error, componentStack: string | null) => {
+      onError={(error: unknown, componentStack: string | undefined, _eventId: string) => {
         if (__DEV__) {
           console.error(`[ErrorBoundary:${section}]`, error);
           console.error('Component stack:', componentStack);

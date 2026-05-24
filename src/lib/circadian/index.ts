@@ -118,12 +118,19 @@ export function generateSleepPlan(
   const allBlocks: PlanBlock[] = [];
 
   for (const day of classifiedDays) {
-    // Look up adaptive bedtime offset for this day (0 if not in protocol)
+    // Look up adaptive offsets for this day.
     const dayKey = format(day.date, 'yyyy-MM-dd');
-    const bedtimeOffsetMinutes = protocolTargets.get(dayKey) ?? 0;
+    const protocolOffsetMinutes = protocolTargets.get(dayKey);
+    const feedbackActive =
+      adaptiveContext?.feedbackResult?.feedbackActive === true &&
+      adaptiveContext.circadian.maintenanceMode;
+    const bedtimeOffsetMinutes = protocolOffsetMinutes ??
+      (feedbackActive ? adaptiveContext.feedbackResult!.adjustedBedtimeOffsetMinutes : 0);
+    const wakeOffsetMinutes = protocolOffsetMinutes ??
+      (feedbackActive ? adaptiveContext.feedbackResult!.adjustedWakeOffsetMinutes : bedtimeOffsetMinutes);
 
     // Step 2: Main sleep windows (with adaptive offset if applicable)
-    const sleepBlocks = computeSleepBlocks(day, profile, { bedtimeOffsetMinutes });
+    const sleepBlocks = computeSleepBlocks(day, profile, { bedtimeOffsetMinutes, wakeOffsetMinutes });
     allBlocks.push(...sleepBlocks);
 
     // Step 3: Strategic naps

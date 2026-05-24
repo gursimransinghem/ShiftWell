@@ -6,7 +6,7 @@
  * without manual approval via InsightCard.
  *
  * Auto-apply criteria:
- *   - magnitude < 45 min shift
+ *   - magnitude <= 30 min shift
  *   - confidence > 0.6 (from feedback engine)
  *
  * Changes that don't meet criteria still go through the normal InsightCard flow.
@@ -26,7 +26,7 @@ export interface AutopilotState {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const ELIGIBILITY_THRESHOLD_DAYS = 30;
-const AUTO_APPLY_MAX_MAGNITUDE = 45;   // minutes
+const AUTO_APPLY_MAX_MAGNITUDE = 30;   // minutes
 const AUTO_APPLY_MIN_CONFIDENCE = 0.6;
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -58,7 +58,7 @@ export function shouldAutoApply(
 ): boolean {
   if (!autopilotState.eligible) return false;
   if (!autopilotState.enabled) return false;
-  if (change.magnitudeMinutes >= AUTO_APPLY_MAX_MAGNITUDE) return false;
+  if (change.magnitudeMinutes > AUTO_APPLY_MAX_MAGNITUDE) return false;
   if (confidence <= AUTO_APPLY_MIN_CONFIDENCE) return false;
   return true;
 }

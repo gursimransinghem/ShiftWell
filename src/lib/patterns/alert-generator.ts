@@ -68,12 +68,6 @@ const ALERT_TEMPLATES: Partial<Record<PatternType, AlertTemplate>> = {
     recommendation: () =>
       `Keep it up. Consistency within 15 minutes of your target is the goal.`,
   },
-  'shift-transition-cluster': {
-    text: () =>
-      `Your schedule has several shift type changes this week, which can challenge your circadian rhythm.`,
-    recommendation: () =>
-      `Use the light protocol on transition days — bright light in the morning, dimmed light after 8 PM.`,
-  },
 };
 
 // ---------------------------------------------------------------------------

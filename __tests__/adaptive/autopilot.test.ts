@@ -5,11 +5,11 @@
  * AP-02: not eligible when daysTracked < 30
  * AP-03: shouldAutoApply returns false when not eligible
  * AP-04: shouldAutoApply returns false when eligible but not enabled
- * AP-05: shouldAutoApply returns false when magnitude >= 45 min
+ * AP-05: shouldAutoApply returns false when magnitude > 30 min
  * AP-06: shouldAutoApply returns false when confidence <= 0.6
  * AP-07: shouldAutoApply returns true when all criteria met
  * AP-08: shouldAutoApply uses conservative default (0) for missing confidence
- * AP-09: exact boundary: magnitude 44 min → auto-apply; 45 min → manual
+ * AP-09: exact boundary: magnitude 30 min → auto-apply; 31 min → manual
  * AP-10: exact boundary: confidence 0.61 → auto-apply; 0.6 → manual
  */
 
@@ -65,9 +65,9 @@ describe('shouldAutoApply', () => {
     expect(shouldAutoApply(makeChange(30), state, 0.8)).toBe(false);
   });
 
-  it('AP-05: returns false when magnitude >= 45 min', () => {
+  it('AP-05: returns false when magnitude > 30 min', () => {
     const state = makeState(true, true);
-    expect(shouldAutoApply(makeChange(45), state, 0.8)).toBe(false);
+    expect(shouldAutoApply(makeChange(31), state, 0.8)).toBe(false);
     expect(shouldAutoApply(makeChange(60), state, 0.8)).toBe(false);
     expect(shouldAutoApply(makeChange(90), state, 0.8)).toBe(false);
   });
@@ -83,7 +83,7 @@ describe('shouldAutoApply', () => {
     const state = makeState(true, true);
     expect(shouldAutoApply(makeChange(30), state, 0.8)).toBe(true);
     expect(shouldAutoApply(makeChange(1), state, 0.7)).toBe(true);
-    expect(shouldAutoApply(makeChange(44), state, 0.65)).toBe(true);
+    expect(shouldAutoApply(makeChange(29), state, 0.65)).toBe(true);
   });
 
   it('AP-08: defaults confidence to 0 (conservative) when not provided', () => {
@@ -92,10 +92,10 @@ describe('shouldAutoApply', () => {
     expect(shouldAutoApply(makeChange(30), state)).toBe(false);
   });
 
-  it('AP-09: magnitude boundary: 44 → auto-apply, 45 → manual', () => {
+  it('AP-09: magnitude boundary: 30 → auto-apply, 31 → manual', () => {
     const state = makeState(true, true);
-    expect(shouldAutoApply(makeChange(44), state, 0.8)).toBe(true);
-    expect(shouldAutoApply(makeChange(45), state, 0.8)).toBe(false);
+    expect(shouldAutoApply(makeChange(30), state, 0.8)).toBe(true);
+    expect(shouldAutoApply(makeChange(31), state, 0.8)).toBe(false);
   });
 
   it('AP-10: confidence boundary: 0.61 → auto-apply, 0.60 → manual', () => {
