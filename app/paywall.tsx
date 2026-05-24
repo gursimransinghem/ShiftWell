@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremiumStore } from '@/src/store/premium-store';
-import { useUserStore } from '@/src/store/user-store';
+import { useAuthStore } from '@/src/store/auth-store';
 import { getPaywallVariant } from '@/src/lib/growth/paywall-experiment';
 import { logExposure } from '@/src/lib/growth/ab-testing';
 import { COLORS, SPACING, RADIUS, PURPLE } from '@/src/theme';
@@ -241,10 +241,24 @@ function PlanCard({
 export default function PaywallScreen() {
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>('annual');
   const { purchase, restore, isLoading } = usePremiumStore();
-  const profile = useUserStore((s) => s.profile);
+  const userId = useAuthStore((s) => s.userId);
 
-  // Paywall pricing A/B experiment (GRO-04)
-  const paywallVariant = getPaywallVariant(profile.id ?? '');
+  // Paywall pricing A/B experiment (GRO-04). userId is null for unauthed users;
+  // empty-string fallback preserves the existing experiment-hash bucketing.
+  const paywallVariant = getPaywallVariant(userId ?? '');
+
+  // Log paywall IMPRESSION (exposure) — fires when the paywall is rendered for
+  // an identified user, not when they click Start Trial. GRO-04 measures
+  // exposure as the denominator for conversion rate, so it must fire on view.
+  useEffect(() => {
+    if (userId) {
+      logExposure(
+        'paywall-pricing-v1',
+        paywallVariant.variantId === 'control' ? 'A' : 'B',
+        userId
+      ).catch(() => {});
+    }
+  }, [userId, paywallVariant.variantId]);
 
   // Override annual plan pricing based on experiment variant
   const experimentPlans: Plan[] = PLANS.map((p) => {
@@ -261,10 +275,6 @@ export default function PaywallScreen() {
   const currentPlan = experimentPlans.find((p) => p.key === selectedPlan)!;
 
   async function handleStartTrial() {
-    // Log paywall impression for experiment tracking
-    if (profile.id) {
-      logExposure('paywall-pricing-v1', paywallVariant.variantId === 'control' ? 'A' : 'B', profile.id).catch(() => {});
-    }
     await purchase(currentPlan);
     router.back();
   }

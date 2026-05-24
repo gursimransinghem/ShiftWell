@@ -185,6 +185,8 @@ export interface PredictionInput {
   currentSleepDebt: number;   // hours
   baselineMidsleep: number;   // circadian anchor (0-24)
   lookAheadDays: number;      // 14
+  /** Optional deterministic scan anchor for tests/simulations. Defaults to today. */
+  referenceDate?: string | Date;
 }
 
 /**

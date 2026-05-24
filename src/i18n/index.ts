@@ -4,7 +4,15 @@ import { getLocales } from 'expo-localization';
 
 type SupportedLocale = 'en' | 'es';
 
-type TranslationMap = typeof en;
+// Widen string-literal types from `typeof en` to plain `string` so non-English
+// locales can hold different translations without violating literal-type parity.
+// Preserves the structural shape (so adding a key to en still requires the same
+// shape in es), but allows the leaf string values to differ.
+type Loosen<T> = T extends string
+  ? string
+  : { readonly [K in keyof T]: Loosen<T[K]> };
+
+type TranslationMap = Loosen<typeof en>;
 
 const translations: Record<SupportedLocale, TranslationMap> = { en, es };
 

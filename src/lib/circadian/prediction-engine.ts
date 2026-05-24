@@ -242,7 +242,7 @@ function selectProtocolType(
  * @param input PredictionInput with shifts, sleep debt, and circadian anchor
  */
 export function scanUpcomingTransitions(input: PredictionInput): TransitionPrediction[] {
-  const { shifts, currentSleepDebt, lookAheadDays } = input;
+  const { shifts, currentSleepDebt, lookAheadDays, referenceDate } = input;
 
   if (shifts.length === 0) return [];
 
@@ -256,7 +256,11 @@ export function scanUpcomingTransitions(input: PredictionInput): TransitionPredi
   }
 
   // Determine scan window
-  const today = new Date();
+  const today = referenceDate instanceof Date
+    ? new Date(referenceDate)
+    : referenceDate
+      ? new Date(`${referenceDate}T00:00:00`)
+      : new Date();
   today.setHours(0, 0, 0, 0);
   const todayISO = today.toISOString().slice(0, 10);
 

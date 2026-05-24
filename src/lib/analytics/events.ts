@@ -2,6 +2,17 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import type { PostHog } from 'posthog-react-native';
 
+// JSON-serializable value matching posthog-core's JsonType. Defined locally because
+// posthog-react-native's main entry barrel does not re-export the core types.
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+type PostHogEventProperties = { [key: string]: JsonValue };
+
 // ---------------------------------------------------------------------------
 // Tier 1 event name constants
 // ---------------------------------------------------------------------------
@@ -57,7 +68,7 @@ export function getPostHogInstance(): PostHog | null {
  */
 export function trackEvent(
   name: string,
-  properties?: Record<string, unknown>
+  properties?: PostHogEventProperties
 ): void {
   if (!_posthog) {
     if (__DEV__) {
@@ -90,7 +101,7 @@ export function identifyUser(
 /**
  * Set super properties that persist across all subsequent events.
  */
-export function setSuperProperties(properties: Record<string, unknown>): void {
+export function setSuperProperties(properties: PostHogEventProperties): void {
   _posthog?.register(properties);
 }
 

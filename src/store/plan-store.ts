@@ -267,6 +267,7 @@ export const usePlanStore = create<PlanState>()(
         autopilot: s.autopilot,
         transparencyLog: s.transparencyLog,
         discrepancyHistory: s.discrepancyHistory,
+        feedbackOffset: s.feedbackOffset,
       }),
     },
   ),

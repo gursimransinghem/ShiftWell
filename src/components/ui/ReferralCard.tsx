@@ -17,20 +17,20 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useUserStore } from '@/src/store/user-store';
+import { useAuthStore } from '@/src/store/auth-store';
 import { buildReferralUrl } from '@/src/lib/growth/referral';
 import { COLORS, RADIUS, SPACING } from '@/src/theme';
 
 export default function ReferralCard() {
-  const profile = useUserStore((s) => s.profile);
+  const userId = useAuthStore((s) => s.userId);
   const [referralUrl, setReferralUrl] = useState<string | null>(null);
   const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
-    if (profile.id) {
-      setReferralUrl(buildReferralUrl(profile.id));
+    if (userId) {
+      setReferralUrl(buildReferralUrl(userId));
     }
-  }, [profile.id]);
+  }, [userId]);
 
   async function handleShare() {
     if (!referralUrl) return;

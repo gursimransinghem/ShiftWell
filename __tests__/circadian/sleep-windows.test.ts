@@ -2,8 +2,9 @@ import { computeSleepBlocks } from '../../src/lib/circadian/sleep-windows';
 import { classifyDays } from '../../src/lib/circadian/classify-shifts';
 import { generateSleepPlan } from '../../src/lib/circadian';
 import type { ShiftEvent, UserProfile, ClassifiedDay } from '../../src/lib/circadian/types';
+import type { AdaptiveContext } from '../../src/lib/adaptive/types';
 import { DEFAULT_PROFILE } from '../../src/lib/circadian/types';
-import { differenceInHours, getHours } from 'date-fns';
+import { differenceInHours, differenceInMinutes, getHours } from 'date-fns';
 
 const testProfile: UserProfile = {
   ...DEFAULT_PROFILE,
@@ -107,6 +108,27 @@ describe('computeSleepBlocks', () => {
       const mainSleep = blocks.find((b) => b.type === 'main-sleep');
 
       expect(mainSleep).toBeDefined();
+    });
+  });
+
+  describe('adaptive offsets', () => {
+    it('applies independent bedtime and wake offsets while preserving a safe duration floor', () => {
+      const day: ClassifiedDay = {
+        date: new Date('2026-03-15'),
+        dayType: 'off',
+        shift: null,
+        personalEvents: [],
+      };
+
+      const base = computeSleepBlocks(day, testProfile).find((b) => b.type === 'main-sleep')!;
+      const adjusted = computeSleepBlocks(day, testProfile, {
+        bedtimeOffsetMinutes: 30,
+        wakeOffsetMinutes: -30,
+      }).find((b) => b.type === 'main-sleep')!;
+
+      expect(differenceInMinutes(adjusted.start, base.start)).toBe(30);
+      expect(differenceInMinutes(adjusted.end, base.end)).toBe(-30);
+      expect(differenceInMinutes(adjusted.end, adjusted.start)).toBeGreaterThanOrEqual(120);
     });
   });
 
@@ -259,5 +281,118 @@ describe('generateSleepPlan (integration)', () => {
     // Even off days have a small sleep debt penalty since avg sleep
     // may not perfectly match the 7.5h target
     expect(plan.stats.circadianDebtScore).toBeLessThan(20);
+  });
+
+  it('applies active feedback offsets to generated sleep windows during maintenance mode', () => {
+    const base = generateSleepPlan(
+      new Date('2026-03-15'),
+      new Date('2026-03-15'),
+      [],
+      [],
+      testProfile,
+    );
+
+    const feedbackContext: AdaptiveContext = {
+      circadian: {
+        protocol: null,
+        phaseOffsetMinutes: 0,
+        maintenanceMode: true,
+      },
+      debt: { rollingHours: 2, bankHours: 0, severity: 'mild' },
+      schedule: {
+        transitionType: null,
+        daysUntilTransition: 999,
+        calendarConflicts: [],
+        patternAlerts: [],
+        bankingWindowOpen: false,
+      },
+      recovery: { score: 72, zone: 'yellow', baselineMature: false },
+      meta: { learningPhase: true, daysTracked: 12, lastUpdated: new Date('2026-03-15') },
+      feedbackResult: {
+        adjustedBedtimeOffsetMinutes: 30,
+        adjustedWakeOffsetMinutes: 30,
+        feedbackActive: true,
+        feedbackReason: 'Active — adjusting based on sleep timing',
+        smoothedBedtimeDeviation: 60,
+        convergenceStatus: 'converging',
+        activeDeadZoneMinutes: 20,
+      },
+    };
+
+    const adjusted = generateSleepPlan(
+      new Date('2026-03-15'),
+      new Date('2026-03-15'),
+      [],
+      [],
+      testProfile,
+      feedbackContext,
+    );
+
+    const baseSleep = base.blocks.find((b) => b.type === 'main-sleep')!;
+    const adjustedSleep = adjusted.blocks.find((b) => b.type === 'main-sleep')!;
+
+    expect(differenceInMinutes(adjustedSleep.start, baseSleep.start)).toBe(30);
+    expect(differenceInMinutes(adjustedSleep.end, baseSleep.end)).toBe(30);
+  });
+
+  it('lets circadian protocol targets override feedback offsets on protocol days', () => {
+    const protocolContext: AdaptiveContext = {
+      circadian: {
+        protocol: {
+          transitionType: 'day-to-night',
+          daysUntilTransition: 2,
+          dailyTargets: [
+            {
+              date: new Date('2026-03-15'),
+              bedtimeAdjustMinutes: 90,
+              lightGuidance: 'Dim lights after 9 PM.',
+            },
+          ],
+        },
+        phaseOffsetMinutes: 0,
+        maintenanceMode: false,
+      },
+      debt: { rollingHours: 2, bankHours: 0, severity: 'mild' },
+      schedule: {
+        transitionType: 'day-to-night',
+        daysUntilTransition: 2,
+        calendarConflicts: [],
+        patternAlerts: [],
+        bankingWindowOpen: false,
+      },
+      recovery: { score: 72, zone: 'yellow', baselineMature: false },
+      meta: { learningPhase: true, daysTracked: 12, lastUpdated: new Date('2026-03-15') },
+      feedbackResult: {
+        adjustedBedtimeOffsetMinutes: -30,
+        adjustedWakeOffsetMinutes: -30,
+        feedbackActive: true,
+        feedbackReason: 'Active — adjusting based on sleep timing',
+        smoothedBedtimeDeviation: -60,
+        convergenceStatus: 'converging',
+        activeDeadZoneMinutes: 20,
+      },
+    };
+
+    const base = generateSleepPlan(
+      new Date('2026-03-15'),
+      new Date('2026-03-15'),
+      [],
+      [],
+      testProfile,
+    );
+    const adjusted = generateSleepPlan(
+      new Date('2026-03-15'),
+      new Date('2026-03-15'),
+      [],
+      [],
+      testProfile,
+      protocolContext,
+    );
+
+    const baseSleep = base.blocks.find((b) => b.type === 'main-sleep')!;
+    const adjustedSleep = adjusted.blocks.find((b) => b.type === 'main-sleep')!;
+
+    expect(differenceInMinutes(adjustedSleep.start, baseSleep.start)).toBe(90);
+    expect(differenceInMinutes(adjustedSleep.end, baseSleep.end)).toBe(90);
   });
 });

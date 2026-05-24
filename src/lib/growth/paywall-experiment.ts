@@ -49,6 +49,12 @@ const VARIANTS: Record<'A' | 'B', PaywallVariant> = {
  * @returns PaywallVariant with display pricing and variant ID
  */
 export function getPaywallVariant(userId: string): PaywallVariant {
+  // getVariant returns the global Variant type ('A' | 'B' | 'C'); this 2-arm
+  // experiment passes arms=2, so only 'A' or 'B' is reachable at runtime. Narrow
+  // locally instead of changing the framework's Variant type.
   const variant = getVariant(PAYWALL_EXPERIMENT_ID, userId, 2);
-  return VARIANTS[variant] ?? VARIANTS.A;
+  if (variant === 'A' || variant === 'B') {
+    return VARIANTS[variant];
+  }
+  return VARIANTS.A;
 }

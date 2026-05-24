@@ -333,10 +333,12 @@ describe('usePlanStore — changeLog persistence (BRAIN-06)', () => {
       changeLog: [{ ...MOCK_CHANGE, timestamp: '2026-01-01T00:00:00.000Z' }],
       daysUntilTransition: 5,
       snapshotTimestamp: '2026-01-01T00:00:00.000Z',
+      feedbackOffset: { bedtimeMinutes: 15, wakeMinutes: 15 },
     };
     const result = partialize(fullState);
     const resultKeys = Object.keys(result).sort();
-    expect(resultKeys).toEqual(['autopilot', 'changeLog', 'daysUntilTransition', 'discrepancyHistory', 'feedbackAdjustment', 'snapshotTimestamp', 'transparencyLog'].sort());
+    expect(resultKeys).toEqual(['autopilot', 'changeLog', 'daysUntilTransition', 'discrepancyHistory', 'feedbackAdjustment', 'feedbackOffset', 'snapshotTimestamp', 'transparencyLog'].sort());
+    expect(result).toHaveProperty('feedbackOffset', { bedtimeMinutes: 15, wakeMinutes: 15 });
     expect(result).not.toHaveProperty('plan');
     expect(result).not.toHaveProperty('planSnapshot');
     expect(result).not.toHaveProperty('adaptiveContext');
