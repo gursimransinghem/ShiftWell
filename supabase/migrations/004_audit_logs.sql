@@ -42,21 +42,23 @@ DECLARE
   affected_user_id UUID;
   affected_record_id UUID;
 BEGIN
-  -- Derive user_id from the row (all audited tables have user_id or id=user_id)
-  IF TG_OP = 'DELETE' THEN
-    affected_user_id   := OLD.user_id;
-    affected_record_id := OLD.id;
-  ELSE
-    affected_user_id   := NEW.user_id;
-    affected_record_id := NEW.id;
-  END IF;
-
   -- users table: id IS the user_id (1:1 with auth.users)
   IF TG_TABLE_NAME = 'users' THEN
     IF TG_OP = 'DELETE' THEN
       affected_user_id := OLD.id;
+      affected_record_id := OLD.id;
     ELSE
       affected_user_id := NEW.id;
+      affected_record_id := NEW.id;
+    END IF;
+  -- Other audited tables carry user_id directly.
+  ELSE
+    IF TG_OP = 'DELETE' THEN
+      affected_user_id := OLD.user_id;
+      affected_record_id := OLD.id;
+    ELSE
+      affected_user_id := NEW.user_id;
+      affected_record_id := NEW.id;
     END IF;
   END IF;
 

@@ -7,7 +7,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "jest"
+    "test": "jest",
+    "test:rls": "bash scripts/verify-supabase-rls.sh"
   },
   "dependencies": {
     "@kingstinct/react-native-healthkit": "^13.3.1",
