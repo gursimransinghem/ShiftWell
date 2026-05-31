@@ -43,6 +43,51 @@ function makeDayShiftDay(dateStr: string): ClassifiedDay {
   };
 }
 
+function makeEveningShiftDay(dateStr: string): ClassifiedDay {
+  return {
+    date: new Date(dateStr),
+    dayType: 'work-evening',
+    shift: {
+      id: `evening-${dateStr}`,
+      title: 'Evening Shift',
+      start: new Date(`${dateStr}T14:00:00`),
+      end: new Date(`${dateStr}T22:00:00`),
+      shiftType: 'evening',
+    },
+    personalEvents: [],
+  };
+}
+
+function makeExtendedShiftDay(dateStr: string): ClassifiedDay {
+  return {
+    date: new Date(dateStr),
+    dayType: 'work-extended',
+    shift: {
+      id: `extended-${dateStr}`,
+      title: 'Extended Shift',
+      start: new Date(`${dateStr}T07:00:00`),
+      end: new Date(`${dateStr.replace(/(\d{2})$/, (d) => String(Number(d) + 1).padStart(2, '0'))}T07:00:00`),
+      shiftType: 'extended',
+    },
+    personalEvents: [],
+  };
+}
+
+function makeShortNightShiftDay(dateStr: string): ClassifiedDay {
+  return {
+    date: new Date(dateStr),
+    dayType: 'work-night',
+    shift: {
+      id: `short-night-${dateStr}`,
+      title: 'Short Night Shift',
+      start: new Date(`${dateStr}T19:00:00`),
+      end: new Date(`${dateStr}T23:30:00`),
+      shiftType: 'night',
+    },
+    personalEvents: [],
+  };
+}
+
 function makeTransitionDay(dateStr: string): ClassifiedDay {
   return {
     date: new Date(dateStr),
@@ -277,6 +322,59 @@ describe('Nap Engine', () => {
       expect(NAP_DURATIONS.power).toBe(20);
       expect(NAP_DURATIONS.short).toBe(30);
       expect(NAP_DURATIONS.full).toBe(90);
+    });
+  });
+
+  describe('audited shift-type branches', () => {
+    it('places a pre-shift Power Nap for work-evening shifts', () => {
+      const day = makeEveningShiftDay('2026-03-15');
+      const naps = generateNaps(day, napProfile, []);
+      const powerNap = naps.find((n) => n.label === 'Power Nap');
+
+      expect(powerNap).toBeDefined();
+      expect(powerNap!.type).toBe('nap');
+      expect(differenceInMinutes(powerNap!.end, powerNap!.start)).toBe(25);
+    });
+
+    it('work-evening pre-shift nap ends 45 minutes before leave time', () => {
+      const day = makeEveningShiftDay('2026-03-15');
+      const naps = generateNaps(day, napProfile, []);
+      const powerNap = naps.find((n) => n.label === 'Power Nap');
+      const leaveTime = new Date('2026-03-15T13:30:00');
+
+      expect(powerNap).toBeDefined();
+      expect(differenceInMinutes(leaveTime, powerNap!.end)).toBe(45);
+    });
+
+    it('places a Sleep Banking Nap for work-extended shifts', () => {
+      const day = makeExtendedShiftDay('2026-03-15');
+      const naps = generateNaps(day, napProfile, []);
+      const bankingNap = naps.find((n) => n.label === 'Sleep Banking Nap');
+
+      expect(bankingNap).toBeDefined();
+      expect(bankingNap!.type).toBe('nap');
+      expect(differenceInMinutes(bankingNap!.end, bankingNap!.start)).toBe(90);
+    });
+
+    it("forces a 20-minute power pre-shift nap when a night shift starts within 3 hours", () => {
+      const day = {
+        ...makeNightShiftDay('2026-03-15'),
+        date: new Date('2026-03-15T17:00:00'),
+      };
+      const fullProfile: UserProfile = { ...DEFAULT_PROFILE, napPreference: 'full' as unknown as boolean };
+      const naps = generateNaps(day, fullProfile, []);
+      const preShiftNap = naps.find((n) => n.label === 'Pre-Shift Nap');
+
+      expect(preShiftNap).toBeDefined();
+      expect(differenceInMinutes(preShiftNap!.end, preShiftNap!.start)).toBe(NAP_DURATIONS.power);
+    });
+
+    it('does not place an on-shift nap when the night shift is shorter than 6 hours', () => {
+      const day = makeShortNightShiftDay('2026-03-15');
+      const naps = generateNaps(day, napProfile, []);
+
+      expect(naps.some((n) => n.id.endsWith('-on-shift-nap'))).toBe(false);
+      expect(naps.some((n) => n.id.endsWith('-pre-shift-nap'))).toBe(true);
     });
   });
 

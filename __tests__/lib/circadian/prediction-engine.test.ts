@@ -81,6 +81,29 @@ describe('scanUpcomingTransitions — basic detection', () => {
     expect(match).toBeDefined();
     expect(match!.transitionType).toBe('night-to-day');
   });
+
+  it('detects off-to-night when the first scheduled shift is a night shift', () => {
+    const input: PredictionInput = {
+      shifts: [
+        { date: '2026-04-16', startHour: 19, endHour: 7, type: 'night' },
+      ],
+      currentSleepDebt: 0,
+      baselineMidsleep: 2.5,
+      lookAheadDays: 14,
+      referenceDate: TODAY_STR,
+    };
+
+    const predictions = scanUpcomingTransitions(input);
+
+    expect(predictions).toHaveLength(1);
+    expect(predictions[0]).toMatchObject({
+      transitionDate: '2026-04-16',
+      transitionType: 'off-to-night',
+      severity: 'critical',
+      protocolType: 'standard-transition',
+      consecutiveNights: 1,
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -116,6 +139,74 @@ describe('scanUpcomingTransitions — severity bands', () => {
     // With high debt + large phase shift, at least one transition must be critical
     expect(critical).toBeDefined();
     expect(critical!.predictedAlertnesNadir).toBeLessThan(40);
+  });
+
+  it('uses TSS tie-breaker when alertness nadir is above the medium-risk band', () => {
+    const input: PredictionInput = {
+      shifts: [
+        { date: '2026-04-14', startHour: 7, endHour: 15, type: 'day' },
+        { date: '2026-04-15', startHour: 14, endHour: 22, type: 'evening' },
+      ],
+      currentSleepDebt: -1,
+      baselineMidsleep: 2.5,
+      lookAheadDays: 14,
+      referenceDate: TODAY_STR,
+    };
+
+    const predictions = scanUpcomingTransitions(input);
+
+    expect(predictions).toHaveLength(1);
+    expect(predictions[0].predictedAlertnesNadir).toBeGreaterThan(70);
+    expect(predictions[0]).toMatchObject({
+      transitionType: 'day-to-evening',
+      severityScore: 35,
+      severity: 'medium',
+    });
+  });
+
+  it('maps medium TSS to standard-transition when alertness nadir is above 70', () => {
+    const input: PredictionInput = {
+      shifts: [
+        { date: '2026-04-16', startHour: 7, endHour: 15, type: 'day' },
+        { date: '2026-04-17', startHour: 14, endHour: 22, type: 'evening' },
+      ],
+      currentSleepDebt: -1,
+      baselineMidsleep: 2.5,
+      lookAheadDays: 14,
+      referenceDate: TODAY_STR,
+    };
+
+    const predictions = scanUpcomingTransitions(input);
+
+    expect(predictions).toHaveLength(1);
+    expect(predictions[0].predictedAlertnesNadir).toBeGreaterThan(70);
+    expect(predictions[0]).toMatchObject({
+      transitionType: 'day-to-evening',
+      severityScore: 35,
+      severity: 'medium',
+      protocolType: 'standard-transition',
+    });
+  });
+
+  it('selects protocolType from severity and transition type returned by scanUpcomingTransitions', () => {
+    const input: PredictionInput = {
+      shifts: [
+        { date: '2026-04-14', startHour: 7, endHour: 15, type: 'day' },
+        { date: '2026-04-15', startHour: 19, endHour: 7, type: 'night' },
+        { date: '2026-04-16', startHour: 7, endHour: 15, type: 'day' },
+      ],
+      currentSleepDebt: 0,
+      baselineMidsleep: 2.5,
+      lookAheadDays: 14,
+      referenceDate: TODAY_STR,
+    };
+
+    const predictions = scanUpcomingTransitions(input);
+
+    expect(predictions.map((p) => [p.transitionType, p.protocolType])).toEqual([
+      ['day-to-night', 'pre-night-critical'],
+      ['night-to-day', 'post-night-critical'],
+    ]);
   });
 
   it('assigns severity=high when predictedAlertnesNadir is 40-55', () => {

@@ -353,6 +353,47 @@ describe('analyzeScheduleImpact', () => {
     // Consistent nights adapted — should be lower disruption than fragmented pattern
     expect(longScore.disruptionIndex).toBeLessThan(shortScore.disruptionIndex);
   });
+
+  it('rotating workers with 5 consecutive nights receive the long-night-run penalty', () => {
+    const rotatingLongRun: ShiftPattern = {
+      userId: 'rotating-long-run',
+      shiftSequence: ['day', 'night', 'night', 'night', 'night', 'night'],
+      currentShiftType: 'rotating',
+    };
+    const baseline: ShiftPattern = {
+      userId: 'baseline-days',
+      shiftSequence: ['day', 'day', 'day', 'day', 'day', 'day'],
+      currentShiftType: 'day',
+    };
+
+    const scores = analyzeScheduleImpact([rotatingLongRun, baseline]);
+    const longRunScore = scores.find((s) => s.userId === 'rotating-long-run')!;
+    const baselineScore = scores.find((s) => s.userId === 'baseline-days')!;
+
+    expect(longRunScore.disruptionIndex - baselineScore.disruptionIndex).toBe(15);
+    expect(longRunScore.primaryCause).toBe('consecutive nights > 4');
+  });
+
+  it('evening-to-day transitions add the forward-rotation penalty', () => {
+    const eveningToDay: ShiftPattern = {
+      userId: 'evening-to-day',
+      shiftSequence: ['evening', 'day'],
+      currentShiftType: 'rotating',
+    };
+    const baseline: ShiftPattern = {
+      userId: 'baseline-days',
+      shiftSequence: ['day', 'day'],
+      currentShiftType: 'day',
+    };
+
+    const scores = analyzeScheduleImpact([eveningToDay, baseline]);
+    const transitionScore = scores.find((s) => s.userId === 'evening-to-day')!;
+    const baselineScore = scores.find((s) => s.userId === 'baseline-days')!;
+
+    expect(transitionScore.disruptionIndex - baselineScore.disruptionIndex).toBe(20);
+    expect(transitionScore.transitionCount).toBe(1);
+    expect(transitionScore.primaryCause).toBe('forward rotation E→D');
+  });
 });
 
 describe('generateOptimizationRecommendations', () => {
