@@ -19,20 +19,33 @@ const CHANNEL_ID = 'shiftwell-reminders';
 /** Default lead time before bedtime for wind-down reminder (ms) — overridden by store */
 const DEFAULT_WIND_DOWN_LEAD_MS = 45 * 60 * 1000;
 
+type NotificationPermissionResult = Awaited<ReturnType<typeof Notifications.getPermissionsAsync>>;
+
+function hasNotificationPermission(settings: NotificationPermissionResult): boolean {
+  if ('granted' in settings) {
+    return settings.granted === true;
+  }
+
+  return (
+    settings.ios?.status === Notifications.IosAuthorizationStatus.AUTHORIZED ||
+    settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+  );
+}
+
 /**
  * Request notification permissions from the user.
  *
  * @returns Whether permissions were granted
  */
 export async function requestPermissions(): Promise<boolean> {
-  const { status: existing } = await Notifications.getPermissionsAsync();
+  const existing = await Notifications.getPermissionsAsync();
 
-  if (existing === 'granted') {
+  if (hasNotificationPermission(existing)) {
     return true;
   }
 
-  const { status } = await Notifications.requestPermissionsAsync();
-  return status === 'granted';
+  const requested = await Notifications.requestPermissionsAsync();
+  return hasNotificationPermission(requested);
 }
 
 /**
