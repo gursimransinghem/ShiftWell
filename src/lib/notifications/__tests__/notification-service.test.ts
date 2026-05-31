@@ -24,6 +24,10 @@ jest.mock('expo-notifications', () => ({
   SchedulableTriggerInputTypes: {
     DATE: 'date',
   },
+  IosAuthorizationStatus: {
+    AUTHORIZED: 2,
+    PROVISIONAL: 3,
+  },
 }));
 
 // Mock notification-store — default all enabled with standard lead times
@@ -42,6 +46,7 @@ jest.mock('@/src/store/notification-store', () => ({
 }));
 
 import {
+  requestPermissions,
   scheduleSleepReminder,
   scheduleCaffeineCutoff,
   scheduleWakeReminder,
@@ -53,6 +58,63 @@ import {
 function futureDate(minutesFromNow: number): Date {
   return new Date(Date.now() + minutesFromNow * 60 * 1000);
 }
+
+describe('requestPermissions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('returns true immediately when existing permissions are granted', async () => {
+    mockGetPermissionsAsync.mockResolvedValueOnce({
+      granted: true,
+      canAskAgain: false,
+      expires: 'never',
+    });
+
+    await expect(requestPermissions()).resolves.toBe(true);
+    expect(mockRequestPermissionsAsync).not.toHaveBeenCalled();
+  });
+
+  it('treats iOS provisional authorization as usable notification permission', async () => {
+    mockGetPermissionsAsync.mockResolvedValueOnce({
+      ios: { status: 3 },
+    });
+
+    await expect(requestPermissions()).resolves.toBe(true);
+    expect(mockRequestPermissionsAsync).not.toHaveBeenCalled();
+  });
+
+  it('requests permission when existing settings are not granted and returns requested grant result', async () => {
+    mockGetPermissionsAsync.mockResolvedValueOnce({
+      granted: false,
+      canAskAgain: true,
+      expires: 'never',
+    });
+    mockRequestPermissionsAsync.mockResolvedValueOnce({
+      granted: true,
+      canAskAgain: false,
+      expires: 'never',
+    });
+
+    await expect(requestPermissions()).resolves.toBe(true);
+    expect(mockRequestPermissionsAsync).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns false when both existing and requested permissions are denied', async () => {
+    mockGetPermissionsAsync.mockResolvedValueOnce({
+      granted: false,
+      canAskAgain: true,
+      expires: 'never',
+    });
+    mockRequestPermissionsAsync.mockResolvedValueOnce({
+      granted: false,
+      canAskAgain: false,
+      expires: 'never',
+    });
+
+    await expect(requestPermissions()).resolves.toBe(false);
+  });
+});
 
 describe('notification copy — warm emoji tone', () => {
   beforeEach(() => {
