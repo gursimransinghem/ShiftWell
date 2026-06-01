@@ -25,6 +25,8 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+coverage/
+.claude/logs/
 
 # macOS
 .DS_Store
@@ -56,6 +58,10 @@ logs/ceo-loop/*.log
 
 # Sibling projects (tracked independently in their own repos)
 shiftwell-dashboard/
+
+# Supabase local CLI state
+supabase/.branches/
+supabase/.temp/
 
 # Design reference image drop zones (keep README + written distillations, ignore large PNGs/MP4s)
 docs/design/references/lumi-screenshots/*.png
