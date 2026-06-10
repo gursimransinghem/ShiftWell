@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Purple glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="25" result="blur"/>
+      <feFlood flood-color="#7B61FF" flood-opacity="0.35" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glowColor"/>
+      <feMerge>
+        <feMergeNode in="glowColor"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Radial gradient for moon -->
+    <radialGradient id="moonGrad" cx="45%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#9B7DFF"/>
+      <stop offset="60%" stop-color="#7B61FF"/>
+      <stop offset="100%" stop-color="#6247CC"/>
+    </radialGradient>
+    <!-- Background gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#131726"/>
+      <stop offset="100%" stop-color="#080B14"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+  <!-- Subtle background stars (tiny dots) -->
+  <circle cx="180" cy="200" r="1.5" fill="#FFFFFF" opacity="0.15"/>
+  <circle cx="820" cy="150" r="1" fill="#FFFFFF" opacity="0.12"/>
+  <circle cx="750" cy="680" r="1.5" fill="#FFFFFF" opacity="0.1"/>
+  <circle cx="250" cy="750" r="1" fill="#FFFFFF" opacity="0.08"/>
+  <circle cx="650" cy="280" r="1" fill="#FFFFFF" opacity="0.1"/>
+
+  <!-- Crescent moon with glow -->
+  <g filter="url(#glow)" transform="translate(512, 420)">
+    <!--
+      Crescent moon: large circle minus smaller offset circle.
+      Main circle radius ~220, cutout offset to upper-right.
+    -->
+    <clipPath id="crescentClip">
+      <path d="
+        M -220,0
+        A 220,220 0 1,1 220,0
+        A 220,220 0 1,1 -220,0
+        Z
+      "/>
+    </clipPath>
+    <!-- Full moon circle -->
+    <circle cx="0" cy="0" r="220" fill="url(#moonGrad)"/>
+    <!-- Cutout circle to create crescent (matches background) -->
+    <circle cx="90" cy="-70" r="175" fill="#0E1220"/>
+  </g>
+
+  <!-- Clock hands inside the crescent curve -->
+  <g transform="translate(420, 390)" stroke="#FFFFFF" stroke-linecap="round" opacity="0.9">
+    <!-- Hour hand (shorter, thicker) pointing ~10 o'clock -->
+    <line x1="0" y1="0" x2="-38" y2="-52" stroke-width="8"/>
+    <!-- Minute hand (longer, thinner) pointing ~2 o'clock -->
+    <line x1="0" y1="0" x2="30" y2="-65" stroke-width="5"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="0" r="6" fill="#FFFFFF" stroke="none"/>
+  </g>
+
+  <!-- Gold accent dot (star / 12 o'clock marker) -->
+  <circle cx="420" cy="310" r="10" fill="#C8A84B"/>
+  <!-- Gold dot glow -->
+  <circle cx="420" cy="310" r="16" fill="#C8A84B" opacity="0.2"/>
+
+  <!-- "SW" text mark at bottom (subtle, small) -->
+  <text
+    x="512"
+    y="820"
+    text-anchor="middle"
+    font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif"
+    font-size="72"
+    font-weight="700"
+    letter-spacing="8"
+    fill="#FFFFFF"
+    opacity="0.6"
+  >SW</text>
+
+  <!-- Thin gold underline accent below text -->
+  <line x1="462" y1="840" x2="562" y2="840" stroke="#C8A84B" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+</svg>

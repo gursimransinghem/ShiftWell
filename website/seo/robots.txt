@@ -1,0 +1,21 @@
+# ShiftWell — robots.txt
+# https://shiftwell.app
+
+User-agent: *
+Allow: /
+
+# SEO landing pages
+Allow: /nurses
+Allow: /first-responders
+Allow: /healthcare-workers
+
+# Sitemap
+Sitemap: https://shiftwell.app/sitemap.xml
+
+# Block internal/dev paths
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+Disallow: /debug/
+
+# Created: 2026-04-18 | Last Reviewed: 2026-04-18 | Last Edited: 2026-04-18 | Review Notes: Initial creation, standard crawl rules for ShiftWell marketing site

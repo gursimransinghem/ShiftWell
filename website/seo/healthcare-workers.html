@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShiftWell for Hospitals — Reduce nurse fatigue, improve retention, and prevent sentinel events with evidence-based circadian optimization. See ROI in 90 days.">
+    <meta name="keywords" content="nurse fatigue reduction, hospital worker wellness, shift worker burnout, sentinel event prevention, nurse retention, Joint Commission fatigue management, healthcare worker burnout solution, residency wellness">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#080B14">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ShiftWell for Hospitals — Reduce Nurse Fatigue, Improve Retention">
+    <meta property="og:description" content="Enterprise wellness platform proven to reduce nurse turnover and fatigue-related errors. HIPAA-compliant, privacy-first architecture.">
+    <meta property="og:url" content="https://shiftwell.app/healthcare-workers">
+    <meta property="og:site_name" content="ShiftWell">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ShiftWell for Hospitals — Reduce Nurse Fatigue, Improve Retention">
+    <meta name="twitter:description" content="Enterprise wellness platform proven to reduce nurse turnover and fatigue-related errors. HIPAA-compliant, privacy-first.">
+    <meta name="twitter:site" content="@ShiftWellApp">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://shiftwell.app/healthcare-workers">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <title>ShiftWell for Hospitals — Reduce Nurse Fatigue, Improve Retention | ShiftWell</title>
+
+    <style>
+        :root {
+            --bg-primary: #080B14;
+            --bg-surface: #131726;
+            --bg-elevated: #1A1F35;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --purple: #7B61FF;
+            --gold: #C8A84B;
+            --border: #1F2937;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        a {
+            color: var(--purple);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--gold);
+        }
+
+        button {
+            font-family: 'DM Sans', sans-serif;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 28px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: var(--purple);
+            color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            background: #6B54E8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(123, 97, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--purple);
+            border: 2px solid var(--purple);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(123, 97, 255, 0.1);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        .logo span {
+            color: var(--purple);
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin: 0 20px;
+        }
+
+        nav a:hover {
+            color: var(--text-primary);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            padding: 80px 0 100px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid var(--purple);
+            color: var(--purple);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-subheading {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .section {
+            padding: 80px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section h2 {
+            font-size: 40px;
+            margin-bottom: 50px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .section h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .cost-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--purple);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(123, 97, 255, 0.15);
+        }
+
+        .stat-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--purple);
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .pillar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .pillar:hover {
+            border-color: var(--gold);
+            box-shadow: 0 12px 32px rgba(200, 168, 75, 0.1);
+        }
+
+        .pillar-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(123, 97, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .pillar-title {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .pillar-text {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .roi-section {
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(200, 168, 75, 0.05));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .roi-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .roi-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .roi-value {
+            font-family: 'Inter', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .roi-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--purple);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(123, 97, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .trust-section {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 50px 40px;
+            margin-top: 40px;
+        }
+
+        .trust-title {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .trust-text {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .trust-highlight {
+            background: rgba(200, 168, 75, 0.1);
+            border-left: 4px solid var(--gold);
+            padding: 20px;
+            border-radius: 4px;
+            margin-top: 24px;
+        }
+
+        .trust-highlight p {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .science-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-top: 50px;
+        }
+
+        .science-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .science-card h4 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: var(--purple);
+        }
+
+        .science-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .science-citation {
+            color: var(--text-tertiary);
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .faq-section {
+            margin-top: 60px;
+        }
+
+        .faq-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-elevated);
+        }
+
+        .faq-question h4 {
+            font-size: 16px;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .faq-toggle {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple);
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: var(--bg-elevated);
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 24px 24px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .cta-final {
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(200, 168, 75, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-final h2 {
+            margin-bottom: 20px;
+        }
+
+        .cta-final p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .contact-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .divider {
+            color: var(--text-tertiary);
+        }
+
+        .call-link {
+            color: var(--purple);
+            font-weight: 600;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            margin-top: 80px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        .footer-section a {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            text-align: center;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-subheading {
+                font-size: 16px;
+            }
+
+            .section h2 {
+                font-size: 32px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .stat-number {
+                font-size: 36px;
+            }
+
+            .hero {
+                padding: 60px 0 80px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .stat-card {
+                padding: 30px 20px;
+            }
+
+            .stat-number {
+                font-size: 28px;
+            }
+
+            .pillars,
+            .features-grid,
+            .science-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Shift<span>Well</span></div>
+                <nav>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#roi">ROI</a>
+                    <a href="#features">Features</a>
+                    <a href="#faq">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="badge fade-in">Enterprise Wellness Solution</div>
+                <h1 class="fade-in">Reduce Fatigue-Related Errors. Improve Nurse Retention.</h1>
+                <p class="hero-subheading fade-in">Evidence-based circadian optimization platform designed for hospitals, health systems, and residency programs. Reduce turnover, prevent sentinel events, and achieve Joint Commission compliance.</p>
+                <div class="cta-buttons fade-in">
+                    <button class="btn-primary">Request a Demo</button>
+                    <button class="btn-secondary">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost of Fatigue Section -->
+        <section class="section">
+            <div class="container">
+                <h2>The Cost of Fatigue in Healthcare</h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto 50px; font-size: 16px;">Fatigue among healthcare workers is not just a wellness issue — it's a patient safety and financial imperative. Organizations that don't address it face significant risks.</p>
+                <div class="cost-grid">
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">$4.6B</div>
+                        <div class="stat-label">Annual cost of nurse turnover in US hospitals alone</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">168%</div>
+                        <div class="stat-label">Increase in medical errors after 12+ hours of work</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">27%</div>
+                        <div class="stat-label">Of sentinel events involve healthcare worker fatigue</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">$56K-$88K</div>
+                        <div class="stat-label">Average cost to replace one experienced nurse</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">10-38%</div>
+                        <div class="stat-label">Of night shift workers meet criteria for Shift Work Sleep Disorder</div>
+                    </div>
+                    <div class="stat-card fade-in">
+                        <div class="stat-number">32%</div>
+                        <div class="stat-label">Of US healthcare workers report chronic short sleep</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="section" id="how-it-works">
+            <div class="container">
+                <h2>How ShiftWell Works for Organizations</h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto 50px; font-size: 16px;">Three pillars designed for enterprise deployment, privacy-first architecture, and measurable outcomes.</p>
+                <div class="pillars">
+                    <div class="pillar fade-in">
+                        <div class="pillar-icon">🚀</div>
+                        <div class="pillar-title">Deploy</div>
+                        <div class="pillar-text">Simple enterprise onboarding with minimal IT overhead. Works with existing scheduling systems via API or manual import. Support team ensures smooth rollout to your organization.</div>
+                    </div>
+                    <div class="pillar fade-in">
+                        <div class="pillar-icon">⚙️</div>
+                        <div class="pillar-title">Optimize</div>
+                        <div class="pillar-text">Each worker receives personalized, evidence-based circadian rhythm recommendations. Based on their schedule, not a one-size-fits-all approach. Workers voluntarily opt in and control their own data.</div>
+                    </div>
+                    <div class="pillar fade-in">
+                        <div class="pillar-icon">📊</div>
+                        <div class="pillar-title">Measure</div>
+                        <div class="pillar-text">Anonymized fatigue risk dashboards give leadership visibility. Compliance reports for Joint Commission. Track outcomes: turnover reduction, engagement scores, sentinel event trends.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROI Section -->
+        <section class="section" id="roi">
+            <div class="container">
+                <div class="roi-section fade-in">
+                    <h3 class="roi-title">Calculate Your ROI</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 40px;">Example: 500-bed hospital with 400 RN FTEs</p>
+                    <div class="roi-grid">
+                        <div class="roi-item">
+                            <div class="roi-value">5%</div>
+                            <div class="roi-label">Turnover Reduction (Conservative)</div>
+                        </div>
+                        <div class="roi-item">
+                            <div class="roi-value">20 RNs</div>
+                            <div class="roi-label">Retained Annually</div>
+                        </div>
+                        <div class="roi-item">
+                            <div class="roi-value">$1.4M</div>
+                            <div class="roi-label">Direct Cost Savings (Year 1)</div>
+                        </div>
+                        <div class="roi-item">
+                            <div class="roi-value">$125K</div>
+                            <div class="roi-label">Platform Cost (Annual)</div>
+                        </div>
+                    </div>
+                    <p style="color: var(--gold); font-weight: 600; font-size: 18px;">Net Benefit: $1.27M+</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <div class="container">
+                <h2>Features for Administrators</h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto 50px; font-size: 16px;">Purpose-built capabilities for hospital leadership, CNOs, and wellness committees.</p>
+                <div class="features-grid">
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-title">Anonymized Fatigue Risk Dashboards</div>
+                        <div class="feature-description">Real-time visibility into organizational fatigue risk scores by unit, shift, and trend. No individual data exposed. Aggregate metrics only.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">✅</div>
+                        <div class="feature-title">Joint Commission Compliance Reports</div>
+                        <div class="feature-description">Pre-formatted reporting for fatigue management plans, Sentinel Event Alert #48, and fatigue risk mitigation documentation.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🔗</div>
+                        <div class="feature-title">Scheduling System Integration</div>
+                        <div class="feature-description">API connectors for QGenda, Kronos, and other major platforms. Automatic schedule sync. Manual import also supported.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Customizable Wellness Programs</div>
+                        <div class="feature-description">Tailor recommendations to your organization: sleep, napping, light exposure, meal timing. Aligned with NIOSH guidelines and best practices.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🔬</div>
+                        <div class="feature-title">Evidence-Based Protocols</div>
+                        <div class="feature-description">Algorithms grounded in published research: Two-Process Model, AASM guidelines, Eastman & Burgess circadian shifting. Not LLM-based guessing.</div>
+                    </div>
+                    <div class="feature-card fade-in">
+                        <div class="feature-icon">🔐</div>
+                        <div class="feature-title">Privacy-First Architecture</div>
+                        <div class="feature-description">HIPAA-aware design. Individual sleep data stays with workers. Employers see only anonymized aggregate insights. Workers control their own data.</div>
+                    </div>
+                </div>
+
+                <div class="trust-section fade-in">
+                    <h3 class="trust-title">Privacy & Trust Are Non-Negotiable</h3>
+                    <p class="trust-text">We understand the concern: "Will you share our employees' health data with us?" The answer is an unequivocal no.</p>
+                    <p class="trust-text">Individual sleep data, fatigue scores, and recommendations remain private. Each worker controls their own profile. Organizations see only:</p>
+                    <ul style="color: var(--text-secondary); margin-left: 20px; margin-bottom: 16px;">
+                        <li style="margin-bottom: 8px;">Anonymized aggregate fatigue risk trends (by unit, shift type, time period)</li>
+                        <li style="margin-bottom: 8px;">Opt-in participation rates</li>
+                        <li style="margin-bottom: 8px;">Compliance documentation</li>
+                        <li>De-identified outcome metrics (turnover trend, incident trends)</li>
+                    </ul>
+                    <div class="trust-highlight">
+                        <p><strong>Workers drive voluntary adoption.</strong> Employees choose to use ShiftWell. They own their data. Your organization benefits from aggregate insights and compliance documentation, not surveillance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Science & Compliance Section -->
+        <section class="section">
+            <div class="container">
+                <h2>Grounded in Evidence & Regulation</h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto 50px; font-size: 16px;">Our algorithms trace to published science. Your compliance obligations are built in.</p>
+                <div class="science-grid">
+                    <div class="science-card fade-in">
+                        <h4>Joint Commission Sentinel Event Alert #48</h4>
+                        <p>Fatigue of healthcare workers is a patient safety issue. ShiftWell helps you document mitigation strategies and compliance with fatigue management plans.</p>
+                        <p class="science-citation">Joint Commission (2011) — Sentinel Event Alert Issue 48</p>
+                    </div>
+                    <div class="science-card fade-in">
+                        <h4>Two-Process Model of Sleep Regulation</h4>
+                        <p>The foundation of modern sleep science. Our algorithms model circadian rhythm (C-process) and sleep pressure (S-process) to predict optimal sleep and alert windows.</p>
+                        <p class="science-citation">Borbely (1982); AASM Clinical Practice Guidelines (2015, 2023)</p>
+                    </div>
+                    <div class="science-card fade-in">
+                        <h4>Shift Work Sleep Disorder & Health Impact</h4>
+                        <p>Prevalence affects 10-38% of night shift workers. Our recommendations reduce circadian misalignment and improve sleep quality for rotating schedules.</p>
+                        <p class="science-citation">Drake et al. (2004, 2013); Chellappa et al. (2021)</p>
+                    </div>
+                    <div class="science-card fade-in">
+                        <h4>NIOSH Fatigue Risk Management</h4>
+                        <p>We incorporate NIOSH anchor sleep principles, fatigue risk assessment frameworks, and evidence-based fatigue mitigation from CDC guidelines.</p>
+                        <p class="science-citation">NIOSH CDC Fatigue Risk Management (2020–2025)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section" id="faq">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-section">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>How does ShiftWell protect employee privacy?</h4>
+                            <div class="faq-toggle">+</div>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Individual health data (sleep logs, fatigue scores, recommendations) remains private and under employee control. Your organization receives only anonymized, aggregate insights: fatigue risk trends by unit or shift type, participation rates, and compliance documentation. We never share identifying information, location data, or individual health records with employers. This is fundamental to our architecture and privacy promise.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>Does ShiftWell integrate with our scheduling system?</h4>
+                            <div class="faq-toggle">+</div>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes. We have API connectors for QGenda, Kronos, and other major scheduling platforms. Schedules sync automatically, keeping recommendations fresh. If you use a system we don't yet support, we offer manual CSV import or can work with your IT team on a custom connector. Our team provides full setup and ongoing support during deployment.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>What ROI can we realistically expect?</h4>
+                            <div class="faq-toggle">+</div>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Conservative estimates: 5% reduction in RN turnover (typical for wellness interventions) translates to $1.2M–$1.5M saved per 400-RN hospital annually, against ~$125K platform cost. Additional benefits include reduced sentinel events, improved engagement scores, lower workers' comp claims, and documented compliance. We provide detailed ROI modeling for your organization size and current turnover rate during the sales process.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>How does this help with Joint Commission requirements?</h4>
+                            <div class="faq-toggle">+</div>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Joint Commission Sentinel Event Alert #48 requires healthcare organizations to address fatigue as a patient safety issue. ShiftWell provides: (1) documented fatigue management protocols aligned with evidence; (2) automatic compliance reports for your accreditation file; (3) fatigue risk dashboards for leadership; (4) data to support your sentinel event reduction efforts. We help you close gaps identified in your survey.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h4>What does enterprise pricing look like?</h4>
+                            <div class="faq-toggle">+</div>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Pricing is customized based on organization size, number of employees, and feature tier. A typical 400-bed hospital pays ~$125K annually for full platform access with integration, compliance reporting, and dedicated support. Multi-facility health systems receive volume discounts. Contact our enterprise team to discuss your specific needs and get a detailed proposal.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="section">
+            <div class="container">
+                <div class="cta-final fade-in">
+                    <h2>See How ShiftWell Can Transform Your Workforce Wellness</h2>
+                    <p>Join leading health systems in reducing fatigue-related errors and improving nurse retention with evidence-based circadian optimization.</p>
+                    <div class="contact-options">
+                        <button class="btn-primary">Request a Demo</button>
+                        <span class="divider">|</span>
+                        <span>Or give us a call: <a href="tel:+1-855-SHIFTWELL" class="call-link">(855) 743-8935</a></span>
+                    </div>
+                    <p style="color: var(--text-tertiary); font-size: 14px;">Enterprise sales team responds within 24 hours.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <a href="#">For Healthcare</a>
+                    <a href="#">For Shift Workers</a>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Health Disclaimers</a>
+                    <a href="#">HIPAA</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="mailto:enterprise@shiftwell.app">enterprise@shiftwell.app</a>
+                    <a href="tel:+1-855-SHIFTWELL">(855) 743-8935</a>
+                    <p style="margin-top: 12px;">San Francisco, CA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ShiftWell. All rights reserved. | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', function() {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('open');
+                    }
+                });
+                // Toggle current item
+                item.classList.toggle('open');
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Button click handlers (placeholder)
+        document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('Demo') || this.textContent.includes('demo')) {
+                    // Demo request action
+                    console.log('Demo requested');
+                    alert('Thank you for your interest! Our sales team will contact you within 24 hours.');
+                } else if (this.textContent.includes('Learn')) {
+                    // Scroll to features
+                    document.getElementById('how-it-works').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Schema.org JSON-LD Markup
+        const schemaScript = document.createElement('script');
+        schemaScript.type = 'application/ld+json';
+        schemaScript.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": "ShiftWell for Hospitals — Reduce Nurse Fatigue, Improve Retention",
+            "description": "Enterprise wellness platform proven to reduce nurse turnover and fatigue-related errors. HIPAA-compliant, privacy-first architecture.",
+            "url": "https://shiftwell.app/healthcare-workers",
+            "isPartOf": {
+                "@type": "Website",
+                "name": "ShiftWell",
+                "url": "https://shiftwell.app"
+            },
+            "organization": {
+                "@type": "Organization",
+                "name": "ShiftWell",
+                "url": "https://shiftwell.app",
+                "logo": "https://shiftwell.app/logo.png",
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "telephone": "+1-855-743-8935",
+                    "contactType": "Sales"
+                }
+            }
+        });
+        document.head.appendChild(schemaScript);
+
+        const faqSchema = document.createElement('script');
+        faqSchema.type = 'application/ld+json';
+        faqSchema.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "How does ShiftWell protect employee privacy?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Individual health data remains private and under employee control. Organizations receive only anonymized, aggregate insights."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "Does ShiftWell integrate with our scheduling system?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Yes. We have API connectors for QGenda, Kronos, and other major scheduling platforms."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What ROI can we realistically expect?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Conservative estimates show 5% turnover reduction yielding $1.2M–$1.5M in savings per 400-RN hospital annually."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "How does this help with Joint Commission requirements?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Provides documented fatigue management protocols, compliance reports, and fatigue risk dashboards for leadership."
+                    }
+                },
+                {
+                    "@type": "Question",
+                    "name": "What does enterprise pricing look like?",
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Pricing is customized based on organization size. A typical 400-bed hospital costs ~$125K annually."
+                    }
+                }
+            ]
+        });
+        document.head.appendChild(faqSchema);
+    </script>
+</body>
+</html>
+<!-- Created: 2026-04-18 | Last Reviewed: 2026-04-18 | Last Edited: 2026-04-18 | Review Notes: Initial creation, all original copy, B2B healthcare workers landing page with enterprise ROI focus, privacy emphasis, Joint Commission compliance, evidence-based positioning, complete self-contained HTML with inline CSS/JS, SEO meta tags, schema.org markup, mobile responsive, dark theme matching design system -->

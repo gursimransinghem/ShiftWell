@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.shiftwell.ceo-loop</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/sima/Projects/ShiftWell/scripts/company-ops-v2/ceo-loop.sh</string>
+    </array>
+
+    <!-- 1x/day at 6:00 AM ET (reduced from 3x/day) -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>6</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/sima/Projects/ShiftWell</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sima/Projects/ShiftWell/logs/ceo-loop/launchd-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/sima/Projects/ShiftWell/logs/ceo-loop/launchd-stderr.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/sima/.local/bin:/Users/sima/.nvm/versions/node/v22/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/sima</string>
+        <key>SHIFTWELL_DIR</key>
+        <string>/Users/sima/Projects/ShiftWell</string>
+        <key>OBSIDIAN_SHIFTWELL</key>
+        <string>/Users/sima/Obsidian/SimVault/projects/shiftwell</string>
+    </dict>
+</dict>
+</plist>

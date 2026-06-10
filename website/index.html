@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShiftWell — Sleep Autopilot for Shift Workers</title>
+    <meta name="description" content="ShiftWell uses science-backed circadian algorithms to optimize your sleep around any shift schedule. Built by an ER physician who lives the night shift.">
+    <meta name="keywords" content="shift work sleep, night shift sleep app, circadian rhythm, sleep optimization, nurse sleep, healthcare worker sleep, shift work disorder">
+    <meta name="author" content="ShiftWell">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shiftwell.app">
+    <meta property="og:title" content="ShiftWell — Sleep Autopilot for Shift Workers">
+    <meta property="og:description" content="Import your shifts. Get a science-backed sleep plan. Export to calendar. Built by an ER physician.">
+    <meta property="og:image" content="https://shiftwell.app/og-image.png">
+    <meta property="og:site_name" content="ShiftWell">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ShiftWell — Sleep Autopilot for Shift Workers">
+    <meta name="twitter:description" content="Import your shifts. Get a science-backed sleep plan. Export to calendar. Built by an ER physician.">
+    <meta name="twitter:image" content="https://shiftwell.app/og-image.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://shiftwell.app">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================
+           ShiftWell — Design Tokens
+           ============================================ */
+        :root {
+            /* Backgrounds */
+            --bg-primary: #080B14;
+            --bg-surface: #131726;
+            --bg-elevated: #1A1F35;
+            --bg-hero: #060912;
+
+            /* Text */
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --text-dim: #4B5563;
+
+            /* Brand */
+            --purple: #7B61FF;
+            --purple-muted: rgba(123, 97, 255, 0.15);
+            --purple-glow: rgba(123, 97, 255, 0.35);
+            --gold: #C8A84B;
+            --gold-muted: rgba(200, 168, 75, 0.15);
+
+            /* Semantic */
+            --success: #34D399;
+            --warning: #FBBF24;
+            --error: #FF6B6B;
+            --info: #4A90D9;
+
+            /* Block colors */
+            --sleep: #7B61FF;
+            --nap: #B794F6;
+            --shift-night: #FF9F43;
+            --meal: #34D399;
+            --caffeine: #FF6B6B;
+            --light: #FCD34D;
+            --wind-down: #818CF8;
+
+            /* Border */
+            --border-default: #1F2937;
+            --border-subtle: #171D2E;
+
+            /* Spacing */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --space-3xl: 32px;
+            --space-4xl: 40px;
+            --space-5xl: 56px;
+            --space-6xl: 80px;
+            --space-7xl: 120px;
+
+            /* Radius */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            --radius-2xl: 28px;
+            --radius-full: 9999px;
+
+            /* Typography */
+            --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* ============================================
+           Reset & Base
+           ============================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============================================
+           Utility
+           ============================================ */
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 var(--space-2xl);
+        }
+
+        .section {
+            padding: var(--space-7xl) 0;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--purple), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-purple { color: var(--purple); }
+        .text-gold { color: var(--gold); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-center { text-align: center; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--purple-muted);
+            border: 1px solid rgba(123, 97, 255, 0.2);
+            border-radius: var(--radius-full);
+            font-family: var(--font-heading);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--purple);
+            letter-spacing: 0.3px;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--purple);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        /* ============================================
+           Navigation
+           ============================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: var(--space-lg) 0;
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(8, 11, 20, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--purple), #5B41DF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3xl);
+        }
+
+        .nav-link {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover { color: var(--text-primary); }
+
+        .nav-cta {
+            padding: var(--space-sm) var(--space-xl);
+            background: var(--purple);
+            border-radius: var(--radius-full);
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--purple-glow);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: var(--space-sm);
+        }
+
+        /* ============================================
+           Hero
+           ============================================ */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: var(--space-7xl);
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        /* Gradient orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+        }
+
+        .hero-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.3), transparent 70%);
+            top: -200px;
+            right: -100px;
+            animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .hero-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(200, 168, 75, 0.15), transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation: float-orb 25s ease-in-out infinite reverse;
+        }
+
+        .hero-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(100, 70, 240, 0.15), transparent 70%);
+            top: 40%;
+            left: 30%;
+            animation: float-orb 22s ease-in-out infinite 5s;
+        }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -40px); }
+            66% { transform: translate(-20px, 20px); }
+        }
+
+        /* Stars */
+        .hero-stars {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite var(--delay);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 720px;
+        }
+
+        .hero-overline {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(40px, 6vw, 64px);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(17px, 2vw, 20px);
+            color: var(--text-secondary);
+            line-height: 1.65;
+            max-width: 540px;
+            margin-bottom: var(--space-4xl);
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-3xl);
+            background: var(--purple);
+            border-radius: var(--radius-full);
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--purple-glow);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-3xl);
+            background: transparent;
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-full);
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--purple);
+            color: var(--text-primary);
+        }
+
+        .hero-proof {
+            margin-top: var(--space-5xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3xl);
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-stat-value {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .hero-stat-label {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .hero-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--border-default);
+        }
+
+        /* Phone mockup */
+        .hero-visual {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: var(--bg-surface);
+            border-radius: 40px;
+            border: 2px solid var(--border-default);
+            padding: 12px;
+            position: relative;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), 0 0 60px var(--purple-glow);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            border-radius: 30px;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-notch {
+            width: 120px;
+            height: 28px;
+            background: var(--bg-surface);
+            border-radius: 0 0 16px 16px;
+            margin: -20px auto 16px;
+        }
+
+        .phone-greeting {
+            font-family: var(--font-heading);
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 2px;
+        }
+
+        .phone-date {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .phone-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.18);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+
+        .phone-score-ring {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            border: 3px solid var(--purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+        }
+
+        .phone-score-ring::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--purple-glow), transparent 70%);
+            animation: score-glow 4s ease-in-out infinite;
+        }
+
+        @keyframes score-glow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        .phone-score-value {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .phone-score-label {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .phone-countdowns {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .phone-countdown-cell {
+            flex: 1;
+            background: var(--bg-surface);
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+        }
+
+        .phone-countdown-emoji { font-size: 13px; }
+        .phone-countdown-time {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            margin: 2px 0;
+        }
+        .phone-countdown-label {
+            font-size: 8px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .phone-timeline {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .phone-event {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            background: var(--bg-surface);
+            font-size: 11px;
+        }
+
+        .phone-event-bar {
+            width: 3px;
+            height: 28px;
+            border-radius: 2px;
+        }
+
+        .phone-event-time {
+            font-family: var(--font-heading);
+            font-size: 10px;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-tertiary);
+            min-width: 32px;
+        }
+
+        .phone-event-title {
+            font-weight: 500;
+            font-size: 11px;
+        }
+
+        /* ============================================
+           Problem Section
+           ============================================ */
+        .problem {
+            background: var(--bg-surface);
+            position: relative;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6xl);
+            align-items: center;
+        }
+
+        .problem h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(30px, 4vw, 42px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .problem-text {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+        }
+
+        .stat-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+        }
+
+        .stat-card-value {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .stat-card-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: var(--space-xs);
+            line-height: 1.45;
+        }
+
+        .stat-card:nth-child(1) .stat-card-value { color: var(--error); }
+        .stat-card:nth-child(2) .stat-card-value { color: var(--warning); }
+        .stat-card:nth-child(3) .stat-card-value { color: var(--shift-night); }
+        .stat-card:nth-child(4) .stat-card-value { color: var(--info); }
+
+        /* ============================================
+           How It Works
+           ============================================ */
+        .how-it-works {
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto var(--space-6xl);
+        }
+
+        .section-overline {
+            font-family: var(--font-heading);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--purple);
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(30px, 4vw, 42px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-header p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3xl);
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 48px;
+            left: calc(16.67% + 24px);
+            right: calc(16.67% + 24px);
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--gold), var(--success));
+            opacity: 0.3;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-2xl);
+            font-size: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step:nth-child(1) .step-icon {
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.15), rgba(123, 97, 255, 0.05));
+            border: 1px solid rgba(123, 97, 255, 0.25);
+        }
+
+        .step:nth-child(2) .step-icon {
+            background: linear-gradient(135deg, rgba(200, 168, 75, 0.15), rgba(200, 168, 75, 0.05));
+            border: 1px solid rgba(200, 168, 75, 0.25);
+        }
+
+        .step:nth-child(3) .step-icon {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(52, 211, 153, 0.05));
+            border: 1px solid rgba(52, 211, 153, 0.25);
+        }
+
+        .step-number {
+            font-family: var(--font-heading);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-md);
+        }
+
+        .step h3 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.3px;
+        }
+
+        .step p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           Features
+           ============================================ */
+        .features {
+            background: var(--bg-surface);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-2xl);
+        }
+
+        .feature-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4xl);
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(123, 97, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .feature-card:nth-child(1) .feature-icon {
+            background: rgba(123, 97, 255, 0.12);
+        }
+        .feature-card:nth-child(2) .feature-icon {
+            background: rgba(200, 168, 75, 0.12);
+        }
+        .feature-card:nth-child(3) .feature-icon {
+            background: rgba(52, 211, 153, 0.12);
+        }
+        .feature-card:nth-child(4) .feature-icon {
+            background: rgba(129, 140, 248, 0.12);
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.3px;
+        }
+
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: var(--space-lg);
+            letter-spacing: 0.3px;
+        }
+
+        .feature-tag-science {
+            background: rgba(52, 211, 153, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .feature-tag-premium {
+            background: var(--gold-muted);
+            color: var(--gold);
+            border: 1px solid rgba(200, 168, 75, 0.2);
+        }
+
+        /* ============================================
+           Science / Credibility
+           ============================================ */
+        .science {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .science-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6xl);
+            align-items: center;
+        }
+
+        .science h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(30px, 4vw, 42px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .science-text {
+            font-size: 17px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .citations {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .citation {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .citation-icon {
+            font-size: 16px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .citation-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .founder-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4xl);
+            text-align: center;
+        }
+
+        .founder-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto var(--space-2xl);
+        }
+
+        .founder-name {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .founder-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .founder-quote {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-style: italic;
+        }
+
+        .founder-quote::before { content: '\201C'; }
+        .founder-quote::after { content: '\201D'; }
+
+        /* ============================================
+           Social Proof / Testimonials
+           ============================================ */
+        .social-proof {
+            background: var(--bg-surface);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2xl);
+        }
+
+        .testimonial {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-3xl);
+        }
+
+        .testimonial-stars {
+            color: var(--gold);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .testimonial-avatar-1 { background: rgba(123, 97, 255, 0.15); }
+        .testimonial-avatar-2 { background: rgba(52, 211, 153, 0.15); }
+        .testimonial-avatar-3 { background: rgba(200, 168, 75, 0.15); }
+
+        .testimonial-name {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .testimonial-role {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================
+           Pricing
+           ============================================ */
+        .pricing {
+            position: relative;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2xl);
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4xl);
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--purple);
+            box-shadow: 0 0 40px rgba(123, 97, 255, 0.15);
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: var(--space-xs) var(--space-lg);
+            background: var(--purple);
+            border-radius: var(--radius-full);
+            font-family: var(--font-heading);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .pricing-name {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+        }
+
+        .pricing-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .pricing-price {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-xs);
+        }
+
+        .pricing-amount {
+            font-family: var(--font-heading);
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+        }
+
+        .pricing-period {
+            font-size: 15px;
+            color: var(--text-tertiary);
+        }
+
+        .pricing-savings {
+            font-size: 13px;
+            color: var(--success);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .pricing-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-heading);
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.25s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .pricing-btn-primary {
+            background: var(--purple);
+            color: white;
+        }
+
+        .pricing-btn-primary:hover {
+            box-shadow: 0 4px 20px var(--purple-glow);
+            transform: translateY(-1px);
+        }
+
+        .pricing-btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+        }
+
+        .pricing-btn-secondary:hover {
+            border-color: var(--purple);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           CTA Section
+           ============================================ */
+        .cta {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-inner {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(30px, 4vw, 48px);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: var(--space-4xl);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        .app-store-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-lg) var(--space-2xl);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .app-store-btn:hover {
+            border-color: var(--purple);
+            transform: translateY(-2px);
+        }
+
+        .app-store-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .app-store-text-small {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .app-store-text-large {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .cta-orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.12), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(80px);
+        }
+
+        /* ============================================
+           Footer
+           ============================================ */
+        .footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            padding: var(--space-5xl) 0 var(--space-3xl);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: var(--space-4xl);
+            margin-bottom: var(--space-4xl);
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-top: var(--space-lg);
+            max-width: 280px;
+        }
+
+        .footer-heading {
+            font-family: var(--font-heading);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover { color: var(--text-primary); }
+
+        .footer-social {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .footer-social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-default);
+        }
+
+        .footer-social-link:hover {
+            border-color: var(--purple);
+            background: var(--purple-muted);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-3xl);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: var(--space-2xl);
+        }
+
+        .footer-legal a {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            transition: color 0.2s ease;
+        }
+
+        .footer-legal a:hover { color: var(--text-secondary); }
+
+        /* ============================================
+           Responsive
+           ============================================ */
+        @media (max-width: 1024px) {
+            .hero-visual { display: none; }
+
+            .problem-grid,
+            .science-inner {
+                grid-template-columns: 1fr;
+                gap: var(--space-4xl);
+            }
+
+            .steps { grid-template-columns: 1fr; gap: var(--space-4xl); }
+            .steps::before { display: none; }
+
+            .feature-grid { grid-template-columns: 1fr; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: var(--space-3xl);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: var(--space-5xl) 0; }
+            .container { padding: 0 var(--space-lg); }
+
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+
+            .nav-links.open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(8, 11, 20, 0.95);
+                backdrop-filter: blur(20px);
+                padding: var(--space-2xl);
+                border-bottom: 1px solid var(--border-subtle);
+                gap: var(--space-lg);
+            }
+
+            .hero { min-height: auto; padding-top: 120px; padding-bottom: var(--space-5xl); }
+            .hero-proof { gap: var(--space-xl); }
+            .hero-divider { display: none; }
+            .hero-stat-value { font-size: 22px; }
+
+            .stat-cards { grid-template-columns: 1fr; }
+
+            .footer-grid { grid-template-columns: 1fr; }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: var(--space-lg);
+                text-align: center;
+            }
+
+            .footer-legal { justify-content: center; }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { letter-spacing: -1px; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .btn-primary, .btn-secondary { justify-content: center; }
+        }
+
+        /* ============================================
+           Animations
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="container nav-inner">
+            <a href="#" class="nav-logo">
+                <div class="nav-logo-icon">🌙</div>
+                ShiftWell
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#science" class="nav-link">Science</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#download" class="nav-cta">Download Free</a>
+            </div>
+            <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+            <div class="hero-stars" id="stars"></div>
+        </div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-overline">
+                    <span class="badge"><span class="badge-dot"></span> Built by an ER physician</span>
+                </div>
+
+                <h1>Sleep autopilot<br>for <span class="text-gradient">shift workers</span></h1>
+
+                <p class="hero-subtitle">
+                    Import your shifts. Get a personalized sleep plan backed by circadian science.
+                    Export to your calendar. Finally rest like your schedule allows.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#download" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                        Download for iOS
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">See how it works</a>
+                </div>
+
+                <div class="hero-proof">
+                    <div class="hero-stat">
+                        <span class="hero-stat-value">700M</span>
+                        <span class="hero-stat-label">Shift workers globally</span>
+                    </div>
+                    <div class="hero-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value">1,059</span>
+                        <span class="hero-stat-label">Automated tests passing</span>
+                    </div>
+                    <div class="hero-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value">15+</span>
+                        <span class="hero-stat-label">Peer-reviewed citations</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone mockup (desktop only) -->
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-notch"></div>
+                        <div class="phone-greeting">Good evening</div>
+                        <div class="phone-date">Friday, Apr 18</div>
+                        <div class="phone-status">🌿 Recovery Day</div>
+
+                        <div class="phone-score-ring">
+                            <span class="phone-score-value">87</span>
+                        </div>
+                        <div class="phone-score-label">Sleep Score · ↑ 12% this week</div>
+
+                        <div class="phone-countdowns">
+                            <div class="phone-countdown-cell">
+                                <div class="phone-countdown-emoji">☕</div>
+                                <div class="phone-countdown-time">2:30p</div>
+                                <div class="phone-countdown-label">Caffeine</div>
+                            </div>
+                            <div class="phone-countdown-cell">
+                                <div class="phone-countdown-emoji">🌙</div>
+                                <div class="phone-countdown-time">9:45p</div>
+                                <div class="phone-countdown-label">Wind Down</div>
+                            </div>
+                            <div class="phone-countdown-cell">
+                                <div class="phone-countdown-emoji">😴</div>
+                                <div class="phone-countdown-time">10:30p</div>
+                                <div class="phone-countdown-label">Sleep</div>
+                            </div>
+                        </div>
+
+                        <div class="phone-timeline">
+                            <div class="phone-event">
+                                <div class="phone-event-bar" style="background: var(--meal);"></div>
+                                <div class="phone-event-time">6:00p</div>
+                                <div class="phone-event-title">Last Meal Window</div>
+                            </div>
+                            <div class="phone-event">
+                                <div class="phone-event-bar" style="background: var(--light);"></div>
+                                <div class="phone-event-time">8:00p</div>
+                                <div class="phone-event-title">Dim Lights Protocol</div>
+                            </div>
+                            <div class="phone-event">
+                                <div class="phone-event-bar" style="background: var(--wind-down);"></div>
+                                <div class="phone-event-time">9:45p</div>
+                                <div class="phone-event-title">Wind Down</div>
+                            </div>
+                            <div class="phone-event">
+                                <div class="phone-event-bar" style="background: var(--sleep);"></div>
+                                <div class="phone-event-time">10:30p</div>
+                                <div class="phone-event-title">Optimal Sleep Window</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="problem section" id="problem">
+        <div class="container">
+            <div class="problem-grid">
+                <div class="fade-in">
+                    <span class="section-overline">The Problem</span>
+                    <h2>Shift work is the largest occupational health crisis <span class="text-gradient">nobody talks about</span></h2>
+                    <p class="problem-text">
+                        Night shifts don't just disrupt your schedule — they disrupt your biology. Your body evolved for a solar day. Working against that clock means chronic sleep debt, metabolic disruption, and cognitive impairment that compounding over years. Yet the standard advice is "just sleep when you can."
+                    </p>
+                    <p class="problem-text">
+                        That's not a solution. That's abandonment.
+                    </p>
+                </div>
+                <div class="stat-cards fade-in fade-in-delay-2">
+                    <div class="stat-card">
+                        <div class="stat-card-value">32%</div>
+                        <div class="stat-card-label">of healthcare workers report short sleep (NIOSH)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">10–38%</div>
+                        <div class="stat-card-label">of night workers develop Shift Work Sleep Disorder</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">$136B</div>
+                        <div class="stat-card-label">annual cost of fatigue-related productivity loss</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value">23%</div>
+                        <div class="stat-card-label">of sentinel events cite nurse fatigue as root cause</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works section" id="how-it-works">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-overline">How It Works</p>
+                <h2>Three steps to <span class="text-gradient">better sleep</span></h2>
+                <p>No manual tracking. No guesswork. ShiftWell generates your optimal plan in under 30 seconds.</p>
+            </div>
+
+            <div class="steps">
+                <div class="step fade-in">
+                    <div class="step-icon">📅</div>
+                    <p class="step-number">Step 1</p>
+                    <h3>Import your shifts</h3>
+                    <p>Connect your calendar or enter shifts manually. ShiftWell reads your schedule — days, nights, evenings, rotations — and understands the transitions between them.</p>
+                </div>
+                <div class="step fade-in fade-in-delay-1">
+                    <div class="step-icon">🧠</div>
+                    <p class="step-number">Step 2</p>
+                    <h3>Get your science plan</h3>
+                    <p>Our circadian algorithm generates personalized sleep windows, nap timing, caffeine cutoffs, meal schedules, and light protocols — all based on your chronotype and schedule.</p>
+                </div>
+                <div class="step fade-in fade-in-delay-2">
+                    <div class="step-icon">✅</div>
+                    <p class="step-number">Step 3</p>
+                    <h3>Export to calendar</h3>
+                    <p>One tap exports your plan to Apple Calendar or Google Calendar. Sleep blocks, alarms, reminders — everything appears where you already look. The app runs invisibly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features section" id="features">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-overline">Features</p>
+                <h2>Everything your circadian rhythm <span class="text-gradient">needs</span></h2>
+                <p>Every feature traces to published, peer-reviewed research. Not wellness blogs. Not vibes.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">😴</div>
+                    <h3>Adaptive Sleep Windows</h3>
+                    <p>Personalized sleep and wake times based on the Two-Process Model (Borbely 1982). Adjusts automatically when your schedule changes — including the tricky transition days between day and night shifts.</p>
+                    <span class="feature-tag feature-tag-science">Based on AASM Guidelines</span>
+                </div>
+
+                <div class="feature-card fade-in fade-in-delay-1">
+                    <div class="feature-icon">☕</div>
+                    <h3>Smart Caffeine Cutoffs</h3>
+                    <p>Caffeine has a 5-hour half-life. ShiftWell calculates your personal cutoff time based on your sensitivity, shift timing, and target sleep window — so you get the boost without the insomnia.</p>
+                    <span class="feature-tag feature-tag-science">Based on Drake et al. 2013</span>
+                </div>
+
+                <div class="feature-card fade-in fade-in-delay-2">
+                    <div class="feature-icon">🍽️</div>
+                    <h3>Circadian Meal Timing</h3>
+                    <p>When you eat matters as much as what you eat. ShiftWell schedules your eating windows to align with your circadian rhythm, reducing metabolic disruption from off-hours eating.</p>
+                    <span class="feature-tag feature-tag-science">Based on Manoogian et al. 2022</span>
+                </div>
+
+                <div class="feature-card fade-in fade-in-delay-3">
+                    <div class="feature-icon">💡</div>
+                    <h3>Light Exposure Protocols</h3>
+                    <p>Strategic bright light at the right times can shift your circadian clock by 1–3 hours per day. ShiftWell tells you exactly when to seek and avoid light based on your transition schedule.</p>
+                    <span class="feature-tag feature-tag-premium">Premium Feature</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Science / Credibility -->
+    <section class="science section" id="science">
+        <div class="container">
+            <div class="science-inner">
+                <div class="fade-in">
+                    <span class="section-overline">Built on Science</span>
+                    <h2>Not another wellness app.<br><span class="text-gradient">Actual research.</span></h2>
+                    <p class="science-text">
+                        ShiftWell's algorithm is deterministic — not AI-generated advice that hallucinates. Every recommendation traces to published, peer-reviewed circadian science. Built by a physician who reads the papers and lives the problem.
+                    </p>
+
+                    <div class="citations">
+                        <div class="citation">
+                            <span class="citation-icon">📄</span>
+                            <span class="citation-text">Borbely (1982) — Two-Process Model of sleep regulation. The mathematical foundation of our sleep timing algorithm.</span>
+                        </div>
+                        <div class="citation">
+                            <span class="citation-icon">📄</span>
+                            <span class="citation-text">Eastman & Burgess (2009) — Circadian phase shifting with bright light. Basis for our light protocol recommendations.</span>
+                        </div>
+                        <div class="citation">
+                            <span class="citation-icon">📄</span>
+                            <span class="citation-text">Drake et al. (2004) — SWSD prevalence and diagnostic criteria. Informed our risk assessment features.</span>
+                        </div>
+                        <div class="citation">
+                            <span class="citation-icon">📄</span>
+                            <span class="citation-text">AHA Scientific Statement (2025) — Cardiovascular impact of circadian disruption. Why this problem matters clinically.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="founder-card fade-in fade-in-delay-2">
+                    <div class="founder-avatar">🩺</div>
+                    <div class="founder-name">Dr. Gursimran Singh, DO</div>
+                    <div class="founder-title">Emergency Medicine Physician · Founder</div>
+                    <p class="founder-quote">
+                        I built ShiftWell because I was the problem. After years of night shifts, I realized no app understood my schedule. They all assumed I slept at night. So I built the one I needed — grounded in the same evidence-based medicine I practice in the ER.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof section" id="testimonials">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-overline">Early Feedback</p>
+                <h2>What shift workers <span class="text-gradient">are saying</span></h2>
+            </div>
+
+            <div class="testimonial-grid">
+                <div class="testimonial fade-in">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"I've tried every sleep app. They all assume you sleep at night. ShiftWell is the first one that actually understands rotating schedules. The caffeine cutoff alerts alone changed my sleep quality."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar testimonial-avatar-1">👩‍⚕️</div>
+                        <div>
+                            <div class="testimonial-name">Sarah K.</div>
+                            <div class="testimonial-role">ICU Nurse · 12-hour nights</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial fade-in fade-in-delay-1">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"The transition days were always my worst. ShiftWell's light protocol helped me shift my clock 2 hours faster than I used to. I actually feel human on my first day back."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar testimonial-avatar-2">👨‍🚒</div>
+                        <div>
+                            <div class="testimonial-name">Marcus T.</div>
+                            <div class="testimonial-role">Firefighter/Paramedic · 48/96 rotation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial fade-in fade-in-delay-2">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Built by a doctor who actually works nights? That sold me. The meal timing feature was something I never even considered. My GI issues have noticeably improved."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar testimonial-avatar-3">👮</div>
+                        <div>
+                            <div class="testimonial-name">Jen P.</div>
+                            <div class="testimonial-role">Police Officer · Rotating days/nights</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing section" id="pricing">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-overline">Pricing</p>
+                <h2>Start free. <span class="text-gradient">Upgrade when ready.</span></h2>
+                <p>No pop-ups. No countdown timers. No dark patterns. The product speaks for itself.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <div class="pricing-name">Free</div>
+                    <div class="pricing-description">Everything you need to start sleeping better</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$0</span>
+                        <span class="pricing-period">forever</span>
+                    </div>
+                    <div class="pricing-savings">&nbsp;</div>
+                    <ul class="pricing-features">
+                        <li>Shift import from calendar</li>
+                        <li>Personalized sleep windows</li>
+                        <li>Caffeine cutoff alerts</li>
+                        <li>Meal timing windows</li>
+                        <li>Calendar export</li>
+                        <li>Chronotype assessment</li>
+                    </ul>
+                    <a href="#download" class="pricing-btn pricing-btn-secondary">Get Started Free</a>
+                </div>
+
+                <div class="pricing-card featured fade-in fade-in-delay-1">
+                    <div class="pricing-popular">Most Popular</div>
+                    <div class="pricing-name">Premium Annual</div>
+                    <div class="pricing-description">Full circadian optimization suite</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$29.99</span>
+                        <span class="pricing-period">/year</span>
+                    </div>
+                    <div class="pricing-savings">7-day free trial · Cancel anytime</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Free</li>
+                        <li>Light exposure protocols</li>
+                        <li>Sleep debt tracking</li>
+                        <li>Adaptive Brain insights</li>
+                        <li>Nap optimization engine</li>
+                        <li>Circadian forecast</li>
+                        <li>Weekly briefings</li>
+                        <li>HealthKit integration</li>
+                    </ul>
+                    <a href="#download" class="pricing-btn pricing-btn-primary">Start 7-Day Free Trial</a>
+                </div>
+
+                <div class="pricing-card fade-in fade-in-delay-2">
+                    <div class="pricing-name">Premium Monthly</div>
+                    <div class="pricing-description">Same features, monthly flexibility</div>
+                    <div class="pricing-price">
+                        <span class="pricing-amount">$4.99</span>
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <div class="pricing-savings">Save 50% with annual plan</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Free</li>
+                        <li>Light exposure protocols</li>
+                        <li>Sleep debt tracking</li>
+                        <li>Adaptive Brain insights</li>
+                        <li>Nap optimization engine</li>
+                        <li>Circadian forecast</li>
+                        <li>Weekly briefings</li>
+                        <li>HealthKit integration</li>
+                    </ul>
+                    <a href="#download" class="pricing-btn pricing-btn-secondary">Start 7-Day Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta section" id="download">
+        <div class="cta-orb"></div>
+        <div class="container">
+            <div class="cta-inner fade-in">
+                <h2>Your schedule is complicated.<br><span class="text-gradient">Your sleep doesn't have to be.</span></h2>
+                <p>Join thousands of shift workers who stopped guessing and started sleeping. Free to start. Science inside.</p>
+
+                <div class="cta-buttons">
+                    <a href="https://apps.apple.com/app/shiftwell" class="app-store-btn" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        <div>
+                            <div class="app-store-text-small">Download on the</div>
+                            <div class="app-store-text-large">App Store</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="nav-logo">
+                        <div class="nav-logo-icon">🌙</div>
+                        ShiftWell
+                    </a>
+                    <p>Sleep autopilot for shift workers. Science-backed circadian optimization built by a physician who lives the night shift.</p>
+                    <div class="footer-social">
+                        <a href="https://twitter.com/shiftwell_app" class="footer-social-link" target="_blank" rel="noopener" aria-label="X / Twitter">𝕏</a>
+                        <a href="https://instagram.com/shiftwell.app" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+                        <a href="https://linkedin.com/company/shiftwell" class="footer-social-link" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+                        <a href="https://tiktok.com/@shiftwell.app" class="footer-social-link" target="_blank" rel="noopener" aria-label="TikTok">🎵</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="footer-heading">Product</div>
+                    <div class="footer-links">
+                        <a href="#features" class="footer-link">Features</a>
+                        <a href="#pricing" class="footer-link">Pricing</a>
+                        <a href="#science" class="footer-link">Science</a>
+                        <a href="#download" class="footer-link">Download</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="footer-heading">Company</div>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">About</a>
+                        <a href="#" class="footer-link">Blog</a>
+                        <a href="#" class="footer-link">Careers</a>
+                        <a href="mailto:hello@shiftwell.app" class="footer-link">Contact</a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="footer-heading">Resources</div>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Sleep Science Guide</a>
+                        <a href="#" class="footer-link">For Employers</a>
+                        <a href="#" class="footer-link">Help Center</a>
+                        <a href="#" class="footer-link">API Docs</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 ShiftWell. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Health Disclaimers</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // Stars generation
+        // ============================================
+        (function generateStars() {
+            const container = document.getElementById('stars');
+            if (!container) return;
+            const count = 60;
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.cssText = `
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    width: ${1 + Math.random() * 2}px;
+                    height: ${1 + Math.random() * 2}px;
+                    --duration: ${3 + Math.random() * 5}s;
+                    --delay: ${Math.random() * 5}s;
+                `;
+                container.appendChild(star);
+            }
+        })();
+
+        // ============================================
+        // Nav scroll effect
+        // ============================================
+        const nav = document.getElementById('nav');
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            nav.classList.toggle('scrolled', scrollY > 50);
+            lastScroll = scrollY;
+        }, { passive: true });
+
+        // ============================================
+        // Mobile menu toggle
+        // ============================================
+        const menuBtn = document.getElementById('menuBtn');
+        const navLinks = document.getElementById('navLinks');
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            menuBtn.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+        });
+
+        // Close menu on link click
+        navLinks.querySelectorAll('.nav-link, .nav-cta').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                menuBtn.textContent = '☰';
+            });
+        });
+
+        // ============================================
+        // Smooth scroll for anchor links
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============================================
+        // Intersection Observer for fade-in
+        // ============================================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

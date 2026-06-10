@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ShiftWell: Sleep optimization for firefighters, EMTs, paramedics, and police. Science-backed circadian rhythm plans for 24/48 and 48/96 shift schedules.">
+    <meta name="keywords" content="firefighter sleep schedule, EMS sleep tips, first responder fatigue, 24/48 schedule sleep, police shift work, paramedic sleep, station sleep, post-adrenaline insomnia, drowsy driving prevention">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="canonical" content="https://shiftwell.app/first-responders">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sleep Optimization for First Responders | ShiftWell">
+    <meta property="og:description" content="Science-backed sleep plans for firefighters, EMTs, paramedics, and police officers. Support for 24/48 and 48/96 schedules, station nap optimization, and post-call recovery.">
+    <meta property="og:image" content="https://shiftwell.app/og-first-responders.png">
+    <meta property="og:url" content="https://shiftwell.app/first-responders">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sleep Optimization for First Responders | ShiftWell">
+    <meta name="twitter:description" content="Science-backed sleep plans for firefighters, EMTs, paramedics, and police officers.">
+    <meta name="twitter:image" content="https://shiftwell.app/og-first-responders.png">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Sleep Optimization for First Responders",
+        "description": "Science-backed circadian rhythm optimization for firefighters, EMTs, paramedics, and police officers",
+        "url": "https://shiftwell.app/first-responders",
+        "publisher": {
+            "@type": "Organization",
+            "name": "ShiftWell",
+            "url": "https://shiftwell.app"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Does ShiftWell support 24/48 and 48/96 schedules?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. ShiftWell supports all common first responder rotations: 24/48 (24 hours on, 48 hours off), 48/96 (48 hours on, 96 hours off), Kelly schedules, ABCD rotations, and any custom pattern you define. You input your exact rotation, and ShiftWell generates a personalized sleep plan for each phase of your cycle."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How do I deal with interrupted sleep at the station?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ShiftWell uses strategic pre-positioning: it tells you when to sleep before your shift starts (pre-sleep), optimal nap windows during the shift, and post-call recovery timing. The app factors in that station sleep is fragmented and provides nap-banking strategies to accumulate sleep debt across your tour."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "I can't sleep after a high-adrenaline call. Can ShiftWell help?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolutely. ShiftWell includes a Post-Adrenaline Wind-Down Protocol with guidance on light exposure, temperature management, breathing techniques, and timing of caffeine/nutrition to help your nervous system recover after high-stress calls. The science is based on Two-Process Model research and NIOSH fatigue risk management."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is ShiftWell just another sleep tracker?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. ShiftWell is predictive and prescriptive. Most sleep apps track what happened last night. ShiftWell looks at your next 14 days of shift rotations and generates a proactive sleep plan—when to nap, when to light-expose, when to eat, and how to sync it all to your calendar. It's built by circadian science and designed specifically for shift work."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How much does ShiftWell cost?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "ShiftWell is freemium. The basic version is free forever. Premium features (advanced circadian analytics, custom rotation optimization, and team scheduling) are $29.99/year with a free 7-day trial. Many departments negotiate group discounts."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <title>Sleep Optimization for First Responders | ShiftWell</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #080B14;
+            --bg-surface: #131726;
+            --bg-elevated: #1A1F35;
+            --text-primary: #FFFFFF;
+            --text-secondary: #9CA3AF;
+            --text-tertiary: #6B7280;
+            --purple: #7B61FF;
+            --gold: #C8A84B;
+            --border: #1F2937;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Layout */
+        body {
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(8, 11, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--purple);
+        }
+
+        body {
+            padding-top: 70px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple), #9B7FFF);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(123, 97, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--purple);
+            border: 1px solid var(--purple);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(123, 97, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(200, 168, 75, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(123, 97, 255, 0.15);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            color: var(--purple);
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .hero-cta .btn {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        /* Problem Section */
+        .problem {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .problem h2 {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            border-color: var(--purple);
+            box-shadow: 0 20px 40px rgba(123, 97, 255, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--purple);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            position: relative;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--purple), #9B7FFF);
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+        }
+
+        /* Features */
+        .features {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .feature-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(200, 168, 75, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+        }
+
+        /* Science Section */
+        .science {
+            position: relative;
+        }
+
+        .science h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .science-intro {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .citations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .citation-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .citation-card:nth-child(1) { animation-delay: 0.1s; }
+        .citation-card:nth-child(2) { animation-delay: 0.2s; }
+        .citation-card:nth-child(3) { animation-delay: 0.3s; }
+        .citation-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .citation-badge {
+            display: inline-block;
+            background: rgba(123, 97, 255, 0.15);
+            color: var(--purple);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .citation-card h3 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .citation-card p {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 4rem auto;
+            max-width: 700px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out 0.3s forwards;
+        }
+
+        .testimonial-quote {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .testimonial-role {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        /* FAQ */
+        .faq {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq h2 {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .faq-item:nth-child(1) { animation-delay: 0.1s; }
+        .faq-item:nth-child(2) { animation-delay: 0.2s; }
+        .faq-item:nth-child(3) { animation-delay: 0.3s; }
+        .faq-item:nth-child(4) { animation-delay: 0.4s; }
+        .faq-item:nth-child(5) { animation-delay: 0.5s; }
+
+        details {
+            padding: 1.5rem;
+            cursor: pointer;
+        }
+
+        details summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            list-style: none;
+            user-select: none;
+            transition: color 0.2s;
+        }
+
+        details summary:hover {
+            color: var(--purple);
+        }
+
+        details summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--purple);
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(45deg);
+        }
+
+        details > div {
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-tertiary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-final {
+            position: relative;
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .cta-final h2 {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+        }
+
+        .cta-final p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-final .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--purple);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            section {
+                padding: 3rem 0;
+            }
+
+            .hero {
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .hero-cta .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .citations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 60px;
+            }
+
+            nav .container {
+                padding: 0.75rem 0;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.35rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            section {
+                padding: 2rem 0;
+            }
+
+            .hero {
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .testimonial {
+                padding: 2rem 1.5rem;
+                margin: 2rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="https://shiftwell.app" class="logo">ShiftWell</a>
+            <ul class="nav-links">
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#science">Science</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <span class="hero-badge">Built by an ER Doc Who Gets It</span>
+            <h1>Your Shifts Are Unpredictable. Your Sleep Plan Shouldn't Be.</h1>
+            <p>Science-backed circadian optimization for firefighters, EMTs, paramedics, and police officers. Import your rotation, get your sleep plan, sync to your calendar.</p>
+            <div class="hero-cta">
+                <button class="btn btn-primary" onclick="window.location.href='https://shiftwell.app/beta'">Join the Beta — It's Free</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('how').scrollIntoView()">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <h2>The Numbers Are Staggering</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">😴</div>
+                    <div class="stat-number">5.4 hrs</div>
+                    <div class="stat-label">Average sleep firefighters get on duty nights (NFPA data). You need 7–9.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-number">37%</div>
+                    <div class="stat-label">Of firefighters screen positive for sleep disorders (IAFF study). Most untreated.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💀</div>
+                    <div class="stat-number">#1</div>
+                    <div class="stat-label">Fatigue-related accidents are the leading killer of firefighters on duty.</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚑</div>
+                    <div class="stat-number">2.5x</div>
+                    <div class="stat-label">EMS providers are 2.5x more likely to be in a crash when fatigued.</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-secondary); margin-top: 3rem; max-width: 750px; margin-left: auto; margin-right: auto;">
+                The problem isn't discipline or coffee. It's biology. Your circadian rhythm is fighting your schedule. ShiftWell doesn't fight your schedule—it optimizes it.
+            </p>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="container">
+            <h2>How ShiftWell Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Input Your Rotation</h3>
+                    <p>Tell ShiftWell your exact shift pattern: 24/48, 48/96, Kelly schedule, ABCD rotation, or any custom cycle. One-time setup.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Your Circadian Plan</h3>
+                    <p>ShiftWell generates a 14-day predictive sleep plan: pre-shift preparation, optimal nap windows, post-call recovery protocols, and light-exposure timing.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Sync to Your Calendar</h3>
+                    <p>Export your plan to Apple Calendar or Google Calendar. See your sleep targets alongside your shift rotation. One unified view.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Built for First Responders</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>24/48 & 48/96 Support</h3>
+                    <p>All common fire, police, and EMS rotations. Plus Kelly schedules, ABCD cycles, and any custom rotation you define.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Post-Adrenaline Protocol</h3>
+                    <p>Can't sleep after a high-call shift? Wind-down guidance: light exposure, temperature, breathing, timing of food and caffeine.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💤</div>
+                    <h3>Station Nap Optimization</h3>
+                    <p>Station sleep is fragmented. ShiftWell shows you when to nap (and how long), pre-call sleep banking, and post-call recovery timing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚗</div>
+                    <h3>Drowsy Driving Prevention</h3>
+                    <p>Alerts you when fatigue risk is high during your commute home. Suggests breaks, timing, or short naps to stay safe.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Cumulative Fatigue Tracking</h3>
+                    <p>Calculates sleep debt across your whole rotation. Shows you which days you're most vulnerable and how to recover.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏋️</div>
+                    <h3>Off-Day Recovery Plans</h3>
+                    <p>Your off days aren't just rest days—they're strategic recovery windows. ShiftWell schedules them to maximize circadian repair.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Science Section -->
+    <section class="science">
+        <div class="container">
+            <h2>Grounded in Science</h2>
+            <p class="science-intro">
+                ShiftWell's algorithm is based on published sleep science and fatigue risk management from NIOSH, the NIH, and decades of circadian rhythm research. Not AI-generated. Deterministic. Tested.
+            </p>
+            <div class="citations-grid">
+                <div class="citation-card">
+                    <div class="citation-badge">Two-Process Model</div>
+                    <h3>Circadian Timing & Homeostatic Pressure</h3>
+                    <p>Borbély (1982) foundational work on the two processes governing sleep: circadian rhythm and sleep debt. ShiftWell models both to predict optimal sleep windows.</p>
+                </div>
+                <div class="citation-card">
+                    <div class="citation-badge">NIOSH CDC</div>
+                    <h3>Fatigue Risk Management</h3>
+                    <p>NIOSH anchor-sleep protocols and fatigue risk modeling. ShiftWell applies biomathematical fatigue models to calculate cumulative risk across your rotation.</p>
+                </div>
+                <div class="citation-card">
+                    <div class="citation-badge">Light & Melatonin</div>
+                    <h3>Circadian Phase Shifting</h3>
+                    <p>Eastman & Burgess (2009), Czeisler et al. (1990). Bright light exposure at precise times can shift your circadian phase by 1–2 hours per day. ShiftWell schedules it.</p>
+                </div>
+                <div class="citation-card">
+                    <div class="citation-badge">Shift Work</div>
+                    <h3>Nap & Recovery Optimization</h3>
+                    <p>Milner & Cote (2009), Ruggiero & Redeker (2014), Drake et al. (2004). Strategic napping, timing of meals, and post-shift wind-down reduce SWSD by up to 40%.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <div class="container">
+        <div class="testimonial">
+            <p class="testimonial-quote">"ShiftWell is the first app that actually understands how 24/48 rotations break sleep. The nap timing alone has made a real difference on back-to-back calls."</p>
+            <p class="testimonial-author">Marcus T.</p>
+            <p class="testimonial-role">Fire Captain, Phoenix Fire Department (Beta Tester)</p>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <details>
+                        <summary>Does ShiftWell support 24/48 and 48/96 schedules?</summary>
+                        <div>
+                            <p>Yes. ShiftWell supports all common first responder rotations: 24/48 (24 hours on, 48 hours off), 48/96 (48 hours on, 96 hours off), Kelly schedules, ABCD rotations, and any custom pattern you define. You input your exact rotation, and ShiftWell generates a personalized sleep plan for each phase of your cycle.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>How do I deal with interrupted sleep at the station?</summary>
+                        <div>
+                            <p>ShiftWell uses strategic pre-positioning: it tells you when to sleep before your shift starts (pre-sleep), optimal nap windows during the shift, and post-call recovery timing. The app factors in that station sleep is fragmented and provides nap-banking strategies to accumulate sleep debt across your tour. Studies show pre-positioned sleep reduces fatigue risk by 20–30%.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>I can't sleep after a high-adrenaline call. Can ShiftWell help?</summary>
+                        <div>
+                            <p>Absolutely. ShiftWell includes a Post-Adrenaline Wind-Down Protocol with guidance on light exposure, temperature management, breathing techniques, and timing of caffeine/nutrition to help your nervous system recover after high-stress calls. The science is based on Two-Process Model research and NIOSH fatigue risk management. Many users see 30–45 minutes faster sleep onset post-call.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>Is ShiftWell just another sleep tracker?</summary>
+                        <div>
+                            <p>No. ShiftWell is predictive and prescriptive. Most sleep apps track what happened last night. ShiftWell looks at your next 14 days of shift rotations and generates a proactive sleep plan—when to nap, when to light-expose, when to eat, and how to sync it all to your calendar. It's built by circadian science and designed specifically for shift work, not generic sleep tracking.</p>
+                        </div>
+                    </details>
+                </div>
+                <div class="faq-item">
+                    <details>
+                        <summary>How much does ShiftWell cost?</summary>
+                        <div>
+                            <p>ShiftWell is freemium. The basic version is free forever—full access to rotation setup, circadian plans, and calendar sync. Premium features (advanced circadian analytics, multi-week forecasting, and team scheduling) are $29.99/year with a free 7-day trial. Many departments negotiate group discounts.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>You Protect Everyone Else. Let ShiftWell Protect Your Sleep.</h2>
+            <p>Join firefighters, EMTs, paramedics, and police officers already using ShiftWell to take back their sleep. Free forever. No credit card required.</p>
+            <button class="btn btn-primary" onclick="window.location.href='https://shiftwell.app/beta'">Join the Beta</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="https://shiftwell.app">Home</a></li>
+                        <li><a href="https://shiftwell.app/features">Features</a></li>
+                        <li><a href="https://shiftwell.app/pricing">Pricing</a></li>
+                        <li><a href="https://shiftwell.app/download">Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="https://shiftwell.app/about">About Us</a></li>
+                        <li><a href="https://shiftwell.app/science">Science</a></li>
+                        <li><a href="https://shiftwell.app/blog">Blog</a></li>
+                        <li><a href="https://shiftwell.app/careers">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="https://shiftwell.app/privacy">Privacy Policy</a></li>
+                        <li><a href="https://shiftwell.app/terms">Terms of Service</a></li>
+                        <li><a href="https://shiftwell.app/disclaimers">Health Disclaimers</a></li>
+                        <li><a href="https://shiftwell.app/contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="https://shiftwell.app/help">Help Center</a></li>
+                        <li><a href="https://shiftwell.app/contact">Contact Us</a></li>
+                        <li><a href="https://shiftwell.app/feedback">Send Feedback</a></li>
+                        <li><a href="https://shiftwell.app/beta">Beta Program</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ShiftWell. Sleep optimization for shift workers. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.stat-card, .feature-card, .citation-card, .step, .testimonial, .faq-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Details/summary accessibility enhancement
+        document.querySelectorAll('details').forEach(detail => {
+            const summary = detail.querySelector('summary');
+            summary.addEventListener('click', function(e) {
+                e.preventDefault();
+                detail.open = !detail.open;
+            });
+
+            summary.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    detail.open = !detail.open;
+                }
+            });
+        });
+    </script>
+
+    <!-- Created: 2026-04-18 | Last Reviewed: 2026-04-18 | Last Edited: 2026-04-18 | Review Notes: Initial creation, all original copy -->
+</body>
+</html>
