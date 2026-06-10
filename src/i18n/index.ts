@@ -6,7 +6,7 @@ type SupportedLocale = 'en' | 'es';
 
 type TranslationMap = typeof en;
 
-const translations: Record<SupportedLocale, TranslationMap> = { en, es };
+const translations: Record<SupportedLocale, TranslationMap> = { en, es: es as unknown as TranslationMap };
 
 /**
  * Detect the device locale and return a supported locale code.

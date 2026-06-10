@@ -27,6 +27,7 @@ const FACTOR_COLORS: Record<ChangeFactor, string> = {
   debt: '#C8A84B',       // gold
   recovery: '#60A5FA',   // blue
   schedule: '#34D399',   // green
+  feedback: '#FF8C42',   // orange
 };
 
 const FACTOR_ICONS: Record<ChangeFactor, keyof typeof Ionicons.glyphMap> = {
@@ -34,6 +35,7 @@ const FACTOR_ICONS: Record<ChangeFactor, keyof typeof Ionicons.glyphMap> = {
   debt: 'battery-half-outline',
   recovery: 'fitness-outline',
   schedule: 'calendar-outline',
+  feedback: 'analytics-outline',
 };
 
 export function AdaptiveInsightCard({ changes, context, onUndo, onDismiss }: Props) {

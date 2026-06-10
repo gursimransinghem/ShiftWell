@@ -53,6 +53,7 @@ export interface RoutineStep {
 
 /** User profile collected during onboarding */
 export interface UserProfile {
+  id?: string;
   chronotype: Chronotype;
   /** Desired sleep hours per 24h period (default: 7.5) */
   sleepNeed: number;

@@ -13,37 +13,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useUserStore } from '@/src/store/user-store';
 import { usePremiumStore } from '@/src/store/premium-store';
-<<<<<<< HEAD
 import { useAuthStore } from '@/src/store/auth-store';
 import { useBriefStore } from '@/src/store/brief-store';
 import { usePlanStore } from '@/src/store/plan-store';
 import { useFeatureGate } from '@/src/lib/premium/feature-gate';
 import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from '@/src/theme';
 import ReferralCard from '@/src/components/ui/ReferralCard';
-=======
-import { useExport } from '@/src/hooks/useExport';
-import { DEFAULT_EXPORT_OPTIONS, type ExportOptions } from '@/src/lib/calendar/ics-generator';
-import { fullSync, getSyncStatus } from '@/src/lib/sync/sync-engine';
-import { requestPermissions, getScheduledNotifications } from '@/src/lib/notifications/notification-service';
-import {
-  BACKGROUND,
-  TEXT,
-  ACCENT,
-  BORDER,
-  SEMANTIC,
-  SPACING,
-  RADIUS,
-  heading2,
-  heading3,
-  body,
-  bodySmall,
-  caption,
-  label,
-} from '@/src/theme';
-import Button from '@/src/components/ui/Button';
-import Card from '@/src/components/ui/Card';
-import { WeeklyBriefToggle } from '@/src/components/settings/WeeklyBriefToggle';
->>>>>>> worktree-agent-a211ed4f
 
 // ---------------------------------------------------------------------------
 // Section header
@@ -333,55 +308,9 @@ export default function SettingsScreen() {
           )}
         </View>
 
-<<<<<<< HEAD
         {/* Community */}
         <SectionHeader title="COMMUNITY" />
         <ReferralCard />
-=======
-        {/* ---- AI Coaching Section ---- */}
-        <SectionHeader title="AI COACHING" />
-        <Card style={styles.card}>
-          <WeeklyBriefToggle />
-        </Card>
-
-        {/* ---- Profile Section ---- */}
-        <SectionHeader title="PROFILE" />
-        <Card style={styles.card} padding={false}>
-          <SettingsRow
-            label="Chronotype"
-            value={CHRONOTYPE_LABELS[profile.chronotype] ?? profile.chronotype}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Sleep need"
-            value={`${profile.sleepNeed}h`}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Caffeine half-life"
-            value={`${profile.caffeineHalfLife}h`}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Strategic naps"
-            value={profile.napPreference ? 'Yes' : 'No'}
-          />
-          <View style={styles.cardDivider} />
-          <SettingsRow
-            label="Commute"
-            value={`${profile.commuteDuration} min`}
-          />
-          <View style={styles.cardDivider} />
-          <View style={styles.editButtonWrapper}>
-            <Button
-              title="Edit Preferences"
-              onPress={() => router.push('/(onboarding)')}
-              variant="ghost"
-              size="sm"
-            />
-          </View>
-        </Card>
->>>>>>> worktree-agent-a211ed4f
 
         {/* About */}
         <SectionHeader title="ABOUT" />
