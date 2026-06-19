@@ -1262,3 +1262,114 @@ These apps manage shift calendars but don't optimize sleep or health:
 ---
 
 *This report covers every identified app, product, and service in the shift work sleep optimization space as of March 2026. It should be refreshed quarterly as this is an active and growing market.*
+
+---
+
+## May 2026 Update — New Competitors Identified
+
+> **Source:** SCIENCE_FIRST_DESIGN_INTELLIGENCE.md + SHIFTWELL_CROSS_ANALYSIS.md (compiled 2026-05-01)
+> These three products were not included in the original 38-product analysis. Peaks is a direct design competitor. Endel is an indirect competitor in the science-backed wellness space. Gentler Streak is a design benchmark (2024 Apple Design Award winner) rather than a direct competitor.
+
+---
+
+### Peaks
+
+| Field | Detail |
+|-------|--------|
+| **Developer** | Not publicly disclosed (independent iOS developer) |
+| **Platform** | iOS |
+| **Pricing** | Freemium; premium subscription (pricing not publicly confirmed) |
+| **Target Audience** | General users seeking energy and alertness optimization; professionals tracking cognitive performance |
+| **Last Updated** | Active (2026) |
+
+**Core Features:**
+- Two-Process Model energy wave visualization — a flowing, continuously animated curve showing predicted alertness/energy across the day
+- Calendar export overlay — circadian energy forecast overlaid on the user's existing calendar events
+- Full widget suite including Apple Watch complications for energy level at a glance
+- Circadian-phase-aware scheduling recommendations (when to focus, rest, perform)
+
+**What Users Love:**
+- The energy wave visualization is reported as "gorgeous" — a direct embodiment of the Two-Process Model that is immediately legible to non-expert users
+- Widget suite allows passive ambient awareness without opening the app
+- Calendar overlay makes circadian science practical and actionable in the tools users already live in
+
+**What's Missing:**
+- No shift schedule awareness — the app models a standard sleep/wake pattern and cannot account for rotating or irregular schedules
+- No recommendation depth or scientific sourcing — the wave is beautiful but not citable
+- No calendar read (only export/overlay); does not read the user's actual schedule to compute a personalized model
+- No night-shift-specific protocols, transition planning, or recovery logic
+
+**Unique Selling Point:** The most visually refined Two-Process Model implementation in any consumer app. The energy wave visualization sets the design standard for circadian data display.
+
+**ShiftWell Relevance:** Direct design competitor. Peaks demonstrates that the Two-Process Model wave is commercially viable as a primary visualization. ShiftWell should implement an equivalent (the Circadian Energy Wave, Visualization 4 in the Cross-Analysis) that adds what Peaks lacks: shift schedule context, inline citations, and actual circadian plan recommendations. The SHIFTWELL_CROSS_ANALYSIS.md describes this explicitly: "License their visualization approach; do it better with the full shift schedule context they lack."
+
+---
+
+### Endel
+
+| Field | Detail |
+|-------|--------|
+| **Developer** | Endel GmbH (Berlin, Germany) — backed by major music labels; partnership with Amazon Music |
+| **Platform** | iOS, Android, Apple Watch, Mac, Web |
+| **Pricing** | Freemium; ~$5.99/month or $49.99/year |
+| **Target Audience** | Knowledge workers, creatives, and general users seeking focus, relaxation, and sleep support |
+| **Last Updated** | Active (2026) |
+
+**Core Features:**
+- Generative adaptive soundscapes — music and ambient audio that changes in real time based on the user's circadian phase, time of day, heart rate, weather, and location
+- Circadian-phase-aware intensity adaptation: during a circadian low period, sound becomes less intense and slower; during a peak, more activating
+- Peer-reviewed efficacy: published in *Communications Biology* (Nature portfolio), confirming measurable effects on alertness and relaxation
+- Four modes: Focus, Relax, Sleep, Move — each with circadian adaptation
+- Apple Watch integration for heart rate-responsive adaptation
+
+**What Users Love:**
+- The interface literally responds to your body — users describe it as "the app that knows where I am in my day"
+- Peer-reviewed publication in a Nature-portfolio journal is cited as the strongest trust signal by skeptical users
+- "Unlike music, Endel is designed to restore, not entertain" — the anti-claim positioning is effective and widely quoted
+- Apple Watch heart rate integration creates a genuinely personalized experience
+
+**What's Missing:**
+- No visual circadian planning — Endel adapts sound but does not show or schedule circadian recommendations
+- No shift schedule awareness — the circadian model assumes a standard sleep/wake cycle
+- No calendar integration in either direction
+- No sleep window recommendations, light protocols, or meal timing
+- Sound-only medium limits use cases (cannot use during patient care, in meetings, with some shift environments)
+
+**Unique Selling Point:** The only peer-reviewed consumer app with published results in a Nature-portfolio journal. Proves that "circadian-phase-aware adaptation" is a commercially viable and scientifically defensible product category.
+
+**ShiftWell Relevance:** Indirect competitor in the "science-backed wellness" space — targets the same skeptical, high-value user who wants peer-reviewed evidence before spending money. Endel's key design principle — the interface adapts its *intensity* based on where the user is in their circadian cycle — should be applied to ShiftWell's Night Sky Mode. The SHIFTWELL_CROSS_ANALYSIS.md identifies "Night Sky Mode Intensity Scaling" as a v1.1 feature: animation intensity scales with circadian phase position (deeper/slower near biological night, lighter/faster near biological day). Endel's peer-reviewed publication in *Communications Biology* also sets the science-communication standard for the category.
+
+---
+
+### Gentler Streak
+
+| Field | Detail |
+|-------|--------|
+| **Developer** | Gentler Stories (independent iOS developer) |
+| **Platform** | iOS, watchOS |
+| **Pricing** | Free with optional premium subscription |
+| **Target Audience** | Fitness and exercise tracking users who have been burned by punitive streak apps; users recovering from injury or illness |
+| **Last Updated** | Active (2026) |
+
+**Core Features:**
+- Compassionate fitness streak system: missed days are "rest days" or "quieter days," never broken streaks
+- Streak display shows longest run and rolling trend, not a single breakable counter that resets to zero
+- Abstract companion (not a named mascot) that "waits for you" rather than penalizing absence
+- Liquid Glass design aesthetic — winner of the 2024 Apple Design Award for Interface Design
+- Monthly summary vs. personal history only (no external comparison or leaderboards)
+
+**What Users Love:**
+- "Finally, a fitness app that doesn't make me feel like a failure for being sick or busy"
+- The visual design is widely cited as a benchmark — described as "Liquid Glass" with Apple Design Award-level polish
+- The compassionate model specifically retains users who would otherwise churn after a missed day
+- Personal history only — no external comparison creates a shame-free environment
+
+**What's Missing:**
+- No sleep or circadian features — purely a fitness/exercise streak app
+- No shift schedule awareness
+- No health science grounding beyond general fitness advice
+- The abstract companion model may not translate to a clinical audience without modification
+
+**Unique Selling Point:** 2024 Apple Design Award winner. Demonstrates that replacing punitive accountability with compassionate tracking is not just ethically preferable — it is the commercially superior model by Apple's own evaluation criteria.
+
+**ShiftWell Relevance:** Design benchmark, not a direct competitor. Gentler Streak establishes the definitive standard for the compassionate streak model that ShiftWell should adopt. The SHIFTWELL_CROSS_ANALYSIS.md specifies this directly as the "Compassionate Streak System" feature (v1.0): replace breakable streak counter with longest run + rolling 7-day compliance % + "quieter day not failed day" copy. Shift workers miss planned sleep windows due to clinical emergencies, codes, and last-minute schedule changes — a punitive streak model creates churn at exactly the moments users most need support. The Gentler Streak model solves this, and its 2024 Apple Design Award makes it a citable design precedent.
